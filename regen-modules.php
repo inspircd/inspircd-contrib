@@ -27,7 +27,7 @@ function get_tags($sFile)
 		
 
 		$sStrippedName = str_replace(".cpp", "", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://www.inspircd.com/modules/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{

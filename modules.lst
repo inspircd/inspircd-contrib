@@ -1,54 +1,54 @@
-module m_antirandom 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_antirandom.cpp
+module m_antirandom 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_antirandom.cpp
  depends core 1.1
  description A module to prevent against bots using random patterns.
-module m_banreason 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_banreason.cpp
+module m_banreason 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_banreason.cpp
  depends core 1.1
  description Adds the abiliy to store the reason a user was banned from a channel
-module m_codepage 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_codepage.cpp
+module m_codepage 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
-module m_exception 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_exception.cpp
+module m_exception 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_exception.cpp
  depends core 1.1
  description Provides support for the +x channel mode
-module m_fantasy 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_fantasy.cpp
+module m_fantasy 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_fantasy.cpp
  depends core 1.1
  description Provides ircd-side fantasy commands.
-module m_modeaccess 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_modeaccess.cpp
+module m_modeaccess 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_modeaccess.cpp
  depends core 1.1
  description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
-module m_modesquish 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_modesquish.cpp
+module m_modesquish 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_modesquish.cpp
  depends core 1.1
  description Pre-parses MODE command to remove redundant modes
-module m_nationalchars 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_nationalchars.cpp
+module m_nationalchars 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_nationalchars.cpp
  depends core 1.2
  description Provides ability to have non-RFC1459 nicks an maybe not only them :)
-module m_operflood 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_operflood.cpp
+module m_operflood 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_operflood.cpp
  depends core 1.1
  description Removes flood limits from users upon opering up.
-module m_operperms 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_operperms.cpp
+module m_operperms 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_operperms.cpp
  depends core 1.1
  description Provides an /operperms command, allowing opers to view what commands they and other opers have access to.
-module m_pretenduser 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_pretenduser.cpp
+module m_pretenduser 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_pretenduser.cpp
  depends core 1.2
  description Inject a command from another user
-module m_remoteoper 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_remoteoper.cpp
+module m_remoteoper 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_remoteoper.cpp
  depends core 1.2
  description A module which shows remote /oper up as REMOTEOPER to snomasks
-module m_rpg 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_rpg.cpp
+module m_rpg 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_rpg.cpp
  depends core 1.2
  description Provides NPC, NPCA, and AMBIANCE commands for use by Game Masters doing pen & paper RPGs via IRC
-module m_shun 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_shun.cpp
+module m_shun 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_shun.cpp
  depends core 1.1
  description Gives the /shun command, which stops a user executing all commands except PING and PONG.
-module m_syncbans 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_syncbans.cpp
+module m_syncbans 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_syncbans.cpp
  depends core 1.1
  description Automatically synchronize bans between lists of channels
-module m_ulinemessages 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_ulinemessages.cpp
+module m_ulinemessages 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_ulinemessages.cpp
  depends core 1.1
  description Provides user mode +m, which converts uline notices to privmsg
-module m_whoismodes 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_whoismodes.cpp
+module m_whoismodes 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_whoismodes.cpp
  depends core 1.1
  description Allows opers to see users modes on whois
-module m_xmlsocket 5ba528dcd969cb401fe25806539278ad1d44fda0 http://www.inspircd.com/modules/m_xmlsocket.cpp
+module m_xmlsocket 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_xmlsocket.cpp
  depends core 1.2
  description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
