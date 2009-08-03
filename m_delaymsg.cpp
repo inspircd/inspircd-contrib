@@ -67,8 +67,6 @@ class ModuleDelayMsg : public Module
 	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string &text, char status, CUList &exempt_list);
 };
 
-/* $ModDesc: Allows for delay-join channels (+D) where users dont appear to join until they speak */
-
 ModeAction DelayMsgMode::OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding)
 {
 	if (adding)
