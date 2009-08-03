@@ -10,7 +10,7 @@ module m_channelnames 7aecc7cc9445edb8ce94ce3093dcc761938c566a http://gitorious.
 module m_codepage 62a095c9551c934b77ddf84e00823eaa453876f7 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
-module m_delaymsg 7aecc7cc9445edb8ce94ce3093dcc761938c566a http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_delaymsg.cpp
+module m_delaymsg 8b70c968b6361ca09abaa6d9998209cf91c69369 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_delaymsg.cpp
  depends core 1.2
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
 module m_exception 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_exception.cpp
@@ -34,6 +34,9 @@ module m_nationalchars 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious
 module m_noctcp_user 9873ea7c604bfe85c6edd397f570a25a5bb0744b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_noctcp_user.cpp
  depends core 1.2
  description Provides support for unreal-style user mode +T
+module m_ojoin fa6acff8de1ca4052b37b2fd87357139134164fc http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_ojoin.cpp
+ depends core 1.2
+ description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
 module m_oojoin 7aecc7cc9445edb8ce94ce3093dcc761938c566a http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_oojoin.cpp
  depends core 1.2
  description Provides overriding join into a channel through explicit command
