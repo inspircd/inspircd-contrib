@@ -4,7 +4,7 @@ module m_antirandom 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.or
 module m_banreason 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_banreason.cpp
  depends core 1.1
  description Adds the abiliy to store the reason a user was banned from a channel
-module m_codepage 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_codepage.cpp
+module m_codepage 62a095c9551c934b77ddf84e00823eaa453876f7 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
 module m_exception 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_exception.cpp
@@ -16,6 +16,9 @@ module m_fantasy 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/i
 module m_modeaccess 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_modeaccess.cpp
  depends core 1.1
  description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
+module m_modeoncreate 85312b5db13d8ccd29f44ad557fd952cb455632e http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_modeoncreate.cpp
+ depends core 1.2
+ description Allows modes to be customised for channel creation. e.g. <modeoncreate privs="@%"> would set +oh on a creating user. Also allows <modeoncreate affectsoper="true"> if you want opers affected too.
 module m_modesquish 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_modesquish.cpp
  depends core 1.1
  description Pre-parses MODE command to remove redundant modes
@@ -40,6 +43,9 @@ module m_rpg 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspi
 module m_shun 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_shun.cpp
  depends core 1.1
  description Gives the /shun command, which stops a user executing all commands except PING and PONG.
+module m_svsoper e1d5a3a1b1e5407f2ec69394b3b9f55002955d0c http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_svsoper.cpp
+ depends core 1.2
+ description Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator.
 module m_syncbans 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_syncbans.cpp
  depends core 1.1
  description Automatically synchronize bans between lists of channels
