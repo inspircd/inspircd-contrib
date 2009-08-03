@@ -26,6 +26,9 @@
 #include "inspircd.h"
 
 /* $ModDesc: Provides support for unreal-style user mode +T */
+/* $ModAuthor: SnoFox */
+/* $ModAuthorMail: josh@sleepyirc.net */
+/* $ModDepends: core 1.2 */
 
 class NoCTCPuser : public SimpleUserModeHandler
 {
