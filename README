@@ -1,1 +1,9 @@
 InspIRCd third party modules repository.
+
+Example tags:
+/* $ModConfig: <syncbans channels="#a,#b,#c"> */
+/* $ModDesc: Provides ircd-side fantasy commands. */
+/* $ModAuthor: w00t */
+/* $ModAuthorMail: w00t@inspircd.org */
+/* $ModDepends: core 1.1 */
+/* $ModMask: mask reason */
