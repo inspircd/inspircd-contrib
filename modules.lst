@@ -46,7 +46,7 @@ module m_noctcp_user 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.o
 module m_ojoin 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_ojoin.cpp
  depends core 1.2
  description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
-module m_oojoin 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_oojoin.cpp
+module m_oojoin c85f8e65be3e641a3971a13ac6d433db8ea5e6fc http://gitorious.org/inspircd/inspircd-extras/blobs/raw/c85f8e65be3e641a3971a13ac6d433db8ea5e6fc/m_oojoin.cpp
  depends core 1.2
  description Provides overriding join into a channel through explicit command
 module m_ookick 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_ookick.cpp
