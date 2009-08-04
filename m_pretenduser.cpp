@@ -18,7 +18,6 @@
 /* $ModAuthor: Alexey */
 /* $ModAuthorMail: Phoenix@RusNet */
 /* $ModDepends: core 1.2 */
-/* $ModVersion: $Rev: 78 $ */
 
 #include "inspircd.h"
 
@@ -35,9 +34,13 @@ class CommandPretenduser : public Command
         CmdResult Handle (const std::vector<std::string>& parameters, User *user)
         {
 		User * u=ServerInstance->FindNick(parameters[0]);
-		if (u==NULL)
-		    return CMD_FAILURE;
 
+                if (u==NULL)
+                    {
+                    user->WriteServ("NOTICE %s :*** Invalid nickname '%s'", user->nick.c_str(), parameters[0].c_str());
+                    return CMD_FAILURE;
+                    }
+		
 		std::string cmd="";
 		for (unsigned int i=1; i<parameters.size(); ++i)
 		    {
@@ -47,6 +50,16 @@ class CommandPretenduser : public Command
 			}
 		    cmd.append(parameters[i]);
 		    }
+
+		if (!ServerInstance->ULine(user->server))
+		{
+		// Ulines PUSH silently. Thanks to jackmcbarn.
+		    ServerInstance->SNO->WriteToSnoMask('A', "%s used PRETENDUSER to send '%s' from %s", user->nick.c_str(), cmd.c_str(), u->nick.c_str());
+		}
+
+		if (!IS_LOCAL(user))
+            	    return CMD_SUCCESS;
+
 /*		ServerInstance->Logs->Log(this->source,DEBUG,"loggind fake command: %s",cmd.c_str());*/
 		ServerInstance->Parser->ProcessBuffer(cmd,u);
                 return CMD_SUCCESS;
@@ -68,7 +81,7 @@ class ModuleCodepage : public Module
 		}
                 virtual Version GetVersion()
                 {
-                        return Version(0,0,0,0,VF_VENDOR,API_VERSION);
+		return Version("$Id: m_pretenduser.cpp 0 2008-10-22 9:33:00SAMST phoenix $",VF_VENDOR,API_VERSION);
                 }
 };
 
