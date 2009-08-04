@@ -94,6 +94,9 @@ module m_ulinemessages 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious
 module m_whoismodes 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5ba528dcd969cb401fe25806539278ad1d44fda0/m_whoismodes.cpp
  depends core 1.1
  description Allows opers to see users modes on whois
+module m_xline_sql df8ce8cf0867bc0808f006bea2e0ae989f5147e1 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/df8ce8cf0867bc0808f006bea2e0ae989f5147e1/m_xline_sql.cpp
+ depends core 1.2
+ description Keeps a dynamic log of all XLines created, and stores them in a database.
 module m_xmlsocket 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5ba528dcd969cb401fe25806539278ad1d44fda0/m_xmlsocket.cpp
  depends core 1.2
  description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
