@@ -61,6 +61,9 @@ module m_operflood 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org
 module m_operperms 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5ba528dcd969cb401fe25806539278ad1d44fda0/m_operperms.cpp
  depends core 1.1
  description Provides an /operperms command, allowing opers to view what commands they and other opers have access to.
+module m_operrequiresr d718400f261b3ac713255dea2e8cbbe9c94cf131 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/d718400f261b3ac713255dea2e8cbbe9c94cf131/m_operrequiresr.cpp
+ depends core 1.2
+ description Make /oper require that a user be identified as a certain user.
 module m_pretenduser af935171ff72b44e33b95f9f93dd57a643c8d153 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/af935171ff72b44e33b95f9f93dd57a643c8d153/m_pretenduser.cpp
  depends core 1.2
  description Inject a command from another user
