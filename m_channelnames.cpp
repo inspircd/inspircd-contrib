@@ -28,7 +28,7 @@ class ModuleChannelNames: public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("ModVersion: 1.0", VF_COMMON, API_VERSION);
+		return Version("$Id$", VF_COMMON, API_VERSION);
 	}
 
 	int OnUserPreJoin(User* user, Channel* chan, const char* name, std::string& privs, const std::string& key)

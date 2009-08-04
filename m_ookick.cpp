@@ -74,7 +74,7 @@ class ModuleOoKick : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("ModVersion: 1.0", 0, API_VERSION);
+		return Version("$Id$", 0, API_VERSION);
 	}
 };
 

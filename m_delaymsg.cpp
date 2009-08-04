@@ -100,7 +100,7 @@ ModuleDelayMsg::~ModuleDelayMsg()
 
 Version ModuleDelayMsg::GetVersion()
 {
-	return Version("ModVersion: 1.0", VF_COMMON, API_VERSION);
+	return Version("$Id$", VF_COMMON, API_VERSION);
 }
 
 void ModuleDelayMsg::OnUserJoin(User* user, Channel* channel, bool sync, bool &silent, bool created)

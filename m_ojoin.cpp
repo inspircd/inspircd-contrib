@@ -390,7 +390,7 @@ class ModuleOjoin : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id: m_ojoin.cpp 1.0 - Taros $", VF_COMMON | VF_VENDOR, API_VERSION);
+		return Version("$Id$", VF_COMMON | VF_VENDOR, API_VERSION);
 	}
 };
 
