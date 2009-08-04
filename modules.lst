@@ -13,6 +13,9 @@ module m_channelnames 7aecc7cc9445edb8ce94ce3093dcc761938c566a http://gitorious.
 module m_codepage 62a095c9551c934b77ddf84e00823eaa453876f7 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/62a095c9551c934b77ddf84e00823eaa453876f7/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
+module m_conn_pass_nickserv e1da1f9fcb3a8583f854f3ce7c1618702a2b00e7 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/e1da1f9fcb3a8583f854f3ce7c1618702a2b00e7/m_conn_pass_nickserv.cpp
+ depends core 1.2
+ description Forwards NickServ credentials from PASS
 module m_delaymsg 8b70c968b6361ca09abaa6d9998209cf91c69369 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/8b70c968b6361ca09abaa6d9998209cf91c69369/m_delaymsg.cpp
  depends core 1.2
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
