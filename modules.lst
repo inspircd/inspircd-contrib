@@ -82,7 +82,7 @@ module m_rpg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspi
 module m_shun 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_shun.cpp
  depends core 1.1
  description Gives the /shun command, which stops a user executing all commands except PING and PONG.
-module m_svsoper 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_svsoper.cpp
+module m_svsoper 2a9a92b6478012adb1eb2da9e336881ea308f9f4 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2a9a92b6478012adb1eb2da9e336881ea308f9f4/m_svsoper.cpp
  depends core 1.2
  description Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator.
 module m_syncbans 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_syncbans.cpp
