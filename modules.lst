@@ -1,6 +1,9 @@
 module m_antirandom 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_antirandom.cpp
  depends core 1.1
  description A module to prevent against bots using random patterns.
+module m_bandetails 0145b6c76990fd6dc099649e820b748188d1d0fb http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_bandetails.cpp
+ depends core 1.2
+ description Synchronises setter and time set of channel bans, so details are not lost.
 module m_banreason 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_banreason.cpp
  depends core 1.1
  description Adds the abiliy to store the reason a user was banned from a channel
