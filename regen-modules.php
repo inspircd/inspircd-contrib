@@ -24,6 +24,12 @@ function get_tags($sFile)
 		$aOut = explode(" ", $aOut[0]);
 
 		$aTags = get_tags($sFile);
+
+		if (empty($aOut[1]))
+		{
+			echo "Skipping " . $sStrippedName . " which is not in git\n";
+			continue;
+		}
 		
 
 		$sStrippedName = str_replace(".cpp", "", $sFile);
