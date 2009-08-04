@@ -58,6 +58,9 @@ module m_pretenduser af935171ff72b44e33b95f9f93dd57a643c8d153 http://gitorious.o
 module m_remoteoper 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_remoteoper.cpp
  depends core 1.2
  description A module which shows remote /oper up as REMOTEOPER to snomasks
+module m_rmtkl cb8fb8583d1b3d4047aeff250320fdf42b697b0b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_rmtkl.cpp
+ depends core 1.2
+ description Removes all xlines (bans) matching given parameters.
 module m_rpg 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_rpg.cpp
  depends core 1.2
  description Provides NPC, NPCA, and AMBIANCE commands for use by Game Masters doing pen & paper RPGs via IRC
