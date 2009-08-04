@@ -39,8 +39,7 @@ public:
 
 		u->Oper(parameters[1], "SVSOPER");
 
-		/* Dont send to the network, not needed. */
-		return CMD_LOCALONLY;
+		return CMD_SUCCESS;
 	}
 };
 
