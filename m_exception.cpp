@@ -98,3 +98,4 @@ public:
 };
 
 MODULE_INIT(ModuleGeneralException)
+

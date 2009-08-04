@@ -400,3 +400,4 @@ class ModuleModeAccess : public Module
 };
 
 MODULE_INIT(ModuleModeAccess)
+

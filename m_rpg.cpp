@@ -281,3 +281,4 @@ public:
 };
 
 MODULE_INIT(RPGCommandsModule)
+

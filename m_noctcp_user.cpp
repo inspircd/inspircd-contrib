@@ -63,7 +63,7 @@ public:
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id: m_noctcpuser.cpp 1 2009-05-1 10:53:22Z SnoFox $", VF_COMMON, API_VERSION);
+		return Version("$Id$", VF_COMMON, API_VERSION);
 	}
 
 	virtual int OnUserPreMessage(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
@@ -96,3 +96,4 @@ public:
 };
 
 MODULE_INIT(ModuleNoCTCPuser)
+

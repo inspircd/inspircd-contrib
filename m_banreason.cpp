@@ -238,3 +238,4 @@ extern "C" void * init_module( void )
 {
 	return new ModuleBanReasonFactory;
 }
+

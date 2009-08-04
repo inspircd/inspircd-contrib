@@ -78,3 +78,4 @@ class ModuleOoMode : public Module
 };
 
 MODULE_INIT(ModuleOoMode)
+

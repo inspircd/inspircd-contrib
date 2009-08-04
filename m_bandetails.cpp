@@ -51,9 +51,10 @@ class ModuleBanDetails : public Module
 
 		virtual Version GetVersion()
 		{
-			return Version("$Id: m_bandetails.cpp 0 2008-11-07 18:02:38SAMT phoenix $",VF_COMMON,API_VERSION);
+			return Version("$Id$",VF_COMMON,API_VERSION);
 		}
 
 };
 
 MODULE_INIT(ModuleBanDetails)
+

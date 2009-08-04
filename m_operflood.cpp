@@ -60,3 +60,4 @@ extern "C" DllExport void * init_module( void )
 {
 	return new ModuleOperFloodFactory;
 }
+

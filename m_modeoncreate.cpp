@@ -60,8 +60,9 @@ class ModuleModeOnCreate : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id: 41b11ed414c92ff5472ab52a0383c8d32c965438 $", VF_VENDOR, API_VERSION);
+		return Version("$Id$", VF_VENDOR, API_VERSION);
 	}
 };
 
 MODULE_INIT(ModuleModeOnCreate)
+

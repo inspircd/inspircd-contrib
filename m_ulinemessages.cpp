@@ -124,3 +124,4 @@ class ModuleFoobar : public Module
 
 MODULE_INIT(ModuleFoobar)
 
+

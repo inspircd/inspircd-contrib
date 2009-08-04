@@ -81,9 +81,10 @@ class ModuleCodepage : public Module
 		}
                 virtual Version GetVersion()
                 {
-		return Version("$Id: m_pretenduser.cpp 0 2008-10-22 9:33:00SAMST phoenix $",VF_VENDOR,API_VERSION);
+		return Version("$Id$",VF_VENDOR,API_VERSION);
                 }
 };
 
 
 MODULE_INIT(ModuleCodepage)
+

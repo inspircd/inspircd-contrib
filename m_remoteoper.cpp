@@ -58,3 +58,4 @@ class ModuleRemoteOper : public Module
 
 
 MODULE_INIT(ModuleRemoteOper)
+

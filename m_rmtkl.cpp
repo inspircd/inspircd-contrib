@@ -146,9 +146,10 @@ class ModuleRMTKL : public Module
 
 		virtual Version GetVersion()
 		{
-			return Version("$Id: m_rmtkl.cpp 0 2008-10-28 12:43:00SAMT phoenix $", VF_VENDOR, API_VERSION);
+			return Version("$Id$", VF_VENDOR, API_VERSION);
 		}
 
 };
 
 MODULE_INIT(ModuleRMTKL)
+

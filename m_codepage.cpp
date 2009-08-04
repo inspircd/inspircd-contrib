@@ -819,9 +819,10 @@ class ModuleCodepage : public Module
 
 		virtual Version GetVersion()
 		{
-		return Version("$Id: m_codepage.cpp 0 2008-10-21 10:00:00SAMST phoenix $",VF_VENDOR,API_VERSION);
+		return Version("$Id$",VF_VENDOR,API_VERSION);
 		}
 
 };
 
 MODULE_INIT(ModuleCodepage)
+

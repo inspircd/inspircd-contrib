@@ -65,8 +65,9 @@ class ModuleOperReg : public Module
 
 		virtual Version GetVersion()
 		{
-			return Version("$Id: m_operrequiresr.cpp 0 2008-10-28 00:00:00SAMT phoenix $",VF_VENDOR|VF_COMMON,API_VERSION);
+			return Version("$Id$",VF_VENDOR|VF_COMMON,API_VERSION);
 		}
 };
 
 MODULE_INIT(ModuleOperReg)
+

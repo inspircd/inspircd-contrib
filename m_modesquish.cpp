@@ -206,3 +206,4 @@ class module_modesquish : public Module
 
 MODULE_INIT(module_modesquish)
 
+

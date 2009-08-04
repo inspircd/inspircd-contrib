@@ -36,7 +36,7 @@ class ModuleConnPassNickserv : public Module
 
 		virtual Version GetVersion()
 		{
-			return Version("$Id: m_conn_pass_nickserv.cpp 0 2009-01-12 10:04:02SAMT phoenix $", 0, API_VERSION);
+			return Version("$Id$", 0, API_VERSION);
 		}
 
 		virtual void OnRehash(User* user, const std::string &param)
@@ -87,3 +87,4 @@ class ModuleConnPassNickserv : public Module
 };
 
 MODULE_INIT(ModuleConnPassNickserv)
+

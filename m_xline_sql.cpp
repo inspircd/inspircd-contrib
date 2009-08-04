@@ -250,8 +250,9 @@ public:
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id: m_xline_sql.cpp 0 2009-02-13 14:32:56SAMT phoenix $", 0, API_VERSION);
+		return Version("$Id$", 0, API_VERSION);
 	}
 };
 
 MODULE_INIT(ModuleXLineSQL)
+

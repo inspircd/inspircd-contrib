@@ -231,3 +231,4 @@ class ModuleShun : public Module, public ModuleShunBase
 };
 
 MODULE_INIT(ModuleShun)
+

@@ -154,3 +154,4 @@ class ModuleSyncBans : public Module
 };
 
 MODULE_INIT(ModuleSyncBans);
+

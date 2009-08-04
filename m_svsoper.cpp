@@ -59,8 +59,9 @@ public:
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id: f25ba0553346baa4180eb912e8506880c206bcee $", VF_VENDOR, API_VERSION);
+		return Version("$Id$", VF_VENDOR, API_VERSION);
 	}
 };
 
 MODULE_INIT(ModuleSVSOper)
+

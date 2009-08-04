@@ -51,3 +51,4 @@ class ModuleFreeformAdmin : public Module
 };
 
 MODULE_INIT(ModuleFreeformAdmin)
+

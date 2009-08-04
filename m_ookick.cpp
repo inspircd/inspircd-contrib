@@ -79,3 +79,4 @@ class ModuleOoKick : public Module
 };
 
 MODULE_INIT(ModuleOoKick)
+

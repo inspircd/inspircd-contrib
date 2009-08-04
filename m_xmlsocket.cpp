@@ -186,3 +186,4 @@ class ModuleXMLSocket : public Module
 
 MODULE_INIT(ModuleXMLSocket)
 
+
