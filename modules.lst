@@ -52,7 +52,7 @@ module m_operflood 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org
 module m_operperms 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_operperms.cpp
  depends core 1.1
  description Provides an /operperms command, allowing opers to view what commands they and other opers have access to.
-module m_pretenduser 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_pretenduser.cpp
+module m_pretenduser af935171ff72b44e33b95f9f93dd57a643c8d153 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_pretenduser.cpp
  depends core 1.2
  description Inject a command from another user
 module m_remoteoper 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_remoteoper.cpp
