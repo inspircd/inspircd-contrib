@@ -52,7 +52,7 @@ module m_oojoin c85f8e65be3e641a3971a13ac6d433db8ea5e6fc http://gitorious.org/in
 module m_ookick 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_ookick.cpp
  depends core 1.2
  description Provides overriding kick through explicit command
-module m_oomode 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_oomode.cpp
+module m_oomode 5dc1a3e513148a591401bf1c20f938e51e33978f http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5dc1a3e513148a591401bf1c20f938e51e33978f/m_oomode.cpp
  depends core 1.2
  description Provides nicer-looking SAMODE
 module m_operflood 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_operflood.cpp
