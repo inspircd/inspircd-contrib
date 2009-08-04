@@ -13,6 +13,9 @@ module m_codepage 62a095c9551c934b77ddf84e00823eaa453876f7 http://gitorious.org/
 module m_delaymsg 8b70c968b6361ca09abaa6d9998209cf91c69369 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_delaymsg.cpp
  depends core 1.2
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
+module m_elmer 81e09305d30ec410b2076016d5686fa25be66468 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_elmer.cpp
+ depends core 1.2
+ description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
 module m_exception 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/m_exception.cpp
  depends core 1.1
  description Provides support for the +x channel mode
