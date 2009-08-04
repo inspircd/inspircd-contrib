@@ -33,7 +33,7 @@ function get_tags($sFile)
 		
 
 		$sStrippedName = str_replace(".cpp", "", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/master/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{
