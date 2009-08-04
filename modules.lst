@@ -37,9 +37,6 @@ module m_modeoncreate 85312b5db13d8ccd29f44ad557fd952cb455632e http://gitorious.
 module m_modesquish 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5ba528dcd969cb401fe25806539278ad1d44fda0/m_modesquish.cpp
  depends core 1.1
  description Pre-parses MODE command to remove redundant modes
-module m_nationalchars 5ba528dcd969cb401fe25806539278ad1d44fda0 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5ba528dcd969cb401fe25806539278ad1d44fda0/m_nationalchars.cpp
- depends core 1.2
- description Provides ability to have non-RFC1459 nicks an maybe not only them :)
 module m_noctcp_user 9873ea7c604bfe85c6edd397f570a25a5bb0744b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/9873ea7c604bfe85c6edd397f570a25a5bb0744b/m_noctcp_user.cpp
  depends core 1.2
  description Provides support for unreal-style user mode +T
