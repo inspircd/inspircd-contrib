@@ -34,12 +34,6 @@ module m_ookick 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/in
 module m_oomode 5dc1a3e513148a591401bf1c20f938e51e33978f http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5dc1a3e513148a591401bf1c20f938e51e33978f/m_oomode.cpp
  depends core 1.2
  description Provides nicer-looking SAMODE
-module m_operflood 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_operflood.cpp
- depends core 1.1
- description Removes flood limits from users upon opering up.
-module m_operperms 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_operperms.cpp
- depends core 1.1
- description Provides an /operperms command, allowing opers to view what commands they and other opers have access to.
 module m_operrequiresr 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_operrequiresr.cpp
  depends core 1.2
  description Make /oper require that a user be identified as a certain user.
@@ -58,21 +52,9 @@ module m_rmtkl 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/ins
 module m_rpg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_rpg.cpp
  depends core 1.2
  description Provides NPC, NPCA, and AMBIANCE commands for use by Game Masters doing pen & paper RPGs via IRC
-module m_shun 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_shun.cpp
- depends core 1.1
- description Gives the /shun command, which stops a user executing all commands except PING and PONG.
 module m_svsoper 2a9a92b6478012adb1eb2da9e336881ea308f9f4 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2a9a92b6478012adb1eb2da9e336881ea308f9f4/m_svsoper.cpp
  depends core 1.2
  description Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator.
-module m_syncbans 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_syncbans.cpp
- depends core 1.1
- description Automatically synchronize bans between lists of channels
-module m_ulinemessages 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_ulinemessages.cpp
- depends core 1.1
- description Provides user mode +m, which converts uline notices to privmsg
-module m_whoismodes 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_whoismodes.cpp
- depends core 1.1
- description Allows opers to see users modes on whois
 module m_xline_sql 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_xline_sql.cpp
  depends core 1.2
  description Keeps a dynamic log of all XLines created, and stores them in a database.
