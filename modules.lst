@@ -1,12 +1,6 @@
-module m_antirandom 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_antirandom.cpp
- depends core 1.1
- description A module to prevent against bots using random patterns.
 module m_bandetails 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_bandetails.cpp
  depends core 1.2
  description Synchronises setter and time set of channel bans, so details are not lost.
-module m_banreason 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_banreason.cpp
- depends core 1.1
- description Adds the abiliy to store the reason a user was banned from a channel
 module m_channelnames 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_channelnames.cpp
  depends core 1.2
  description Implements a filter for channel names
@@ -22,24 +16,9 @@ module m_delaymsg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/
 module m_elmer 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_elmer.cpp
  depends core 1.2
  description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
-module m_exception 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_exception.cpp
- depends core 1.1
- description Provides support for the +x channel mode
-module m_fantasy 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_fantasy.cpp
- depends core 1.1
- description Provides ircd-side fantasy commands.
-module m_freeformadmin 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_freeformadmin.cpp
- depends core 1.1
- description Allows a freeform reply to the /ADMIN command
-module m_modeaccess 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_modeaccess.cpp
- depends core 1.1
- description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
 module m_modeoncreate 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_modeoncreate.cpp
  depends core 1.2
  description Allows modes to be customised for channel creation. e.g. <modeoncreate privs="@%"> would set +oh on a creating user. Also allows <modeoncreate affectsoper="true"> if you want opers affected too.
-module m_modesquish 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_modesquish.cpp
- depends core 1.1
- description Pre-parses MODE command to remove redundant modes
 module m_noctcp_user 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_noctcp_user.cpp
  depends core 1.2
  description Provides support for unreal-style user mode +T
