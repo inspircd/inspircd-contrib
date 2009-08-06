@@ -13,8 +13,9 @@
 
 #include "inspircd.h"
 
-/* $ModDesc: Creates a snomask with notices for whenever 
-	      user create, join, part, kick to or from channel */
+/* $ModDesc: Creates a snomask with notices for channel creation, join, part, and kick */
+/* $ModAuthor: cytrix */
+/* $ModDepends: core 1.2 */
 
 class ModuleSeeChan : public Module
 {

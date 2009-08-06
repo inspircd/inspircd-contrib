@@ -22,6 +22,8 @@
 #endif
 
 /* $ModDesc: Provides handling of DNS blacklists */
+/* $ModAuthor: cytrix */
+/* $ModDepends: core 1.2 */
 
 /* Class holding data for a single entry */
 class DNSBLConfEntry : public classbase

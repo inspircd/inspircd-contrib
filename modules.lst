@@ -13,6 +13,9 @@ module m_conn_pass_nickserv 65ed0c3f05122f79df39789b82353ad894983d37 http://gito
 module m_delaymsg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_delaymsg.cpp
  depends core 1.2
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
+module m_dnsbl 9111e6854194ff99a056e282f5874064217427d9 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/9111e6854194ff99a056e282f5874064217427d9/m_dnsbl.cpp
+ depends core 1.2
+ description Provides handling of DNS blacklists
 module m_elmer 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_elmer.cpp
  depends core 1.2
  description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
@@ -58,6 +61,9 @@ module m_rmtkl 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/ins
 module m_rpg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_rpg.cpp
  depends core 1.2
  description Provides NPC, NPCA, and AMBIANCE commands for use by Game Masters doing pen & paper RPGs via IRC
+module m_seechan 8dc19064556eb29c62eaaeec841905753096ad53 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/8dc19064556eb29c62eaaeec841905753096ad53/m_seechan.cpp
+ depends core 1.2
+ description Creates a snomask with notices for channel creation, join, part, and kick
 module m_shun 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_shun.cpp
  depends core 1.1
  description Gives the /shun command, which stops a user executing all commands except PING and PONG.
