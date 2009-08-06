@@ -38,7 +38,7 @@ class ModuleSeeChan : public Module
 		ServerInstance->SNO->DisableSnomask('j');
 		ServerInstance->SNO->DisableSnomask('J');
 	}
-	virtual Version GetVersion(
+	virtual Version GetVersion()
 	{
 		return Version("$Id$",VF_VENDOR,API_VERSION);
 	}
