@@ -30,7 +30,7 @@ public:
 
 	CmdResult Handle (const std::vector<std::string> &parameters, User *user)
 	{
-		if (IS_LOCAL(user) && !ServerInstance->ULine(user->server))
+		if (IS_LOCAL(user))
 			return CMD_FAILURE;
 
 		User *u = ServerInstance->FindNick(parameters[0]);
