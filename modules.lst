@@ -13,9 +13,6 @@ module m_conn_pass_nickserv 65ed0c3f05122f79df39789b82353ad894983d37 http://gito
 module m_delaymsg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_delaymsg.cpp
  depends core 1.2
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
-module m_dnsbl 14d647b4737f5dd8a740bc1c5481453acc2b02f8 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/14d647b4737f5dd8a740bc1c5481453acc2b02f8/m_dnsbl.cpp
- depends core 1.2
- description Provides handling of DNS blacklists
 module m_elmer 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_elmer.cpp
  depends core 1.2
  description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
