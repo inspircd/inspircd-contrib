@@ -23,7 +23,7 @@ module m_noctcp_user 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.o
  depends core 1.2
  description Provides support for unreal-style user mode +T
 module m_ojoin 1c0dbcac93a3dc6a572771b7dbfdf4f0fe337aac http://gitorious.org/inspircd/inspircd-extras/blobs/raw/1c0dbcac93a3dc6a572771b7dbfdf4f0fe337aac/m_ojoin.cpp
- depends core 1.2
+ depends core 1.2-1.3
  description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
 module m_oojoin c85f8e65be3e641a3971a13ac6d433db8ea5e6fc http://gitorious.org/inspircd/inspircd-extras/blobs/raw/c85f8e65be3e641a3971a13ac6d433db8ea5e6fc/m_oojoin.cpp
  depends core 1.2

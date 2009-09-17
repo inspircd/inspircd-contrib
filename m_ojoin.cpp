@@ -27,7 +27,7 @@
 /* $ModDesc: Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on. */
 /* $ModAuthor: Taros */
 /* $ModAuthorMail: taros34@hotmail.com */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 /* A note: This will not protect against kicks from services,
  * ulines, or operoverride. */
