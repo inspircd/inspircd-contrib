@@ -16,14 +16,15 @@
 
 /* $ModDesc: channel mode +d <time> prevents users from speaking for <time> seconds after join */
 /* $ModAuthor: danieldg */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 class DelayMsgMode : public ModeHandler
 {
  private:
 	CUList empty;
+	Module* Creator;
  public:
-	DelayMsgMode(InspIRCd* Instance, Module* Parent) : ModeHandler(Instance, Parent, 'd', 1, 0, false, MODETYPE_CHANNEL, false, 0, '@') {};
+	DelayMsgMode(InspIRCd* Instance, Module* Parent) : ModeHandler(Instance, 'd', 1, 0, false, MODETYPE_CHANNEL, false, 0, '@'), Creator(Parent) {};
 
 	ModePair ModeSet(User*, User*, Channel* channel, const std::string &parameter)
 	{
@@ -38,12 +39,7 @@ class DelayMsgMode : public ModeHandler
 		}
 	}
 
-	bool CheckTimeStamp(std::string &their_param, const std::string &our_param, Channel*)
-	{
-		return (atoi(their_param.c_str()) < atoi(our_param.c_str()));
-	}
-
-	ModeAction OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding);
+	ModeAction OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding, bool);
 };
 
 class ModuleDelayMsg : public Module
@@ -60,14 +56,14 @@ class ModuleDelayMsg : public Module
 	}
 	virtual ~ModuleDelayMsg();
 	virtual Version GetVersion();
-	void OnUserJoin(User* user, Channel* channel, bool sync, bool &silent, bool created);
+	void OnUserJoin(User* user, Channel* channel, bool sync, bool &silent);
 	void OnUserPart(User* user, Channel* channel, std::string &partmessage, bool &silent);
 	void OnUserKick(User* source, User* user, Channel* chan, const std::string &reason, bool &silent);
 	void OnCleanup(int target_type, void* item);
-	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string &text, char status, CUList &exempt_list);
+	int OnUserPreMessage(User* user, void* dest, int target_type, std::string &text, char status, CUList &exempt_list);
 };
 
-ModeAction DelayMsgMode::OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding)
+ModeAction DelayMsgMode::OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding, bool)
 {
 	if (adding)
 	{
@@ -100,10 +96,10 @@ ModuleDelayMsg::~ModuleDelayMsg()
 
 Version ModuleDelayMsg::GetVersion()
 {
-	return Version("$Id$", VF_COMMON, API_VERSION);
+	return Version("$Id$", VF_COMMON | VF_VENDOR, API_VERSION);
 }
 
-void ModuleDelayMsg::OnUserJoin(User* user, Channel* channel, bool sync, bool &silent, bool created)
+void ModuleDelayMsg::OnUserJoin(User* user, Channel* channel, bool sync, bool &silent)
 {
 	if (channel->IsModeSet('d'))
 		user->Extend("delaymsg_"+channel->name, reinterpret_cast<char*>(ServerInstance->Time()));
@@ -170,5 +166,4 @@ int ModuleDelayMsg::OnUserPreMessage(User* user, void* dest, int target_type, st
 }
 
 MODULE_INIT(ModuleDelayMsg)
-
 
