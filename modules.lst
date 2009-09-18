@@ -10,7 +10,7 @@ module m_codepage 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/
 module m_conn_pass_nickserv 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_conn_pass_nickserv.cpp
  depends core 1.2
  description Forwards NickServ credentials from PASS
-module m_delaymsg 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_delaymsg.cpp
+module m_delaymsg 484406b211f7bad16d532cd81b264716a039042f http://gitorious.org/inspircd/inspircd-extras/blobs/raw/484406b211f7bad16d532cd81b264716a039042f/m_delaymsg.cpp
  depends core 1.2-1.3
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
 module m_elmer 65ed0c3f05122f79df39789b82353ad894983d37 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/65ed0c3f05122f79df39789b82353ad894983d37/m_elmer.cpp
