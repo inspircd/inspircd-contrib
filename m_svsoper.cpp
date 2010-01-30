@@ -58,7 +58,7 @@ public:
 
 	virtual Version GetVersion()
 	{
-		return Version("$Id$", VF_VENDOR, API_VERSION);
+		return Version("$Id$", 0, API_VERSION);
 	}
 };
 
