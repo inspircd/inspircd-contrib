@@ -22,7 +22,7 @@ module m_elmer 74579bccd0239eaa75c860f8f2239c13e4a41fca http://gitorious.org/ins
 module m_mkick 74579bccd0239eaa75c860f8f2239c13e4a41fca http://gitorious.org/inspircd/inspircd-extras/blobs/raw/74579bccd0239eaa75c860f8f2239c13e4a41fca/m_mkick.cpp
  depends core 1.2-1.3
  description Provides the /MKICK command, allows ops on a a channel to mass kick all non-ops.
-module m_modeaccess 27c3af825f747330aadf5320d39e91053e734e69 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/27c3af825f747330aadf5320d39e91053e734e69/m_modeaccess.cpp
+module m_modeaccess ee84c78ee743e1b27348b2dbd2c5493daacfd987 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/ee84c78ee743e1b27348b2dbd2c5493daacfd987/m_modeaccess.cpp
  depends core 1.2
  description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
 module m_modeoncreate 74579bccd0239eaa75c860f8f2239c13e4a41fca http://gitorious.org/inspircd/inspircd-extras/blobs/raw/74579bccd0239eaa75c860f8f2239c13e4a41fca/m_modeoncreate.cpp
