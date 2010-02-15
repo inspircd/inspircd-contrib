@@ -41,9 +41,11 @@ class ModuleSSLAutoOper : public Module
 	{
 		Module* sslmodule;
 		sslmodule = ServerInstance->Modules->Find("m_ssl_gnutls.so");
-		if (!sslmodule)
-			sslmodule = ServerInstance->Modules->Find("m_ssl_openssl.so");
-		ServerInstance->Modules->SetPriority(this, I_OnPostConnect, PRIORITY_AFTER, &sslmodule);
+		if (sslmodule)
+			ServerInstance->Modules->SetPriority(this, I_OnPostConnect, PRIORITY_AFTER, &sslmodule);
+		sslmodule = ServerInstance->Modules->Find("m_ssl_openssl.so");
+		if (sslmodule)
+			ServerInstance->Modules->SetPriority(this, I_OnPostConnect, PRIORITY_AFTER, &sslmodule);
 	}
 
 	bool OneOfMatches(const char* host, const char* ip, const char* hostlist)
