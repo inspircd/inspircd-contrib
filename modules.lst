@@ -40,89 +40,89 @@ module m_ulinemessages 710d6cadb7a4bc72a9cb08289a9288a26362fbcd http://gitorious
 module m_whoismodes 710d6cadb7a4bc72a9cb08289a9288a26362fbcd http://gitorious.org/inspircd/inspircd-extras/blobs/raw/710d6cadb7a4bc72a9cb08289a9288a26362fbcd/1.1/m_whoismodes.cpp
  depends core 1.1
  description Allows opers to see users modes on whois
-module m_bandetails db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_bandetails.cpp
+module m_bandetails 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_bandetails.cpp
  depends core 1.2
  description Synchronises setter and time set of channel bans, so details are not lost.
-module m_chanmode db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_chanmode.cpp
+module m_chanmode 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_chanmode.cpp
  depends core 1.2-1.3
  description Module adds snomasks v and V allows opers to view any and ALL mode changes that are done by users to channels on the network.
-module m_channelnames db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_channelnames.cpp
+module m_channelnames 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_channelnames.cpp
  depends core 1.2
  description Implements a filter for channel names
-module m_codepage db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_codepage.cpp
+module m_codepage 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
-module m_conn_pass_nickserv db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_conn_pass_nickserv.cpp
+module m_conn_pass_nickserv 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_conn_pass_nickserv.cpp
  depends core 1.2
  description Forwards NickServ credentials from PASS
-module m_delaymsg db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_delaymsg.cpp
+module m_delaymsg 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_delaymsg.cpp
  depends core 1.2-1.3
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
-module m_elmer db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_elmer.cpp
- depends core 1.2
- description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
-module m_mkick db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_mkick.cpp
- depends core 1.2-1.3
- description Provides the /MKICK command, allows ops on a a channel to mass kick all non-ops.
-module m_modeaccess db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_modeaccess.cpp
- depends core 1.2
- description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
-module m_modeoncreate db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_modeoncreate.cpp
- depends core 1.2
- description Allows modes to be customised for channel creation. e.g. <modeoncreate privs="@%"> would set +oh on a creating user. Also allows <modeoncreate affectsoper="true"> if you want opers affected too.
-module m_noctcp_user db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_noctcp_user.cpp
- depends core 1.2
- description Provides support for unreal-style user mode +T
-module m_ojoin db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_ojoin.cpp
- depends core 1.2-1.3
- description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
-module m_oojoin db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_oojoin.cpp
- depends core 1.2
- description Provides overriding join into a channel through explicit command
-module m_ookick db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_ookick.cpp
- depends core 1.2
- description Provides overriding kick through explicit command
-module m_oomode db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_oomode.cpp
- depends core 1.2
- description Provides nicer-looking SAMODE
-module m_operrequiresr db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_operrequiresr.cpp
- depends core 1.2
- description Make /oper require that a user be identified as a certain user.
-module m_pretendserver db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_pretendserver.cpp
- depends core 1.2
- description Inject a command from a server to a user
-module m_pretenduser db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_pretenduser.cpp
- depends core 1.2
- description Inject a command from another user
-module m_remoteoper db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_remoteoper.cpp
- depends core 1.2
- description A module which shows remote /oper up as REMOTEOPER to snomasks
-module m_rmtkl db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_rmtkl.cpp
- depends core 1.2
- description Removes all xlines (bans) matching given parameters.
-module m_rpg db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_rpg.cpp
- depends core 1.2 1.3
- description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
-module m_seechan db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_seechan.cpp
- depends core 1.2
- description Creates a snomask with notices for channel creation, join, part, and kick
-module m_ssl_autooper db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_ssl_autooper.cpp
- depends core 1.2-1.3
- description auto-opers any user if his SSL fingerprint matches with the fingerprint in an oper block
-module m_statusprefix db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_statusprefix.cpp
- depends core 1.2-1.3
-module m_svsoper db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_svsoper.cpp
- depends core 1.2
- description Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator.
-module m_usermode db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_usermode.cpp
- depends core 1.2-1.3
- description Module adds snomasks u and U allows opers to view any and ALL mode changes that are done by users on the network.
-module m_xline_sql db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_xline_sql.cpp
- depends core 1.2
- description Keeps a dynamic log of all XLines created, and stores them in a database.
-module m_xmlsocket db5789c23bae7e0e4970e56a6f004cc1bd212326 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/db5789c23bae7e0e4970e56a6f004cc1bd212326/1.2/m_xmlsocket.cpp
- depends core 1.2
- description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
-module m_dnsbl 74579bccd0239eaa75c860f8f2239c13e4a41fca http://gitorious.org/inspircd/inspircd-extras/blobs/raw/74579bccd0239eaa75c860f8f2239c13e4a41fca/staging/m_dnsbl.cpp
+module m_dnsbl_2 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_dnsbl_2.cpp
  depends core 1.2
  description Provides handling of DNS blacklists
+module m_elmer 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_elmer.cpp
+ depends core 1.2
+ description Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.)
+module m_mkick 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_mkick.cpp
+ depends core 1.2-1.3
+ description Provides the /MKICK command, allows ops on a a channel to mass kick all non-ops.
+module m_modeaccess 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_modeaccess.cpp
+ depends core 1.2
+ description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
+module m_modeoncreate 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_modeoncreate.cpp
+ depends core 1.2
+ description Allows modes to be customised for channel creation. e.g. <modeoncreate privs="@%"> would set +oh on a creating user. Also allows <modeoncreate affectsoper="true"> if you want opers affected too.
+module m_noctcp_user 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_noctcp_user.cpp
+ depends core 1.2
+ description Provides support for unreal-style user mode +T
+module m_ojoin 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ojoin.cpp
+ depends core 1.2-1.3
+ description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
+module m_oojoin 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_oojoin.cpp
+ depends core 1.2
+ description Provides overriding join into a channel through explicit command
+module m_ookick 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ookick.cpp
+ depends core 1.2
+ description Provides overriding kick through explicit command
+module m_oomode 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_oomode.cpp
+ depends core 1.2
+ description Provides nicer-looking SAMODE
+module m_operrequiresr 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_operrequiresr.cpp
+ depends core 1.2
+ description Make /oper require that a user be identified as a certain user.
+module m_pretendserver 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_pretendserver.cpp
+ depends core 1.2
+ description Inject a command from a server to a user
+module m_pretenduser 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_pretenduser.cpp
+ depends core 1.2
+ description Inject a command from another user
+module m_remoteoper 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_remoteoper.cpp
+ depends core 1.2
+ description A module which shows remote /oper up as REMOTEOPER to snomasks
+module m_rmtkl 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_rmtkl.cpp
+ depends core 1.2
+ description Removes all xlines (bans) matching given parameters.
+module m_rpg 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_rpg.cpp
+ depends core 1.2 1.3
+ description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
+module m_seechan 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_seechan.cpp
+ depends core 1.2
+ description Creates a snomask with notices for channel creation, join, part, and kick
+module m_ssl_autooper 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ssl_autooper.cpp
+ depends core 1.2-1.3
+ description auto-opers any user if his SSL fingerprint matches with the fingerprint in an oper block
+module m_statusprefix 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_statusprefix.cpp
+ depends core 1.2-1.3
+module m_svsoper 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_svsoper.cpp
+ depends core 1.2
+ description Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator.
+module m_usermode 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_usermode.cpp
+ depends core 1.2-1.3
+ description Module adds snomasks u and U allows opers to view any and ALL mode changes that are done by users on the network.
+module m_xline_sql 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_xline_sql.cpp
+ depends core 1.2
+ description Keeps a dynamic log of all XLines created, and stores them in a database.
+module m_xmlsocket 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_xmlsocket.cpp
+ depends core 1.2
+ description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
