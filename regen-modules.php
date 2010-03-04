@@ -17,7 +17,7 @@ function get_tags($sFile)
 
 	$sText = "";
 
-	foreach (glob("m_*.cpp") as $sFile)
+	foreach (glob("*/m_*.cpp") as $sFile)
 	{
 		$aOut = array();
 		exec("git log -n 1 " . $sFile, $aOut);
@@ -32,7 +32,7 @@ function get_tags($sFile)
 		}
 		
 
-		$sStrippedName = str_replace(".cpp", "", $sFile);
+		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
 		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
