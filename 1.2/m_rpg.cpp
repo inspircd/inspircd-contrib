@@ -18,7 +18,7 @@
 /* $ModDesc: Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC */
 /* $ModAuthor: Naram Qashat (CyberBotX) */
 /* $ModAuthorMail: cyberbotx@cyberbotx.com */
-/* $ModDepends: core 1.2 1.3 */
+/* $ModDepends: core 1.2-1.3 */
 
 /** Base class for /NPC and /NPCA
  */
