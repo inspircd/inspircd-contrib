@@ -103,7 +103,7 @@ module m_remoteoper 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.or
 module m_rmtkl 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_rmtkl.cpp
  depends core 1.2
  description Removes all xlines (bans) matching given parameters.
-module m_rpg 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_rpg.cpp
+module m_rpg cb0d9a9ca7aa55a4f498461355a812885a26289b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/cb0d9a9ca7aa55a4f498461355a812885a26289b/1.2/m_rpg.cpp
  depends core 1.2-1.3
  description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
 module m_seechan 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_seechan.cpp
