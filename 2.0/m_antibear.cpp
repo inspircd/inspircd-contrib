@@ -15,6 +15,7 @@
 #include "xline.h"
 
 /* $ModDesc: Sends a numeric on connect which cripples a common type of trojan/spambot */
+/* $ModDepends: core 2.0 */
 
 class ModuleAntiBear : public Module
 {
