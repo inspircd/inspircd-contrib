@@ -126,9 +126,12 @@ module m_xline_sql 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org
 module m_xmlsocket 0ae678b7ca9fc03a4a2e3335b29daf11835ca186 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_xmlsocket.cpp
  depends core 1.2
  description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
-module m_antibear 1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79/2.0/m_antibear.cpp
+module m_antibear e3594b65d8febf31314c3f64ee39836cff08b58d http://gitorious.org/inspircd/inspircd-extras/blobs/raw/e3594b65d8febf31314c3f64ee39836cff08b58d/2.0/m_antibear.cpp
+ depends core 2.0
  description Sends a numeric on connect which cripples a common type of trojan/spambot
-module m_antibottler 1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79/2.0/m_antibottler.cpp
+module m_antibottler e3594b65d8febf31314c3f64ee39836cff08b58d http://gitorious.org/inspircd/inspircd-extras/blobs/raw/e3594b65d8febf31314c3f64ee39836cff08b58d/2.0/m_antibottler.cpp
+ depends core 2.0
  description Changes the ident of connecting bottler clients to 'bottler'
-module m_invisible 1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/1652b0b7a2d1a8a3836fd0771f8d65bd6022ee79/2.0/m_invisible.cpp
+module m_invisible e3594b65d8febf31314c3f64ee39836cff08b58d http://gitorious.org/inspircd/inspircd-extras/blobs/raw/e3594b65d8febf31314c3f64ee39836cff08b58d/2.0/m_invisible.cpp
+ depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
