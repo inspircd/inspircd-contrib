@@ -15,7 +15,7 @@
 #include <stdarg.h>
 
 /* $ModDesc: Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode */
-/* $ModDepends: core 2.0 */
+/* $ModDepends: core 2.0-2.1 */
 
 class InvisibleMode : public ModeHandler
 {

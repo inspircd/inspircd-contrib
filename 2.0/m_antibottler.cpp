@@ -14,7 +14,7 @@
 #include "inspircd.h"
 
 /* $ModDesc: Changes the ident of connecting bottler clients to 'bottler' */
-/* $ModDepends: core 2.0 */
+/* $ModDepends: core 2.0-2.1 */
 
 class ModuleAntiBottler : public Module
 {
