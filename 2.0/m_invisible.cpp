@@ -93,8 +93,7 @@ class ModuleInvisible : public Module
 
 	void init()
 	{
-		if (!ServerInstance->Modes->AddMode(&qm))
-			throw ModuleException("Could not add new modes!");
+		ServerInstance->Modules->AddService(qm);
 
 		/* Yeah i know people can take this out. I'm not about to obfuscate code just to be a pain in the ass. */
 		ServerInstance->Users->ServerNoticeAll("*** m_invisible.so has just been loaded on this network. For more information, please visit http://inspircd.org/wiki/Modules/invisible");
