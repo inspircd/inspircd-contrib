@@ -63,13 +63,19 @@ class ModuleAntiBear : public Module
 		return MOD_RES_PASSTHRU;
 	}
 
-	virtual ModResult OnUserRegister(LocalUser* user)
+#if INSPIRCD_VERSION_MAJ >= 201
+	void OnUserRegister(LocalUser* user)
+#else
+	ModResult OnUserRegister(LocalUser* user)
+#endif
 	{
 		user->WriteNumeric(439, "%s :This server has anti-spambot mechanisms enabled.", user->nick.c_str());
 		user->WriteNumeric(931, "%s :Malicious bots, spammers, and other automated systems of dubious origin are NOT welcome here.", user->nick.c_str());
 		user->WriteServ("PRIVMSG %s :\1TIME\1", user->nick.c_str());
 		bearExt.set(user, 1);
+#if INSPIRCD_VERSION_MAJ < 201
 		return MOD_RES_PASSTHRU;
+#endif
 	}
 };
 
