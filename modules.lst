@@ -52,13 +52,13 @@ module m_channelnames init-80-g0ae678b http://gitorious.org/inspircd/inspircd-ex
 module m_codepage init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_codepage.cpp
  depends core 1.2
  description Recodes messages from one encoding to another based on port bindings.
-module m_conn_pass_nickserv init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_conn_pass_nickserv.cpp
+module m_conn_pass_nickserv init-92-g2787e15 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2787e156e2f6a0e974752061fbc9c2f5a2c00069/1.2/m_conn_pass_nickserv.cpp
  depends core 1.2
  description Forwards NickServ credentials from PASS
 module m_delaymsg init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_delaymsg.cpp
  depends core 1.2-1.3
  description channel mode +d <time> prevents users from speaking for <time> seconds after join
-module m_dnsbl_2 init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_dnsbl_2.cpp
+module m_dnsbl_2 init-92-g2787e15 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2787e156e2f6a0e974752061fbc9c2f5a2c00069/1.2/m_dnsbl_2.cpp
  depends core 1.2
  description Provides handling of DNS blacklists
 module m_elmer init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_elmer.cpp
@@ -67,7 +67,7 @@ module m_elmer init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/bl
 module m_mkick init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_mkick.cpp
  depends core 1.2-1.3
  description Provides the /MKICK command, allows ops on a a channel to mass kick all non-ops.
-module m_modeaccess init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_modeaccess.cpp
+module m_modeaccess init-92-g2787e15 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2787e156e2f6a0e974752061fbc9c2f5a2c00069/1.2/m_modeaccess.cpp
  depends core 1.2
  description Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes.
 module m_modeoncreate init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_modeoncreate.cpp
@@ -79,16 +79,7 @@ module m_noctcp_user init-80-g0ae678b http://gitorious.org/inspircd/inspircd-ext
 module m_ojoin init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ojoin.cpp
  depends core 1.2-1.3
  description Provides the /ojoin command, which joins a user to a channel on network business, and gives them +Y, which makes them immune to kick / deop and so on.
-module m_oojoin init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_oojoin.cpp
- depends core 1.2
- description Provides overriding join into a channel through explicit command
-module m_ookick init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ookick.cpp
- depends core 1.2
- description Provides overriding kick through explicit command
-module m_oomode init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_oomode.cpp
- depends core 1.2
- description Provides nicer-looking SAMODE
-module m_operrequiresr init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_operrequiresr.cpp
+module m_operrequiresr init-92-g2787e15 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2787e156e2f6a0e974752061fbc9c2f5a2c00069/1.2/m_operrequiresr.cpp
  depends core 1.2
  description Make /oper require that a user be identified as a certain user.
 module m_pretendserver init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_pretendserver.cpp
@@ -106,7 +97,7 @@ module m_rmtkl init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/bl
 module m_rpg init-82-gcb0d9a9 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/cb0d9a9ca7aa55a4f498461355a812885a26289b/1.2/m_rpg.cpp
  depends core 1.2-1.3
  description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
-module m_seechan init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_seechan.cpp
+module m_seechan init-92-g2787e15 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2787e156e2f6a0e974752061fbc9c2f5a2c00069/1.2/m_seechan.cpp
  depends core 1.2
  description Creates a snomask with notices for channel creation, join, part, and kick
 module m_ssl_autooper init-80-g0ae678b http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ssl_autooper.cpp
