@@ -31,9 +31,11 @@ function get_tags($sFile)
 			continue;
 		}
 		
+		$niceVer = array();
+		exec("git describe --tags ".$aOut[1], $niceVer);
 
 		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $aOut[1] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $niceVer[0] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{
