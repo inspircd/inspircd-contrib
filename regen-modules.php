@@ -33,9 +33,10 @@ function get_tags($sFile)
 		
 		$niceVer = array();
 		exec("git describe --tags ".$aOut[1], $niceVer);
+		$verNum = preg_replace('/init-(.*)-g.*/', "0.$1", $niceVer[0]);
 
 		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $niceVer[0] . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $verNum . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{
