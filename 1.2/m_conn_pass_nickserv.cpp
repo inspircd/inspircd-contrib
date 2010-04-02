@@ -25,7 +25,7 @@ class ModuleConnPassNickserv : public Module
 	public:
 		ModuleConnPassNickserv(InspIRCd* Me) : Module(Me)
 		{
-			OnRehash(NULL,"");
+			OnRehash(NULL);
 			Implementation eventlist[] = { I_OnPostConnect, I_OnRehash };
 			ServerInstance->Modules->Attach(eventlist, this, 2);
 		}
@@ -39,7 +39,7 @@ class ModuleConnPassNickserv : public Module
 			return Version("$Id$", 0, API_VERSION);
 		}
 
-		virtual void OnRehash(User* user, const std::string &param)
+		virtual void OnRehash(User* user)
 		{
 			ConfigReader Conf(ServerInstance);
 			nickrequired = Conf.ReadValue("passnickserv", "nick", "NickServ", 0);

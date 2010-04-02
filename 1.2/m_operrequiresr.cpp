@@ -57,7 +57,7 @@ class ModuleOperReg : public Module
 			Conf = new ConfigReader(ServerInstance);
 		}
 
-		virtual void OnRehash(User* user, const std::string &parameter)
+		void OnRehash(User* user)
 		{
 			delete Conf;
 			Conf = new ConfigReader(ServerInstance);

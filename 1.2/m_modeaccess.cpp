@@ -193,7 +193,7 @@ class ModuleModeAccess : public Module
 		ModuleModeAccess(InspIRCd* Me)
 			: Module::Module(Me), Srv(Me)
 		{
-			OnRehash(NULL, "");
+			OnRehash(NULL);
 
 			Implementation list[] = { I_On005Numeric, I_OnRawMode, I_OnRehash };
 			Me->Modules->Attach(list, this, 3);
@@ -216,7 +216,7 @@ class ModuleModeAccess : public Module
 		 * <access modes="S" prefix="~" umodes="o"> - Only opers who are have the ~ prefix on a channel can set +S on the channel
 		 * <access modes="A" cmodes="z"><access modes="A" umodes="z"> - +A can be set by a user with umode +z, or by anyone if the channel has cmode +z
 		 */
-		virtual void OnRehash(User* user, const std::string &parameter)
+		virtual void OnRehash(User* user)
 		{
 			ConfigReader Conf(Srv);
 

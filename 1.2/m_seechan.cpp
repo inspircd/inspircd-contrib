@@ -29,7 +29,7 @@ class ModuleSeeChan : public Module
 		Implementation eventlist[] = { I_OnUserJoin, I_OnUserPart, I_OnUserKick };
 		ServerInstance->Modules->Attach(eventlist, this, 3);
 	}
-	virtual void OnUserJoin(User* user, Channel* channel, bool sync, bool &silent, bool created);
+	virtual void OnUserJoin(User* user, Channel* channel, bool sync, bool &silent);
 	virtual void OnUserPart(User* user, Channel* channel, std::string &partmessage, bool &silent);
 	virtual void OnUserKick(User* source, User* user, Channel* chan, const std::string &reason, bool &silent);
 
@@ -44,10 +44,10 @@ class ModuleSeeChan : public Module
 	}
 };
 
-void ModuleSeeChan::OnUserJoin(User* user, Channel* channel, bool sync, bool &silent, bool created)
+void ModuleSeeChan::OnUserJoin(User* user, Channel* channel, bool sync, bool &silent)
 {
 	silent = false;
-	if (!created)
+	if (channel->age == ServerInstance->Time())
 		ServerInstance->SNO->WriteToSnoMask(IS_LOCAL(user) ? 'j' : 'J',"%s!%s@%s has joined to %s",user->nick.c_str(), user->ident.c_str(), user->host.c_str(),channel->name.c_str());
 	else
 		ServerInstance->SNO->WriteToSnoMask(IS_LOCAL(user) ? 'j' : 'J',"%s!%s@%s has created %s",user->nick.c_str(), user->ident.c_str(), user->host.c_str(),channel->name.c_str());
