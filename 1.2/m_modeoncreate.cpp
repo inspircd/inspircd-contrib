@@ -16,7 +16,7 @@
 /* $ModDesc: Allows modes to be customised for channel creation. e.g. <modeoncreate privs="@%"> would set +oh on a creating user. Also allows <modeoncreate affectsoper="true"> if you want opers affected too. */
 /* $ModAuthor: w00t */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 
 class ModuleModeOnCreate : public Module

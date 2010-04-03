@@ -16,7 +16,7 @@
 /* $ModDesc: Allows services to oper up a given user via SVSOPER. e.g. SVSOPER 00AAAAAAA Network_Administrator. */
 /* $ModAuthor: w00t */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 class CommandSVSOper : public Command
 {

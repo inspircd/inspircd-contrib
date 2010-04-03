@@ -3,7 +3,7 @@
 /* $ModDesc: Synchronises setter and time set of channel bans, so details are not lost. */
 /* $ModAuthor: Aleksey */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
  
 class ModuleBanDetails : public Module
 {

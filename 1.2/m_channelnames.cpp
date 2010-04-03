@@ -15,7 +15,7 @@
 
 /* $ModDesc: Implements a filter for channel names */
 /* $ModAuthor: danieldg */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 class ModuleChannelNames: public Module
 {

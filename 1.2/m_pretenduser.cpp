@@ -17,7 +17,7 @@
 /* $ModDesc: Inject a command from another user */
 /* $ModAuthor: Alexey */
 /* $ModAuthorMail: Phoenix@RusNet */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 #include "inspircd.h"
 

@@ -17,7 +17,7 @@
 /* $ModDesc: Recodes messages from one encoding to another based on port bindings. */
 /* $ModAuthor: Alexey */
 /* $ModAuthorMail: Phoenix@RusNet */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 /* $ModVersion: $Rev: 78 $ */
 
 

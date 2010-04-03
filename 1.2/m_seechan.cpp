@@ -15,7 +15,7 @@
 
 /* $ModDesc: Creates a snomask with notices for channel creation, join, part, and kick */
 /* $ModAuthor: cytrix */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 class ModuleSeeChan : public Module
 {

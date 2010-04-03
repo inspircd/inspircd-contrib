@@ -19,7 +19,7 @@
 /* $ModDesc: Keeps a dynamic log of all XLines created, and stores them in a database. */
 /* $ModAuthor: Alexey */
 /* $ModAuthorMail: Phoenix@Rusnet */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 /* based on m_xline_db and m_sql_auth(?)
    by Chernov-Phoenix Alexey (Phoenix@RusNet) mailto:phoenix /email address separator/ pravmail.ru */

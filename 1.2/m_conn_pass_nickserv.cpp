@@ -3,7 +3,7 @@
 /* $ModDesc: Forwards NickServ credentials from PASS */
 /* $ModAuthor: satmd */
 /* $ModAuthorMail: http://lain.at/blog/ */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 void SearchAndReplace(std::string& newline, const std::string &find, const std::string &replace)
 {

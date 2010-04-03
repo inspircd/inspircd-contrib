@@ -17,7 +17,7 @@
 /* $ModDesc: Removes all xlines (bans) matching given parameters. */
 /* $ModAuthor: Alexey */
 /* $ModAuthorMail: Phoenix@RusNet */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 bool XLineTypeSort(const std::string &f1, const std::string &f2)
 {

@@ -16,7 +16,7 @@
 /* $ModDesc: A module which shows remote /oper up as REMOTEOPER to snomasks */
 /* $ModAuthor: psychon */
 /* $ModAuthorMail: psychon@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 /* $ModVersion: $Rev: 78 $ */
 
 class ModuleRemoteOper : public Module

@@ -17,7 +17,7 @@
 /* $ModDesc: Gives /elmer: makes someone talk like Elmer Fudd, that is, letters 'l' and 'r' become 'w', (More info at http://www.geocities.com/Hollywood/Park/2326/character1.html#elmer.) */
 /* $ModAuthor: Sazpiamon */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
  
 /** Holds an Elmer item
  */

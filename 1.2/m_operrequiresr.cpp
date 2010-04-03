@@ -1,7 +1,7 @@
 /* $ModDesc: Make /oper require that a user be identified as a certain user. */
 /* $ModAuthor: w00t */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 #include "inspircd.h"
 

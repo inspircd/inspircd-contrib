@@ -26,7 +26,7 @@
 /* $ModDesc: Allows fine configuration of what users can set arbitrary channel modes, based on usermodes, channel modes and prefixes. */
 /* $ModAuthor: Om */
 /* $ModAuthorMail: om@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 
 typedef std::pair<char, bool> CharPair;
 typedef std::vector<CharPair> CharPairList;
