@@ -1,5 +1,17 @@
 InspIRCd third party modules repository.
 
+The primary interface to this repository is via the "modulemanager" binary
+shipped with inspircd 1.2 and newer. If you do not have this or do not wish to
+use it, you can download directly from this repository. Copy or symlink the
+modules you wish to use to src/modules/ in the inspircd directory. For 1.x, you
+will need to run ./configure -modupdate and then remake; for 2.x you can just
+rerun "make" and "make install".
+
+Modules in this repository are not officially supported by the inspircd
+development team; see the module author comments in the module files to find the
+author. You may be able to find the author or others who use the module in
+#inspircd, but please make it clear you're asking about a third-party module!
+
 Example tags:
 /* $ModConfig: <syncbans channels="#a,#b,#c"> */
 /* $ModDesc: Provides ircd-side fantasy commands. */
