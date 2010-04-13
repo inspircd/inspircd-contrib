@@ -15,7 +15,7 @@
 #include <stdarg.h>
 
 /* $ModDesc: Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode */
-/* $ModDepends: core 2.0 */
+/* $ModDepends: core 2.1 */
 
 class InvisibleMode : public ModeHandler
 {
@@ -45,14 +45,13 @@ class InvisibleMode : public ModeHandler
 			/* User appears to vanish or appear from nowhere */
 			for (UCListIter f = dest->chans.begin(); f != dest->chans.end(); f++)
 			{
-				const UserMembList *ulist = (*f)->GetUsers();
+				const UserMembList *ulist = f->chan->GetUsers();
 				char tb[MAXBUF];
 
-				snprintf(tb,MAXBUF,":%s %s %s", dest->GetFullHost().c_str(), adding ? "PART" : "JOIN", (*f)->name.c_str());
+				snprintf(tb,MAXBUF,":%s %s %s", dest->GetFullHost().c_str(), adding ? "PART" : "JOIN", f->chan->name.c_str());
 				std::string out = tb;
-				Membership* memb = (**f).GetUser(dest);
-				std::string ms = memb->modes;
-				for(unsigned int i=0; i < memb->modes.length(); i++)
+				std::string ms = f->modes;
+				for(unsigned int i=0; i < f->modes.length(); i++)
 					ms.append(" ").append(dest->nick);
 
 
@@ -63,7 +62,7 @@ class InvisibleMode : public ModeHandler
 					{
 						i->first->Write(out);
 						if (!ms.empty() && !adding)
-							i->first->WriteServ("MODE %s +%s", (**f).name.c_str(), ms.c_str());
+							i->first->WriteServ("MODE %s +%s", f->chan->name.c_str(), ms.c_str());
 					}
 				}
 			}
@@ -116,7 +115,7 @@ class ModuleInvisible : public Module
 	}
 	Version GetVersion();
 	void OnUserJoin(Membership* memb, bool sync, bool created, CUList& excepts);
-	void OnBuildNeighborList(User* source, UserChanList &include, std::map<User*,bool> &exceptions);
+	void OnBuildNeighborList(User* source, std::vector<Channel*> &include, std::map<User*,bool> &exceptions);
 	ModResult OnUserPreNotice(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list);
 	ModResult OnUserPreMessage(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list);
 	void OnSendWhoLine(User* source, const std::vector<std::string>&, User* user, std::string& line);
@@ -148,7 +147,7 @@ void ModuleInvisible::OnUserJoin(Membership* memb, bool sync, bool created, CULi
 	}
 }
 
-void ModuleInvisible::OnBuildNeighborList(User* source, UserChanList &include, std::map<User*,bool> &exceptions)
+void ModuleInvisible::OnBuildNeighborList(User* source, std::vector<Channel*> &include, std::map<User*,bool> &exceptions)
 {
 	if (hidewho && source->IsModeSet('Q'))
 	{
