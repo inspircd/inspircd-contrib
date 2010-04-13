@@ -33,7 +33,9 @@ function get_tags($sFile)
 		
 		$niceVer = array();
 		exec("git describe --tags ".$aOut[1], $niceVer);
-		$verNum = preg_replace('/init-(.*)-g.*/', "0.$1", $niceVer[0]);
+		$verNum = preg_replace('/init-(.*)-g.*/', "$1", $niceVer[0]);
+		$verDir = preg_replace('/(.*)\/m_.*/', "$1", $sFile);
+		$verNum = $verDir . "." . $verNum;
 
 		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
 		$sText .= "module " . $sStrippedName . " " . $verNum . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
