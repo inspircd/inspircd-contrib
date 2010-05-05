@@ -21,7 +21,7 @@
 /* $ModDesc: A module to prevent against bots using random patterns. */
 /* $ModAuthor: w00t */
 /* $ModAuthorMail: w00t@inspircd.org */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 /* $ModVersion: $Rev: 79 $ */
 
 #define ANTIRANDOM_ACT_KILL			0
