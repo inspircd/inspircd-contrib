@@ -677,6 +677,8 @@ class ModuleAntiRandom : public Module
 					ZLine* zl = new ZLine(ServerInstance, ServerInstance->Time(), this->BanDuration, user->nick.c_str(), this->BanReason.c_str(), user->GetIPString());
                 	if (ServerInstance->XLines->AddLine(zl,user))
                 		ServerInstance->XLines->ApplyLines();
+                	else
+                		delete zl;
 					break;
 			}
 		}
