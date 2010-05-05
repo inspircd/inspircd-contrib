@@ -26,6 +26,7 @@
 
 #define ANTIRANDOM_ACT_KILL			0
 #define ANTIRANDOM_ACT_ZLINE		1
+#define ANTIRANDOM_ACT_GLINE		2
 
 static const char *triples_txt[] = {
 	"aj", "fqtvxz",
@@ -671,15 +672,28 @@ class ModuleAntiRandom : public Module
 			switch (this->BanAction)
 			{
 				case ANTIRANDOM_ACT_KILL:
+				{
 					ServerInstance->Users->QuitUser(user, this->BanReason);
 					break;
+				}
 				case ANTIRANDOM_ACT_ZLINE:
-					ZLine* zl = new ZLine(ServerInstance, ServerInstance->Time(), this->BanDuration, user->nick.c_str(), this->BanReason.c_str(), user->GetIPString());
+				{
+					ZLine* zl = new ZLine(ServerInstance, ServerInstance->Time(), this->BanDuration, ServerInstance->Config->ServerName, this->BanReason.c_str(), user->GetIPString());
                 	if (ServerInstance->XLines->AddLine(zl,user))
                 		ServerInstance->XLines->ApplyLines();
                 	else
                 		delete zl;
 					break;
+				}
+				case ANTIRANDOM_ACT_GLINE:
+				{
+					GLine* gl = new GLine(ServerInstance, ServerInstance->Time(), this->BanDuration, ServerInstance->Config->ServerName, this->BanReason.c_str(), "*", user->GetIPString());
+                	if (ServerInstance->XLines->AddLine(gl,user))
+                		ServerInstance->XLines->ApplyLines();
+                	else
+                		delete gl;
+					break;
+				}
 			}
 		}
 	}
@@ -701,6 +715,10 @@ class ModuleAntiRandom : public Module
 		this->BanAction = ANTIRANDOM_ACT_KILL;
 		tmp = Conf.ReadValue("antirandom", "banaction", 0);
 
+		if (tmp == "GLINE")
+		{
+			this->BanAction = ANTIRANDOM_ACT_GLINE;
+		}
 		if (tmp == "ZLINE")
 		{
 			this->BanAction = ANTIRANDOM_ACT_ZLINE;
