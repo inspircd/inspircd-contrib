@@ -61,7 +61,7 @@ public:
 			throw ModuleException("Can't find m_customtitle.so. Please load m_customtitle.so before m_sqlauth_extended.so.");
 		*/
 
-		OnRehash(NULL,"");
+		OnRehash(NULL);
 		Implementation eventlist[] = { I_OnPostConnect, I_OnPreCommand, I_OnUserConnect, I_OnUserDisconnect, I_OnCheckReady, I_OnRequest, I_OnRehash, I_OnUserRegister };
 		ServerInstance->Modules->Attach(eventlist, this, 8);
 
@@ -85,7 +85,7 @@ public:
 	}
 
 	/* IRCd has been rehased, reload config vars */
-	virtual void OnRehash(User* user, const std::string &parameter) {
+	virtual void OnRehash(User* user) {
 		ConfigReader Conf(ServerInstance);
 
 		databaseid		= Conf.ReadValue("sqlauth_extended", "dbid", 0);				/* Database ID, given to the SQL service provider */
