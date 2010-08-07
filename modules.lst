@@ -103,7 +103,7 @@ module m_rpg 1.2.82 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/cb0d
 module m_seechan 1.2.95 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/1f76f99893e0cec26fd366b5241259b5c525d707/1.2/m_seechan.cpp
  depends core 1.2-1.3
  description Creates a snomask with notices for channel creation, join, part, and kick
-module m_sqlauth_extended 1.2.109 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/eba9d3b87c48a5be29fc2de8fc32b188fc3cfb6c/1.2/m_sqlauth_extended.cpp
+module m_sqlauth_extended 1.2.109 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/5c5e364a58c793a1757928f48f729686b81f7e2f/1.2/m_sqlauth_extended.cpp
  description Allow/Deny connections based upon an arbitary SQL table with extended options.
 module m_ssl_autooper 1.2.80 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_ssl_autooper.cpp
  depends core 1.2-1.3
@@ -131,6 +131,9 @@ module m_antibottler 2.0.87 http://gitorious.org/inspircd/inspircd-extras/blobs/
 module m_invisible 2.0.98 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/50cf025d256f4f3c0d8499a2077a8ea052cd7158/2.0/m_invisible.cpp
  depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
+module m_chanregister 2.1.110 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/f51354e8c6c3838367e1a52aa2ccde5c0552a0b5/2.1/m_chanregister.cpp
+ depends core 2.1
+ description Provides channel mode +r for channel registration
 module m_invisible 2.1.98 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/50cf025d256f4f3c0d8499a2077a8ea052cd7158/2.1/m_invisible.cpp
  depends core 2.1
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
