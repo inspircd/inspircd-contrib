@@ -304,7 +304,7 @@ class DatabaseWriter
 class RegisterModeHandler : public ModeHandler
 {
 	/* this is the prefix required to use that mode */
-	unsigned char prefixrequired;
+	std::string prefixrequired;
 	public:
 	/* mode constructor */
 	RegisterModeHandler (Module *me) : ModeHandler (me, "registered", 'r', PARAM_SETONLY, MODETYPE_CHANNEL)
@@ -339,7 +339,7 @@ class RegisterModeHandler : public ModeHandler
 	ModResult AccessCheck (User *source, Channel *chan, std::string &param, bool adding)
 	{
 		/* you have prefix configured, try to translate it into the prefix rank */
-		unsigned int rankrequired = ServerInstance->Modes->FindPrefix (prefixrequired)->GetPrefixRank ( );
+		unsigned int rankrequired = ServerInstance->Modes->FindMode (prefixrequired)->GetPrefixRank ( );
 		/* and get the current rank of user issuing the command */
 		unsigned int rank = chan->GetAccessRank (source);
 		/* we have rank required to use the mode and rank of user trying to set it, let's check if rank of the user is greater or equal to the required one, 
@@ -444,9 +444,9 @@ class RegisterModeHandler : public ModeHandler
 		return MODEACTION_ALLOW;
 	}
 	/* set a prefix */
-	void set_prefixrequired (unsigned char c)
+	void set_prefixrequired (std::string pm)
 	{
-		prefixrequired = c;
+		prefixrequired = pm;
 	}
 };
 /* module class */
@@ -636,15 +636,15 @@ class ChannelRegistrationModule : public Module
 	{
 		/* try to download the tag from the config system */
 		ConfigTag *chregistertag = ServerInstance->Config->ConfValue ("chanregister");
-		/* get the prefix character */
-		unsigned char prefixchar = chregistertag->getString ("prefix", "@")[0];
+		/* get the prefix mode */
+		std::string prefixmode = chregistertag->getString ("prefix", "op");
 		/* get the channel database */
 		chandb = chregistertag->getString ("chandb", "data/channels.db");
 		/* get the expire time and convert it to time_t */
 		expiretime = ServerInstance->Duration (chregistertag->getString ("expiretime", "7d"));
 		/* check if prefix exists, if not, throw an exception */
-		if (!ServerInstance->Modes->FindPrefix (prefixchar)) throw CoreException ("Module providing the configured prefix is not loaded");
-		mh.set_prefixrequired (prefixchar);
+		if (!ServerInstance->Modes->FindMode (prefixmode)) throw CoreException ("Module providing the configured prefix is not loaded");
+		mh.set_prefixrequired (prefixmode);
 	}
 	/* OnCheckJoin - this is an event for checking permissions of some user to join some channel, it is used to allow joining by registrants even when 
 banned */
