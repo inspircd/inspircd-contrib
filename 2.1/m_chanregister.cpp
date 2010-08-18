@@ -329,7 +329,7 @@ class RegisterModeHandler : public ModeHandler
 		if (!acctname || acctname->empty ( ))
 		{
 			/* user not logged in, so we don't have any account to use as a default one, just tell him that he can't do this, really. */
-			user->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s You must be logged into an account to register a channel", chan->name.c_str ( ));
+			user->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into an account to register a channel", user->nick.c_str(), chan->name.c_str ( ));
 			return;
 		}
 		/* user is logged in, this doesn't mean we'll allow it, but we really deny it without a param, so set the parameter */
@@ -346,7 +346,7 @@ class RegisterModeHandler : public ModeHandler
 		if it's not, deny */
 		if (rank < rankrequired)
 		{
-			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s :You must have prefix %c or above to register or unregister a channel", chan->name.c_str ( ), prefixrequired);
+			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %c or above to register or unregister a channel", user->nick.c_str(), chan->name.c_str ( ), prefixrequired);
 			return MOD_RES_DENY;
 		}
 		if (adding)
@@ -363,7 +363,7 @@ class RegisterModeHandler : public ModeHandler
 			/* if the account name was not given, is empty or is not equal to the given parameter, deny */
 			if (!acctname || acctname->empty ( ) || *acctname != param)
 			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s :You must be logged into the account %s to register a channel to it", chan->name.c_str ( ), param.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into the account %s to register a channel to it", user->nick.c_str(), chan->name.c_str ( ), param.c_str ( ));
 				return MOD_RES_DENY;
 			}
 		} else
@@ -381,7 +381,7 @@ class RegisterModeHandler : public ModeHandler
 			if (!acctname || acctname->empty ( ))
 			{
 				/* he is not logged in */
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s :You must be logged into an account to unregister a channel", chan->name.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into an account to unregister a channel", user->nick.c_str(), chan->name.c_str ( ));
 				/* deny */
 				return MOD_RES_DENY;
 			}
@@ -389,7 +389,7 @@ class RegisterModeHandler : public ModeHandler
 			/* if accountname is not the same as registrantname, deny access */
 			if (*acctname != registrantname)
 			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s :Only the person who registered a channel may unregister it", chan->name.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :Only the person who registered a channel may unregister it", user->nick.c_str(), chan->name.c_str ( ));
 				return MOD_RES_DENY;
 			}
 		}
@@ -615,7 +615,7 @@ class ChannelRegistrationModule : public Module
 	void init ( )
 	{
 		/* enable the snomask for channel registration */
-		ServerInstance->SNO->EnableSnomask ('r', "chanregister");
+		ServerInstance->SNO->EnableSnomask ('r', "CHANREGISTER");
 		/* attach events */
 		Implementation eventlist[] = {I_OnRehash, I_OnCheckJoin, I_OnPermissionCheck, I_OnChannelPreDelete, I_OnBackgroundTimer, I_OnMode, 
 		I_OnPostTopicChange, I_OnRawMode, I_OnUserQuit, I_OnUserPart, I_OnUserKick, I_OnGarbageCollect};
