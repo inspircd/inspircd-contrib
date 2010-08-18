@@ -346,7 +346,7 @@ class RegisterModeHandler : public ModeHandler
 		if it's not, deny */
 		if (rank < rankrequired)
 		{
-			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %c or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired);
+			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %s or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired.c_str());
 			return MOD_RES_DENY;
 		}
 		if (adding)
