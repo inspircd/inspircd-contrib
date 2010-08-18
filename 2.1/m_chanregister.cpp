@@ -346,7 +346,7 @@ class RegisterModeHandler : public ModeHandler
 		if it's not, deny */
 		if (rank < rankrequired)
 		{
-			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %c or above to register or unregister a channel", user->nick.c_str(), chan->name.c_str ( ), prefixrequired);
+			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %c or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired);
 			return MOD_RES_DENY;
 		}
 		if (adding)
@@ -363,7 +363,7 @@ class RegisterModeHandler : public ModeHandler
 			/* if the account name was not given, is empty or is not equal to the given parameter, deny */
 			if (!acctname || acctname->empty ( ) || *acctname != param)
 			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into the account %s to register a channel to it", user->nick.c_str(), chan->name.c_str ( ), param.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into the account %s to register a channel to it", source->nick.c_str(), chan->name.c_str ( ), param.c_str ( ));
 				return MOD_RES_DENY;
 			}
 		} else
@@ -381,7 +381,7 @@ class RegisterModeHandler : public ModeHandler
 			if (!acctname || acctname->empty ( ))
 			{
 				/* he is not logged in */
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into an account to unregister a channel", user->nick.c_str(), chan->name.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into an account to unregister a channel", source->nick.c_str(), chan->name.c_str ( ));
 				/* deny */
 				return MOD_RES_DENY;
 			}
@@ -389,7 +389,7 @@ class RegisterModeHandler : public ModeHandler
 			/* if accountname is not the same as registrantname, deny access */
 			if (*acctname != registrantname)
 			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :Only the person who registered a channel may unregister it", user->nick.c_str(), chan->name.c_str ( ));
+				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :Only the person who registered a channel may unregister it", source->nick.c_str(), chan->name.c_str ( ));
 				return MOD_RES_DENY;
 			}
 		}
