@@ -346,7 +346,7 @@ class RegisterModeHandler : public ModeHandler
 		if it's not, deny */
 		if (rank < rankrequired)
 		{
-			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have prefix %s or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired.c_str());
+			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have %s access or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired.c_str ( ));
 			return MOD_RES_DENY;
 		}
 		if (adding)
@@ -411,7 +411,7 @@ class RegisterModeHandler : public ModeHandler
 			if (source != ServerInstance->FakeClient)
 			{
 				/* first, send a message to all ircops with snomask +r set */
-				ServerInstance->SNO->WriteGlobalSno ('r', "%s registered channel %s to account %s", source->GetFullHost ( ).c_str ( ), chan->name.c_str ( ), param.c_str ( ));
+				ServerInstance->SNO->WriteToSnoMask (IS_LOCAL (source) ? 'r' : 'R', "%s registered channel %s to account %s", source->GetFullHost ( ).c_str ( ), chan->name.c_str ( ), param.c_str ( ));
 				/* now, send similar to channel */
 				chan->WriteChannel (ServerInstance->FakeClient, "NOTICE %s :This channel has been registered", chan->name.c_str ( ));
 			}
@@ -428,7 +428,7 @@ class RegisterModeHandler : public ModeHandler
 			if (source != ServerInstance->FakeClient)
 			{
 				/* it is set, so first send a server notice to all ircops using +r snomask that this channel has been unregistered */
-				ServerInstance->SNO->WriteGlobalSno ('r', "channel %s unregistered by %s", chan->name.c_str ( ), source->GetFullHost ( ).c_str ( ));
+				ServerInstance->SNO->WriteToSnoMask (IS_LOCAL (source) ? 'r' : 'R', "channel %s unregistered by %s", chan->name.c_str ( ), source->GetFullHost ( ).c_str ( ));
 				/* then send this important message to the channel as the notice */
 				chan->WriteChannel (ServerInstance->FakeClient, "NOTICE %s :This channel has been unregistered", chan->name.c_str ( ));
 			}
