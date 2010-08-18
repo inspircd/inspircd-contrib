@@ -407,8 +407,8 @@ class RegisterModeHandler : public ModeHandler
 		{
 			/* we won't do anything if mode is set */
 			if (chan->IsModeSet (this)) return MODEACTION_DENY;
-			/* we are doing that only if we aren't fakeclient */
-			if (source != ServerInstance->FakeClient)
+			/* servers are expected to notice their reasons themselves */
+			if (!IS_SERVER(source))
 			{
 				/* first, send a message to all ircops with snomask +r set */
 				ServerInstance->SNO->WriteToSnoMask (IS_LOCAL (source) ? 'r' : 'R', "%s registered channel %s to account %s", source->GetFullHost ( ).c_str ( ), chan->name.c_str ( ), param.c_str ( ));
@@ -425,7 +425,8 @@ class RegisterModeHandler : public ModeHandler
 			/* if not, we are unregistering it */
 			/*if the channel mode is unset, don't set it again and deny */
 			if (!chan->IsModeSet (this)) return MODEACTION_DENY;
-			if (source != ServerInstance->FakeClient)
+			/* servers are expected to notice their reasons themselves */
+			if (!IS_SERVER(source))
 			{
 				/* it is set, so first send a server notice to all ircops using +r snomask that this channel has been unregistered */
 				ServerInstance->SNO->WriteToSnoMask (IS_LOCAL (source) ? 'r' : 'R', "channel %s unregistered by %s", chan->name.c_str ( ), source->GetFullHost ( ).c_str ( ));
