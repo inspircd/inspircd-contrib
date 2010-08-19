@@ -303,8 +303,6 @@ class DatabaseWriter
 /* class for handling +r mode */
 class RegisterModeHandler : public ModeHandler
 {
-	/* this is the prefix required to use that mode */
-	std::string prefixrequired;
 	public:
 	/* mode constructor */
 	RegisterModeHandler (Module *me) : ModeHandler (me, "registered", 'r', PARAM_SETONLY, MODETYPE_CHANNEL)
@@ -314,8 +312,7 @@ class RegisterModeHandler : public ModeHandler
 		fixed_letter = false;
 		oper = false;
 		m_paramtype = TR_TEXT;
-		/* warning, levelrequired is ignored in our case because this specific mode has specific permission checking that doesn't, for example, allow changing 
-		permissions required to set it */
+		levelrequired = OP_VALUE;
 	}
 	/* translate a parameter */
 	void OnParameterMissing (User *user, User *undefined, Channel *chan, std::string &param)
@@ -336,67 +333,52 @@ class RegisterModeHandler : public ModeHandler
 		param = *acctname;
 	}
 	/* make access checks */
-	ModResult AccessCheck (User *source, Channel *chan, std::string &param, bool adding)
+	void AccessCheck(ModePermissionData& perm)
 	{
-		/* you have prefix configured, try to translate it into the prefix rank */
-		unsigned int rankrequired = ServerInstance->Modes->FindMode (prefixrequired)->GetPrefixRank ( );
-		/* and get the current rank of user issuing the command */
-		unsigned int rank = chan->GetAccessRank (source);
-		/* we have rank required to use the mode and rank of user trying to set it, let's check if rank of the user is greater or equal to the required one, 
-		if it's not, deny */
-		if (rank < rankrequired)
+		AccountExtItem *it = GetAccountExtItem();
+		std::string *acctname = it ? it->get(perm.source) : NULL;
+
+		if (perm.mc.adding)
 		{
-			source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must have %s access or above to register or unregister a channel", source->nick.c_str(), chan->name.c_str ( ), prefixrequired.c_str ( ));
-			return MOD_RES_DENY;
-		}
-		if (adding)
-		{
-			/* check something */
-			if (chan->IsModeSet (this)) return MOD_RES_PASSTHRU;
-			/* if you are adding +r mode to a channel, you register it, you have required permissions to register at all */
-		/* now check if you have permissions to register using the given account */
-			/* if you have the channels/set-registration oper privilege, then you can always set this mode */
-			if (source->HasPrivPermission ("channels/set-registration", false)) return MOD_RES_ALLOW;
-			/* if you don't have the privilege, you are a normal user or a ... mispermitted oper */
-			/* get the current account user is logged into */
-			std::string *acctname = GetAccountExtItem ( )->get (source);
+			if (perm.source->HasPrivPermission("channels/set-registration", false))
+			{
+				perm.result = MOD_RES_ALLOW;
+				return;
+			}
+			/* otherwise, you can only set it to your own account name */
+
 			/* if the account name was not given, is empty or is not equal to the given parameter, deny */
-			if (!acctname || acctname->empty ( ) || *acctname != param)
+			if (!acctname || acctname->empty() || *acctname != perm.mc.value)
 			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into the account %s to register a channel to it", source->nick.c_str(), chan->name.c_str ( ), param.c_str ( ));
-				return MOD_RES_DENY;
-			}
-		} else
-		{
-			/* yes, we are removing a mode, this time, even an ircop can't do it without samode unles he's a channel registrant */
-			/* removal of +r is only allowed for user having at least required rank and also having registrant status */
-			/* user has registrant status if +r mode set on a channel he's on has it's parameter set to the account user's currently logged in */
-			/* if the mode +r is not set, don't check permissions */
-			if (!chan->IsModeSet (this)) return MOD_RES_PASSTHRU;
-			/* get the name of the current channel registrant */
-			std::string registrantname = chan->GetModeParameter (this);
-			/* get account name of the user */
-			std::string *acctname = GetAccountExtItem ( )->get (source);
-			/* check if user was really logged in */
-			if (!acctname || acctname->empty ( ))
-			{
-				/* he is not logged in */
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :You must be logged into an account to unregister a channel", source->nick.c_str(), chan->name.c_str ( ));
-				/* deny */
-				return MOD_RES_DENY;
-			}
-			/* user is logged in */
-			/* if accountname is not the same as registrantname, deny access */
-			if (*acctname != registrantname)
-			{
-				source->WriteNumeric (ERR_CHANOPRIVSNEEDED, "%s %s :Only the person who registered a channel may unregister it", source->nick.c_str(), chan->name.c_str ( ));
-				return MOD_RES_DENY;
+				perm.ErrorNumeric(ERR_CHANOPRIVSNEEDED, "%s :You must be logged into the account %s to register a channel to it",
+					perm.chan->name.c_str(), perm.mc.value.c_str());
+				perm.result = MOD_RES_DENY;
 			}
 		}
-		/* okay, we did all permission checking to ensure that anything is okay and the user source has all required permissions to register or unregister the 
-		channel */
-		/* allow it */
-		return MOD_RES_ALLOW;
+		else
+		{
+			/* removing a mode: must be the registrant */
+			std::string registrantname = perm.chan->GetModeParameter(this);
+			if (!acctname || acctname->empty())
+			{
+				perm.ErrorNumeric(ERR_CHANOPRIVSNEEDED, "%s :You must be logged into an account to unregister a channel",
+					perm.chan->name.c_str());
+				perm.result = MOD_RES_DENY;
+				return;
+			}
+			/* user is logged in; right account? */
+			if (*acctname == registrantname)
+			{
+				// go ahead and skip the rest of the checks
+				perm.result = MOD_RES_ALLOW;
+			}
+			else
+			{
+				perm.ErrorNumeric(ERR_CHANOPRIVSNEEDED, "%s :Only the person who registered a channel may unregister it",
+					perm.chan->name.c_str());
+				perm.result = MOD_RES_DENY;
+			}
+		}
 	}
 	/*what to do on mode change? */
 	ModeAction OnModeChange (User *source, User *undefined, Channel *chan, std::string &param, bool adding)
@@ -445,9 +427,13 @@ class RegisterModeHandler : public ModeHandler
 		return MODEACTION_ALLOW;
 	}
 	/* set a prefix */
-	void set_prefixrequired (std::string pm)
+	void set_prefixrequired (std::string prefixrequired)
 	{
-		prefixrequired = pm;
+		ModeHandler* mh = ServerInstance->Modes->FindMode(prefixrequired);
+		if (mh)
+			levelrequired = mh->GetPrefixRank();
+		else
+			levelrequired = OP_VALUE;
 	}
 };
 /* module class */
