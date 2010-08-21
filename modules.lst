@@ -134,6 +134,6 @@ module m_antibottler 2.0.87 http://gitorious.org/inspircd/inspircd-extras/blobs/
 module m_invisible 2.0.98 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/50cf025d256f4f3c0d8499a2077a8ea052cd7158/2.0/m_invisible.cpp
  depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
-module m_invisible 2.1.98 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/50cf025d256f4f3c0d8499a2077a8ea052cd7158/2.1/m_invisible.cpp
+module m_invisible 2.1.130 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/2c26ca7f53828fa2a83de8346af27a14ca238bab/2.1/m_invisible.cpp
  depends core 2.1
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
