@@ -98,14 +98,12 @@ class ModuleInvisible : public Module
 		ServerInstance->Users->ServerNoticeAll("*** m_invisible.so has just been loaded on this network. For more information, please visit http://inspircd.org/wiki/Modules/invisible");
 		Implementation eventlist[] = {
 			I_OnUserPreMessage, I_OnUserPreNotice, I_OnUserJoin,
-			I_OnBuildNeighborList, I_OnSendWhoLine, I_OnNamesListItem,
-			I_OnRehash
+			I_OnBuildNeighborList, I_OnSendWhoLine, I_OnNamesListItem
 		};
 		ServerInstance->Modules->Attach(eventlist, this, 7);
-		OnRehash(NULL);
 	}
 
-	void OnRehash(User*)
+	void ReadConfig(ConfigReadStatus&)
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("invisible");
 		hidejoin = tag->getBool("join");
