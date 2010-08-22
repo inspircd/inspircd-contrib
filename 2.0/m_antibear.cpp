@@ -23,6 +23,12 @@ class ModuleAntiBear : public Module
  public:
 	ModuleAntiBear() : bearExt("antibear_timewait", this)
 	{
+#if INSPIRCD_VERSION_MAJ >= 201
+	}
+
+	void init()
+	{
+#endif
 		ServerInstance->Extensions.Register(&bearExt);
 		Implementation eventlist[] = { I_OnUserRegister, I_OnPreCommand };
 		ServerInstance->Modules->Attach(eventlist, this, 2);

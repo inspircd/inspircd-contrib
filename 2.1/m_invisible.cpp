@@ -105,7 +105,7 @@ class ModuleInvisible : public Module
 
 	void ReadConfig(ConfigReadStatus&)
 	{
-		ConfigTag* tag = ServerInstance->Config->ConfValue("invisible");
+		ConfigTag* tag = ServerInstance->Config->GetTag("invisible");
 		hidejoin = tag->getBool("join");
 		hidelist = tag->getBool("list");
 		hidewho = tag->getBool("who");

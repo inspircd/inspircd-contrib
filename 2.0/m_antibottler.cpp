@@ -20,13 +20,16 @@ class ModuleAntiBottler : public Module
 {
  public:
 	ModuleAntiBottler()
-			{
+	{
+#if INSPIRCD_VERSION_MAJ >= 201
+	}
 
+	void init()
+	{
+#endif
 		Implementation eventlist[] = { I_OnPreCommand };
 		ServerInstance->Modules->Attach(eventlist, this, 1);
 	}
-
-
 
 	virtual ~ModuleAntiBottler()
 	{
