@@ -31,7 +31,7 @@ class ModuleAntiBear : public Module
 #endif
 		ServerInstance->Extensions.Register(&bearExt);
 		Implementation eventlist[] = { I_OnUserRegister, I_OnPreCommand };
-		ServerInstance->Modules->Attach(eventlist, this, 2);
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
 	virtual ~ModuleAntiBear()

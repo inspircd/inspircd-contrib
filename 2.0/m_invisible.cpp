@@ -102,7 +102,7 @@ class ModuleInvisible : public Module
 			I_OnBuildNeighborList, I_OnSendWhoLine, I_OnNamesListItem,
 			I_OnRehash
 		};
-		ServerInstance->Modules->Attach(eventlist, this, 7);
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 		OnRehash(NULL);
 	}
 

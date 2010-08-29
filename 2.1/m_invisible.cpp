@@ -100,7 +100,7 @@ class ModuleInvisible : public Module
 			I_OnUserPreMessage, I_OnUserPreNotice, I_OnUserJoin,
 			I_OnBuildNeighborList, I_OnSendWhoLine, I_OnNamesListItem
 		};
-		ServerInstance->Modules->Attach(eventlist, this, 7);
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
 	void ReadConfig(ConfigReadStatus&)
