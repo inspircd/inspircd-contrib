@@ -131,6 +131,9 @@ module m_antibear 2.0.134 http://gitorious.org/inspircd/inspircd-extras/blobs/ra
 module m_antibottler 2.0.134 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  depends core 2.0-2.1
  description Changes the ident of connecting bottler clients to 'bottler'
+module m_antirandom 2.0.136 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/962bb3b2b93f8e5a07a97a2f2405963a18ed6869/2.0/m_antirandom.cpp
+ depends core 2.0
+ description A module to prevent against bots using random patterns.
 module m_invisible 2.0.134 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
  depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
