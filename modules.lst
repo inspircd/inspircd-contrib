@@ -137,6 +137,9 @@ module m_antirandom 2.0.136 http://gitorious.org/inspircd/inspircd-extras/blobs/
 module m_invisible 2.0.134 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
  depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
+module m_noctcp_user 2.0.138 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/cc6ac2536e51800f208ea58c73028bb196bf8f48/2.0/m_noctcp_user.cpp
+ depends core 2.0
+ description Provides support for unreal-style user mode +T
 module m_invisible 2.1.134 http://gitorious.org/inspircd/inspircd-extras/blobs/raw/93f027e93157860173200d1b7d6ea9a708889ef7/2.1/m_invisible.cpp
  depends core 2.1
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
