@@ -38,7 +38,7 @@ function get_tags($sFile)
 		$verNum = $verDir . "." . $verNum;
 
 		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $verNum . " http://gitorious.org/inspircd/inspircd-extras/blobs/raw/" . $aOut[1] . "/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $verNum . " https://raw.github.com/inspircd/inspircd-extras/" . $aOut[1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{
