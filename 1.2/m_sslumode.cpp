@@ -15,7 +15,7 @@
 
 /* $ModAuthor: Shawn Smith */
 /* $ModAuthorMail: Shawn AT CriticalSecurity.net, Put [IRC] in subject line. */
-/* $ModDepends: core 1.2 */
+/* $ModDepends: core 1.2-1.3 */
 /* $ModDesc: Provides support for ssl-only queries and notices. (umode: z) */
 
 static char* dummy;
@@ -33,7 +33,8 @@ public:
 
 		if (adding)
 		{
-			if (isSet)
+			/* Make sure user is on an ssl connection when setting */
+			if (!isSet && dest->GetExt("ssl", dummy))
 			{
 				dest->SetMode('z', true);
 				return MODEACTION_ALLOW;
@@ -41,7 +42,7 @@ public:
 		}
 		else
 		{
-			if (!isSet)
+			if (isSet)
 			{
 				dest->SetMode('z', false);
 				return MODEACTION_ALLOW;
@@ -55,7 +56,7 @@ public:
 class ModuleSSLModes : public Module
 {
 
-	SSLModeUser* sslpm;
+	SSLModeUser* sslquery;
 
  public:
 	ModuleSSLModes(InspIRCd* Me)
@@ -63,7 +64,7 @@ class ModuleSSLModes : public Module
 	{
 
 
-		sslpm = new SSLModeUser(ServerInstance);
+		sslquery = new SSLModeUser(ServerInstance);
 		Implementation eventlist[] = { I_OnUserPreNotice, I_OnUserPreMessage };
 		ServerInstance->Modules->Attach(eventlist, this, 2);
 	}
@@ -96,33 +97,13 @@ class ModuleSSLModes : public Module
 	
 	virtual int OnUserPreNotice(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
 	{
-		if (target_type == TYPE_USER)
-		{
-			User* t = (User*)dest;
-			if (t->IsModeSet('z') && !ServerInstance->ULine(user->server))
-			{
-				if (!user->GetExt("ssl", dummy))
-				{
-					user->WriteNumeric(ERR_CANTSENDTOUSER, "%s %s :You are not permitted to send private messages to this user (+z set)", user->nick.c_str(), t->nick.c_str());
-					return 1;
-				}
-			}
-			else if (user->IsModeSet('z') && !ServerInstance->ULine(t->server))
-			{
-				if (t->GetExt("ssl", dummy))
-				{
-					user->WriteNumeric(ERR_CANTSENDTOUSER, "%s %s :You must remove usermode 'z' before you are able to send privates messages to a non-ssl user.", user->nick.c_str(), t->nick.c_str());
-					return 1;
-				}
-			}
-		}
-		return 0;
+		return OnUserPreMessage(user, dest, target_type, text, status, exempt_list);
 	}
 
 	virtual ~ModuleSSLModes()
 	{
-		ServerInstance->Modes->DelMode(sslpm);
-		delete sslpm;
+		ServerInstance->Modes->DelMode(sslquery);
+		delete sslquery;
 	}
 
 	virtual Version GetVersion()
