@@ -14,7 +14,7 @@
 #include "inspircd.h"
 
 /* $ModAuthor: Shawn Smith */
-/* $ModAuthorMail: Shawn AT CriticalSecurity.net, Put [IRC] in subject line. */
+/* $ModAuthorMail: Shawn@inspircd.org */
 /* $ModDepends: core 1.2-1.3 */
 /* $ModDesc: Provides support for ssl-only queries and notices. (umode: z) */
 
