@@ -112,7 +112,7 @@ module m_ssl_autooper 1.2.80 https://raw.github.com/inspircd/inspircd-extras/0ae
  depends core 1.2-1.3
  description auto-opers any user if his SSL fingerprint matches with the fingerprint in an oper block
 module m_sslumode 1.2.143 https://raw.github.com/inspircd/inspircd-extras/ffc6507221a7aadb762ef8068cbf88992d8f0362/1.2/m_sslumode.cpp
- depends core 1.2
+ depends core 1.2-1.3
  description Provides support for ssl-only queries and notices. (umode: z)
 module m_statusprefix 1.2.80 https://raw.github.com/inspircd/inspircd-extras/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_statusprefix.cpp
  depends core 1.2-1.3
