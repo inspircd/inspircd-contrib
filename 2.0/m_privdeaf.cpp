@@ -37,7 +37,7 @@ class User_D : public ModeHandler
 		{
 			if (!dest->IsModeSet('D'))
 			{
-				dest->WriteServ("NOTICE %s :*** You have enabled usermode +D, private deaf mode. This mode means you WILL NOT receive any messages from any nicks. If you did NOT mean to do this, use /mode %s -p.", dest->nick.c_str(), dest->nick.c_str());
+				dest->WriteServ("NOTICE %s :*** You have enabled usermode +D, private deaf mode. This mode means you WILL NOT receive any messages and notices from any nicks. If you did NOT mean to do this, use /mode %s -D.", dest->nick.c_str(), dest->nick.c_str());
 				dest->SetMode('D',true);
 				return MODEACTION_ALLOW;
 			}
@@ -57,9 +57,8 @@ class User_D : public ModeHandler
 class ModulePrivdeaf : public Module
 {
 	User_D m1;
-
-	std::string deaf_bypasschars;
-	std::string deaf_bypasschars_uline;
+	bool operoverride;
+	bool ulineoverride;
 
  public:
 	ModulePrivdeaf()
@@ -73,98 +72,39 @@ class ModulePrivdeaf : public Module
 		ServerInstance->Modules->Attach(eventlist, this, 3);
 	}
 
-
 	virtual void OnRehash(User* user)
 	{
 		ConfigReader conf;
-		deaf_bypasschars = conf.ReadValue("privdeaf", "bypasschars", 0);
-		deaf_bypasschars_uline = conf.ReadValue("privdeaf", "bypasscharsuline", 0);
+		operoverride = conf.ReadFlag("privdeaf", "operoverride", "1", 0);
+		ulineoverride = conf.ReadFlag("privdeaf", "ulineoverride", "1", 0);
 	}
 
 	virtual ModResult OnUserPreNotice(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
 	{
-		if (target_type == TYPE_CHANNEL)
-		{
-			Channel* chan = (Channel*)dest;
-			if (chan)
-				this->BuildDeafList(MSG_NOTICE, chan, user, status, text, exempt_list);
-		}
-
-		return MOD_RES_PASSTHRU;
+		return OnUserPreMessage(user, dest, target_type, text, status, exempt_list);
 	}
 
 	virtual ModResult OnUserPreMessage(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
 	{
-		if (target_type == TYPE_CHANNEL)
-		{
-			Channel* chan = (Channel*)dest;
-			if (chan)
-				this->BuildDeafList(MSG_PRIVMSG, chan, user, status, text, exempt_list);
-		}
+		if (target_type != TYPE_USER)
+			return MOD_RES_PASSTHRU;
 
-		return MOD_RES_PASSTHRU;
-	}
+		User* target = (User*) dest;
+		if (!target->IsModeSet('D'))
+			return MOD_RES_PASSTHRU;
 
-	virtual void BuildDeafList(MessageType message_type, Channel* chan, User* sender, char status, const std::string &text, CUList &exempt_list)
-	{
-		const UserMembList *ulist = chan->GetUsers();
-		bool is_a_uline;
-		bool is_bypasschar, is_bypasschar_avail;
-		bool is_bypasschar_uline, is_bypasschar_uline_avail;
+		if ((operoverride) && (IS_OPER(user)))
+			return MOD_RES_PASSTHRU;
 
-		is_bypasschar = is_bypasschar_avail = is_bypasschar_uline = is_bypasschar_uline_avail = 0;
-		if (!deaf_bypasschars.empty())
-		{
-			is_bypasschar_avail = 1;
-			if (deaf_bypasschars.find(text[0], 0) != std::string::npos)
-				is_bypasschar = 1;
-		}
-		if (!deaf_bypasschars_uline.empty())
-		{
-			is_bypasschar_uline_avail = 1;
-			if (deaf_bypasschars_uline.find(text[0], 0) != std::string::npos)
-				is_bypasschar_uline = 1;
-		}
+		if ((ulineoverride) && (ServerInstance->ULine(user->server)))
+			return MOD_RES_PASSTHRU;
 
-		/*
-		 * If we have no bypasschars_uline in config, and this is a bypasschar (regular)
-		 * Than it is obviously going to get through +d, no build required
-		 */
-		if (!is_bypasschar_uline_avail && is_bypasschar)
-			return;
-
-		for (UserMembCIter i = ulist->begin(); i != ulist->end(); i++)
-		{
-			/* not +D ? */
-			if (!i->first->IsModeSet('D'))
-				continue; /* deliver message */
-			/* matched both U-line only and regular bypasses */
-			if (is_bypasschar && is_bypasschar_uline)
-				continue; /* deliver message */
-
-			is_a_uline = ServerInstance->ULine(i->first->server);
-			/* matched a U-line only bypass */
-			if (is_bypasschar_uline && is_a_uline)
-				continue; /* deliver message */
-			/* matched a regular bypass */
-			if (is_bypasschar && !is_a_uline)
-				continue; /* deliver message */
-
-			if (status && strchr(chan->GetAllPrefixChars(i->first), status))
-				continue;
-
-			/* don't deliver message! */
-			exempt_list.insert(i->first);
-		}
-	}
-
-	virtual ~ModulePrivdeaf()
-	{
+		return MOD_RES_DENY;
 	}
 
 	virtual Version GetVersion()
 	{
-		return Version("Provides support for blocking any private messages (umode +D)");
+		return Version("Provides support for blocking any private messages and notices (umode +D)");
 	}
 
 };
