@@ -29,12 +29,10 @@ public:
 	SSLModeUser(InspIRCd* Instance) : ModeHandler(Instance, 'z', 0, 0, false, MODETYPE_USER, false) { }
 	ModeAction OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding, bool)
 	{
-		bool isSet = dest->IsModeSet('z');
-
 		if (adding)
 		{
 			/* Make sure user is on an ssl connection when setting */
-			if (!isSet && dest->GetExt("ssl", dummy))
+			if (!dest->IsModeSet('z') && dest->GetExt("ssl", dummy))
 			{
 				dest->SetMode('z', true);
 				return MODEACTION_ALLOW;
@@ -42,7 +40,7 @@ public:
 		}
 		else
 		{
-			if (isSet)
+			if (dest->IsModeSet('z'))
 			{
 				dest->SetMode('z', false);
 				return MODEACTION_ALLOW;
@@ -65,6 +63,10 @@ class ModuleSSLModes : public Module
 
 
 		sslquery = new SSLModeUser(ServerInstance);
+
+		if (!ServerInstance->Modes->AddMode(sslquery))
+			throw ModuleException("Could not add new modes!");
+
 		Implementation eventlist[] = { I_OnUserPreNotice, I_OnUserPreMessage };
 		ServerInstance->Modules->Attach(eventlist, this, 2);
 	}
@@ -85,7 +87,7 @@ class ModuleSSLModes : public Module
 			}
 			else if (user->IsModeSet('z') && !ServerInstance->ULine(t->server))
 			{
-				if (t->GetExt("ssl", dummy))
+				if (!t->GetExt("ssl", dummy))
 				{
 					user->WriteNumeric(ERR_CANTSENDTOUSER, "%s %s :You must remove usermode 'z' before you are able to send privates messages to a non-ssl user.", user->nick.c_str(), t->nick.c_str());
 					return 1;
