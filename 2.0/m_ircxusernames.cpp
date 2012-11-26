@@ -34,7 +34,7 @@ class ModuleIRCXUsernames : public Module
 	{
 		size_t position = std::string::npos;
 
-		if (command == "USER")
+		if (validated && !(user->registered & REG_USER) && (command == "USER"))
 		{
 			if (!parameters.empty() && (position = parameters[0].find("@", 0)) != std::string::npos)
 			{
