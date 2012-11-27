@@ -137,12 +137,29 @@ module m_antibottler 2.0.134 https://raw.github.com/inspircd/inspircd-extras/93f
 module m_antirandom 2.0.136 https://raw.github.com/inspircd/inspircd-extras/962bb3b2b93f8e5a07a97a2f2405963a18ed6869/2.0/m_antirandom.cpp
  depends core 2.0
  description A module to prevent against bots using random patterns.
+module m_hideidle 2.0.0 https://raw.github.com/inspircd/inspircd-extras/6bdddbd730d2dfb91c903f435c2a73987dd18ba8/2.0/m_hideidle.cpp
+ depends core 2.0
+ description Provides the +a usermode that hides idle and signon time in WHOIS for non-opers
 module m_invisible 2.0.134 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
  depends core 2.0
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
+module m_ircxusernames 2.0.0 https://raw.github.com/inspircd/inspircd-extras/ca0aa2e169c6f27b4e489b3ca0baf73b4aef5117/2.0/m_ircxusernames.cpp
+ depends core 2.0-2.1
+ description Provides support for IRCX usernames
+module m_joinpartsno 2.0.1 https://raw.github.com/inspircd/inspircd-extras/b9780148a3ef10ef421ec2e72942d40bf8fd47fa/2.0/m_joinpartsno.cpp
+ depends core 2.0-2.1
+ description Sends server notices when a user joins/parts a channel.
 module m_noctcp_user 2.0.138 https://raw.github.com/inspircd/inspircd-extras/cc6ac2536e51800f208ea58c73028bb196bf8f48/2.0/m_noctcp_user.cpp
  depends core 2.0
  description Provides support for unreal-style user mode +T
+module m_privdeaf 2.0.1 https://raw.github.com/inspircd/inspircd-extras/18b3c13d1d79da774d3ebc8bf8d8661a93c9d07b/2.0/m_privdeaf.cpp
+ depends core 2.0
+ description Provides support for blocking any private messages (umode +D)
+module m_quietban 2.0.0 https://raw.github.com/inspircd/inspircd-extras/eff96188fa9e9e974f30990d38fa8c4fa3288466/2.0/m_quietban.cpp
+ depends core 2.0-2.1
+ conflicts m_muteban.so
+ conflicts m_chanprotect.so
+ description Provides channel mode +q for 'quiet' bans.
 module m_invisible 2.1.134 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.1/m_invisible.cpp
  depends core 2.1
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
