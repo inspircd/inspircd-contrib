@@ -20,25 +20,22 @@ function get_tags($sFile)
 	foreach (glob("*/m_*.cpp") as $sFile)
 	{
 		$aOut = array();
-		exec("git log -n 1 " . $sFile, $aOut);
-		$aOut = explode(" ", $aOut[0]);
-
-		$aTags = get_tags($sFile);
-
-		if (empty($aOut[1]))
+		exec("git ls-files --error-unmatch -- " . $sFile . " 2>/dev/null", $aOut, $exitStatus);
+		
+		if ($exitStatus > 0)
 		{
-			echo "Skipping " . $sStrippedName . " which is not in git\n";
+			echo "Skipping " . $sFile . " which is not in git\n";
 			continue;
 		}
 		
+		$aTags = get_tags($sFile);
+
 		$niceVer = array();
-		exec("git describe --tags ".$aOut[1], $niceVer);
-		$verNum = preg_replace('/init-(.*)-g.*/', "$1", $niceVer[0]);
-		$verDir = preg_replace('/(.*)\/m_.*/', "$1", $sFile);
-		$verNum = $verDir . "." . $verNum;
+		exec("git rev-list HEAD -- " . $sFile . " 2>/dev/null", $niceVer);
+		$verFullNum = preg_replace('/(.*)\/m_.*/', "$1", $sFile) . "." . (count($niceVer) - 1);
 
 		$sStrippedName = preg_replace('/.*m_(.*).cpp/', "m_$1", $sFile);
-		$sText .= "module " . $sStrippedName . " " . $verNum . " https://raw.github.com/inspircd/inspircd-extras/" . $aOut[1] . "/" . $sFile . "\n";
+		$sText .= "module " . $sStrippedName . " " . $verFullNum . " https://raw.github.com/inspircd/inspircd-extras/" . $niceVer[count($niceVer) - 1] . "/" . $sFile . "\n";
 
 		if ($aTags['ModDepends'])
 		{
