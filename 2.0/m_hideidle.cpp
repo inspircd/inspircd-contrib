@@ -16,7 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* $ModAuthor: Attila Molnar */
+/* $ModAuthorMail: attilamolnar@hush.com */
 /* $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS for non-opers */
+/* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
 

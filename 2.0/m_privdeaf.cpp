@@ -23,6 +23,7 @@
 #include "inspircd.h"
 
 /* $ModDesc: Provides support for blocking any private messages (umode +D) */
+/* $ModDepends: core 2.0 */
 
 /** User mode +D - filter out any private messages (non-channel)
  */
