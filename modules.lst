@@ -160,6 +160,9 @@ module m_quietban 2.0.0 https://raw.github.com/inspircd/inspircd-extras/eff96188
  conflicts m_muteban.so
  conflicts m_chanprotect.so
  description Provides channel mode +q for 'quiet' bans.
+module m_custompenalty 2.0.0 https://raw.github.com/inspircd/inspircd-extras/619ca9ecb9bc05a67cf8671808ebd9edb0f749a3/2.0/m_custompenalty.cpp
+ depends core 2.0-2.1
+ description Allows the customisation of penalty levels.
 module m_invisible 2.1.134 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.1/m_invisible.cpp
  depends core 2.1
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
