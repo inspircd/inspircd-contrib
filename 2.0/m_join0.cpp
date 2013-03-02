@@ -23,7 +23,6 @@
 
 class ModuleJoinZero : public Module
 {
- private:
  public:
 	void init()
 	{
@@ -44,10 +43,6 @@ class ModuleJoinZero : public Module
 		}
 		else
 			return MOD_RES_PASSTHRU;
-	}
-
-	virtual ~ModuleJoinZero()
-	{
 	}
 
 	virtual Version GetVersion()
