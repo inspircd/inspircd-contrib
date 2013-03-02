@@ -20,6 +20,8 @@
 /* $ModAuthorMail: attilamolnar@hush.com */
 /* $ModDesc: Implements hash functions using GnuTLS API */
 /* $ModDepends: core 2.0 */
+/* $ModConflicts: m_sha256.so */
+/* $ModConflicts: m_ripemd160.so */
 
 #include "inspircd.h"
 #include "hash.h"
