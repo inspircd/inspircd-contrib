@@ -35,9 +35,9 @@ class ModuleJoinZero : public Module
 	{
 		if (validated && command == "JOIN" && parameters.size() && parameters[0] == "0")
 		{
-			std::string reason("Left all channels");
 			UserChanList cl(user->chans);
 			for(UCListIter ci=cl.begin();ci != cl.end(); ++ci) {
+				std::string reason("Left all channels");
 				(*ci)->PartUser(user, reason);
 			}
 			return MOD_RES_DENY;
