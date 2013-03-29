@@ -51,7 +51,7 @@ class ModuleQuietBan : public Module
 		void init()
 		{
 			if (ServerInstance->Modules->Find("m_muteban.so") || ServerInstance->Modules->Find("m_chanprotect.so"))
-				throw ModuleException("Can not load with: m_muteban.so or m_chanprotect.so.");
+				throw ModuleException("Cannot load with: m_muteban.so or m_chanprotect.so.");
 
 			ServerInstance->Modules->AddService(qb);
 
@@ -68,7 +68,7 @@ class ModuleQuietBan : public Module
 			{
 				Channel* chan = (Channel*)dest;
 
-				/* If the user is +v or higher they can speak regardless. */
+				/* If the user is +v or higher, they can speak regardless. */
 				if (chan->GetPrefixValue(user) >= VOICE_VALUE)
 					return MOD_RES_PASSTHRU;
 
@@ -83,14 +83,14 @@ class ModuleQuietBan : public Module
 				std::string ipmask(user->nick);
 				ipmask.append(1, '!').append(user->MakeHostIP());
 
-				/* If this matches then they match a +q, don't allow them to speak. */
+				/* If this matches, then they match a +q, & don't allow them to speak. */
 				for (modelist::iterator it = list->begin(); it != list->end(); it++)
 					if (InspIRCd::Match(user->GetFullHost(), it->mask) ||
 						InspIRCd::Match(user->GetFullRealHost(), it->mask) ||
 						InspIRCd::MatchCIDR(ipmask, it->mask))
 					{
 						/* lol 404 */
-						user->WriteNumeric(404, "%s %s :Cannot send to channel (you're muted (+q))", user->nick.c_str(), chan->name.c_str());
+						user->WriteNumeric(404, "%s %s :Cannot send to channel (You are muted (+q))", user->nick.c_str(), chan->name.c_str());
 						return MOD_RES_DENY;
 					}
 			}
@@ -115,7 +115,7 @@ class ModuleQuietBan : public Module
 
 		Version GetVersion()
 		{
-			return Version("Provides cahnnel mode +q for 'quiet' bans.", VF_OPTCOMMON);
+			return Version("Provides channel mode +q for 'quiet' bans.", VF_OPTCOMMON);
 		}
 };
 
