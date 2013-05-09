@@ -8,6 +8,9 @@
  * This program is free but copyrighted software; see
  *            the file COPYING for details.
  *
+ * (C) Copyright 2013 SimosNap IRC Network <admin@simosnap.org>
+ *                    lnx85 <lnx85@lnxlabs.it>
+ *     - Added exempt support (nick, ident, host and fullname based)
  * (C) Copyright 2011 Syloq <syloq@nightstar.net>
  *     - Renamed failedconnects to showfailedconnects
  *     - Added example config and notes
@@ -25,27 +28,44 @@
         banaction="ZLINE" (Defaults to "" Valid values: GLINE,ZLINE,KILL,"") 
         banduration="86400" (Defaults to 86400 (1 day). Time in seconds)
         banreason="You look like a bot. Change your nick/ident/gecos and try reconnecting.">
+   <antirandomexempt type="host" pattern="*.tld">
+   <antirandomexempt type="ident" pattern="*lightirc">
+   <antirandomexempt type="fullname" pattern="Mibbit">
+
    Notes:
         showfailedconnects - Show failed connection
         This module uses a scoring system that will react based
          on the threshold set above. If the threshold is set too low many
-         clients will be tagged a bot. 
-         
+         clients will be tagged a bot.
  */
 
 #include "inspircd.h"
 #include "xline.h"
 
 /* $ModDesc: A module to prevent against bots using random patterns. */
-/* $ModAuthor: Syloq */
-/* $ModAuthorMail: syloq@nightstar.net */
+/* $ModAuthor: lnx85 */
+/* $ModAuthorMail: lnx85@lnxlabs.it */
 /* $ModDepends: core 2.0 */
-/* $ModVersion: $Rev: 80 $ */
 
 #define ANTIRANDOM_ACT_KILL     0
 #define ANTIRANDOM_ACT_ZLINE    1
 #define ANTIRANDOM_ACT_GLINE    2
 #define ANTIRANDOM_ACT_NONE     3
+
+enum AntirandomExemptType { NICK, IDENT, HOST, FULLNAME };
+
+class AntirandomExempt
+{
+public:
+	AntirandomExemptType type;
+	std::string pattern;
+
+	AntirandomExempt(AntirandomExemptType t, const std::string &p)
+	: type(t), pattern(p)
+	{
+	}
+};
+typedef std::vector<AntirandomExempt> AntirandomExemptList;
 
 static const char *triples_txt[] = {
 	"aj", "fqtvxz",
@@ -499,6 +519,7 @@ class ModuleAntiRandom : public Module
 	unsigned int BanAction;
 	unsigned int BanDuration;
 	std::string BanReason;
+	AntirandomExemptList Exempts;
  public:
 	ModuleAntiRandom()
 	{
@@ -603,19 +624,19 @@ class ModuleAntiRandom : public Module
 		if (digits >= 5)
 		{
 			score += 5 + (digits - 5);
-			ServerInstance->SNO->WriteGlobalSno('O', "m_antirandom: %s:MATCH digits", original_str);
+			ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
 		}
 		if (vowels >= 4)
 		{
 			score += 4 + (vowels - 4);
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('O', "m_antirandom: %s:MATCH vowels", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str);
 		}
 		if (consonants >= 4)
 		{
 			score += 4 + (consonants - 4);
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('O',  "m_antirandom: %s:MATCH consonants", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str);
 		}
 
 
@@ -640,7 +661,7 @@ class ModuleAntiRandom : public Module
 						// Triple matches!
 						score++;
 						if (this->DebugMode)
-						ServerInstance->SNO->WriteGlobalSno('O',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
+						ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
 					}
 				}
 				else
@@ -668,23 +689,78 @@ class ModuleAntiRandom : public Module
 
 		gettimeofday(&tv_beta, NULL);
 		if (this->DebugMode)
-			ServerInstance->SNO->WriteGlobalSno('O', "m_antirandom Timing: %ld microseconds",
+			ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom Timing: %ld microseconds",
 				((tv_beta.tv_sec - tv_alpha.tv_sec) * 1000000) + (tv_beta.tv_usec - tv_alpha.tv_usec));
 
 		if (this->DebugMode)
-			ServerInstance->SNO->WriteGlobalSno('O', "m_antirandom Got score: %d/%d/%d = %d", nscore, uscore, gscore, score);
+			ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom Got score: %d/%d/%d = %d", nscore, uscore, gscore, score);
 		return score;
 	}
 
+	bool IsAntirandomExempt(User *user)
+	{
+		for (AntirandomExemptList::iterator iter = Exempts.begin(); iter != Exempts.end(); iter++)
+		{
+			switch (iter->type)
+			{
+				case NICK:
+				{
+					if (InspIRCd::Match(user->nick, iter->pattern, ascii_case_insensitive_map))
+					{
+						if (this->DebugMode)
+							ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom exempt: NICK (%s)", iter->pattern.c_str());
+						return true;
+					}
+					break;
+				}
+				case IDENT:
+				{
+					if (InspIRCd::Match(user->ident, iter->pattern, ascii_case_insensitive_map))
+					{
+						if (this->DebugMode)
+							ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom exempt: IDENT (%s)", iter->pattern.c_str());
+						return true;
+					}
+					break;
+				}
+				case HOST:
+				{
+					if (InspIRCd::Match(user->host, iter->pattern, ascii_case_insensitive_map) || InspIRCd::MatchCIDR(user->GetIPString(), iter->pattern, ascii_case_insensitive_map))
+					{
+						if (this->DebugMode)
+							ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom exempt: HOST (%s)", iter->pattern.c_str());
+						return true;
+					}
+					break;
+				}
+				case FULLNAME:
+				{
+					if (InspIRCd::Match(user->fullname, iter->pattern, ascii_case_insensitive_map))
+					{
+						if (this->DebugMode)
+							ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom exempt: FULLNAME (%s)", iter->pattern.c_str());
+						return true;
+					}
+					break;
+				}
+			}
+		}
+		return false;
+	}
 
 	virtual void OnUserConnect(LocalUser* user)
 	{
+		if (IsAntirandomExempt(user))
+		{
+			return;
+		}
+
 		unsigned int score = GetUserScore(user);
 
 		if (score > this->Threshold)
 		{
-		    std::string method = "allowed because no action was set";
-		    
+			std::string method = "allowed because no action was set";
+
 			switch (this->BanAction)
 			{
 				case ANTIRANDOM_ACT_KILL:
@@ -717,7 +793,9 @@ class ModuleAntiRandom : public Module
 			if (this->ShowFailedConnects)
 			{
 			    std::string realhost = user->GetFullRealHost();
-				ServerInstance->SNO->WriteGlobalSno('O', "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
+				ServerInstance->SNO->WriteGlobalSno('a', "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
+
+				ServerInstance->Logs->Log("CONFIG",DEFAULT, "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
 			}
 		}
 	}
@@ -773,6 +851,46 @@ class ModuleAntiRandom : public Module
 			this->BanReason = tmp;
 		else
 			this->BanReason = "You look like a bot. Change your nick/ident/gecos and try reconnecting.";
+
+		Exempts.clear();
+
+		ConfigTagList exempts_list = ServerInstance->Config->ConfTags("antirandomexempt");
+		for (ConfigIter i = exempts_list.first; i != exempts_list.second; ++i)
+		{
+			ConfigTag* tag = i->second;
+
+			std::string type = tag->getString("type");
+			std::string pattern = tag->getString("pattern");
+
+			if(pattern.length() && type.length())
+			{
+				AntirandomExemptType exemptType;
+				if (type == "nick")
+					exemptType = NICK;
+				else if (type == "ident")
+					exemptType = IDENT;
+				else if (type == "host")
+					exemptType = HOST;
+				else if (type == "fullname")
+					exemptType = FULLNAME;
+				else
+				{
+					ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: Invalid <antirandomexempt:type> value in config: %s", type.c_str());
+					ServerInstance->Logs->Log("CONFIG",DEFAULT, "m_antirandom: Invalid <antirandomexempt:type> value in config: %s", type.c_str());
+					continue;
+				}
+
+				Exempts.push_back(AntirandomExempt(exemptType, pattern));
+				if (this->DebugMode)
+					ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: Added exempt: %s (%s)", type.c_str(), pattern.c_str());
+			}
+			else
+			{
+				ServerInstance->Logs->Log("CONFIG",DEFAULT, "m_antirandom: Invalid block <antirandomexempt type=\"%s\" pattern=\"%s\">", type.c_str(), pattern.c_str());
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: Invalid block <antirandomexempt type=\"%s\" pattern=\"%s\">", type.c_str(), pattern.c_str());
+				continue;
+			}
+		}
 	}
 
 };
