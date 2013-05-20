@@ -29,7 +29,7 @@ class ModuleInviteNotify : public Module
 	GenericCap invite_notify;
 
  public:
-	ModuleInviteNotify() : invite_notify(this, "invite-notify")
+	ModuleInviteNotify() : invite_notify(this, "inspircd.org/invite-notify")
 	{
 	}
 
