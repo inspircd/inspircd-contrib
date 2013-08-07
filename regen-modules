@@ -1,0 +1,63 @@
+#!/usr/bin/env perl
+#
+# InspIRCd -- Internet Relay Chat Daemon
+#
+#   Copyright (C) 2013 Peter Powell <petpow@saberuk.com>
+#
+# This file is part of InspIRCd.  InspIRCd is free software: you can
+# redistribute it and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation, version 2.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+
+BEGIN {
+	require 5.10.0;
+}
+
+use strict;
+use warnings FATAL => qw(all);
+
+use File::Basename;
+
+if (system 'git --version > /dev/null 2>&1') {
+	say 'Error: Git is not installed and available in the PATH!';
+	exit 1;
+}
+
+open(LIST, '>modules.lst');
+for my $file (<*/m_*.cpp>) {
+	if (system "git ls-files --error-unmatch -- $file > /dev/null 2>&1") {
+		say STDERR "Skipping $file which is not in Git!";
+		next;
+	}
+	my $name = basename($file, '.cpp');
+	my $branch = dirname($file);
+	chomp(my $revision = `git rev-list HEAD --max-count=1 -- $file`);
+	chomp(my $version = `git rev-list $revision | wc -l`);
+	$version =~ s/\s//g;
+	say LIST "module $name $branch.$version https://raw.github.com/inspircd/inspircd-extras/$revision/$file";
+	open(MODULE, $file);
+	while (<MODULE>) {
+		if ($_ =~ /^\/\* \$(\S+): (.+) \*\/$/) {
+			if ($1 eq 'ModDepends') {
+				say LIST " depends $2";
+			} elsif ($1 eq 'ModConflicts') {
+				say LIST " conflicts $2";
+			} elsif ($1 eq 'ModDesc') {
+				say LIST " description $2";
+			} elsif ($1 eq 'ModMask') {
+				say LIST " mask $2";
+			}
+		}
+	}
+	close(MODULE);
+}
+close(LIST);
