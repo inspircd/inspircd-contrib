@@ -19,6 +19,7 @@
 
 /* $ModDesc: Allow/Deny connections based upon an arbitary SQL table with extended options. */
 /* $ModDep: m_sqlv2.h m_sqlutils.h m_hash.h */
+/* $ModDepends: core 1.2 */
 
 /* Original source from InspIRCd 1.2 modified by Bawitdaba on December 23rd 2008 */
 /* Derived from m_sqlauth.cpp rev 10622 by brain */
