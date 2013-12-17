@@ -150,6 +150,9 @@ module m_custompenalty 2.0.163 https://raw.github.com/inspircd/inspircd-extras/0
 module m_findxline 2.0.163 https://raw.github.com/inspircd/inspircd-extras/3cf5ae5988043c3a4fa923bb7b4eca5460040a6c/2.0/m_findxline.cpp
  description Provides the FINDXLINE command which lets opers search XLines
  depends core 2.0
+module m_forceident 2.0.189 https://raw.github.com/inspircd/inspircd-extras/f5ad6f937dde898880c8ca8d1abb53fe3b33dcd4/2.0/m_forceident.cpp
+ description Allows forcing idents on users based on their connect class.
+ depends core 2.0-2.1
 module m_hash_gnutls 2.0.169 https://raw.github.com/inspircd/inspircd-extras/ef75039c4da63380a4d7df25fbdc4e84e808a05d/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
