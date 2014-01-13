@@ -35,7 +35,7 @@ class ModuleJoinPartSNO : public Module
 
 		Version GetVersion()
 		{
-			return Version("Creates SNOMask for user joins/parts", VF_VENDOR);
+			return Version("Creates SNOMask for user joins/parts");
 		}
 
 		void OnUserJoin(Membership* memb, bool sync, bool created, CUList& except)

@@ -102,7 +102,7 @@ class ModulePretendUser : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides the PRETENDUSER command that lets opers execute commands on behalf of other users", VF_VENDOR|VF_OPTCOMMON);
+		return Version("Provides the PRETENDUSER command that lets opers execute commands on behalf of other users", VF_OPTCOMMON);
 	}
 };
 

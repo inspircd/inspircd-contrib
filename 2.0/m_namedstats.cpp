@@ -107,7 +107,7 @@ class ModuleNamedStats : public Module
 
 	Version GetVersion()
 	{
-		return Version("Allows /STATS queries by name", VF_VENDOR);
+		return Version("Allows /STATS queries by name");
 	}
 };
 

@@ -84,7 +84,7 @@ class ModuleHashGnuTLS : public Module
 
 	Version GetVersion()
 	{
-		return Version("Implements hash functions using GnuTLS API", VF_VENDOR);
+		return Version("Implements hash functions using GnuTLS API");
 	}
 };
 

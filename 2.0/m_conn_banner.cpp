@@ -47,7 +47,7 @@ class ModuleConnBanner : public Module
 
 	Version GetVersion()
 	{
-		return Version("Displays a static text to every connecting user before registration", VF_VENDOR);
+		return Version("Displays a static text to every connecting user before registration");
 	}
 };
 

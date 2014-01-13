@@ -53,7 +53,7 @@ class ModuleIRCXUsernames : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides support for IRCX usernames", VF_VENDOR);
+		return Version("Provides support for IRCX usernames");
 	}
 
 };

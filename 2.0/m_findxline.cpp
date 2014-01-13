@@ -109,7 +109,7 @@ class ModuleFindXLine : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides the FINDXLINE command which lets opers search XLines", VF_VENDOR);
+		return Version("Provides the FINDXLINE command which lets opers search XLines");
 	}
 };
 
