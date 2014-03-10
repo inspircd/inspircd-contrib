@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013 Daniel Vassdasl <shutter@canternet.org>
+ *   Copyright (C) 2013 Daniel Vassdal <shutter@canternet.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -19,7 +19,7 @@
 #include "inspircd.h"
 
 /* $ModDesc: Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name */
-/* $ModAuthor: Daniel Vassdasl */
+/* $ModAuthor: Daniel Vassdal */
 /* $ModAuthorMail: shutter@canternet.org */
 /* $ModDepends: core 2.0 */
 
