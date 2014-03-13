@@ -395,7 +395,7 @@ public:
     }
     ModResult OnCheckReady(LocalUser* user)
     {   /*I'm afraid that using the normal xline methods would then result in this line being checked at the wrong time.*/
-        if (user!=NULL && !isLoggedIn(user))
+        if (!isLoggedIn(user))
         {
             XLine *locallines = ServerInstance->XLines->MatchesLine("A", user);
             XLine *globallines = ServerInstance->XLines->MatchesLine("GA", user);
