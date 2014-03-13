@@ -1,3 +1,26 @@
+/*
+* InspIRCd -- Internet Relay Chat Daemon
+*
+* Copyright (C) 2014 WindowsUser <jasper@jasperswebsite.com>
+* Based off the core xline methods and partially the services account module.
+*
+* This file is part of InspIRCd. InspIRCd is free software: you can
+* redistribute it and/or modify it under the terms of the GNU General Public
+* License as published by the Free Software Foundation, version 2.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+* details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+ 
+/* $ModAuthor: WindowsUser */
+/* $ModDesc: Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines. */
+/* $ModDepends: core 2.0 */
+
 #include "inspircd.h"
 #include "xline.h"
 #include "account.h"
@@ -125,9 +148,7 @@ public:
     }
     bool Matches(const std::string &s)
     {
-        if (matchtext == s)
-            return true;
-        return false;
+        return (matchtext == s);
     }
     const char* Displayable()
     {
@@ -396,4 +417,3 @@ public:
 };
 
 MODULE_INIT(ModuleRequireAuth)
-
