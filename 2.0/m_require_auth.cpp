@@ -95,11 +95,7 @@ class ALine : public GALine
 {
 
 public:
-    ALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host) : GALine(s_time, d, src, re, ident, host, "A")
-    {
-        this->matchtext = this->identmask;
-        this->matchtext.append("@").append(this->hostmask);
-    }
+    ALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host) : GALine(s_time, d, src, re, ident, host, "A"){}
     bool IsBurstable()
     {
         return false;
