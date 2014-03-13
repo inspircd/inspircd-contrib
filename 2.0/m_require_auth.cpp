@@ -27,10 +27,10 @@
 class ALine : public XLine
 {
     /** Ident mask (ident part only)
-*/
+    */
     std::string identmask;
     /** Host mask (host part only)
-*/
+    */
     std::string hostmask;
 
     std::string matchtext;
@@ -94,10 +94,10 @@ public:
 class GALine : public XLine
 {
     /** Ident mask (ident part only)
-*/
+    */
     std::string identmask;
     /** Host mask (host part only)
-*/
+    */
     std::string hostmask;
 
     std::string matchtext;
@@ -161,7 +161,7 @@ public:
     ALineFactory() : XLineFactory("A") { }
 
     /** Generate an ALine
-*/
+     */
     ALine* Generate(time_t set_time, long duration, std::string source, std::string reason, std::string xline_specific_mask)
     {
         IdentHostPair ih = ServerInstance->XLines->IdentSplit(xline_specific_mask);
@@ -175,7 +175,7 @@ public:
     GALineFactory() : XLineFactory("GA") { }
 
     /** Generate a GALine
-*/
+     */
     GALine* Generate(time_t set_time, long duration, std::string source, std::string reason, std::string xline_specific_mask)
     {
         IdentHostPair ih = ServerInstance->XLines->IdentSplit(xline_specific_mask);
@@ -368,8 +368,8 @@ public:
         Implementation eventlist[] = {I_OnCheckReady, I_OnStats};
         ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
     }
-    virtual ModResult OnStats(char symbol, User* user, string_list &out)
-    { /*stats A does global lines, stats a local lines.*/
+    ModResult OnStats(char symbol, User* user, string_list &out)
+    {   /*stats A does global lines, stats a local lines.*/
         if (symbol == 'A')
         {
             ServerInstance->XLines->InvokeStats("GA", 210, user, out);
@@ -382,19 +382,19 @@ public:
         }
         return MOD_RES_PASSTHRU;
     }
-    virtual ~ModuleRequireAuth()
+    ~ModuleRequireAuth()
     {
         ServerInstance->XLines->DelAll("A");
         ServerInstance->XLines->DelAll("GA");
         ServerInstance->XLines->UnregisterFactory(&fact1);
         ServerInstance->XLines->UnregisterFactory(&fact2);
     }
-    virtual Version GetVersion()
+    Version GetVersion()
     {
         return Version("Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.", VF_COMMON | VF_VENDOR);
     }
-    virtual ModResult OnCheckReady(LocalUser* user)
-    { /*I'm afraid that using the normal xline methods would then result in this line being checked at the wrong time.*/
+    ModResult OnCheckReady(LocalUser* user)
+    {   /*I'm afraid that using the normal xline methods would then result in this line being checked at the wrong time.*/
         if (user!=NULL && !isLoggedIn(user))
         {
             XLine *locallines = ServerInstance->XLines->MatchesLine("A", user);
