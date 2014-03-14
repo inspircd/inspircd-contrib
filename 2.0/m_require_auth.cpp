@@ -36,12 +36,7 @@ protected:
 
     std::string matchtext;
 public:
-    GALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host) : XLine(s_time, d, src, re, "GA"), identmask(ident), hostmask(host)
-    {
-        matchtext = this->identmask;
-        matchtext.append("@").append(this->hostmask);
-    }
-    GALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host, std::string othertext) : XLine(s_time, d, src, re, othertext), identmask(ident), hostmask(host)
+    GALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host, std::string othertext = "GA") : XLine(s_time, d, src, re, othertext), identmask(ident), hostmask(host)
     {
         matchtext = this->identmask;
         matchtext.append("@").append(this->hostmask);
