@@ -90,7 +90,7 @@ class ALine : public GALine
 {
 
 public:
-    ALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host) : GALine(s_time, d, src, re, ident, host, "A"){}
+    ALine(time_t s_time, long d, std::string src, std::string re, std::string ident, std::string host) : GALine(s_time, d, src, re, ident, host, "A") {}
     bool IsBurstable()
     {
         return false;
@@ -141,13 +141,13 @@ public:
 class CommandGALine: public Command
 {
 protected:
-	std::string linename;
+    std::string linename;
 public:
     CommandGALine(Module* c, std::string linetype = "GA") : Command(c, linetype+"LINE", 1, 3)
     {
         flags_needed = 'o';
         this->syntax = "<nick> [<duration> :<reason>]";
-	this->linename = linetype;
+        this->linename = linetype;
     }
     CmdResult Handle(const std::vector<std::string>& parameters, User *user)
     {
@@ -176,45 +176,45 @@ public:
 
             else if (target.find('!') != std::string::npos)
             {
-		std::string message = "NOTICE %s :*** "+linename+"-Line cannot operate on nick!user@host masks";
+                std::string message = "NOTICE %s :*** "+linename+"-Line cannot operate on nick!user@host masks";
                 user->WriteServ(message);
                 return CMD_FAILURE;
             }
 
             long duration = ServerInstance->Duration(parameters[1].c_str());
-			GALine* gal = NULL;
-			ALine* al = NULL;
-			bool result = false;
-			if(strcmp(linename.c_str(), "GA")==0)
-			{
-				gal = new GALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
-				result = (ServerInstance->XLines->AddLine(gal, user));
-			}
-			else if(strcmp(linename.c_str(), "A")==0)
-			{
-				al = new ALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
-				result = (ServerInstance->XLines->AddLine(al, user));
-			}
-			if (result)
-			{
-				if (!duration)
-				{
-					ServerInstance->SNO->WriteToSnoMask('x', "%s added permanent %s-line for %s: %s",user->nick.c_str(), linename.c_str(), target.c_str(), parameters[2].c_str());
-				}
-				else
-				{
-					time_t c_requires_crap = duration + ServerInstance->Time();
-					std::string timestr = ServerInstance->TimeString(c_requires_crap);
-					ServerInstance->SNO->WriteToSnoMask('x',"%s added timed %s-line for %s, expires on %s: %s",user->nick.c_str(),linename.c_str(),target.c_str(),timestr.c_str(), parameters[2].c_str());
-				}
-				ServerInstance->XLines->ApplyLines();
-			}
-			else
-			{
-				delete gal;
-				delete al;
-				user->WriteServ("NOTICE %s :*** %s-Line for %s already exists",user->nick.c_str(),linename.c_str(),target.c_str());
-			}
+            GALine* gal = NULL;
+            ALine* al = NULL;
+            bool result = false;
+            if(strcmp(linename.c_str(), "GA")==0)
+            {
+                gal = new GALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
+                result = (ServerInstance->XLines->AddLine(gal, user));
+            }
+            else if(strcmp(linename.c_str(), "A")==0)
+            {
+                al = new ALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
+                result = (ServerInstance->XLines->AddLine(al, user));
+            }
+            if (result)
+            {
+                if (!duration)
+                {
+                    ServerInstance->SNO->WriteToSnoMask('x', "%s added permanent %s-line for %s: %s",user->nick.c_str(), linename.c_str(), target.c_str(), parameters[2].c_str());
+                }
+                else
+                {
+                    time_t c_requires_crap = duration + ServerInstance->Time();
+                    std::string timestr = ServerInstance->TimeString(c_requires_crap);
+                    ServerInstance->SNO->WriteToSnoMask('x',"%s added timed %s-line for %s, expires on %s: %s",user->nick.c_str(),linename.c_str(),target.c_str(),timestr.c_str(), parameters[2].c_str());
+                }
+                ServerInstance->XLines->ApplyLines();
+            }
+            else
+            {
+                delete gal;
+                delete al;
+                user->WriteServ("NOTICE %s :*** %s-Line for %s already exists",user->nick.c_str(),linename.c_str(),target.c_str());
+            }
         }
         else
         {
@@ -224,14 +224,14 @@ public:
             }
             else
             {
-				if(strcmp(linename.c_str(), "GA")==0)
-				{
-					user->WriteServ("NOTICE %s :***GA-Line %s not found in list, try /stats A.",user->nick.c_str(),target.c_str());
-				}
-				else if(strcmp(linename.c_str(), "A")==0)
-				{
-					user->WriteServ("NOTICE %s :***A-Line %s not found in list, try /stats a.",user->nick.c_str(),target.c_str());
-				}
+                if(strcmp(linename.c_str(), "GA")==0)
+                {
+                    user->WriteServ("NOTICE %s :***GA-Line %s not found in list, try /stats A.",user->nick.c_str(),target.c_str());
+                }
+                else if(strcmp(linename.c_str(), "A")==0)
+                {
+                    user->WriteServ("NOTICE %s :***A-Line %s not found in list, try /stats a.",user->nick.c_str(),target.c_str());
+                }
             }
         }
 
