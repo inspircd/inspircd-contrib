@@ -211,7 +211,7 @@ public:
             }
             else
             {
-                delete gal;
+                delete gal; /*Is this safe to do, given that one of gal and al will never point to an actual instantiated object? No problems on my testnet though.*/
                 delete al;
                 user->WriteServ("NOTICE %s :*** %s-Line for %s already exists",user->nick.c_str(),linename.c_str(),target.c_str());
             }
