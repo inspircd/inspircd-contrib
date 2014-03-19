@@ -137,98 +137,21 @@ public:
         return new GALine(set_time, duration, source, reason, ih.first, ih.second);
     }
 };
-class CommandALine: public Command
-{
-public:
-    CommandALine(Module* c) : Command(c, "ALINE", 1, 3)
-    {
-        flags_needed = 'o';
-        this->syntax = "<nick> [<duration> :<reason>]";
-    }
-    CmdResult Handle(const std::vector<std::string>& parameters, User *user)
-    {
-        std::string target = parameters[0];
-
-        if (parameters.size() >= 3)
-        {
-            IdentHostPair ih;
-            User* find = ServerInstance->FindNick(target);
-            if ((find) && (find->registered == REG_ALL))
-            {
-                ih.first = "*";
-                ih.second = find->GetIPString();
-                target = std::string("*@") + find->GetIPString();
-            }
-            else
-                ih = ServerInstance->XLines->IdentSplit(target);
-
-            if (ih.first.empty())
-            {
-                user->WriteServ("NOTICE %s :*** Target not found", user->nick.c_str());
-                return CMD_FAILURE;
-            }
-
-            if (ServerInstance->HostMatchesEveryone(ih.first+"@"+ih.second,user))
-                return CMD_FAILURE;
-
-            else if (target.find('!') != std::string::npos)
-            {
-                user->WriteServ("NOTICE %s :*** A-Line cannot operate on nick!user@host masks",user->nick.c_str());
-                return CMD_FAILURE;
-            }
-
-            long duration = ServerInstance->Duration(parameters[1].c_str());
-            ALine* al = new ALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
-            if (ServerInstance->XLines->AddLine(al, user))
-            {
-                if (!duration)
-                {
-                    ServerInstance->SNO->WriteToSnoMask('x',"%s added permanent A-line for %s: %s",user->nick.c_str(),target.c_str(), parameters[2].c_str());
-                }
-                else
-                {
-                    time_t c_requires_crap = duration + ServerInstance->Time();
-                    std::string timestr = ServerInstance->TimeString(c_requires_crap);
-                    ServerInstance->SNO->WriteToSnoMask('x',"%s added timed A-line for %s, expires on %s: %s",user->nick.c_str(),target.c_str(),timestr.c_str(), parameters[2].c_str());
-                }
-
-                ServerInstance->XLines->ApplyLines();
-            }
-            else
-            {
-                delete al;
-                user->WriteServ("NOTICE %s :*** A-Line for %s already exists",user->nick.c_str(),target.c_str());
-            }
-
-        }
-        else
-        {
-            if (ServerInstance->XLines->DelLine(target.c_str(),"A",user))
-            {
-                ServerInstance->SNO->WriteToSnoMask('x',"%s removed A-line on %s",user->nick.c_str(),target.c_str());
-            }
-            else
-            {
-                user->WriteServ("NOTICE %s :*** A-line %s not found in list, try /stats a.",user->nick.c_str(),target.c_str());
-            }
-        }
-
-        return CMD_SUCCESS;
-    }
-};
 
 class CommandGALine: public Command
 {
+protected:
+	std::string linename;
 public:
-    CommandGALine(Module* c) : Command(c, "GALINE", 1, 3)
+    CommandGALine(Module* c, std::string linetype = "A") : Command(c, linetype+"LINE", 1, 3)
     {
         flags_needed = 'o';
         this->syntax = "<nick> [<duration> :<reason>]";
+		this->linename = linetype;
     }
     CmdResult Handle(const std::vector<std::string>& parameters, User *user)
     {
         std::string target = parameters[0];
-
         if (parameters.size() >= 3)
         {
             IdentHostPair ih;
@@ -253,44 +176,70 @@ public:
 
             else if (target.find('!') != std::string::npos)
             {
-                user->WriteServ("NOTICE %s :*** GA-Line cannot operate on nick!user@host masks",user->nick.c_str());
+                user->WriteServ(("NOTICE %s :*** "+linename+"-Line cannot operate on nick!user@host masks").c_str(),user->nick.c_str());
                 return CMD_FAILURE;
             }
 
             long duration = ServerInstance->Duration(parameters[1].c_str());
-            GALine* gal = new GALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
-            if (ServerInstance->XLines->AddLine(gal, user))
-            {
-                if (!duration)
-                {
-                    ServerInstance->SNO->WriteToSnoMask('x',"%s added permanent GA-line for %s: %s",user->nick.c_str(),target.c_str(), parameters[2].c_str());
-                }
-                else
-                {
-                    time_t c_requires_crap = duration + ServerInstance->Time();
-                    std::string timestr = ServerInstance->TimeString(c_requires_crap);
-                    ServerInstance->SNO->WriteToSnoMask('x',"%s added timed GA-line for %s, expires on %s: %s",user->nick.c_str(),target.c_str(),
-                                                        timestr.c_str(), parameters[2].c_str());
-                }
-
-                ServerInstance->XLines->ApplyLines();
-            }
-            else
-            {
-                delete gal;
-                user->WriteServ("NOTICE %s :*** GA-Line for %s already exists",user->nick.c_str(),target.c_str());
-            }
-
+			GALine* gal;
+			ALine* al; /*I'm a bit hesitent about having a rather useless pointer in either case, but I need these to be in the scope of the entire method and I don't want to duplicate all the below code.*/
+			bool result = false;
+			if(linename.c_str() == "GA")
+			{
+				gal = new GALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
+				result = (ServerInstance->XLines->AddLine(gal, user));
+			}
+			else if(linename.c_str() == "GA")
+			{
+				al = new ALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
+				result = (ServerInstance->XLines->AddLine(al, user));
+			}
+			if (result)
+			{
+				if (!duration)
+				{
+					ServerInstance->SNO->WriteToSnoMask('x',("%s added permanent "+linename+"-line for %s: %s").c_str(),user->nick.c_str(),target.c_str(), parameters[2].c_str());
+				}
+				else
+				{
+					time_t c_requires_crap = duration + ServerInstance->Time();
+					std::string timestr = ServerInstance->TimeString(c_requires_crap);
+					ServerInstance->SNO->WriteToSnoMask('x',("%s added timed "+linename+"-line for %s, expires on %s: %s").c_str(),user->nick.c_str(),target.c_str(),
+														timestr.c_str(), parameters[2].c_str());
+				}
+				ServerInstance->XLines->ApplyLines();
+			}
+			else
+			{
+				delete gal;
+				delete al;
+				user->WriteServ(("NOTICE %s :*** "+linename+"-Line for %s already exists").c_str(),user->nick.c_str(),target.c_str());
+			}
+			if(linename == "A") /*Remove the unused pointer*/
+			{
+				delete gal;
+			}
+			else if(linename == "GA")
+			{
+				delete al;
+			}
         }
         else
         {
-            if (ServerInstance->XLines->DelLine(target.c_str(),"GA",user))
+            if (ServerInstance->XLines->DelLine(target.c_str(),linename,user))
             {
-                ServerInstance->SNO->WriteToSnoMask('x',"%s removed GA-line on %s",user->nick.c_str(),target.c_str());
+                ServerInstance->SNO->WriteToSnoMask('x',("%s removed "+linename+"-line on %s").c_str(),user->nick.c_str(),target.c_str());
             }
             else
             {
-                user->WriteServ("NOTICE %s :*** GA-Line %s not found in list, try /stats A.",user->nick.c_str(),target.c_str());
+				if(linename == "GA")
+				{
+					user->WriteServ("NOTICE %s :***GA-Line %s not found in list, try /stats A.",user->nick.c_str(),target.c_str());
+				}
+				else if(linename == "A")
+				{
+					user->WriteServ("NOTICE %s :***A-Line %s not found in list, try /stats a.",user->nick.c_str(),target.c_str());
+				}
             }
         }
 
@@ -298,6 +247,11 @@ public:
     }
 };
 
+class CommandALine: public CommandGALine
+{
+public:
+    CommandALine(Module* c) : CommandGALine(c, "A") {}
+};
 
 class ModuleRequireAuth : public Module
 {
