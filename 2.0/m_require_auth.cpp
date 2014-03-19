@@ -143,11 +143,11 @@ class CommandGALine: public Command
 protected:
 	std::string linename;
 public:
-    CommandGALine(Module* c, std::string linetype = "A") : Command(c, linetype+"LINE", 1, 3)
+    CommandGALine(Module* c, std::string linetype = "GA") : Command(c, linetype+"LINE", 1, 3)
     {
         flags_needed = 'o';
         this->syntax = "<nick> [<duration> :<reason>]";
-		this->linename = linetype;
+	this->linename = linetype;
     }
     CmdResult Handle(const std::vector<std::string>& parameters, User *user)
     {
@@ -176,20 +176,21 @@ public:
 
             else if (target.find('!') != std::string::npos)
             {
-                user->WriteServ(("NOTICE %s :*** "+linename+"-Line cannot operate on nick!user@host masks").c_str(),user->nick.c_str());
+		std::string message = "NOTICE %s :*** "+linename+"-Line cannot operate on nick!user@host masks";
+                user->WriteServ(message);
                 return CMD_FAILURE;
             }
 
             long duration = ServerInstance->Duration(parameters[1].c_str());
-			GALine* gal;
-			ALine* al; /*I'm a bit hesitent about having a rather useless pointer in either case, but I need these to be in the scope of the entire method and I don't want to duplicate all the below code.*/
+			GALine* gal = NULL;
+			ALine* al = NULL;
 			bool result = false;
-			if(linename.c_str() == "GA")
+			if(strcmp(linename.c_str(), "GA")==0)
 			{
 				gal = new GALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
 				result = (ServerInstance->XLines->AddLine(gal, user));
 			}
-			else if(linename.c_str() == "GA")
+			else if(strcmp(linename.c_str(), "A")==0)
 			{
 				al = new ALine(ServerInstance->Time(), duration, user->nick.c_str(), parameters[2].c_str(), ih.first.c_str(), ih.second.c_str());
 				result = (ServerInstance->XLines->AddLine(al, user));
@@ -198,14 +199,13 @@ public:
 			{
 				if (!duration)
 				{
-					ServerInstance->SNO->WriteToSnoMask('x',("%s added permanent "+linename+"-line for %s: %s").c_str(),user->nick.c_str(),target.c_str(), parameters[2].c_str());
+					ServerInstance->SNO->WriteToSnoMask('x', "%s added permanent %s-line for %s: %s",user->nick.c_str(), linename.c_str(), target.c_str(), parameters[2].c_str());
 				}
 				else
 				{
 					time_t c_requires_crap = duration + ServerInstance->Time();
 					std::string timestr = ServerInstance->TimeString(c_requires_crap);
-					ServerInstance->SNO->WriteToSnoMask('x',("%s added timed "+linename+"-line for %s, expires on %s: %s").c_str(),user->nick.c_str(),target.c_str(),
-														timestr.c_str(), parameters[2].c_str());
+					ServerInstance->SNO->WriteToSnoMask('x',"%s added timed %s-line for %s, expires on %s: %s",user->nick.c_str(),linename.c_str(),target.c_str(),timestr.c_str(), parameters[2].c_str());
 				}
 				ServerInstance->XLines->ApplyLines();
 			}
@@ -213,30 +213,22 @@ public:
 			{
 				delete gal;
 				delete al;
-				user->WriteServ(("NOTICE %s :*** "+linename+"-Line for %s already exists").c_str(),user->nick.c_str(),target.c_str());
-			}
-			if(linename == "A") /*Remove the unused pointer*/
-			{
-				delete gal;
-			}
-			else if(linename == "GA")
-			{
-				delete al;
+				user->WriteServ("NOTICE %s :*** %s-Line for %s already exists",user->nick.c_str(),linename.c_str(),target.c_str());
 			}
         }
         else
         {
             if (ServerInstance->XLines->DelLine(target.c_str(),linename,user))
             {
-                ServerInstance->SNO->WriteToSnoMask('x',("%s removed "+linename+"-line on %s").c_str(),user->nick.c_str(),target.c_str());
+                ServerInstance->SNO->WriteToSnoMask('x',"%s removed %s-line on %s",user->nick.c_str(),linename.c_str(),target.c_str());
             }
             else
             {
-				if(linename == "GA")
+				if(strcmp(linename.c_str(), "GA")==0)
 				{
 					user->WriteServ("NOTICE %s :***GA-Line %s not found in list, try /stats A.",user->nick.c_str(),target.c_str());
 				}
-				else if(linename == "A")
+				else if(strcmp(linename.c_str(), "A")==0)
 				{
 					user->WriteServ("NOTICE %s :***A-Line %s not found in list, try /stats a.",user->nick.c_str(),target.c_str());
 				}
