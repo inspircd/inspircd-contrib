@@ -29,20 +29,20 @@ class ModuleForceIdent : public Module
  public:
 	void init()
 	{
-		ServerInstance->Modules->Attach(I_OnCheckReady, this);
+		ServerInstance->Modules->Attach(I_OnUserConnect, this);
 	}
 
-	void Prioritize()
-	{
-		ServerInstance->Modules->SetPriority(this, I_OnCheckReady, PRIORITY_LAST);
-	}
-
-	ModResult OnCheckReady(LocalUser* user)
+	void OnUserConnect(LocalUser* user)
 	{
 		ConfigTag* tag = user->MyClass->config;
-		user->ident = tag->getString("forceident", user->ident);
-		user->InvalidateCache();
-		return MOD_RES_PASSTHRU;
+		std::string ident = tag->getString("forceident");
+		if (ServerInstance->IsIdent(ident.c_str()))
+		{
+			ServerInstance->Logs->Log("m_forceident", DEBUG, "Setting ident of user '%s' (%s) in class '%s' to '%s'.",
+				user->nick.c_str(), user->uuid.c_str(), user->MyClass->name.c_str(), ident.c_str());
+			user->ident = ident;
+			user->InvalidateCache();
+		}
 	}
 
 	Version GetVersion()
