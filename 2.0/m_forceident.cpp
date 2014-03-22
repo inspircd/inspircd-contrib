@@ -40,8 +40,14 @@ class ModuleForceIdent : public Module
 	ModResult OnCheckReady(LocalUser* user)
 	{
 		ConfigTag* tag = user->MyClass->config;
-		user->ident = tag->getString("forceident", user->ident);
-		user->InvalidateCache();
+		std::string ident = tag->getString("forceident");
+		if (ServerInstance->IsIdent(ident.c_str()))
+		{
+			ServerInstance->Logs->Log("m_forceident", DEBUG, "Setting ident of user '%s' (%s) in class '%s' to '%s'.",
+				user->nick.c_str(), user->uuid.c_str(), user->MyClass->name.c_str(), ident.c_str());
+			user->ident = ident;
+			user->InvalidateCache();
+		}
 		return MOD_RES_PASSTHRU;
 	}
 
