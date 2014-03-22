@@ -29,15 +29,10 @@ class ModuleForceIdent : public Module
  public:
 	void init()
 	{
-		ServerInstance->Modules->Attach(I_OnCheckReady, this);
+		ServerInstance->Modules->Attach(I_OnUserConnect, this);
 	}
 
-	void Prioritize()
-	{
-		ServerInstance->Modules->SetPriority(this, I_OnCheckReady, PRIORITY_LAST);
-	}
-
-	ModResult OnCheckReady(LocalUser* user)
+	void OnUserConnect(LocalUser* user)
 	{
 		ConfigTag* tag = user->MyClass->config;
 		std::string ident = tag->getString("forceident");
@@ -48,7 +43,6 @@ class ModuleForceIdent : public Module
 			user->ident = ident;
 			user->InvalidateCache();
 		}
-		return MOD_RES_PASSTHRU;
 	}
 
 	Version GetVersion()
