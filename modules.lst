@@ -141,7 +141,10 @@ module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f
 module m_antirandom 2.0.137 https://raw.github.com/inspircd/inspircd-extras/962bb3b2b93f8e5a07a97a2f2405963a18ed6869/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
-module m_changecap 2.0.178 https://raw.github.com/inspircd/inspircd-extras/fe4844391ba4aba4efc2f26eee944321f45a0070/2.0/m_changecap.cpp
+module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
+ description Implements IRC v3.2 cap-notify
+ depends core 2.0
+module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e2293e186bbd393e58079b800887c52bff5e777/2.0/m_changecap.cpp
  description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name
  depends core 2.0
 module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_conn_banner.cpp
@@ -159,7 +162,10 @@ module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a8
 module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
  description Provides the FINDXLINE command which lets opers search XLines
  depends core 2.0
-module m_forceident 2.0.190 https://raw.github.com/inspircd/inspircd-extras/c91fea1be6fe0178ae8d6c3cb60860dfa57f1516/2.0/m_forceident.cpp
+module m_flashpolicyd 2.0.200 https://raw.github.com/inspircd/inspircd-extras/f09f8f710e95e4d54c93c47d84c653ef46b17522/2.0/m_flashpolicyd.cpp
+ description Flash Policy Daemon. Allows Flash IRC clients to connect.
+ depends core 2.0
+module m_forceident 2.0.205 https://raw.github.com/inspircd/inspircd-extras/19fd7637e5ffd4ee211e08bc14c759100c079bf7/2.0/m_forceident.cpp
  description Allows forcing idents on users based on their connect class.
  depends core 2.0-2.1
 module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
@@ -214,6 +220,9 @@ module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e
 module m_replaymsg 2.0.193 https://raw.github.com/inspircd/inspircd-extras/d4b299163a077d8e611d72680a1b939a688a159f/2.0/m_replaymsg.cpp
  description Replays messages sent to the server back to the sender.
  depends core 2.0-2.1
+module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92ba1dbcf89910c464171b7ad4748a1209370522/2.0/m_require_auth.cpp
+ description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
+ depends core 2.0
 module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c902274356d9aada0ac28d49ec7ea636fe40/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
  depends core 2.0
