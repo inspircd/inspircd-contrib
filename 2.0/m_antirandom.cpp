@@ -649,13 +649,13 @@ class ModuleAntiRandom : public Module
 			/*
 			 * ..run it through each triple.
 			 */
-			for (ci = triples_txt; *ci; *ci++)
+			for (ci = triples_txt; *ci; ci++)
 			{
 				// At this point, ci[0] and ci[1] point to the first two chars in the triples array.
 				if (*ci[0] == s[0] && *ci[1] == s[1] && s[2])
 				{
 					// First half of triple matches. Try match the other half.
-					*ci++;
+					ci++;
 					if (strchr(*ci, s[2]))
 					{
 						// Triple matches!
@@ -667,7 +667,7 @@ class ModuleAntiRandom : public Module
 				else
 				{
 					// No match. Just blindly increment half a triple.
-					*ci++;
+					ci++;
 				}
 			}
 		}
