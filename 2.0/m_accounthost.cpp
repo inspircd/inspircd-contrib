@@ -47,6 +47,11 @@ class ModuleAccountHost : public Module
 		AccountEvent* accev = (AccountEvent*)&event;
 		if (!IS_LOCAL(accev->user))
 			return;
+
+		// Ignore logout events
+		if (accev->account.empty())
+			return;
+
 		std::string hostname = hostprefix + accev->account + hostsuffix;
 		if (changereal && accev->user->registered != REG_ALL)
 			accev->user->host = hostname;
