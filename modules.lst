@@ -129,7 +129,7 @@ module m_xline_sql 1.2.96 https://raw.github.com/inspircd/inspircd-extras/1f76f9
 module m_xmlsocket 1.2.81 https://raw.github.com/inspircd/inspircd-extras/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_xmlsocket.cpp
  description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
  depends core 1.2
-module m_accounthost 2.0.191 https://raw.github.com/inspircd/inspircd-extras/2e23d70715f535306931b3b53deaf5077b965511/2.0/m_accounthost.cpp
+module m_accounthost 2.0.220 https://raw.github.com/inspircd/inspircd-extras/c421705f80863c1d27bd59c33732975ef739cd7e/2.0/m_accounthost.cpp
  description Allows setting hosts on users based on their account name on login.
  depends core 2.0
 module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibear.cpp
@@ -138,12 +138,15 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_antirandom 2.0.137 https://raw.github.com/inspircd/inspircd-extras/962bb3b2b93f8e5a07a97a2f2405963a18ed6869/2.0/m_antirandom.cpp
+module m_antirandom 2.0.219 https://raw.github.com/inspircd/inspircd-extras/afe55e428c09d68bf7b3095e37a643fcfea5c6e4/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
  description Enables two factor authentification for oper blocks using authy
  depends core 2.0
+module m_autokick 2.0.221 https://raw.github.com/inspircd/inspircd-extras/a70b0465f0154c17111a53d7e582ac3d74a92ff7/2.0/m_autokick.cpp
+ description Automatically kicks people who match a banned mask.
+ depends core 2.0-2.1
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
  depends core 2.0
@@ -174,6 +177,8 @@ module m_forceident 2.0.205 https://raw.github.com/inspircd/inspircd-extras/19fd
 module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
  description Displays the full version of a server to an oper
  depends core 2.0
+module m_geoipban 2.0.217 https://raw.github.com/inspircd/inspircd-extras/f18b6d8b0d723cf5e4edc9bfe301a97dc46377c8/2.0/m_geoipban.cpp
+ description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
 module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
@@ -197,6 +202,9 @@ module m_join0 2.0.169 https://raw.github.com/inspircd/inspircd-extras/ef75039c4
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 2.0-2.1
+module m_largetextpaste 2.0.0 https://raw.github.com/inspircd/inspircd-extras//2.0/m_largetextpaste.cpp
+ description Allows server to catch large PRIVMSG text and send them off to a pastebin-like service and replace the text with a shortened version including said url to text entirety. Defaults to using 'pastebinit' command
+ depends core 2.0
 module m_namedstats 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_namedstats.cpp
  description Allows /STATS queries by name
  depends core 2.0
