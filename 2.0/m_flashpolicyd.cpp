@@ -16,6 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * How to use this module:
+ * Load the module and assign a port to it, e.g. like this
+ * <bind address="" port="8430" type="flashpolicyd">
+ * Unless you want to specify a policy file manually,
+ * or change the timeout, you're done now.
+ */
+
 /* $ModDesc: Flash Policy Daemon. Allows Flash IRC clients to connect. */
 /* $ModAuthor: Daniel Vassdal */
 /* $ModDepends: core 2.0 */
