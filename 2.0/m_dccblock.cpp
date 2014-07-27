@@ -2,13 +2,6 @@
  * InspIRCd -- Internet Relay Chat Daemon
  *
  *   Copyright (C) 2014 Jansteen <pliantcom@yandex.com>
- *   Copyright (C) 2009 Daniel De Graaf <danieldg@inspircd.org>
- *   Copyright (C) 2008 John Brooks <john.brooks@dereferenced.net>
- *   Copyright (C) 2008 Pippijn van Steenhoven <pip88nl@gmail.com>
- *   Copyright (C) 2006-2008 Craig Edwards <craigedwards@brainbox.cc>
- *   Copyright (C) 2007-2008 Robin Burchell <robin+git@viroteck.net>
- *   Copyright (C) 2007 Dennis Friis <peavey@inspircd.org>
- *   Copyright (C) 2006 Jamie ??? <???@???>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -27,17 +20,9 @@
 #include "inspircd.h"
 
 /* $ModDesc: Provides support for blocking DCC transfers and DCCALLOW */
-/* $ModAuthor: Jansteen and all previous authors of m_dccallow from
-               which this is derived  */
+/* $ModAuthor: Jansteen */
 /* $ModAuthorMail: pliantcom@yandex.com */
 
-
-class DCCBlock
-{
- public:
-
-	DCCBlock() { }
-};
 
 class CommandDCCBlock : public Command
 {
@@ -81,7 +66,7 @@ class ModuleDCCBlock : public Module
         void init()
         {
                 ServerInstance->Modules->AddService(cmd);
-                Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice, I_OnUserPostNick };
+                Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice };
                 ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
         }
 
@@ -102,10 +87,6 @@ class ModuleDCCBlock : public Module
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
-	}
-
-	virtual ~ModuleDCCBlock()
-	{
 	}
 
 	virtual Version GetVersion()
