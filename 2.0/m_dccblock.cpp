@@ -19,53 +19,30 @@
 
 #include "inspircd.h"
 
-/* $ModDesc: Provides support for blocking DCC transfers and DCCALLOW */
+/* $ModDesc: Provides support for blocking DCC transfers */
 /* $ModAuthor: Jansteen */
 /* $ModAuthorMail: pliantcom@yandex.com */
 
+/* Documentation
+   This module is used to completely block DCC from being used on your
+   IRC network in all cases.  Previous work-arounds to accomplish this
+   included configuring m_dccallow to block DCC by default and adding an
+   extra clause to disable DCCALLOW for non-operators, but there are
+   some cases where it is best to make sure DCC is off for everyone,
+   operators included.  This module does this simply and without extra
+   configuration required.
 
-class CommandDCCBlock : public Command
-{
- public:
-	CommandDCCBlock(Module* parent) : Command(parent, "DCCALLOW", 0)
-	{
-		syntax = "";
-	}
-
-	CmdResult Handle(const std::vector<std::string> &parameters, User *user)
-	{
-		/* Display error about DCCALLOW being blocked */
-		DisplayError(user);
-		return CMD_FAILURE;
-	}
-
-	RouteDescriptor GetRouting(User* user, const std::vector<std::string>& parameters)
-	{
-		return ROUTE_BROADCAST;
-	}
-
-	void DisplayError(User* user)
-	{
-		user->WriteNumeric(998, "%s :DCC not allowed on this server.  No exceptions allowed.", user->nick.c_str());
-
-		LocalUser* localuser = IS_LOCAL(user);
-		if (localuser)
-			localuser->CommandFloodPenalty += 4000;
-	}
-};
+   Note: You should not load m_dccallow.so simultaneously to m_dccblock.so
+   because it will do nothing useful.  It wouldn't prevent this module from
+   blocking DCC however.
+*/
 
 class ModuleDCCBlock : public Module
 {
-	CommandDCCBlock cmd;
  public:
-
-        ModuleDCCBlock()
-                : cmd(this)
-        { }
 
         void init()
         {
-                ServerInstance->Modules->AddService(cmd);
                 Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice };
                 ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
         }
@@ -91,7 +68,7 @@ class ModuleDCCBlock : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("Provides support for blocking DCC transfers and DCCALLOW", VF_COMMON );
+		return Version("Provides support for blocking DCC transfers", VF_COMMON | VF_VENDOR);
 	}
 };
 
