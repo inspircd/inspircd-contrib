@@ -129,7 +129,7 @@ module m_xline_sql 1.2.96 https://raw.github.com/inspircd/inspircd-extras/1f76f9
 module m_xmlsocket 1.2.81 https://raw.github.com/inspircd/inspircd-extras/0ae678b7ca9fc03a4a2e3335b29daf11835ca186/1.2/m_xmlsocket.cpp
  description Provides and processes \0 IRC line terminators, for use with Flash XMLSockets.
  depends core 1.2
-module m_accounthost 2.0.191 https://raw.github.com/inspircd/inspircd-extras/2e23d70715f535306931b3b53deaf5077b965511/2.0/m_accounthost.cpp
+module m_accounthost 2.0.220 https://raw.github.com/inspircd/inspircd-extras/c421705f80863c1d27bd59c33732975ef739cd7e/2.0/m_accounthost.cpp
  description Allows setting hosts on users based on their account name on login.
  depends core 2.0
 module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibear.cpp
@@ -138,12 +138,15 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_antirandom 2.0.137 https://raw.github.com/inspircd/inspircd-extras/962bb3b2b93f8e5a07a97a2f2405963a18ed6869/2.0/m_antirandom.cpp
+module m_antirandom 2.0.219 https://raw.github.com/inspircd/inspircd-extras/afe55e428c09d68bf7b3095e37a643fcfea5c6e4/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
  description Enables two factor authentification for oper blocks using authy
  depends core 2.0
+module m_autokick 2.0.221 https://raw.github.com/inspircd/inspircd-extras/a70b0465f0154c17111a53d7e582ac3d74a92ff7/2.0/m_autokick.cpp
+ description Automatically kicks people who match a banned mask.
+ depends core 2.0-2.1
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
  depends core 2.0
@@ -156,6 +159,8 @@ module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
 module m_custompenalty 2.0.163 https://raw.github.com/inspircd/inspircd-extras/0902918d32b552863d9071c659978538b0f11e43/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
  depends core 2.0-2.1
+module m_dccblock 2.0.229 https://raw.github.com/inspircd/inspircd-extras/8b0188bd4aa1c5ed46b0cf8f16732405af99cfe6/2.0/m_dccblock.cpp
+ description Provides support for blocking DCC transfers
 module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78af1adb3cf9b2bbb247f1f2b3f87f548a7e3dbd/2.0/m_deferaccept.cpp
  description Enable TCP_DEFER_ACCEPT on sockets
  depends core 2.0
@@ -165,7 +170,7 @@ module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a8
 module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
  description Provides the FINDXLINE command which lets opers search XLines
  depends core 2.0
-module m_flashpolicyd 2.0.200 https://raw.github.com/inspircd/inspircd-extras/f09f8f710e95e4d54c93c47d84c653ef46b17522/2.0/m_flashpolicyd.cpp
+module m_flashpolicyd 2.0.225 https://raw.github.com/inspircd/inspircd-extras/f71b8fcccee453dd1dba034ace918d8fa4309421/2.0/m_flashpolicyd.cpp
  description Flash Policy Daemon. Allows Flash IRC clients to connect.
  depends core 2.0
 module m_forceident 2.0.205 https://raw.github.com/inspircd/inspircd-extras/19fd7637e5ffd4ee211e08bc14c759100c079bf7/2.0/m_forceident.cpp
@@ -174,6 +179,8 @@ module m_forceident 2.0.205 https://raw.github.com/inspircd/inspircd-extras/19fd
 module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
  description Displays the full version of a server to an oper
  depends core 2.0
+module m_geoipban 2.0.217 https://raw.github.com/inspircd/inspircd-extras/f18b6d8b0d723cf5e4edc9bfe301a97dc46377c8/2.0/m_geoipban.cpp
+ description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
 module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
@@ -232,9 +239,12 @@ module m_replaymsg 2.0.193 https://raw.github.com/inspircd/inspircd-extras/d4b29
 module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92ba1dbcf89910c464171b7ad4748a1209370522/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 2.0
-module m_sha1 2.0.212 https://raw.github.com/inspircd/inspircd-extras/69852061345370982017859a30bfb507f073bfbc/2.0/m_sha1.cpp
+module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
  depends core 2.0
+module m_stats_unlinked 2.0.223 https://raw.github.com/inspircd/inspircd-extras/89dc7e93756d2539237fdc6c25d5a50d7d3771dd/2.0/m_stats_unlinked.cpp
+ description Adds stats character 'X' which shows unlinked servers.
+ depends core 2.0-2.1
 module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c902274356d9aada0ac28d49ec7ea636fe40/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
  depends core 2.0
