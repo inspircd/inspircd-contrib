@@ -259,3 +259,6 @@ module m_changecap 2.2.182 https://raw.github.com/inspircd/inspircd-extras/8fbd4
 module m_noctcp_user 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_noctcp_user.cpp
  description Provides support for unreal-style user mode +T
  depends core 2.2
+module m_largetextpaste 2.0.221 https://raw.github.com/inspircd/inspircd-extras/03c83ea4eee04458f4d116f5c9aeea50ea1686cb/2.0/m_largetextpaste.cpp
+ description Allows server to catch large PRIVMSG text and send them off to a pastebin.com service and replace the text with a shortened version including said url to text entirety.
+ depends core 2.0
