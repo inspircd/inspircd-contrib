@@ -58,7 +58,7 @@ class ModuleLargeTextPaste : public Module
             char** response_ptr = (char**) userdata;
 
             // copy the string, it better return a string
-            *response_ptr = strndup(ptr, size * nmemb);
+            strncpy(*response_ptr, ptr, size * nmemb);
 
             // return the number of bytes we read
             return size * nmemb;
@@ -68,13 +68,23 @@ class ModuleLargeTextPaste : public Module
 
         void init()
         {
-            devKey = "53d52aec235802c98c931fe58f90882d";
             serviceUrl = "http://pastebin.com/api/api_post.php";
 
             OnRehash(NULL);
 
             Implementation eventlist[] = { I_OnUserPreMessage, I_OnRehash };
             ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
+        }
+
+        ModuleLargeTextPaste() : Module()
+        {
+            curl_global_init(CURL_GLOBAL_ALL);
+        }
+
+        ~ModuleLargeTextPaste()
+        {
+            // must cleanup
+            curl_global_cleanup();
         }
 
         ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char status, CUList& exempt_list)
@@ -88,10 +98,7 @@ class ModuleLargeTextPaste : public Module
                     std::string orig = std::string(text);
 
                     // required cURL setup
-                    CURL* curl = NULL;
-                    curl_global_init(CURL_GLOBAL_ALL);
-                    curl = curl_easy_init();
-
+                    CURL* curl = curl_easy_init();
                     if (curl)
                     {
 
@@ -137,9 +144,6 @@ class ModuleLargeTextPaste : public Module
                         // must cleanup
                         curl_easy_cleanup(curl);
                     }
-
-                    // must cleanup
-                    curl_global_cleanup();
                 }
             }
 
@@ -150,6 +154,7 @@ class ModuleLargeTextPaste : public Module
             ConfigTag* conf = ServerInstance->Config->ConfValue("largetextpaste");
             snipLen = conf->getInt("sniplen", 60);
             cutoffLen = conf->getInt("cutofflen", 300);
+            devKey = conf->getString("apikey");
         }
 
         Version GetVersion()
