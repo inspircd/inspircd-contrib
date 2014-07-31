@@ -59,7 +59,12 @@ class ModuleLargeTextPaste : public Module
 
             // copy the string, it better return a string
             *response_ptr = new char[size * nmemb];
-            strncpy(*response_ptr, ptr, size * nmemb);
+
+            // probably need a sanity check here too. could be null if allocation fails
+            if (*response_ptr)
+            {
+                strncpy(*response_ptr, ptr, size * nmemb);
+            }
 
             // return the number of bytes we read
             return size * nmemb;
@@ -128,7 +133,7 @@ class ModuleLargeTextPaste : public Module
                         // if the pastebin request worked, then trim the text and add URL
                         text.resize(snipLen);
                         text.append("... (more ").append(response).append(" )");
-                        if (response)
+                        if (response) // just a sanity check
                         {
                             delete response;
                         }
