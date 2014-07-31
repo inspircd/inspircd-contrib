@@ -58,6 +58,7 @@ class ModuleLargeTextPaste : public Module
             char** response_ptr = (char**) userdata;
 
             // copy the string, it better return a string
+            *response_ptr = new char[size * nmemb];
             strncpy(*response_ptr, ptr, size * nmemb);
 
             // return the number of bytes we read
@@ -89,61 +90,59 @@ class ModuleLargeTextPaste : public Module
 
         ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char status, CUList& exempt_list)
         {
-            if (target_type == TYPE_CHANNEL && IS_LOCAL(user))
+            //if the message is over the limit shorten it
+            if (target_type == TYPE_CHANNEL && IS_LOCAL(user) && text.length() > cutoffLen)
             {
-                //if the message is over the limit shorten it
-                if (text.length() > cutoffLen)
+                // required cURL setup
+                CURL* curl = curl_easy_init();
+                if (curl)
                 {
-                    // first store a copy of the text
-                    std::string orig = std::string(text);
 
-                    // required cURL setup
-                    CURL* curl = curl_easy_init();
-                    if (curl)
+                    // set post fields for pastebin API
+                    std::string pasteName  = user->nick + " wrote";
+                    std::string postFields = "api_option=paste";
+                    postFields += "&api_dev_key=" + devKey;
+                    postFields += "&api_paste_code=" + std::string(curl_easy_escape(curl, text.c_str(), text.size()));
+                    postFields += "&api_paste_name=" + std::string(curl_easy_escape(curl, pasteName.c_str(), pasteName.size()));
+                    postFields += "&api_paste_private=1"; // unlisted
+                    postFields += "&api_paste_expire_date=N"; // never expires
+
+                    // set url and post fields
+                    curl_easy_setopt(curl, CURLOPT_URL, serviceUrl.c_str());
+                    curl_easy_setopt(curl, CURLOPT_POST, 1);
+                    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
+
+                    // provide a place to store POST response
+                    char* response = NULL;
+
+                    // set callback for POST write back
+                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+
+                    // set data reference for write back
+                    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+                    // send the request
+                    CURLcode result = curl_easy_perform(curl);
+                    if (result == CURLE_OK)
                     {
-
-                        // set post fields for pastebin API
-                        std::string pasteName  = user->nick + " wrote";
-                        std::string postFields = "api_option=paste";
-                        postFields += "&api_dev_key=" + devKey;
-                        postFields += "&api_paste_code=" + std::string(curl_easy_escape(curl, orig.c_str(), orig.size()));
-                        postFields += "&api_paste_name=" + std::string(curl_easy_escape(curl, pasteName.c_str(), pasteName.size()));
-                        postFields += "&api_paste_private=1"; // unlisted
-                        postFields += "&api_paste_expire_date=N"; // never expires
-
-                        // set url and post fields
-                        curl_easy_setopt(curl, CURLOPT_URL, serviceUrl.c_str());
-                        curl_easy_setopt(curl, CURLOPT_POST, 1);
-                        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postFields.c_str());
-
-                        // provide a place to store POST response
-                        char* response = NULL;
-
-                        // set callback for POST write back
-                        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-
-                        // set data reference for write back
-                        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-                        // send the request
-                        CURLcode result = curl_easy_perform(curl);
-                        if (result == CURLE_OK)
+                        // if the pastebin request worked, then trim the text and add URL
+                        text.resize(snipLen);
+                        text.append("... (more ").append(response).append(" )");
+                        if (response)
                         {
-                            // if the pastebin request worked, then trim the text and add URL
-                            text.resize(snipLen);
-                            text.append("... (more ").append(response).append(" )");
-
+                            delete response;
                         }
 
-                        else
-                        {
-                            // otherwise just leave the text alone and post an error
-                            fprintf(stderr, "Error in m_largetextpaste.so cURL operation: %s\n", curl_easy_strerror(result));
-                        }
-
-                        // must cleanup
-                        curl_easy_cleanup(curl);
                     }
+
+                    else
+                    {
+                        // otherwise just leave the text alone and post an error
+                        ServerInstance->Logs->Log("m_largetextpaste", DEFAULT, "cURL operation failed: %s", curl_easy_strerror(result));
+                    }
+
+                    // must cleanup
+                    curl_easy_cleanup(curl);
                 }
             }
 
