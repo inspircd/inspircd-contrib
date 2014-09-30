@@ -523,7 +523,7 @@ class ModuleAntiRandom : public Module
  public:
 	ModuleAntiRandom()
 	{
-		Implementation eventlist[] = { I_OnRehash, I_OnUserConnect };
+		Implementation eventlist[] = { I_OnRehash, I_OnUserRegister };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 		OnRehash(NULL);
 	}
@@ -748,11 +748,11 @@ class ModuleAntiRandom : public Module
 		return false;
 	}
 
-	virtual void OnUserConnect(LocalUser* user)
+	ModResult OnUserRegister(LocalUser* user)
 	{
 		if (IsAntirandomExempt(user))
 		{
-			return;
+			return MOD_RES_PASSTHRU;
 		}
 
 		unsigned int score = GetUserScore(user);
@@ -797,7 +797,9 @@ class ModuleAntiRandom : public Module
 
 				ServerInstance->Logs->Log("CONFIG",DEFAULT, "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
 			}
+			return MOD_RES_DENY;
 		}
+		return MOD_RES_PASSTHRU;
 	}
 
 	virtual void OnRehash(User* user)
