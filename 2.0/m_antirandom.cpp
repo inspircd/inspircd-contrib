@@ -21,11 +21,11 @@
  *     - Most of the detection mechanisms come from SpamAssassin FVGT_Tripwire.
  * ---------------------------------------------------
  * Example config:
-   <antirandom 
+   <antirandom
         showfailedconnects="1" (Defaults to 1 )
         debugmode="0" (Defaults to 0)
         threshold="10" (Defaults to 10 Valid values between 1 and 100)
-        banaction="ZLINE" (Defaults to "" Valid values: GLINE,ZLINE,KILL,"") 
+        banaction="ZLINE" (Defaults to "" Valid values: GLINE,ZLINE,KILL,"")
         banduration="86400" (Defaults to 86400 (1 day). Time in seconds)
         banreason="You look like a bot. Change your nick/ident/gecos and try reconnecting.">
    <antirandomexempt type="host" pattern="*.tld">
@@ -642,7 +642,7 @@ class ModuleAntiRandom : public Module
 
 		/*
 		 * Now, do the triples checks. For each char in the string we're checking ...
-		 * XXX - on reading this, I wonder why we can't strcmp()/strchr() it.. 
+		 * XXX - on reading this, I wonder why we can't strcmp()/strchr() it..
 		 */
 		for (s = original_str; *s; s++)
 		{
@@ -820,7 +820,7 @@ class ModuleAntiRandom : public Module
 
 		if (this->Threshold >= 100)
 		    this->Threshold = 100;
-		
+
 		this->BanAction = ANTIRANDOM_ACT_NONE;
 		tmp = myConf.ReadValue("antirandom", "banaction", 0);
 
@@ -841,7 +841,7 @@ class ModuleAntiRandom : public Module
 		if (!tmp.empty())
 			this->BanDuration = ServerInstance->Duration(tmp.c_str());
 		    // Sanity check
-		    if ((int)this->BanDuration <= 0) 
+		    if ((int)this->BanDuration <= 0)
 		        this->BanDuration = 1;
 		else
 			this->BanDuration = 86400; // One day.
