@@ -138,7 +138,7 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_antirandom 2.0.219 https://raw.github.com/inspircd/inspircd-extras/afe55e428c09d68bf7b3095e37a643fcfea5c6e4/2.0/m_antirandom.cpp
+module m_antirandom 2.0.237 https://raw.github.com/inspircd/inspircd-extras/c15b0a0627b8f3491775e57d95f1153c7e41c750/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
@@ -189,6 +189,9 @@ module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
 module m_hideidle 2.0.161 https://raw.github.com/inspircd/inspircd-extras/e980fcaa447272a3cd7b4a8f9dc64589b3271d7d/2.0/m_hideidle.cpp
  description Provides the +a usermode that hides idle and signon time in WHOIS for non-opers
  depends core 2.0
+module m_identmeta 2.0.234 https://raw.github.com/inspircd/inspircd-extras/244e222324b64b4757c5c48a459b1e8b8cb0c64d/2.0/m_identmeta.cpp
+ description Stores the ident given in USER as metadata.
+ depends core 2.0-2.1
 module m_invisible 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
  depends core 2.0
@@ -200,6 +203,9 @@ module m_ircxusernames 2.0.192 https://raw.github.com/inspircd/inspircd-extras/5
  depends core 2.0-2.1
 module m_join0 2.0.169 https://raw.github.com/inspircd/inspircd-extras/ef75039c4da63380a4d7df25fbdc4e84e808a05d/2.0/m_join0.cpp
  description Implement JOIN 0 (joining 0 makes a user part all channels), RFC2812
+ depends core 2.0
+module m_joinoninvite 2.0.233 https://raw.github.com/inspircd/inspircd-extras/b2f6bb58237e139b5bb76233e8047d4a088e6cf9/2.0/m_joinoninvite.cpp
+ description Forces user to join the channel on invite
  depends core 2.0
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
