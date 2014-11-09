@@ -143,13 +143,13 @@ class ModuleExtBanRedirect : public Module
 			std::string destlimit = target->GetModeParameter('l');
 			if ((target->IsModeSet('L')) && (ServerInstance->Modules->Find("m_redirect.so")) && (target->GetUserCounter() >= atoi(destlimit.c_str())))
 			{
-				user->WriteNumeric(ERR_BANNEDFROMCHAN, "%s %s :Cannot join channel (You are banned)", user->nick.c_str(), chan->name.c_str());
+				// The core will send "You're banned"
 				return MOD_RES_DENY;
 			}
 		}
 
 		// Ok to redirect
-		user->WriteNumeric(ERR_BANNEDFROMCHAN, "%s %s :Cannot join channel (You are banned)", user->nick.c_str(), chan->name.c_str());
+		// The core will send "You're banned"
 		user->WriteNumeric(470, "%s %s %s :You are banned from this channel, so you are automatically transferred to the redirected channel.", user->nick.c_str(), chan->name.c_str(), target->name.c_str());
 		active = true;
 		Channel::JoinUser(user, target->name.c_str(), false, "", false, ServerInstance->Time());
