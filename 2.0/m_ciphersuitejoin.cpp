@@ -50,6 +50,11 @@ class CiphersuiteJoinMode : public ListModeBase
 	{
 		user->WriteNumeric(964, "%s %s :Ciphersuite %s is not on the whitelist, cannot remove",user->nick.c_str(), chan->name.c_str(), param.c_str());
 	}
+
+	bool ValidateParam(User* user, Channel* chan, std::string& param)
+	{
+		return ((param.length() <= 100) && (!param.empty()));
+	}
 };
 
 class ModuleCiphersuiteJoin : public Module
