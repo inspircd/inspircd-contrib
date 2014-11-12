@@ -153,6 +153,9 @@ module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7
 module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e2293e186bbd393e58079b800887c52bff5e777/2.0/m_changecap.cpp
  description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name
  depends core 2.0
+module m_ciphersuitejoin 2.0.245 https://raw.github.com/inspircd/inspircd-extras/2739d28db74fcaaf6699a88c15c92f2fe0d19623/2.0/m_ciphersuitejoin.cpp
+ description Adds channel list mode +Z which only lets clients join who use a ciphersuite on the list
+ depends core 2.0
 module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_conn_banner.cpp
  description Displays a static text to every connecting user before registration
  depends core 2.0
@@ -166,6 +169,9 @@ module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78a
  depends core 2.0
 module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a82352127ff38e1e48fe92f58a4f020ca3ca5753/2.0/m_disablemodes.cpp
  description Disable modes for users in specific connect blocks
+ depends core 2.0
+module m_extbanredirect 2.0.242 https://raw.github.com/inspircd/inspircd-extras/0d8ddfdc348518ca2e8eb882a70d590ba8c055b8/2.0/m_extbanredirect.cpp
+ description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
  depends core 2.0
 module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
  description Provides the FINDXLINE command which lets opers search XLines
@@ -228,6 +234,9 @@ module m_nooponcreate 2.0.210 https://raw.github.com/inspircd/inspircd-extras/87
 module m_nouidnick 2.0.195 https://raw.github.com/inspircd/inspircd-extras/ce92ed3d637bce893d247b73f5eabbac9d1610cf/2.0/m_nouidnick.cpp
  description Disallows changing nick to UID using /NICK
  depends core 2.0
+module m_override_umode 2.0.242 https://raw.github.com/inspircd/inspircd-extras/f57d88050e1b0fb8bec4d20e48540e69f796282d/2.0/m_override_umode.cpp
+ description Adds usermode +O that must be set on opers to permit override
+ depends core 2.0
 module m_pretenduser 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_pretenduser.cpp
  description Provides the PRETENDUSER command that lets opers execute commands on behalf of other users
  depends core 2.0
@@ -247,6 +256,9 @@ module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92
  depends core 2.0
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
+ depends core 2.0
+module m_sslstats_gnutls 2.0.240 https://raw.github.com/inspircd/inspircd-extras/905a7f91f5cdf03d8225dd6e96ad7889a4d2c7ac/2.0/m_sslstats_gnutls.cpp
+ description Provides stats about SSL ciphersuites in use by users
  depends core 2.0
 module m_stats_unlinked 2.0.223 https://raw.github.com/inspircd/inspircd-extras/89dc7e93756d2539237fdc6c25d5a50d7d3771dd/2.0/m_stats_unlinked.cpp
  description Adds stats character 'X' which shows unlinked servers.
