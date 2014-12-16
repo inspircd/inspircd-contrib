@@ -18,7 +18,7 @@
 
 /* $ModAuthor: Attila Molnar */
 /* $ModAuthorMail: attilamolnar@hush.com */
-/* $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS for non-opers */
+/* $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS from non-opers */
 /* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
@@ -49,7 +49,7 @@ class ModuleHideIdle : public Module
 
 	ModResult OnWhoisLine(User* user, User* dest, int& numeric, std::string& text)
 	{
-		if ((numeric == 317) && (dest->IsModeSet('a')) && (!IS_OPER(user)) && (user != dest))
+		if ((numeric == 317) && (dest->IsModeSet('a')) && (!user->HasPrivPermission("users/auspex")) && (user != dest))
 			return MOD_RES_DENY;
 
 		return MOD_RES_PASSTHRU;
@@ -57,7 +57,7 @@ class ModuleHideIdle : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides the +a usermode that hides idle and signon time in WHOIS for non-opers", VF_NONE);
+		return Version("Provides the +a usermode that hides idle and signon time in WHOIS from non-opers", VF_NONE);
 	}
 };
 
