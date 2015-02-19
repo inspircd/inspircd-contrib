@@ -19,11 +19,13 @@
 
 
 /* $ModAuthor: Hira.io Team */
-/* $ModDesc: Module to make an operator immune for a specified time, it's like a uline */
+/* $ModAuthorMail: miguel2706@outlook.com */
+/* $ModDesc: Module to make an operator immune for a specified time, it's like a uline, but it's hidden */
 /* $ModDepends: core 2.0 */
 
+#include <list>
 #include "inspircd.h"
-int Timeout = 0;
+
 struct AutoRemoveMode : public Timer
 {
  public:
@@ -37,6 +39,8 @@ struct AutoRemoveMode : public Timer
 		User* user = ServerInstance->FindUUID(userid);
 		if(!user)
 			return;
+		if(user->IsModeSet('t'))
+			return;
 		user->WriteServ("NOTICE "+user->nick+" :*** Removing your user mode +t to prevent abuses.");
 		std::vector<std::string> modes;
 		modes.push_back(user->nick);
@@ -44,11 +48,11 @@ struct AutoRemoveMode : public Timer
 		ServerInstance->SendGlobalMode(modes, ServerInstance->FakeClient);
         }
 };
-/** User mode +t - Immune from kicks
- */
 class ImmuneMode : public SimpleUserModeHandler
 {
  public:
+	int Timeout;
+	std::list<AutoRemoveMode*> TimerList;
 	ImmuneMode(Module* Creator) : SimpleUserModeHandler(Creator, "immune", 't')
 	{
 		oper = true;
@@ -59,21 +63,22 @@ class ImmuneMode : public SimpleUserModeHandler
 			return MODEACTION_ALLOW;
 		if(!IS_LOCAL(dest))
 			return MODEACTION_ALLOW;
-		if((!Timeout)||(Timeout == 0))
+		if(!Timeout)
 		{
-			dest->WriteServ("NOTICE "+dest->nick+" :*** This mode will be in place indefinitely, remember to take it off to itself to prevent abuse of power or setting the automatic removal.");
+			dest->WriteServ("NOTICE "+dest->nick+" :*** This mode will be in place indefinitely," +
+			 " remember to take it off to itself to prevent abuse of power or setting the automatic removal.");
 			return MODEACTION_ALLOW;
 		}
                 AutoRemoveMode *timer = new AutoRemoveMode(Timeout);
                 timer->userid = dest->uuid;
                 ServerInstance->Timers->AddTimer(timer);
+		TimerList.push_back(timer);
                 return MODEACTION_ALLOW;
         }
 };
 class ModuleImmune : public Module
 {
  public:
-
 	ImmuneMode im;
 	
 
@@ -89,62 +94,53 @@ class ModuleImmune : public Module
 		Implementation eventlist[] = { I_OnUserPreKick, I_OnCheckChannelBan, I_OnCheckInvite, I_OnCheckKey, I_OnCheckLimit, I_OnRehash };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));		
 	}
-
-	
+	/* We will protect the user of the following if he has the umode +t */
 	ModResult OnUserPreKick(User *source, Membership *memb, const std::string& reason)
 	{
-		if (!IS_LOCAL(memb->user))
-                        return MOD_RES_PASSTHRU;
-		if (memb->user->IsModeSet('t'))
-			return MOD_RES_DENY;
-		else
-			return MOD_RES_PASSTHRU;
+		return this->Check(memb->user);
 	}
 	ModResult OnCheckChannelBan(User * user, Channel * chan)
 	{
-		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
-		if (user->IsModeSet('t'))
-			return MOD_RES_ALLOW;
-		else
-			return MOD_RES_PASSTHRU;
+		return this->Check(user);
 	}
 	ModResult OnCheckInvite(User * user, Channel * chan)
 	{
-		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
-		if (user->IsModeSet('t'))
-			return MOD_RES_ALLOW;
-		else
-			return MOD_RES_PASSTHRU;
+		return this->Check(user);
 	}
 	ModResult OnCheckKey(User * user, Channel * chan, const std::string & keygiven)
 	{
-		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
-		if (user->IsModeSet('t'))
-			return MOD_RES_ALLOW;
-		else
-			return MOD_RES_PASSTHRU;
+		return this->Check(user);
 	}
 	ModResult OnCheckLimit(User * user, Channel * chan)
 	{
-		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
-		if (user->IsModeSet('t'))
-			return MOD_RES_ALLOW;
-		else
-			return MOD_RES_PASSTHRU;
+		return this->Check(user);
 	}
 	Version GetVersion()
 	{
-		return Version("Provides the umode +t, that prevents the user is kicked from any channel. Can only be set by a network operator.", VF_VENDOR);
+		return Version("Provides the umode +t, it makes an operator immune for a specified time.", VF_COMMON);
 	}
 	virtual void OnRehash(User* user)
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("immune");
-		int timeout = tag->getInt("timeout");
-		Timeout = timeout;
+		im.Timeout = tag->getInt("timeout");
+	}
+ private:
+	/* Perform the verification */
+	ModResult Check(User *user)
+	{
+		if (!IS_LOCAL(user))
+                        return MOD_RES_PASSTHRU;
+		if (user->IsModeSet('t'))
+			return MOD_RES_ALLOW;
+		else
+			return MOD_RES_PASSTHRU;
+	}
+	~ModuleImmune()
+	{
+		for (std::list<AutoRemoveMode*>::iterator it=im.TimerList.begin(); it != im.TimerList.end(); ++it)
+		{
+			ServerInstance->Timers->DelTimer((AutoRemoveMode*)*it);
+		}
 	}
 };
 

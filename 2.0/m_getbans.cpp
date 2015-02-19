@@ -19,7 +19,8 @@
 
 
 /* $ModAuthor: Hira.io Team */
-/* $ModDesc: Get the bans from other channels. Usage: /ban j:#channel*/
+/* $ModAuthorMail: miguel2706@outlook.com */
+/* $ModDesc: Get the bans from other channel. Usage: /ban J:#channel */
 /* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
@@ -28,12 +29,12 @@ class ModuleGetBans : public Module
  public:
 	void init()
 	{
-		ServerInstance->Modules->Attach(I_OnCheckBan, this);
-		ServerInstance->Modules->Attach(I_On005Numeric, this);
+		Implementation eventlist[] = { I_OnCheckBan, I_On005Numeric };
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 	Version GetVersion()
 	{
-		return Version("Extban 'j': ban users that are banned in other channel", VF_OPTCOMMON|VF_VENDOR);
+		return Version("Extban 'J': Get the bans from other channel.", VF_COMMON);
 	}
 
 	ModResult OnCheckBan(User *user, Channel *channel, const std::string& mask)
@@ -41,7 +42,7 @@ class ModuleGetBans : public Module
 		if (!IS_LOCAL(user))
                         return MOD_RES_PASSTHRU;
 
-		if ((mask.length() > 2) && (mask[0] == 'j') && (mask[1] == ':'))
+		if ((mask.length() > 2) && (mask[0] == 'J') && (mask[1] == ':'))
 		{
 			// Channel to get the bans
 			const std::string& chan_ = mask.substr(2);
@@ -50,7 +51,7 @@ class ModuleGetBans : public Module
 				return MOD_RES_PASSTHRU;
 			for (BanList::iterator i = chan->bans.begin(); i != chan->bans.end(); i++)
 		        {
-				if ((i->data[0] != 'j' && i->data[1] != ':') && (chan->CheckBan(user, i->data)))
+				if ((i->data[0] != 'J' && i->data[1] != ':') && (chan->CheckBan(user, i->data)))
 		                        return MOD_RES_DENY;
 			}
 		}
@@ -58,7 +59,7 @@ class ModuleGetBans : public Module
 	}
 	void On005Numeric(std::string& output)
 	{
-		ServerInstance->AddExtBanChar('j');
+		ServerInstance->AddExtBanChar('J');
 	}
 };
 
