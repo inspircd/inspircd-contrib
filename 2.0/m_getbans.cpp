@@ -40,7 +40,7 @@ class ModuleGetBans : public Module
 	ModResult OnCheckBan(User *user, Channel *channel, const std::string& mask)
 	{
 		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
+			return MOD_RES_PASSTHRU;
 
 		if ((mask.length() > 2) && (mask[0] == 'J') && (mask[1] == ':'))
 		{
@@ -50,9 +50,9 @@ class ModuleGetBans : public Module
 			if(!chan)
 				return MOD_RES_PASSTHRU;
 			for (BanList::iterator i = chan->bans.begin(); i != chan->bans.end(); i++)
-		        {
+			{
 				if ((i->data[0] != 'J' && i->data[1] != ':') && (chan->CheckBan(user, i->data)))
-		                        return MOD_RES_DENY;
+					return MOD_RES_DENY;
 			}
 		}
 		return MOD_RES_PASSTHRU;

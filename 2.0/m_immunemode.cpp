@@ -20,7 +20,8 @@
 
 /* $ModAuthor: Hira.io Team */
 /* $ModAuthorMail: miguel2706@outlook.com */
-/* $ModDesc: Module to make an operator immune for a specified time, it's like a uline, but it's hidden */
+/* $ModDesc: Module to make an operator immune for a specified time, it's like a ojoin, but it's hidden */
+/* $ModConfig: <immune timeout="900"> */
 /* $ModDepends: core 2.0 */
 
 #include <list>
@@ -29,13 +30,13 @@
 struct AutoRemoveMode : public Timer
 {
  public:
-        std::string userid;
-        AutoRemoveMode(long interval)
-                : Timer(interval, ServerInstance->Time(), false)
-        {
-        }
-        void Tick(time_t TIME)
-        {
+	std::string userid;
+	AutoRemoveMode(long interval)
+		: Timer(interval, ServerInstance->Time(), false)
+	{
+	}
+	void Tick(time_t TIME)
+	{
 		User* user = ServerInstance->FindUUID(userid);
 		if(!user)
 			return;
@@ -46,7 +47,7 @@ struct AutoRemoveMode : public Timer
 		modes.push_back(user->nick);
 		modes.push_back("-t");
 		ServerInstance->SendGlobalMode(modes, ServerInstance->FakeClient);
-        }
+	}
 };
 class ImmuneMode : public SimpleUserModeHandler
 {
@@ -58,7 +59,7 @@ class ImmuneMode : public SimpleUserModeHandler
 		oper = true;
 	}
 	ModeAction OnModeChange(User* source, User* dest, Channel* channel, std::string &parameter, bool adding)
-        {
+	{
 		if(!adding)
 			return MODEACTION_ALLOW;
 		if(!IS_LOCAL(dest))
@@ -66,33 +67,33 @@ class ImmuneMode : public SimpleUserModeHandler
 		if(!Timeout)
 		{
 			dest->WriteServ("NOTICE "+dest->nick+" :*** This mode will be in place indefinitely," +
-			 " remember to take it off to itself to prevent abuse of power or setting the automatic removal.");
+							" remember to take it off to itself to prevent abuse of power or setting the automatic removal.");
 			return MODEACTION_ALLOW;
 		}
-                AutoRemoveMode *timer = new AutoRemoveMode(Timeout);
-                timer->userid = dest->uuid;
-                ServerInstance->Timers->AddTimer(timer);
+		AutoRemoveMode *timer = new AutoRemoveMode(Timeout);
+		timer->userid = dest->uuid;
+		ServerInstance->Timers->AddTimer(timer);
 		TimerList.push_back(timer);
-                return MODEACTION_ALLOW;
-        }
+		return MODEACTION_ALLOW;
+	}
 };
 class ModuleImmune : public Module
 {
  public:
 	ImmuneMode im;
-	
+
 
 	ModuleImmune()
 		: im(this)
 	{
 	}
-	
+
 	void init()
 	{
 		OnRehash(NULL);
 		ServerInstance->Modules->AddService(im);
 		Implementation eventlist[] = { I_OnUserPreKick, I_OnCheckChannelBan, I_OnCheckInvite, I_OnCheckKey, I_OnCheckLimit, I_OnRehash };
-		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));		
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 	/* We will protect the user of the following if he has the umode +t */
 	ModResult OnUserPreKick(User *source, Membership *memb, const std::string& reason)
@@ -129,7 +130,7 @@ class ModuleImmune : public Module
 	ModResult Check(User *user)
 	{
 		if (!IS_LOCAL(user))
-                        return MOD_RES_PASSTHRU;
+			return MOD_RES_PASSTHRU;
 		if (user->IsModeSet('t'))
 			return MOD_RES_ALLOW;
 		else
