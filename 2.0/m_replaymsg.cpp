@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2013-2015 Peter Powell <petpow@saberuk.com>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -22,30 +22,11 @@
 /* $ModDesc: Replays messages sent to the server back to the sender. */
 /* $ModDepends: core 2.0-2.1 */
 
-/* Developer Documentation
- * =======================
+/**
+ * Developer documentation for this module can be found at:
  *
- * Use Case
- * --------
- *
- * There are two main use cases for this module:
- *
- *   (1) If you are using a connection which can have a large amount of latency
- *       such as GPRS then it can be many minutes before a loss of connection
- *       can be detected by the client. This can result in a user chatting away
- *       without realising that their messages are going nowhere.
- *
- *   (2) If the server has a module loaded which modifies user messages (e.g.
- *       m_stripcolor) then the user has no useful way of knowing that their
- *       message has been modified. This was traditionally done using ERR_*
- *       numerics but due to the amount of non-standard extensions to the
- *       IRC protocol it is no longer sanely possible to rely on this method.
- *
- * Enabling
- * --------
- *
- * In order to use this module your client needs to support IRCv3 capability
- * negotiation. The CAP name of this module is inspircd.org/replay-message.
+ *  https://github.com/ircv3/ircv3-specifications/blob/master/extensions/echo-message-3.2.md
+ *  https://github.com/SaberUK/irc-docs/blob/master/specifications/replay-message.md
  *
  */
 
@@ -54,11 +35,12 @@
 
 class ModuleReplayMessage : public Module
 {
-	GenericCap cap;
+	GenericCap standardCap;
+	GenericCap vendorCap;
 
 	void OnMsg(User* user, void* dest, int target_type, const std::string& text, char status, const char* cmd)
 	{
-		if (!cap.ext.get(user))
+		if (!standardCap.ext.get(user) && !vendorCap.ext.get(user))
 			return;
 
 		std::string target;
@@ -90,7 +72,8 @@ class ModuleReplayMessage : public Module
 
  public:
 	ModuleReplayMessage()
-		: cap(this, "inspircd.org/replay-message")
+		: standardCap(this, "echo-message")
+		, vendorCap(this, "inspircd.org/replay-message")
 	{
 	}
 
@@ -102,7 +85,8 @@ class ModuleReplayMessage : public Module
 
 	void OnEvent(Event& event)
 	{
-		cap.HandleEvent(event);
+		standardCap.HandleEvent(event);
+		vendorCap.HandleEvent(event);
 	}
 
 	void OnUserMessage(User* user, void* dest, int target_type, const std::string& text, char status, const CUList& exempt_list)
