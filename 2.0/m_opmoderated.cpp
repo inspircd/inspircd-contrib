@@ -72,16 +72,16 @@ class ModuleOpModerated : public Module
 		return MOD_RES_PASSTHRU;
 	}
 
-	ModResult OnUserPreMessage(User *user, void *dest, int target_type, std::string &text, char status, CUList &exempt_list)
+	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char status, CUList& exempt_list)
 	{
 		return DoMsg(user, dest, target_type, text, status, exempt_list, true);
 	}
-	ModResult OnUserPreNotice(User *user, void *dest, int target_type, std::string &text, char status, CUList &exempt_list)
+	ModResult OnUserPreNotice(User* user, void* dest, int target_type, std::string& text, char status, CUList& exempt_list)
 	{
 		return DoMsg(user, dest, target_type, text, status, exempt_list, false);
 	}
 
-	void On005Numeric(std::string &output)
+	void On005Numeric(std::string& output)
 	{
 		ServerInstance->AddExtBanChar('u');
 	}
