@@ -115,7 +115,7 @@ class ModuleImmune : public Module
                 if (user->IsModeSet('t'))
                         return MOD_RES_DENY;
                 else
-                        return MOD_RES_ALLOW;
+                        return MOD_RES_PASSTHRU;
 	}
 	ModResult OnCheckChannelBan(User * user, Channel * chan)
 	{
