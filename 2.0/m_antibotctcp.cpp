@@ -40,22 +40,22 @@ class ModuleAntiBotCTCP : public Module
 	: ext("ctcptime_wait", this)
 	{
 	}
-	
-        void init()
-        {
+
+	void init()
+	{
 		ServerInstance->Modules->AddService(ext);
 		Implementation eventlist[] = { I_OnUserRegister, I_OnPreCommand, I_OnCheckReady, I_OnRehash };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 		OnRehash(NULL);
-        }
-        
-        Version GetVersion()
-        {
+	}
+
+	Version GetVersion()
+	{
 		return Version("Blocks clients not replying to CTCP.");
-        }
-        
-        void OnRehash(User* user)
-        {
+	}
+
+	void OnRehash(User* user)
+	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("antibotctcp");
 		quitmsg = tag->getBool("quitmsg", true);
 		msgonreply = tag->getBool("msgonreply", true);
@@ -70,10 +70,10 @@ class ModuleAntiBotCTCP : public Module
 		{
 			tmp = "\001" + ctcp      + " ";
 		}
-        }
-        
-        ModResult OnUserRegister(LocalUser* user)
-        {
+	}
+
+	ModResult OnUserRegister(LocalUser* user)
+	{
 		ConfigTag* tag = user->MyClass->config;
 		if (tag->getBool("antibotctcp", true))
 		{
@@ -86,10 +86,10 @@ class ModuleAntiBotCTCP : public Module
 		}
 			return MOD_RES_PASSTHRU;
 		}
-        }
-        
-        ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser* user, bool validated, const std::string &original_line)
-        {
+	}
+
+	ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser* user, bool validated, const std::string &original_line)
+	{
 		if (command == "NOTICE" && !validated && parameters.size() > 1 && ext.get(user))
 		{
 			if (parameters[1].compare(0, tmp.length(), tmp) == 0)
@@ -104,9 +104,9 @@ class ModuleAntiBotCTCP : public Module
 		}
 		return MOD_RES_PASSTHRU;
 	}
-        
-        ModResult OnCheckReady(LocalUser* user)
-        {
+
+	ModResult OnCheckReady(LocalUser* user)
+	{
 		if (ext.get(user))
 		{
 			if (quitmsg)
@@ -118,6 +118,6 @@ class ModuleAntiBotCTCP : public Module
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
-        }
+	}
 };
 MODULE_INIT(ModuleAntiBotCTCP)
