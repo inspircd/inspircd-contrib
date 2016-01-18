@@ -31,19 +31,19 @@ struct Problem
 	bool warned;
 };
 
-class CommandSolve : public Command
+class CommandSolve : public SplitCommand
 {
  private:
 	SimpleExtItem<Problem>& ext;
 
  public:
 	CommandSolve(Module* Creator, SimpleExtItem<Problem>& Ext)
-		: Command(Creator, "SOLVE", 1, 1)
+		: SplitCommand(Creator, "SOLVE", 1, 1)
 		, ext(Ext)
 	{
 	}
 
-	CmdResult Handle(const std::vector<std::string>& parameters, User* user)
+	CmdResult HandleLocal(const std::vector<std::string>& parameters, LocalUser* user)
 	{
 		if (user->exempt)
 		{
