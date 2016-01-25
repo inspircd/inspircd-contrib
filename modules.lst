@@ -144,6 +144,9 @@ module m_antirandom 2.0.237 https://raw.github.com/inspircd/inspircd-extras/c15b
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
  description Enables two factor authentification for oper blocks using authy
  depends core 2.0
+module m_autodrop 2.0.223 https://raw.github.com/inspircd/inspircd-extras/64933b5e031ec41d9f2fd6b70a63710d90878f9d/2.0/m_autodrop.cpp
+ description Allows clients to be automatically dropped if they execute certain commands before registration.
+ depends core 2.0-2.1
 module m_autokick 2.0.221 https://raw.github.com/inspircd/inspircd-extras/a70b0465f0154c17111a53d7e582ac3d74a92ff7/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
  depends core 2.0-2.1
@@ -192,8 +195,8 @@ module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
  depends core 2.0
  conflicts m_sha256.so
  conflicts m_ripemd160.so
-module m_hideidle 2.0.161 https://raw.github.com/inspircd/inspircd-extras/e980fcaa447272a3cd7b4a8f9dc64589b3271d7d/2.0/m_hideidle.cpp
- description Provides the +a usermode that hides idle and signon time in WHOIS for non-opers
+module m_hideidle 2.0.247 https://raw.github.com/inspircd/inspircd-extras/a499f8d0d3f4a1163ca4636dc87c99a3e9a744fa/2.0/m_hideidle.cpp
+ description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
  depends core 2.0
 module m_identmeta 2.0.234 https://raw.github.com/inspircd/inspircd-extras/244e222324b64b4757c5c48a459b1e8b8cb0c64d/2.0/m_identmeta.cpp
  description Stores the ident given in USER as metadata.
@@ -248,14 +251,24 @@ module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e
  depends core 2.0-2.1
  conflicts m_muteban.so
  conflicts m_chanprotect.so
-module m_replaymsg 2.0.193 https://raw.github.com/inspircd/inspircd-extras/d4b299163a077d8e611d72680a1b939a688a159f/2.0/m_replaymsg.cpp
+module m_regex_re2 2.0.234 https://raw.github.com/inspircd/inspircd-extras/46000d2344b8ca1e4adcadcf8c7edf955f9672d3/2.0/m_regex_re2.cpp
+module m_replaymsg 2.0.253 https://raw.github.com/inspircd/inspircd-extras/e182049b147382ee6aa78e750e1ae5c286738cee/2.0/m_replaymsg.cpp
  description Replays messages sent to the server back to the sender.
  depends core 2.0-2.1
 module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92ba1dbcf89910c464171b7ad4748a1209370522/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 2.0
+module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
+ description Rotates the log files after a defined period.
+ depends core 2.0
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
+ depends core 2.0
+module m_slowmode 2.0.263 https://raw.github.com/inspircd/inspircd-extras/94b8993e5750933a8d8d2ee89cea15c96fd5b342/2.0/m_slowmode.cpp
+ description Provides channel mode +W (slow mode)
+ depends core 2.0
+module m_solvemsg 2.0.261 https://raw.github.com/inspircd/inspircd-extras/55659fb0148513e6bab6fa09004b8f49e1214cf9/2.0/m_solvemsg.cpp
+ description Requires users to solve a basic maths problem before messaging others.
  depends core 2.0
 module m_sslstats_gnutls 2.0.240 https://raw.github.com/inspircd/inspircd-extras/905a7f91f5cdf03d8225dd6e96ad7889a4d2c7ac/2.0/m_sslstats_gnutls.cpp
  description Provides stats about SSL ciphersuites in use by users

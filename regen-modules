@@ -22,6 +22,7 @@ BEGIN {
 	require 5.10.0;
 }
 
+use feature ':5.10';
 use strict;
 use warnings FATAL => qw(all);
 
