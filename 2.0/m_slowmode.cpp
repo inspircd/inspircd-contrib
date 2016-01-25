@@ -116,7 +116,7 @@ class ModuleMsgFlood : public Module
 
 	ModResult ProcessMessages(User* user, Channel* dest)
 	{
-		if (!IS_LOCAL(user) || !dest->IsModeSet(mf.GetModeChar()))
+		if (ServerInstance->ULine(user->server) || !dest->IsModeSet(mf.GetModeChar()))
 			return MOD_RES_PASSTHRU;
 
 		if (ServerInstance->OnCheckExemption(user, dest, "slowmode") == MOD_RES_ALLOW)
@@ -124,6 +124,9 @@ class ModuleMsgFlood : public Module
 
 		slowmodesettings *f = ext.get(dest);
 		if (f == NULL || !f->addmessage())
+			return MOD_RES_PASSTHRU;
+
+		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;
 
 		user->WriteNumeric(404, "%s %s :Message throttled due to flood", user->nick.c_str(), dest->name.c_str());
