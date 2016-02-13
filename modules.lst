@@ -219,6 +219,9 @@ module m_joinoninvite 2.0.233 https://raw.github.com/inspircd/inspircd-extras/b2
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 2.0-2.1
+module m_lusersnoservices 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
+ description Adds an extra line to LUSERS output to show global user count minus "clients" from U-Lines servers
+ depends core 2.0
 module m_namedstats 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_namedstats.cpp
  description Allows /STATS queries by name
  depends core 2.0
@@ -252,6 +255,9 @@ module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e
  conflicts m_muteban.so
  conflicts m_chanprotect.so
 module m_regex_re2 2.0.234 https://raw.github.com/inspircd/inspircd-extras/46000d2344b8ca1e4adcadcf8c7edf955f9672d3/2.0/m_regex_re2.cpp
+module m_rehashsslsignal 2.0.265 https://raw.github.com/inspircd/inspircd-extras/ec63edaa12a5c02dad1dc7b7355e113056d37926/2.0/m_rehashsslsignal.cpp
+ description Reload SSL credentials on SIGUSR1
+ depends core 2.0
 module m_replaymsg 2.0.253 https://raw.github.com/inspircd/inspircd-extras/e182049b147382ee6aa78e750e1ae5c286738cee/2.0/m_replaymsg.cpp
  description Replays messages sent to the server back to the sender.
  depends core 2.0-2.1
@@ -260,6 +266,9 @@ module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92
  depends core 2.0
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
  description Rotates the log files after a defined period.
+ depends core 2.0
+module m_rpg 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_rpg.cpp
+ description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
  depends core 2.0
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
