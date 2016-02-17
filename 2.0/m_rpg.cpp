@@ -42,6 +42,40 @@ static std::string strip_npc_nick(const std::string &nick)
 	return newnick;
 }
 
+/* Sends a message to a channel, splitting it as needed if the message is too long.
+ * It'll usually only split into 2 messages because of the 512 character limit. */
+static void send_message(Channel *c, const std::string &source, std::string text, bool action)
+{
+	/* 510 - colon prefixing source - PRIVMSG - colon prefixing text - 3 spaces = 498
+	 * Subtracting the source and the channel name to get how many characters we are allowed left
+	 * If doing an action, subtract an additional 9 for the startind and ending ASCII character 1, ACTION and space */
+	int allowedMessageLength = 498 - source.size() - c->name.size() - (action ? 9 : 0);
+	/* This will keep attempting to determine if there is text to send */
+	do
+	{
+		std::string textToSend = text;
+		/* Check if the current text to send exceeds the length allowed */
+		if (textToSend.size() > allowedMessageLength)
+		{
+			/* Look for the last space at or before the length allowed */
+			size_t lastSpace = textToSend.find_last_of(' ', allowedMessageLength);
+			/* If a space was found, split off the text to send */
+			if (lastSpace != std::string::npos)
+			{
+				textToSend = text.substr(0, lastSpace);
+				text = text.substr(lastSpace + 1);
+			}
+			/* Otherwise, we'll send whatever we have left, even if it may be too long */
+			else
+				text.clear();
+		}
+		else
+			text.clear();
+
+		c->WriteChannelWithServ(source, "PRIVMSG %s :%s%s%s", c->name.c_str(), action ? "\1ACTION " : "", textToSend.c_str(), action ? "\1" : "");
+	} while (!text.empty());
+}
+
 /*
  * NOTE: For all commands, the user in the Handle function is checked to be local or not.
  *
@@ -103,7 +137,7 @@ public:
 		std::string npc_nick = strip_npc_nick(parameters[1]);
 		std::string npc_source = "*" + npc_nick + "*!npc@" + ServerInstance->Config->ServerName;
 
-		c->WriteChannelWithServ(npc_source, "PRIVMSG %s :%s%s%s", c->name.c_str(), action ? "\1ACTION " : "", this->text.c_str(), action ? "\1" : "");
+		send_message(c, npc_source, this->text, action);
 
 		if (localUser)
 		{
@@ -200,7 +234,7 @@ public:
 		/* Source is in the form of: >Ambiance<!npc@[server-name] */
 		std::string amb_source = ">Ambiance<!npc@" + ServerInstance->Config->ServerName;
 
-		c->WriteChannelWithServ(amb_source, "PRIVMSG %s :%s", c->name.c_str(), this->text.c_str());
+		send_message(c, amb_source, this->text, false);
 
 		if (localUser)
 		{
@@ -263,7 +297,7 @@ public:
 		/* Source is in the form of: -Narrator-!npc@[server-name] */
 		std::string narr_source = std::string("-Narrator-!npc@") + ServerInstance->Config->ServerName;
 
-		c->WriteChannelWithServ(narr_source, "PRIVMSG %s :%s%s%s", c->name.c_str(), action ? "\1ACTION " : "", this->text.c_str(), action ? "\1" : "");
+		send_message(c, narr_source, this->text, action);
 
 		if (localUser)
 		{
