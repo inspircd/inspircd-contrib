@@ -144,7 +144,7 @@ class CommandGALine: public Command
 		: Command(c, linetype+"LINE", 1, 3)
 	{
 		flags_needed = 'o';
-		this->syntax = "[user@host] [<duration> :<reason>]";
+		this->syntax = "<ident@host> [<duration> :<reason>]";
 		this->linename = linetype;
 		statschar = stats;
 	}
