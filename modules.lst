@@ -162,6 +162,9 @@ module m_ciphersuitejoin 2.0.245 https://raw.github.com/inspircd/inspircd-extras
 module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_conn_banner.cpp
  description Displays a static text to every connecting user before registration
  depends core 2.0
+module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extras/b517adbc1aedcabdc9bc9e5fd4d895d85fca82dd/2.0/m_conn_delayed_join.cpp
+ description Replaces m_conn_join.so and forces users to join the specified channel(s) after a specified delay on connect
+ depends core 2.0
 module m_custompenalty 2.0.163 https://raw.github.com/inspircd/inspircd-extras/0902918d32b552863d9071c659978538b0f11e43/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
  depends core 2.0-2.1
@@ -267,7 +270,7 @@ module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
  description Rotates the log files after a defined period.
  depends core 2.0
-module m_rpg 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_rpg.cpp
+module m_rpg 2.0.269 https://raw.github.com/inspircd/inspircd-extras/a6b9ab0191a8a33e2b719bc43b591d8ebe362718/2.0/m_rpg.cpp
  description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
  depends core 2.0
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
