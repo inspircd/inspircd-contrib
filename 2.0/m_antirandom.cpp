@@ -624,7 +624,8 @@ class ModuleAntiRandom : public Module
 		if (digits >= 5)
 		{
 			score += 5 + (digits - 5);
-			ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
+			if (this->DebugMode)
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
 		}
 		if (vowels >= 4)
 		{
