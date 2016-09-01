@@ -138,7 +138,7 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_antirandom 2.0.237 https://raw.github.com/inspircd/inspircd-extras/c15b0a0627b8f3491775e57d95f1153c7e41c750/2.0/m_antirandom.cpp
+module m_antirandom 2.0.274 https://raw.github.com/inspircd/inspircd-extras/40eccd3338352e52904f26cb9d5f4635e1a5c9ec/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
@@ -176,7 +176,7 @@ module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78a
 module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a82352127ff38e1e48fe92f58a4f020ca3ca5753/2.0/m_disablemodes.cpp
  description Disable modes for users in specific connect blocks
  depends core 2.0
-module m_extbanredirect 2.0.242 https://raw.github.com/inspircd/inspircd-extras/0d8ddfdc348518ca2e8eb882a70d590ba8c055b8/2.0/m_extbanredirect.cpp
+module m_extbanredirect 2.0.277 https://raw.github.com/inspircd/inspircd-extras/95c5bd68c6580c963903fcfbf7d6c37ea12e5c46/2.0/m_extbanredirect.cpp
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
  depends core 2.0
 module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
@@ -264,7 +264,7 @@ module m_rehashsslsignal 2.0.265 https://raw.github.com/inspircd/inspircd-extras
 module m_replaymsg 2.0.253 https://raw.github.com/inspircd/inspircd-extras/e182049b147382ee6aa78e750e1ae5c286738cee/2.0/m_replaymsg.cpp
  description Replays messages sent to the server back to the sender.
  depends core 2.0-2.1
-module m_require_auth 2.0.207 https://raw.github.com/inspircd/inspircd-extras/92ba1dbcf89910c464171b7ad4748a1209370522/2.0/m_require_auth.cpp
+module m_require_auth 2.0.276 https://raw.github.com/inspircd/inspircd-extras/5e2bbe2dfee12b96914b90dd8734988947cbc1db/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 2.0
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
