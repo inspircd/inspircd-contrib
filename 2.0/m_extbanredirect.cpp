@@ -137,7 +137,8 @@ class ModuleExtBanRedirect : public Module
 		if (!chan->CheckBan(user, mask.substr(p + 1)))
 			return MOD_RES_PASSTHRU;
 
-		Channel* const target = ServerInstance->FindChan(mask.substr(2, p - 2));
+		const std::string targetname = mask.substr(2, p - 2);
+		Channel* const target = ServerInstance->FindChan(targetname);
 		if ((target) && (target->IsModeSet('l')))
 		{
 			std::string destlimit = target->GetModeParameter('l');
@@ -150,9 +151,9 @@ class ModuleExtBanRedirect : public Module
 
 		// Ok to redirect
 		// The core will send "You're banned"
-		user->WriteNumeric(470, "%s %s %s :You are banned from this channel, so you are automatically transferred to the redirected channel.", user->nick.c_str(), chan->name.c_str(), target->name.c_str());
+		user->WriteNumeric(470, "%s %s %s :You are banned from this channel, so you are automatically transferred to the redirected channel.", user->nick.c_str(), chan->name.c_str(), targetname.c_str());
 		active = true;
-		Channel::JoinUser(user, target->name.c_str(), false, "", false, ServerInstance->Time());
+		Channel::JoinUser(user, targetname.c_str(), false, "", false, ServerInstance->Time());
 		active = false;
 
 		return MOD_RES_DENY;
