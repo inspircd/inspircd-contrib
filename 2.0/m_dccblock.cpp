@@ -22,6 +22,7 @@
 /* $ModDesc: Provides support for blocking DCC transfers */
 /* $ModAuthor: Jansteen */
 /* $ModAuthorMail: pliantcom@yandex.com */
+/* $ModConfig: <dccblock users="true" channels="false"> */
 
 /* Documentation
    This module is used to completely block DCC from being used on your
@@ -39,11 +40,29 @@
 
 class ModuleDCCBlock : public Module
 {
+	bool users, channels;
+
  public:
+	ModuleDCCBlock() : Module()
+		, users(true)
+		, channels(false)
+	{
+	}
+
 	void init()
 	{
-		Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice };
+		Implementation eventlist[] = { I_OnUserPreMessage, I_OnUserPreNotice, I_OnRehash };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
+
+		OnRehash(NULL);
+	}
+
+	void OnRehash(User* user)
+	{
+		ConfigTag* tag = ServerInstance->Config->ConfValue("dccblock");
+
+		users = tag->getBool("users", true);
+		channels = tag->getBool("channels");
 	}
 
 	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char status, CUList& exempt_list)
@@ -56,12 +75,19 @@ class ModuleDCCBlock : public Module
 		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;
 
-		if (target_type == TYPE_USER && text.length() && strncmp(text.c_str(), "\1DCC ", 5) == 0)
+		if (strncmp(text.c_str(), "\1DCC ", 5) == 0)
 		{
+			if (target_type == TYPE_USER && !users)
+				return MOD_RES_PASSTHRU;
+
+			if (target_type == TYPE_CHANNEL && !channels)
+				return MOD_RES_PASSTHRU;
+
 			// This is a DCC request and we want to block it
 			user->WriteNumeric(998, "%s :DCC not allowed on this server.  No exceptions allowed.", user->nick.c_str());
 			return MOD_RES_DENY;
 		}
+
 		return MOD_RES_PASSTHRU;
 	}
 
