@@ -19,7 +19,7 @@
 
 /* $ModAuthor: Peter "SaberUK" Powell */
 /* $ModDesc: Adds stats character 'X' which shows unlinked servers. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
 

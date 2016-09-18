@@ -18,8 +18,9 @@
 
 
 /* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Stores the ident given in USER as metadata. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
 

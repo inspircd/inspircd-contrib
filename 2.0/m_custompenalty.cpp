@@ -19,8 +19,9 @@
 #include "inspircd.h"
 
 /* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Allows the customisation of penalty levels. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 /* $ModConfig: <penalty name="INVITE" value="60"> */
 
 class ModuleCustomPenalty : public Module
