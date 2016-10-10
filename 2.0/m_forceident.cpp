@@ -18,8 +18,9 @@
 
 
 /* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Allows forcing idents on users based on their connect class. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 /* $ModConfig: <connect forceident="example"> */
 
 #include "inspircd.h"

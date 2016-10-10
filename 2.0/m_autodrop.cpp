@@ -18,8 +18,9 @@
 
 
 /* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Allows clients to be automatically dropped if they execute certain commands before registration. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 /* $ModConfig: <autodrop commands="CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE"> */
 
 #include "inspircd.h"

@@ -20,7 +20,7 @@
 /* $ModAuthor: Peter "SaberUK" Powell */
 /* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Replays messages sent to the server back to the sender. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 
 /**
  * Developer documentation for this module can be found at:

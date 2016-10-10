@@ -18,8 +18,9 @@
 
 
 /* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
 /* $ModDesc: Automatically kicks people who match a banned mask. */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 /* $ModConfig: <autokick message="Banned"> */
 
 #include "inspircd.h"
