@@ -47,7 +47,7 @@ for my $file (<*/m_*.cpp>) {
 	say LIST "module $name $branch.$version https://raw.github.com/inspircd/inspircd-extras/$revision/$file";
 	open(MODULE, $file);
 	while (<MODULE>) {
-		if ($_ =~ /^\/\* \$(\S+): (.+) \*\/$/) {
+		if ($_ =~ /^\/\* \$(\S+): (.+) \*\/$/ || $_ =~ /^\/\/\/ \$(\S+): (.+)/) {
 			if ($1 eq 'ModDepends') {
 				say LIST " depends $2";
 			} elsif ($1 eq 'ModConflicts') {
