@@ -144,12 +144,12 @@ module m_antirandom 2.0.274 https://raw.github.com/inspircd/inspircd-extras/40ec
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
  description Enables two factor authentification for oper blocks using authy
  depends core 2.0
-module m_autodrop 2.0.223 https://raw.github.com/inspircd/inspircd-extras/64933b5e031ec41d9f2fd6b70a63710d90878f9d/2.0/m_autodrop.cpp
+module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autodrop.cpp
  description Allows clients to be automatically dropped if they execute certain commands before registration.
- depends core 2.0-2.1
-module m_autokick 2.0.221 https://raw.github.com/inspircd/inspircd-extras/a70b0465f0154c17111a53d7e582ac3d74a92ff7/2.0/m_autokick.cpp
+ depends core 2.0
+module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
- depends core 2.0-2.1
+ depends core 2.0
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
  depends core 2.0
@@ -165,10 +165,10 @@ module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
 module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extras/b517adbc1aedcabdc9bc9e5fd4d895d85fca82dd/2.0/m_conn_delayed_join.cpp
  description Replaces m_conn_join.so and forces users to join the specified channel(s) after a specified delay on connect
  depends core 2.0
-module m_custompenalty 2.0.163 https://raw.github.com/inspircd/inspircd-extras/0902918d32b552863d9071c659978538b0f11e43/2.0/m_custompenalty.cpp
+module m_custompenalty 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
- depends core 2.0-2.1
-module m_dccblock 2.0.229 https://raw.github.com/inspircd/inspircd-extras/8b0188bd4aa1c5ed46b0cf8f16732405af99cfe6/2.0/m_dccblock.cpp
+ depends core 2.0
+module m_dccblock 2.0.279 https://raw.github.com/inspircd/inspircd-extras/a6b8584d8d20a9edae939330885b41ca1c10172a/2.0/m_dccblock.cpp
  description Provides support for blocking DCC transfers
 module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78af1adb3cf9b2bbb247f1f2b3f87f548a7e3dbd/2.0/m_deferaccept.cpp
  description Enable TCP_DEFER_ACCEPT on sockets
@@ -185,9 +185,9 @@ module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3c
 module m_flashpolicyd 2.0.225 https://raw.github.com/inspircd/inspircd-extras/f71b8fcccee453dd1dba034ace918d8fa4309421/2.0/m_flashpolicyd.cpp
  description Flash Policy Daemon. Allows Flash IRC clients to connect.
  depends core 2.0
-module m_forceident 2.0.205 https://raw.github.com/inspircd/inspircd-extras/19fd7637e5ffd4ee211e08bc14c759100c079bf7/2.0/m_forceident.cpp
+module m_forceident 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_forceident.cpp
  description Allows forcing idents on users based on their connect class.
- depends core 2.0-2.1
+ depends core 2.0
 module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
  description Displays the full version of a server to an oper
  depends core 2.0
@@ -201,9 +201,9 @@ module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
 module m_hideidle 2.0.247 https://raw.github.com/inspircd/inspircd-extras/a499f8d0d3f4a1163ca4636dc87c99a3e9a744fa/2.0/m_hideidle.cpp
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
  depends core 2.0
-module m_identmeta 2.0.234 https://raw.github.com/inspircd/inspircd-extras/244e222324b64b4757c5c48a459b1e8b8cb0c64d/2.0/m_identmeta.cpp
+module m_identmeta 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_identmeta.cpp
  description Stores the ident given in USER as metadata.
- depends core 2.0-2.1
+ depends core 2.0
 module m_invisible 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
  description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
  depends core 2.0
@@ -261,9 +261,9 @@ module m_regex_re2 2.0.234 https://raw.github.com/inspircd/inspircd-extras/46000
 module m_rehashsslsignal 2.0.265 https://raw.github.com/inspircd/inspircd-extras/ec63edaa12a5c02dad1dc7b7355e113056d37926/2.0/m_rehashsslsignal.cpp
  description Reload SSL credentials on SIGUSR1
  depends core 2.0
-module m_replaymsg 2.0.253 https://raw.github.com/inspircd/inspircd-extras/e182049b147382ee6aa78e750e1ae5c286738cee/2.0/m_replaymsg.cpp
+module m_replaymsg 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_replaymsg.cpp
  description Replays messages sent to the server back to the sender.
- depends core 2.0-2.1
+ depends core 2.0
 module m_require_auth 2.0.276 https://raw.github.com/inspircd/inspircd-extras/5e2bbe2dfee12b96914b90dd8734988947cbc1db/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 2.0
@@ -285,9 +285,9 @@ module m_solvemsg 2.0.261 https://raw.github.com/inspircd/inspircd-extras/55659f
 module m_sslstats_gnutls 2.0.240 https://raw.github.com/inspircd/inspircd-extras/905a7f91f5cdf03d8225dd6e96ad7889a4d2c7ac/2.0/m_sslstats_gnutls.cpp
  description Provides stats about SSL ciphersuites in use by users
  depends core 2.0
-module m_stats_unlinked 2.0.223 https://raw.github.com/inspircd/inspircd-extras/89dc7e93756d2539237fdc6c25d5a50d7d3771dd/2.0/m_stats_unlinked.cpp
+module m_stats_unlinked 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_stats_unlinked.cpp
  description Adds stats character 'X' which shows unlinked servers.
- depends core 2.0-2.1
+ depends core 2.0
 module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c902274356d9aada0ac28d49ec7ea636fe40/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
  depends core 2.0
@@ -312,3 +312,30 @@ module m_changecap 2.2.182 https://raw.github.com/inspircd/inspircd-extras/8fbd4
 module m_noctcp_user 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_noctcp_user.cpp
  description Provides support for unreal-style user mode +T
  depends core 2.2
+module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autodrop.cpp
+ depends core 3.0
+ description Allows clients to be automatically dropped if they execute certain commands before registration.
+module m_autokick 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autokick.cpp
+ depends core 3.0
+ description Automatically kicks people who match a banned mask.
+module m_custompenalty 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_custompenalty.cpp
+ depends core 3.0
+ description Allows the customisation of penalty levels.
+module m_forceident 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_forceident.cpp
+ depends core 3.0
+ description Allows forcing idents on users based on their connect class.
+module m_identmeta 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_identmeta.cpp
+ depends core 3.0
+ description Stores the ident given in USER as metadata.
+module m_rotatelog 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_rotatelog.cpp
+ depends core 3.0
+ description Rotates the log files after a defined period.
+module m_solvemsg 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_solvemsg.cpp
+ depends core 3.0
+ description Requires users to solve a basic maths problem before messaging others.
+module m_stats_unlinked 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_stats_unlinked.cpp
+ depends core 3.0
+ description Adds stats character 'X' which shows unlinked servers.
+module m_svsoper 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_svsoper.cpp
+ depends core 3.0
+ description Allows services to forcibly oper a user.
