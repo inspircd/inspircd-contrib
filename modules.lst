@@ -141,6 +141,10 @@ module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f
 module m_antirandom 2.0.274 https://raw.github.com/inspircd/inspircd-extras/40eccd3338352e52904f26cb9d5f4635e1a5c9ec/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
+module m_ascii 2.0.287 https://raw.github.com/inspircd/inspircd-extras/de316014068178ac74ac5464729a0f9bbe98f353/2.0/m_ascii.cpp
+ description Implements CASEMAPPING=ascii
+ depends core 2.0
+ conflicts m_nationalchars.so
 module m_authy 2.0.211 https://raw.github.com/inspircd/inspircd-extras/6392bcde7d39a85c8df6a86eb77b218379874570/2.0/m_authy.cpp
  description Enables two factor authentification for oper blocks using authy
  depends core 2.0
@@ -149,6 +153,9 @@ module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
  depends core 2.0
 module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
+ depends core 2.0
+module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
+ description Implements CAP chghost
  depends core 2.0
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
