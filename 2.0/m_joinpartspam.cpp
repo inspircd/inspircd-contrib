@@ -16,20 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "inspircd.h"
-
-/* $ModDesc: Adds channel mode +V to ban a user after x per y joins and parts/quits (join/part spam) */
 /* $ModAuthor: genius3000 */
 /* $ModAuthorMail: genius3000@g3k.solutions */
+/* $ModDesc: Adds channel mode +V to ban a user after x per y joins and parts/quits (join/part spam) */
 /* $ModDepends: core 2.0 */
+/* $ModConfig: <joinpartspam redirchan="#BeGoneAnnoyingCycler"> */
 
+/* Helpop Lines for the CHMODES section
+ * Find: '<helpop key="chmodes" value="Channel Modes'
+ * Place just above the 'g <mask>' line:
+ V [*]<cycles>:<sec> Bans a user after the set number of Join and
+                    Part/Quit cycles in the set duration. With '*',
+                    a network configured redirect channel is used.
+ */
 /* Special thanks to Attila for the patience and guidance in
  * fixing up some of my initial, poor methods.
  */
 
+#include "inspircd.h"
+
 class joinpartspamsettings
 {
  public:
+	bool redirect;
 	unsigned int cycles;
 	unsigned int secs;
 	time_t lastcleanup;
@@ -42,8 +51,8 @@ class joinpartspamsettings
 	};
 	std::map<std::string, Tracking> cycler;
 
-	joinpartspamsettings(unsigned int c, unsigned int s)
-		: cycles(c), secs(s), lastcleanup(ServerInstance->Time()) { }
+	joinpartspamsettings(bool r, unsigned int c, unsigned int s)
+		: redirect(r), cycles(c), secs(s), lastcleanup(ServerInstance->Time()) { }
 
 	/* Called by PostJoin to possibly reset a cycler's Tracking and increment the counter */
 	void addcycle(const std::string& mask)
@@ -133,7 +142,8 @@ class JoinPartSpam : public ModeHandler
 				return MODEACTION_DENY;
 			}
 
-			unsigned int ncycles = ConvToInt(parameter.substr(0, colon));
+			bool redirect = (parameter[0] == '*');
+			unsigned int ncycles = ConvToInt(parameter.substr(redirect ? 1 : 0, redirect ? colon-1 : colon));
 			unsigned int nsecs = ConvToInt(parameter.substr(colon+1));
 
 			if (ncycles < 2 || nsecs < 1)
@@ -143,11 +153,11 @@ class JoinPartSpam : public ModeHandler
 			}
 
 			joinpartspamsettings* jpss = ext.get(chan);
-			if (jpss && ncycles == jpss->cycles && nsecs == jpss->secs)
+			if (jpss && ncycles == jpss->cycles && nsecs == jpss->secs && redirect == jpss->redirect)
 				return MODEACTION_DENY;
 
-			ext.set(chan, new joinpartspamsettings(ncycles, nsecs));
-			parameter = ConvToStr(ncycles) + ":" + ConvToStr(nsecs);
+			ext.set(chan, new joinpartspamsettings(redirect, ncycles, nsecs));
+			parameter = std::string(redirect ? "*" : "") + ConvToStr(ncycles) + ":" + ConvToStr(nsecs);
 			chan->SetModeParam(GetModeChar(), parameter);
 			return MODEACTION_ALLOW;
 		}
@@ -166,6 +176,7 @@ class JoinPartSpam : public ModeHandler
 class ModuleJoinPartSpam : public Module
 {
 	JoinPartSpam jps;
+	std::string redirchan;
 
  public:
 	ModuleJoinPartSpam()
@@ -177,7 +188,8 @@ class ModuleJoinPartSpam : public Module
 	{
 		ServerInstance->Modules->AddService(jps);
 		ServerInstance->Modules->AddService(jps.ext);
-		Implementation eventlist[] = { I_OnUserPreJoin, I_OnUserJoin };
+		OnRehash(NULL);
+		Implementation eventlist[] = { I_OnRehash, I_OnUserPreJoin, I_OnUserJoin };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
@@ -186,6 +198,36 @@ class ModuleJoinPartSpam : public Module
 		/* Let bans, etc. stop the join first */
 		ServerInstance->Modules->SetPriority(this, I_OnUserPreJoin, PRIORITY_LAST);
 		ServerInstance->Modules->SetPriority(this, I_OnUserJoin, PRIORITY_LAST);
+	}
+
+	void OnRehash(User*)
+	{
+		/* Use a temp string to read the config value and test it before setting redirchan */
+		ConfigTag* tag = ServerInstance->Config->ConfValue("joinpartspam");
+		const std::string tmp = tag->getString("redirchan");
+		if (tmp.empty())
+		{
+			redirchan.clear();
+			return;
+		}
+
+		/* Upon module (Re)Load we can abort loading if we have a configured channel redirect
+		 * that is an invalid channel name or we don't have m_banredirect loaded.
+		 * During a live Rehash and a test fails, we just ignore the new value.
+		 * In each case, send an SNOTICE to make the issue easily known.
+		 */
+		if (!ServerInstance->IsChannel(tmp.c_str(), ServerInstance->Config->Limits.ChanMax))
+		{
+			ServerInstance->SNO->WriteToSnoMask('a', "m_joinpartspam: The specified redirect channel is not a valid channel name.");
+			throw ModuleException("The specified redirect channel is not a valid channel name.");
+		}
+		if (ServerInstance->Modules->Find("m_banredirect.so") == NULL)
+		{
+			ServerInstance->SNO->WriteToSnoMask('a', "m_joinpartspam: You have set a redirect channel but do not have m_banredirect loaded.");
+			throw ModuleException("You have set a redirect channel but do not have m_banredirect loaded.");
+		}
+
+		redirchan = tmp;
 	}
 
 	/* Stop the join and clear the user's counter if they've hit the limit */
@@ -202,10 +244,15 @@ class ModuleJoinPartSpam : public Module
 			const std::string& mask(user->MakeHost());
 			if (jpss->zapme(mask))
 			{
+				/* Modules can be unloaded, recheck for m_banredirect if we want a redirect */
+				bool DoRedirect = (jpss->redirect && !redirchan.empty());
+				if (DoRedirect && ServerInstance->Modules->Find("m_banredirect.so") == NULL)
+					DoRedirect = false;
+
 				std::vector<std::string> parameters;
 				parameters.push_back(chan->name);
 				parameters.push_back("+b");
-				parameters.push_back(user->MakeWildHost());
+				parameters.push_back(user->MakeWildHost() + (DoRedirect ? redirchan : ""));
 				ServerInstance->SendGlobalMode(parameters, ServerInstance->FakeClient);
 
 				user->WriteNumeric(474, "%s %s :Channel join/part spam triggered (limit is %u cycles in %u secs)", user->nick.c_str(), chan->name.c_str(), jpss->cycles, jpss->secs);
