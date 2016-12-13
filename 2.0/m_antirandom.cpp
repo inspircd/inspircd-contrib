@@ -51,7 +51,6 @@
 /* $ModAuthor: lnx85 */
 /* $ModAuthorMail: lnx85@lnxlabs.it */
 /* $ModDepends: core 2.0 */
-/* $CompileFlags: -std=c++11 */
 
 #define ANTIRANDOM_ACT_KILL     0
 #define ANTIRANDOM_ACT_ZLINE    1
@@ -557,6 +556,7 @@ class ModuleAntiRandom : public Module
 
 	unsigned int GetStringScore(const std::string &original_str)
 	{
+        size_t i = 0;
 		unsigned int score = 0;
 
 		unsigned int highest_vowels = 0;
@@ -568,8 +568,9 @@ class ModuleAntiRandom : public Module
 		unsigned int digits = 0;
 
 		/* Fast digit/consonant/vowel checks... */
-		for (const char &c : original_str)
+		for (i = 0; i < original_str.length(); i++)
 		{
+            const char &c = original_str[i];
 			if ((c >= '0') && (c <= '9'))
 			{
 				digits++;
@@ -637,7 +638,7 @@ class ModuleAntiRandom : public Module
 		/*
 		 * Now, do the triples checks. For each char in the string we're checking ...
 		 */
-        for (size_t i = 0; i < (original_str.length() - 2); i++)
+        for (i = 0; i < (original_str.length() - 2); i++)
         {
             std::map<std::string, std::string>::const_iterator trip;
             // Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
