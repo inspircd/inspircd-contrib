@@ -50,6 +50,7 @@
 /* $ModAuthor: lnx85 */
 /* $ModAuthorMail: lnx85@lnxlabs.it */
 /* $ModDepends: core 2.0 */
+/* $CompileFlags: -std=c++11 */
 
 #define ANTIRANDOM_ACT_KILL     0
 #define ANTIRANDOM_ACT_ZLINE    1
@@ -516,6 +517,18 @@ static const char *triples_txt[] = {
 	NULL, NULL
 };
 
+static std::map<std::string, std::string> init_map(const char **a)
+{
+    std::map<std::string, std::string> m;
+    const char **ci;
+    for (ci = a; *ci; ci += 2) {
+        m.insert(std::pair<std::string, std::string>(ci[0], ci[1]));
+    }
+    return m;
+}
+
+const static std::map<std::string, std::string> triples_map = init_map(triples_txt);
+
 class ModuleAntiRandom : public Module
 {
  private:
@@ -543,9 +556,6 @@ class ModuleAntiRandom : public Module
 
 	unsigned int GetStringScore(const std::string &original_str)
 	{
-		const char **ci;
-		const char *s;
-        size_t pos = 0;
 		unsigned int score = 0;
 
 		unsigned int highest_vowels = 0;
@@ -607,55 +617,38 @@ class ModuleAntiRandom : public Module
 		{
 			score += digits;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str.c_str());
 		}
 		if (vowels >= 4)
 		{
 			score += vowels;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str.c_str());
 		}
 		if (consonants >= 4)
 		{
 			score += consonants;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str.c_str());
 		}
 
 
 		/*
 		 * Now, do the triples checks. For each char in the string we're checking ...
-		 * XXX - on reading this, I wonder why we can't strcmp()/strchr() it..
 		 */
-		for (pos = 0; pos < (original_str.length() - 2); pos++)
-		{
-			/*
-			 * ..run it through each triple.
-			 */
-			for (ci = triples_txt; *ci; ci++)
-			{
-				// At this point, *ci points to the first two chars in the triples array.
-				if (*ci == original_str.substr(pos, 2))
-				{
-					// First half of triple matches. Try match the other half.
-					ci++;
-					if (strchr(*ci, original_str[i + 2]))
-					{
-						// Triple matches!
-						score++;
-						if (this->DebugMode)
-                            ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, 
-                                    *ci, original_str[pos], original_str[pos + 1], original_str[pos + 2]);
-					}
-				}
-				else
-				{
-					// No match. Just blindly increment half a triple.
-					ci++;
-				}
-			}
-		}
-
+        for (size_t i = 0; i < (original_str.length() - 2); i++)
+        {
+            std::map<std::string, std::string>::const_iterator trip;
+            // Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
+            if ((trip = triples_map.find(original_str.substr(i, 2))) != triples_map.end() &&
+                    trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
+            {
+                score++;
+                if (this->DebugMode)
+                    ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
+                            original_str.c_str(), trip->second.c_str(), original_str[pos], original_str[pos + 1], original_str[pos + 2]);
+            }
+        }
 		return score;
 	}
 
