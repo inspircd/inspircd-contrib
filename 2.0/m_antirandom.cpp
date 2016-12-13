@@ -11,6 +11,7 @@
  * (C) Copyright 2016 linuxdaemon / linuxdemon1 <walter@walterbarnes.net>
  *     - Fixed pointer dereference issues in the score calculations
  *     - Rewrote the consonant/vowel switches to use strchr()
+ *     - Changed the calculation function to use std::string instead of a c-ctring
  * (C) Copyright 2013 SimosNap IRC Network <admin@simosnap.org>
  *                    lnx85 <lnx85@lnxlabs.it>
  *     - Added exempt support (nick, ident, host and fullname based)
@@ -540,10 +541,11 @@ class ModuleAntiRandom : public Module
 	    return Version("A module to prevent against bots using random patterns",VF_NONE);
     }
 
-	unsigned int GetStringScore(const char *original_str)
+	unsigned int GetStringScore(const std::string &original_str)
 	{
 		const char **ci;
 		const char *s;
+        size_t pos = 0;
 		unsigned int score = 0;
 
 		unsigned int highest_vowels = 0;
@@ -555,9 +557,9 @@ class ModuleAntiRandom : public Module
 		unsigned int digits = 0;
 
 		/* Fast digit/consonant/vowel checks... */
-		for (s = original_str; *s; s++)
+		for (const char &c : original_str)
 		{
-			if ((*s >= '0') && (*s <= '9'))
+			if ((c >= '0') && (c <= '9'))
 			{
 				digits++;
 			}
@@ -569,7 +571,7 @@ class ModuleAntiRandom : public Module
 			}
 
 			/* Check consonants */
-            if (strchr("bcdfghjklmnpqrstvwxz", *s))
+            if (strchr("bcdfghjklmnpqrstvwxz", c))
             {
                 consonants++;
             }
@@ -581,7 +583,7 @@ class ModuleAntiRandom : public Module
             }
 
 			/* Check vowels */
-            if (strchr("aeiou", *s))
+            if (strchr("aeiou", c))
             {
                 vowels++;
             }
@@ -625,24 +627,25 @@ class ModuleAntiRandom : public Module
 		 * Now, do the triples checks. For each char in the string we're checking ...
 		 * XXX - on reading this, I wonder why we can't strcmp()/strchr() it..
 		 */
-		for (s = original_str; *s; s++)
+		for (pos = 0; pos < (original_str.length() - 2); pos++)
 		{
 			/*
 			 * ..run it through each triple.
 			 */
 			for (ci = triples_txt; *ci; ci++)
 			{
-				// At this point, (*ci)[0] and (*ci)[1] point to the first two chars in the triples array.
-				if ((*ci)[0] == s[0] && (*ci)[1] == s[1] && s[2])
+				// At this point, *ci points to the first two chars in the triples array.
+				if (*ci == original_str.substr(pos, 2))
 				{
 					// First half of triple matches. Try match the other half.
 					ci++;
-					if (strchr(*ci, s[2]))
+					if (strchr(*ci, original_str[i + 2]))
 					{
 						// Triple matches!
 						score++;
 						if (this->DebugMode)
-                            ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
+                            ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, 
+                                    *ci, original_str[pos], original_str[pos + 1], original_str[pos + 2]);
 					}
 				}
 				else
@@ -663,9 +666,9 @@ class ModuleAntiRandom : public Module
 
 		gettimeofday(&tv_alpha, NULL);
 
-		nscore = GetStringScore(user->nick.c_str());
-		uscore = GetStringScore(user->ident.c_str());
-		gscore = GetStringScore(user->fullname.c_str());
+		nscore = GetStringScore(user->nick);
+		uscore = GetStringScore(user->ident);
+		gscore = GetStringScore(user->fullname);
 		score = nscore + uscore + gscore;
 
 		gettimeofday(&tv_beta, NULL);
