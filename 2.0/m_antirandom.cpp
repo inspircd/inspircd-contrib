@@ -8,6 +8,9 @@
  * This program is free but copyrighted software; see
  *            the file COPYING for details.
  *
+ * (C) Copyright 2016 linuxdaemon / linuxdemon1 <walter@walterbarnes.net>
+ *     - Fixed pointer dereference issues in the score calculations
+ *     - Rewrote the consonant/vowel switches to use strchr()
  * (C) Copyright 2013 SimosNap IRC Network <admin@simosnap.org>
  *                    lnx85 <lnx85@lnxlabs.it>
  *     - Added exempt support (nick, ident, host and fullname based)
