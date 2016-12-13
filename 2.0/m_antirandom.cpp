@@ -12,6 +12,7 @@
  *     - Fixed pointer dereference issues in the score calculations
  *     - Rewrote the consonant/vowel switches to use strchr()
  *     - Changed the calculation function to use std::string instead of a c-ctring
+ *     - Migrated to using a std::map rather than blindly iterating over a whole array
  * (C) Copyright 2013 SimosNap IRC Network <admin@simosnap.org>
  *                    lnx85 <lnx85@lnxlabs.it>
  *     - Added exempt support (nick, ident, host and fullname based)
