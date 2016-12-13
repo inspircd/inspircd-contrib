@@ -603,19 +603,19 @@ class ModuleAntiRandom : public Module
 
 		if (digits >= 5)
 		{
-			score += 5 + (digits - 5); // TODO is the subtraction really necessary?
+			score += digits;
 			if (this->DebugMode)
 				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
 		}
 		if (vowels >= 4)
 		{
-			score += 4 + (vowels - 4);
+			score += vowels;
 			if (this->DebugMode)
 				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str);
 		}
 		if (consonants >= 4)
 		{
-			score += 4 + (consonants - 4);
+			score += consonants;
 			if (this->DebugMode)
 				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str);
 		}
@@ -642,7 +642,7 @@ class ModuleAntiRandom : public Module
 						// Triple matches!
 						score++;
 						if (this->DebugMode)
-						ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
+                            ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
 					}
 				}
 				else
