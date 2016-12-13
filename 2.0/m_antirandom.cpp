@@ -638,17 +638,20 @@ class ModuleAntiRandom : public Module
 		/*
 		 * Now, do the triples checks. For each char in the string we're checking ...
 		 */
-        for (i = 0; i < (original_str.length() - 2); i++)
+        if (original_str.length() >= 3) // Make sure the string is at least 3 characters long
         {
-            std::map<std::string, std::string>::const_iterator trip;
-            // Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
-            if ((trip = triples_map.find(original_str.substr(i, 2))) != triples_map.end() &&
-                    trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
+            for (i = 0; i < (original_str.length() - 2); i++)
             {
-                score++;
-                if (this->DebugMode)
-                    ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
-                            original_str.c_str(), trip->second.c_str(), original_str[i], original_str[i + 1], original_str[i + 2]);
+                std::map<std::string, std::string>::const_iterator trip;
+                // Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
+                if ((trip = triples_map.find(original_str.substr(i, 2))) != triples_map.end() && 
+                        trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
+                {
+                    score++;
+                    if (this->DebugMode)
+                        ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
+                                original_str.c_str(), trip->second.c_str(), original_str[i], original_str[i + 1], original_str[i + 2]);
+                }
             }
         }
 		return score;
