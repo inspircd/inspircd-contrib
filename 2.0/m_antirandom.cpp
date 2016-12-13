@@ -67,6 +67,8 @@ public:
 };
 typedef std::vector<AntirandomExempt> AntirandomExemptList;
 
+// TODO Rewrite this to use a std::map rather than an array
+// Would remove the need to iterate over the full thing
 static const char *triples_txt[] = {
 	"aj", "fqtvxz",
 	"aq", "deghjkmnprtxyz",
@@ -564,6 +566,7 @@ class ModuleAntiRandom : public Module
 			}
 
 			/* Check consonants */
+            // TODO this could probably be rewritten to use strchr() and a defined string of consonants
 			switch (*s)
 			{
 				case 'b':
@@ -596,6 +599,7 @@ class ModuleAntiRandom : public Module
 			}
 
 			/* Check vowels */
+            // TODO this could probably be rewritten to use strchr() and a defined string of vowels
 			switch (*s)
 			{
 				case 'a':
@@ -623,7 +627,7 @@ class ModuleAntiRandom : public Module
 
 		if (digits >= 5)
 		{
-			score += 5 + (digits - 5);
+			score += 5 + (digits - 5); // TODO is the subtraction really necessary?
 			if (this->DebugMode)
 				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
 		}
@@ -652,8 +656,8 @@ class ModuleAntiRandom : public Module
 			 */
 			for (ci = triples_txt; *ci; ci++)
 			{
-				// At this point, ci[0] and ci[1] point to the first two chars in the triples array.
-				if (*ci[0] == s[0] && *ci[1] == s[1] && s[2])
+				// At this point, (*ci)[0] and (*ci)[1] point to the first two chars in the triples array.
+				if ((*ci)[0] == s[0] && (*ci)[1] == s[1] && s[2])
 				{
 					// First half of triple matches. Try match the other half.
 					ci++;
