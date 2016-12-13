@@ -646,7 +646,7 @@ class ModuleAntiRandom : public Module
                 score++;
                 if (this->DebugMode)
                     ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
-                            original_str.c_str(), trip->second.c_str(), original_str[pos], original_str[pos + 1], original_str[pos + 2]);
+                            original_str.c_str(), trip->second.c_str(), original_str[i], original_str[i + 1], original_str[i + 2]);
             }
         }
 		return score;
