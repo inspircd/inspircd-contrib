@@ -72,8 +72,6 @@ public:
 };
 typedef std::vector<AntirandomExempt> AntirandomExemptList;
 
-// TODO Rewrite this to use a std::map rather than an array
-// Would remove the need to iterate over the full thing
 static const char *triples_txt[] = {
 	"aj", "fqtvxz",
 	"aq", "deghjkmnprtxyz",
