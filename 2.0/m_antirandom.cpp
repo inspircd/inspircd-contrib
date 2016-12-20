@@ -518,8 +518,7 @@ static const char *triples_txt[] = {
 static std::map<std::string, std::string> init_map(const char **a)
 {
 	std::map<std::string, std::string> m;
-	const char **ci;
-	for (ci = a; *ci; ci += 2)
+	for (const char **ci = a; *ci; ci += 2)
 	{
 		m.insert(std::pair<std::string, std::string>(ci[0], ci[1]));
 	}
@@ -555,7 +554,6 @@ class ModuleAntiRandom : public Module
 
 	unsigned int GetStringScore(const std::string &original_str)
 	{
-		size_t i = 0;
 		unsigned int score = 0;
 
 		unsigned int highest_vowels = 0;
@@ -567,7 +565,7 @@ class ModuleAntiRandom : public Module
 		unsigned int digits = 0;
 
 		/* Fast digit/consonant/vowel checks... */
-		for (i = 0; i < original_str.length(); i++)
+		for (size_t i = 0; i < original_str.length(); i++)
 		{
 			const char &c = original_str[i];
 			if ((c >= '0') && (c <= '9'))
@@ -639,12 +637,11 @@ class ModuleAntiRandom : public Module
 		 */
 		if (original_str.length() >= 3) // Make sure the string is at least 3 characters long
 		{
-			for (i = 0; i < (original_str.length() - 2); i++)
+			for (size_t i = 0; i < (original_str.length() - 2); i++)
 			{
-				std::map<std::string, std::string>::const_iterator trip;
+				std::map<std::string, std::string>::const_iterator trip = triples_map.find(original_str.substr(i, 2));
 				// Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
-				if ((trip = triples_map.find(original_str.substr(i, 2))) != triples_map.end() &&
-						trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
+				if (trip != triples_map.end() && trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
 				{
 					score++;
 					if (this->DebugMode)
