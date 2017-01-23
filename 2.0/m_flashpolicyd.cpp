@@ -97,7 +97,7 @@ class ModuleFlashPD : public Module
 		for (std::set<FlashPDSocket*>::const_iterator i = sockets.begin(); i != sockets.end(); ++i)
 		{
 			FlashPDSocket* sock = *i;
-			if ((sock->created + timeout > curtime) && (sock->created != 0))
+			if ((sock->created + timeout < curtime) && (sock->created != 0))
 				sock->AddToCull();
 		}
 	}
