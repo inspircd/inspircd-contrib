@@ -2,6 +2,7 @@
  * InspIRCd -- Internet Relay Chat Daemon
  *
  *   Copyright (C) 2012 Attila Molnar <attilamolnar@hush.com>
+ *   Copyright (C) 2017 Peter Powell <petpow@saberuk.com>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -32,6 +33,10 @@
 /* $LinkerFlags: rpath("pkg-config --libs gnutls") pkgconflibs("gnutls","/libgnutls.so","-lgnutls") */
 /* $NoPedantic */
 
+#if (GNUTLS_VERSION_MAJOR > 3) || (GNUTLS_VERSION_MAJOR == 3 && GNUTLS_VERSION_MINOR >= 5)
+# define GNUTLS_HAS_DIG_SHA3
+#endif
+
 class GnuTLSHash : public HashProvider
 {
 	const gnutls_digest_algorithm_t algo;
@@ -60,6 +65,12 @@ class ModuleHashGnuTLS : public Module
 	GnuTLSHash sha256;
 	GnuTLSHash sha512;
 	GnuTLSHash ripemd160;
+#if defined GNUTLS_HAS_DIG_SHA3
+	GnuTLSHash sha3_224;
+	GnuTLSHash sha3_256;
+	GnuTLSHash sha3_384;
+	GnuTLSHash sha3_512;
+#endif
 
  public:
 	ModuleHashGnuTLS()
@@ -67,6 +78,12 @@ class ModuleHashGnuTLS : public Module
 		, sha256(this, "hash/sha256", 32, 64, GNUTLS_DIG_SHA256)
 		, sha512(this, "hash/sha512", 64, 128, GNUTLS_DIG_SHA512)
 		, ripemd160(this, "hash/ripemd160", 20, 64, GNUTLS_DIG_RMD160)
+#if defined GNUTLS_HAS_DIG_SHA3
+		, sha3_224(this, "hash/sha3-224", 28, 144, GNUTLS_DIG_SHA3_224)
+		, sha3_256(this, "hash/sha3-256", 32, 136, GNUTLS_DIG_SHA3_256)
+		, sha3_384(this, "hash/sha3-384", 48, 104, GNUTLS_DIG_SHA3_384)
+		, sha3_512(this, "hash/sha3-512", 64, 72, GNUTLS_DIG_SHA3_512)
+#endif
 	{
 		gnutls_global_init();
 	}
@@ -78,7 +95,12 @@ class ModuleHashGnuTLS : public Module
 
 	void init()
 	{
-		ServiceProvider* services[] = { &sha1, &sha256, &sha512, &ripemd160 };
+		ServiceProvider* services[] = {
+			&sha1, &sha256, &sha512, &ripemd160
+#if defined GNUTLS_HAS_DIG_SHA3
+			, &sha3_224, &sha3_256, &sha3_384, &sha3_512
+#endif
+		};
 		ServerInstance->Modules->AddServices(services, sizeof(services)/sizeof(ServiceProvider*));
 	}
 
