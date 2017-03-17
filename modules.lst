@@ -189,7 +189,7 @@ module m_extbanredirect 2.0.277 https://raw.github.com/inspircd/inspircd-extras/
 module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
  description Provides the FINDXLINE command which lets opers search XLines
  depends core 2.0
-module m_flashpolicyd 2.0.225 https://raw.github.com/inspircd/inspircd-extras/f71b8fcccee453dd1dba034ace918d8fa4309421/2.0/m_flashpolicyd.cpp
+module m_flashpolicyd 2.0.271 https://raw.github.com/inspircd/inspircd-extras/77e2fa673315a54538a26f2ebb5ab593b0457006/2.0/m_flashpolicyd.cpp
  description Flash Policy Daemon. Allows Flash IRC clients to connect.
  depends core 2.0
 module m_forceident 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_forceident.cpp
@@ -200,7 +200,7 @@ module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db
  depends core 2.0
 module m_geoipban 2.0.217 https://raw.github.com/inspircd/inspircd-extras/f18b6d8b0d723cf5e4edc9bfe301a97dc46377c8/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
-module m_hash_gnutls 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_hash_gnutls.cpp
+module m_hash_gnutls 2.0.295 https://raw.github.com/inspircd/inspircd-extras/287545046fe070e835921e55877395f37b9a86e2/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
  conflicts m_sha256.so
@@ -217,6 +217,9 @@ module m_invisible 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f02
 module m_invitenotify 2.0.181 https://raw.github.com/inspircd/inspircd-extras/cf9b1d041f8c8bf5917f67d90470dfc4cb800d43/2.0/m_invitenotify.cpp
  description Implements invite-notify
  depends core 2.0
+module m_ircv3_sts 2.0.299 https://raw.github.com/inspircd/inspircd-extras/7ea59be3bea731dabca8ae23d3fc7c857dd34f66/2.0/m_ircv3_sts.cpp
+ description Implements IRCv3 STS (Strict Transport Security) policy advertisement
+ depends core 2.0
 module m_ircxusernames 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_ircxusernames.cpp
  description Provides support for IRCX usernames
  depends core 2.0-2.1
@@ -229,6 +232,9 @@ module m_joinoninvite 2.0.233 https://raw.github.com/inspircd/inspircd-extras/b2
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 2.0-2.1
+module m_joinpartspam 2.0.279 https://raw.github.com/inspircd/inspircd-extras/f791e9fe16904a9120194e614f61fca252a015e9/2.0/m_joinpartspam.cpp
+ description Adds channel mode +V to ban a user after x per y joins and parts/quits (join/part spam)
+ depends core 2.0
 module m_lusersnoservices 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
  description Adds an extra line to LUSERS output to show global user count minus "clients" from U-Lines servers
  depends core 2.0
@@ -250,6 +256,8 @@ module m_nooponcreate 2.0.210 https://raw.github.com/inspircd/inspircd-extras/87
 module m_nouidnick 2.0.195 https://raw.github.com/inspircd/inspircd-extras/ce92ed3d637bce893d247b73f5eabbac9d1610cf/2.0/m_nouidnick.cpp
  description Disallows changing nick to UID using /NICK
  depends core 2.0
+module m_opmoderated 2.0.294 https://raw.github.com/inspircd/inspircd-extras/08aad3548a27d59c41a8104512de85adb6190e6f/2.0/m_opmoderated.cpp
+ description Implements channel mode +U and extban 'U' - moderator mute
 module m_override_umode 2.0.242 https://raw.github.com/inspircd/inspircd-extras/f57d88050e1b0fb8bec4d20e48540e69f796282d/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
  depends core 2.0
