@@ -27,6 +27,7 @@
 /* $ModAuthor: Filippo Cortigiani */
 /* $ModAuthorMail: simos@simosnap.org */
 /* $ModDesc: Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois */
+/* $ModDepends: core 2.0 */
 /* $LinkerFlags: -lGeoIP */
 
 class ModuleGeoIPBan : public Module
