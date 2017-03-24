@@ -32,6 +32,9 @@
 
 #include <re2/re2.h>
 
+/* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModDesc: Regex Provider Module for RE2. */
+/* $ModDepends: core 2.0 */
 /* $LinkerFlags: -lre2 */
 
 class RE2Exception : public ModuleException

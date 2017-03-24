@@ -23,6 +23,7 @@
 /* $ModAuthor: Jansteen */
 /* $ModAuthorMail: pliantcom@yandex.com */
 /* $ModConfig: <dccblock users="true" channels="false"> */
+/* $ModDepends: core 2.0 */
 
 /* Documentation
    This module is used to completely block DCC from being used on your
