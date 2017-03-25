@@ -8,6 +8,11 @@
  * This program is free but copyrighted software; see
  *            the file COPYING for details.
  *
+ * (C) Copyright 2016 linuxdaemon / linuxdemon1 <walter@walterbarnes.net>
+ *     - Fixed pointer dereference issues in the score calculations
+ *     - Rewrote the consonant/vowel switches to use strchr()
+ *     - Changed the calculation function to use std::string instead of a c-ctring
+ *     - Migrated to using a std::map rather than blindly iterating over a whole array
  * (C) Copyright 2013 SimosNap IRC Network <admin@simosnap.org>
  *                    lnx85 <lnx85@lnxlabs.it>
  *     - Added exempt support (nick, ident, host and fullname based)
@@ -510,6 +515,18 @@ static const char *triples_txt[] = {
 	NULL, NULL
 };
 
+static std::map<std::string, std::string> init_map(const char **a)
+{
+	std::map<std::string, std::string> m;
+	for (const char **ci = a; *ci; ci += 2)
+	{
+		m.insert(std::pair<std::string, std::string>(ci[0], ci[1]));
+	}
+	return m;
+}
+
+const static std::map<std::string, std::string> triples_map = init_map(triples_txt);
+
 class ModuleAntiRandom : public Module
 {
  private:
@@ -532,13 +549,11 @@ class ModuleAntiRandom : public Module
 
 	virtual Version GetVersion()
 	{
-	    return Version("A module to prevent against bots using random patterns",VF_NONE);
-    }
+		return Version("A module to prevent against bots using random patterns",VF_NONE);
+	}
 
-	unsigned int GetStringScore(const char *original_str)
+	unsigned int GetStringScore(const std::string &original_str)
 	{
-		const char **ci;
-		const char *s;
 		unsigned int score = 0;
 
 		unsigned int highest_vowels = 0;
@@ -550,9 +565,10 @@ class ModuleAntiRandom : public Module
 		unsigned int digits = 0;
 
 		/* Fast digit/consonant/vowel checks... */
-		for (s = original_str; *s; s++)
+		for (size_t i = 0; i < original_str.length(); i++)
 		{
-			if ((*s >= '0') && (*s <= '9'))
+			const char &c = original_str[i];
+			if ((c >= '0') && (c <= '9'))
 			{
 				digits++;
 			}
@@ -564,52 +580,27 @@ class ModuleAntiRandom : public Module
 			}
 
 			/* Check consonants */
-			switch (*s)
+			if (strchr("bcdfghjklmnpqrstvwxz", c))
 			{
-				case 'b':
-				case 'c':
-				case 'd':
-				case 'f':
-				case 'g':
-				case 'h':
-				case 'j':
-				case 'k':
-				case 'l':
-				case 'm':
-				case 'n':
-				case 'p':
-				case 'q':
-				case 'r':
-				case 's':
-				case 't':
-				case 'v':
-				case 'w':
-				case 'x':
-				case 'z':
-					consonants++;
-					break;
-				default:
-					if (consonants > highest_consonants)
-						highest_consonants = consonants;
-					consonants = 0;
-					break;
+				consonants++;
+			}
+			else
+			{
+				if (consonants > highest_consonants)
+					highest_consonants = consonants;
+				consonants = 0;
 			}
 
 			/* Check vowels */
-			switch (*s)
+			if (strchr("aeiou", c))
 			{
-				case 'a':
-				case 'e':
-				case 'i':
-				case 'o':
-				case 'u':
-					vowels++;
-					break;
-				default:
-					if (vowels > highest_vowels)
-						highest_vowels = vowels;
-					vowels = 0;
-					break;
+				vowels++;
+			}
+			else
+			{
+				if (vowels > highest_vowels)
+					highest_vowels = vowels;
+				vowels = 0;
 			}
 		}
 
@@ -623,56 +614,42 @@ class ModuleAntiRandom : public Module
 
 		if (digits >= 5)
 		{
-			score += 5 + (digits - 5);
+			score += digits;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str.c_str());
 		}
 		if (vowels >= 4)
 		{
-			score += 4 + (vowels - 4);
+			score += vowels;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str.c_str());
 		}
 		if (consonants >= 4)
 		{
-			score += 4 + (consonants - 4);
+			score += consonants;
 			if (this->DebugMode)
-				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str);
+				ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str.c_str());
 		}
 
 
 		/*
 		 * Now, do the triples checks. For each char in the string we're checking ...
-		 * XXX - on reading this, I wonder why we can't strcmp()/strchr() it..
 		 */
-		for (s = original_str; *s; s++)
+		if (original_str.length() >= 3) // Make sure the string is at least 3 characters long
 		{
-			/*
-			 * ..run it through each triple.
-			 */
-			for (ci = triples_txt; *ci; ci++)
+			for (size_t i = 0; i < (original_str.length() - 2); i++)
 			{
-				// At this point, ci[0] and ci[1] point to the first two chars in the triples array.
-				if (*ci[0] == s[0] && *ci[1] == s[1] && s[2])
+				std::map<std::string, std::string>::const_iterator trip = triples_map.find(original_str.substr(i, 2));
+				// Check whether the current and next characters are the first half of a triple, if so, check for the 3rd character in the second half
+				if (trip != triples_map.end() && trip->second.find_first_of(original_str[i + 2]) != std::string::npos)
 				{
-					// First half of triple matches. Try match the other half.
-					ci++;
-					if (strchr(*ci, s[2]))
-					{
-						// Triple matches!
-						score++;
-						if (this->DebugMode)
-						ServerInstance->SNO->WriteGlobalSno('a',  "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)", original_str, *ci, s[0], s[1], s[2]);
-					}
-				}
-				else
-				{
-					// No match. Just blindly increment half a triple.
-					ci++;
+					score++;
+					if (this->DebugMode)
+						ServerInstance->SNO->WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
+															original_str.c_str(), trip->second.c_str(), original_str[i], original_str[i + 1], original_str[i + 2]);
 				}
 			}
 		}
-
 		return score;
 	}
 
@@ -683,9 +660,9 @@ class ModuleAntiRandom : public Module
 
 		gettimeofday(&tv_alpha, NULL);
 
-		nscore = GetStringScore(user->nick.c_str());
-		uscore = GetStringScore(user->ident.c_str());
-		gscore = GetStringScore(user->fullname.c_str());
+		nscore = GetStringScore(user->nick);
+		uscore = GetStringScore(user->ident);
+		gscore = GetStringScore(user->fullname);
 		score = nscore + uscore + gscore;
 
 		gettimeofday(&tv_beta, NULL);
@@ -773,27 +750,27 @@ class ModuleAntiRandom : public Module
 				case ANTIRANDOM_ACT_ZLINE:
 				{
 					ZLine* zl = new ZLine(ServerInstance->Time(), this->BanDuration, ServerInstance->Config->ServerName, this->BanReason.c_str(), user->GetIPString());
-                	if (ServerInstance->XLines->AddLine(zl,user))
-                		ServerInstance->XLines->ApplyLines();
-                	else
-                		delete zl;
-                	method="Z-Lined";
+					if (ServerInstance->XLines->AddLine(zl,user))
+						ServerInstance->XLines->ApplyLines();
+					else
+						delete zl;
+					method="Z-Lined";
 					break;
 				}
 				case ANTIRANDOM_ACT_GLINE:
 				{
 					GLine* gl = new GLine(ServerInstance->Time(), this->BanDuration, ServerInstance->Config->ServerName, this->BanReason.c_str(), "*", user->GetIPString());
-                	if (ServerInstance->XLines->AddLine(gl,user))
-                		ServerInstance->XLines->ApplyLines();
-                	else
-                		delete gl;
-                	method="G-Lined";
+					if (ServerInstance->XLines->AddLine(gl,user))
+						ServerInstance->XLines->ApplyLines();
+					else
+						delete gl;
+					method="G-Lined";
 					break;
 				}
 			}
 			if (this->ShowFailedConnects)
 			{
-			    std::string realhost = user->GetFullRealHost();
+				std::string realhost = user->GetFullRealHost();
 				ServerInstance->SNO->WriteGlobalSno('a', "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
 
 				ServerInstance->Logs->Log("CONFIG",DEFAULT, "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetIPString(), method.c_str(), score, this->Threshold);
@@ -819,10 +796,10 @@ class ModuleAntiRandom : public Module
 
 		// Sanity checks
 		if (this->Threshold < 1)
-		    this->Threshold = 1;
+			this->Threshold = 1;
 
 		if (this->Threshold >= 100)
-		    this->Threshold = 100;
+			this->Threshold = 100;
 
 		this->BanAction = ANTIRANDOM_ACT_NONE;
 		tmp = myConf.ReadValue("antirandom", "banaction", 0);
@@ -843,9 +820,9 @@ class ModuleAntiRandom : public Module
 		tmp = myConf.ReadValue("antirandom", "banduration", 0);
 		if (!tmp.empty())
 			this->BanDuration = ServerInstance->Duration(tmp.c_str());
-		    // Sanity check
-		    if ((int)this->BanDuration <= 0)
-		        this->BanDuration = 1;
+			// Sanity check
+			if ((int)this->BanDuration <= 0)
+				this->BanDuration = 1;
 		else
 			this->BanDuration = 86400; // One day.
 
