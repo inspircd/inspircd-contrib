@@ -138,7 +138,7 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_antirandom 2.0.274 https://raw.github.com/inspircd/inspircd-extras/40eccd3338352e52904f26cb9d5f4635e1a5c9ec/2.0/m_antirandom.cpp
+module m_antirandom 2.0.307 https://raw.github.com/inspircd/inspircd-extras/d1b4de0e2e17ca0beb56a419b57cf0b86834e4f9/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_ascii 2.0.287 https://raw.github.com/inspircd/inspircd-extras/de316014068178ac74ac5464729a0f9bbe98f353/2.0/m_ascii.cpp
@@ -175,8 +175,9 @@ module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extr
 module m_custompenalty 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
  depends core 2.0
-module m_dccblock 2.0.279 https://raw.github.com/inspircd/inspircd-extras/a6b8584d8d20a9edae939330885b41ca1c10172a/2.0/m_dccblock.cpp
+module m_dccblock 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_dccblock.cpp
  description Provides support for blocking DCC transfers
+ depends core 2.0
 module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78af1adb3cf9b2bbb247f1f2b3f87f548a7e3dbd/2.0/m_deferaccept.cpp
  description Enable TCP_DEFER_ACCEPT on sockets
  depends core 2.0
@@ -198,8 +199,9 @@ module m_forceident 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d16
 module m_fullversion 2.0.196 https://raw.github.com/inspircd/inspircd-extras/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
  description Displays the full version of a server to an oper
  depends core 2.0
-module m_geoipban 2.0.217 https://raw.github.com/inspircd/inspircd-extras/f18b6d8b0d723cf5e4edc9bfe301a97dc46377c8/2.0/m_geoipban.cpp
+module m_geoipban 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
+ depends core 2.0
 module m_hash_gnutls 2.0.295 https://raw.github.com/inspircd/inspircd-extras/287545046fe070e835921e55877395f37b9a86e2/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
@@ -247,6 +249,9 @@ module m_nickdelay 2.0.194 https://raw.github.com/inspircd/inspircd-extras/134cb
 module m_nickin001 2.0.209 https://raw.github.com/inspircd/inspircd-extras/dffe595182fc3b22b28e46c89a27f523b5a2810a/2.0/m_nickin001.cpp
  description Replaces the nick!user@host in RPL_WELCOME (001) with the user's nick
  depends core 2.0
+module m_nocreate 2.0.295 https://raw.github.com/inspircd/inspircd-extras/ea7e20a85bbc81f02866e30ec9b3afe510ee1e1e/2.0/m_nocreate.cpp
+ description Adds oper command '/nocreate' to block a user from creating new channels
+ depends core 2.0
 module m_noctcp_user 2.0.139 https://raw.github.com/inspircd/inspircd-extras/cc6ac2536e51800f208ea58c73028bb196bf8f48/2.0/m_noctcp_user.cpp
  description Provides support for unreal-style user mode +T
  depends core 2.0
@@ -256,8 +261,9 @@ module m_nooponcreate 2.0.210 https://raw.github.com/inspircd/inspircd-extras/87
 module m_nouidnick 2.0.195 https://raw.github.com/inspircd/inspircd-extras/ce92ed3d637bce893d247b73f5eabbac9d1610cf/2.0/m_nouidnick.cpp
  description Disallows changing nick to UID using /NICK
  depends core 2.0
-module m_opmoderated 2.0.294 https://raw.github.com/inspircd/inspircd-extras/08aad3548a27d59c41a8104512de85adb6190e6f/2.0/m_opmoderated.cpp
+module m_opmoderated 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_opmoderated.cpp
  description Implements channel mode +U and extban 'U' - moderator mute
+ depends core 2.0
 module m_override_umode 2.0.242 https://raw.github.com/inspircd/inspircd-extras/f57d88050e1b0fb8bec4d20e48540e69f796282d/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
  depends core 2.0
@@ -272,7 +278,9 @@ module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e
  depends core 2.0-2.1
  conflicts m_muteban.so
  conflicts m_chanprotect.so
-module m_regex_re2 2.0.234 https://raw.github.com/inspircd/inspircd-extras/46000d2344b8ca1e4adcadcf8c7edf955f9672d3/2.0/m_regex_re2.cpp
+module m_regex_re2 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_regex_re2.cpp
+ description Regex Provider Module for RE2.
+ depends core 2.0
 module m_rehashsslsignal 2.0.265 https://raw.github.com/inspircd/inspircd-extras/ec63edaa12a5c02dad1dc7b7355e113056d37926/2.0/m_rehashsslsignal.cpp
  description Reload SSL credentials on SIGUSR1
  depends core 2.0
