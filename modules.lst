@@ -154,6 +154,9 @@ module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
 module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
  depends core 2.0
+module m_blockhighlight 2.0.320 https://raw.github.com/inspircd/inspircd-extras/5f22696b9c96b37278307b909680ff31fa6171ce/2.0/m_blockhighlight.cpp
+ description Adds a channel mode which kills clients that mass highlight spam.
+ depends core 2.0
 module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
  description Implements CAP chghost
  depends core 2.0
@@ -187,8 +190,8 @@ module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a8
 module m_extbanredirect 2.0.277 https://raw.github.com/inspircd/inspircd-extras/95c5bd68c6580c963903fcfbf7d6c37ea12e5c46/2.0/m_extbanredirect.cpp
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
  depends core 2.0
-module m_findxline 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_findxline.cpp
- description Provides the FINDXLINE command which lets opers search XLines
+module m_findxline 2.0.320 https://raw.github.com/inspircd/inspircd-extras/dea6ae556b8145ab318e5d60d64f13dffddaf848/2.0/m_findxline.cpp
+ description Provides the FINDXLINE and RMXLINE commands which lets opers search and remove XLines
  depends core 2.0
 module m_flashpolicyd 2.0.271 https://raw.github.com/inspircd/inspircd-extras/77e2fa673315a54538a26f2ebb5ab593b0457006/2.0/m_flashpolicyd.cpp
  description Flash Policy Daemon. Allows Flash IRC clients to connect.
