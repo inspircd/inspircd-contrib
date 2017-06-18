@@ -16,11 +16,11 @@
  * along with this program.      If not, see <http://www.gnu.org/licenses/>.
  */
 #include "inspircd.h"
-/* $ModConfig: <antibotctcp link="http://yoursite.gr" ctcp="VERSION" quitmsg="true" msgonreply="true"> */
+/* $ModConfig: <antibotctcp ctcp="VERSION" quitmsg="true" msgonreply="true" msg="If you are having problems connecting to this server, please get a better client."> */
 /* $ModDesc: Blocks clients not replying to CTCP like botnets/spambots/floodbots. */
 /* $ModAuthor: Nikos `UrL` Papakonstantinou */
 /* $ModAuthorMail: url@mirc.com.gr */
-/* $ModDepends: core 2.0-2.1 */
+/* $ModDepends: core 2.0 */
 
 /*
  * Supports connect class param
@@ -32,7 +32,7 @@ class ModuleAntiBotCTCP : public Module
 	bool quitmsg;
 	bool msgonreply;
 	LocalIntExt ext;
-	std::string link;
+	std::string blockmsg;
 	std::string ctcp;
 	std::string tmp;
  public:
@@ -57,10 +57,7 @@ class ModuleAntiBotCTCP : public Module
 	void OnRehash(User* user)
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("antibotctcp");
-		quitmsg = tag->getBool("quitmsg", true);
-		msgonreply = tag->getBool("msgonreply", true);
 		ctcp = tag->getString("ctcp");
-		link = tag->getString("link");
 		if(ctcp.empty())
 		{
 			ServerInstance->SNO->WriteGlobalSno('a', "m_antibotctcp: Invalid ctcp value in config: %s", ctcp.c_str());
@@ -70,6 +67,9 @@ class ModuleAntiBotCTCP : public Module
 		{
 			tmp = "\001" + ctcp      + " ";
 		}
+		quitmsg = tag->getBool("quitmsg", true);
+		msgonreply = tag->getBool("msgonreply", true);
+		blockmsg = tag->getString("msg");
 	}
 
 	ModResult OnUserRegister(LocalUser* user)
@@ -107,9 +107,7 @@ class ModuleAntiBotCTCP : public Module
 		{
 			if (quitmsg)
 			{
-				std::string qmsg;
-				qmsg = "If you are having problems connecting to this server, please get a better CLIENT or visit " + link + " for more info.";
-				ServerInstance->Users->QuitUser(user, qmsg);
+				ServerInstance->Users->QuitUser(user, blockmsg);
 			}
 			return MOD_RES_DENY;
 		}
