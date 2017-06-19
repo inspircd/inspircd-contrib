@@ -62,14 +62,18 @@ class ModuleAntiBotCTCP : public Module
 		{
 			ServerInstance->SNO->WriteGlobalSno('a', "m_antibotctcp: Invalid ctcp value in config: %s", ctcp.c_str());
 			ServerInstance->Logs->Log("m_antibotctcp",DEFAULT, "m_antibotctcp: Invalid ctcp value in config: %s", ctcp.c_str());
+			ctcp = "VERSION";
 		}
-		else
-		{
-			tmp = "\001" + ctcp      + " ";
-		}
+		tmp = "\001" + ctcp      + " ";
 		quitmsg = tag->getBool("quitmsg", true);
 		msgonreply = tag->getBool("msgonreply", true);
 		blockmsg = tag->getString("msg");
+		if(blockmsg.empty())
+		{
+			ServerInstance->SNO->WriteGlobalSno('a', "m_antibotctcp: Invalid msg value in config: %s, using the default message", blockmsg.c_str());
+			ServerInstance->Logs->Log("m_antibotctcp",DEFAULT, "m_antibotctcp: Invalid msg value in config: %s, using the default message", blockmsg.c_str());
+			blockmsg = "If you are having problems connecting to this server, please get a better client.";
+		}
 	}
 
 	ModResult OnUserRegister(LocalUser* user)
