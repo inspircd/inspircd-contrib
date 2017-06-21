@@ -16,7 +16,7 @@
  * along with this program.      If not, see <http://www.gnu.org/licenses/>.
  */
 #include "inspircd.h"
-/* $ModConfig: <antibotctcp ctcp="VERSION" quitmsg="true" msgonreply="true" msg="If you are having problems connecting to this server, please get a better client."> */
+/* $ModConfig: <antibotctcp ctcp="VERSION" msgonreply="true" accepted="Howdy buddy,you are authorized to use this server!"  declined="You have been blocked!Please get a better client."> */
 /* $ModDesc: Blocks clients not replying to CTCP like botnets/spambots/floodbots. */
 /* $ModAuthor: Nikos `UrL` Papakonstantinou */
 /* $ModAuthorMail: url@mirc.com.gr */
@@ -29,10 +29,10 @@
 
 class ModuleAntiBotCTCP : public Module
 {
-	bool quitmsg;
-	bool msgonreply;
 	LocalIntExt ext;
-	std::string blockmsg;
+	bool msgonreply;
+	std::string accepted;
+	std::string declined;
 	std::string ctcp;
 	std::string tmp;
  public:
@@ -58,30 +58,20 @@ class ModuleAntiBotCTCP : public Module
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("antibotctcp");
 		ctcp = tag->getString("ctcp");
-		if(ctcp.empty())
-		{
-			ServerInstance->SNO->WriteGlobalSno('a', "m_antibotctcp: Invalid ctcp value in config: %s", ctcp.c_str());
-			ServerInstance->Logs->Log("m_antibotctcp",DEFAULT, "m_antibotctcp: Invalid ctcp value in config: %s", ctcp.c_str());
-			ctcp = "VERSION";
-		}
-		tmp = "\001" + ctcp      + " ";
-		quitmsg = tag->getBool("quitmsg", true);
 		msgonreply = tag->getBool("msgonreply", true);
-		blockmsg = tag->getString("msg");
-		if(blockmsg.empty())
-		{
-			ServerInstance->SNO->WriteGlobalSno('a', "m_antibotctcp: Invalid msg value in config: %s, using the default message", blockmsg.c_str());
-			ServerInstance->Logs->Log("m_antibotctcp",DEFAULT, "m_antibotctcp: Invalid msg value in config: %s, using the default message", blockmsg.c_str());
-			blockmsg = "If you are having problems connecting to this server, please get a better client.";
-		}
+		declined = tag->getString("declined");
+		accepted = tag->getString("accepted");
 	}
 
 	ModResult OnUserRegister(LocalUser* user)
 	{
+		if (ctcp.empty())
+		{
+			ctcp = "VERSION";
+		}
 		ConfigTag* tag = user->MyClass->config;
 		if (tag->getBool("antibotctcp", true))
 		{
-			user->WriteNumeric(931, "%s :Malicious or potentially unwanted softwares are not WELCOME here!", user->nick.c_str());
 			user->WriteServ("PRIVMSG %s :\001%s\001", user->nick.c_str(), ctcp.c_str());
 			ext.set(user, 1);
 		}
@@ -92,12 +82,20 @@ class ModuleAntiBotCTCP : public Module
 	{
 		if (command == "NOTICE" && !validated && parameters.size() > 1 && ext.get(user))
 		{
+			tmp = "\001" + ctcp      + " ";
 			if (parameters[1].compare(0, tmp.length(), tmp) == 0)
 			{
 				ext.set(user, 0);
 				if (msgonreply)
 				{
-					user->WriteServ("NOTICE " + user->nick + " :*** Howdy buddy,you are authorized to use this server!");
+					if (accepted.empty())
+					{
+						user->WriteServ("NOTICE " + user->nick + " :*** Howdy buddy,you are authorized to use this server!");
+					}
+					else
+					{
+						user->WriteServ("NOTICE " + user->nick + " :*** " + accepted);
+					}
 				}
 				return MOD_RES_DENY;
 			}
@@ -109,9 +107,23 @@ class ModuleAntiBotCTCP : public Module
 	{
 		if (ext.get(user))
 		{
-			if (quitmsg)
+			if (msgonreply)
 			{
-				ServerInstance->Users->QuitUser(user, blockmsg);
+				if (declined.empty())
+				{
+					ServerInstance->Users->QuitUser(user, "You have been blocked!Please get a better client.");
+					ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
+				}
+				else
+				{
+					ServerInstance->Users->QuitUser(user, declined);
+					ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
+				}
+			}
+			else
+			{
+				ServerInstance->Users->QuitUser(user, "Disconnected");
+				ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
 			}
 			return MOD_RES_DENY;
 		}
