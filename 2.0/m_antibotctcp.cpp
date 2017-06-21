@@ -16,7 +16,7 @@
  * along with this program.      If not, see <http://www.gnu.org/licenses/>.
  */
 #include "inspircd.h"
-/* $ModConfig: <antibotctcp ctcp="VERSION" msgonreply="true" accepted="Howdy buddy,you are authorized to use this server!"  declined="You have been blocked!Please get a better client."> */
+/* $ModConfig: <antibotctcp ctcp="VERSION" msgonreply="true" showlogs="true" accepted="Howdy buddy,you are authorized to use this server!"  declined="You have been blocked!Please get a better client."> */
 /* $ModDesc: Blocks clients not replying to CTCP like botnets/spambots/floodbots. */
 /* $ModAuthor: Nikos `UrL` Papakonstantinou */
 /* $ModAuthorMail: url@mirc.com.gr */
@@ -31,10 +31,10 @@ class ModuleAntiBotCTCP : public Module
 {
 	LocalIntExt ext;
 	bool msgonreply;
+	bool showlogs;
 	std::string accepted;
 	std::string declined;
 	std::string ctcp;
-	std::string tmp;
  public:
 	ModuleAntiBotCTCP()
 	: ext("ctcptime_wait", this)
@@ -58,6 +58,7 @@ class ModuleAntiBotCTCP : public Module
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("antibotctcp");
 		ctcp = tag->getString("ctcp");
+		showlogs = tag->getBool("showlogs", true);
 		msgonreply = tag->getBool("msgonreply", true);
 		declined = tag->getString("declined");
 		accepted = tag->getString("accepted");
@@ -82,8 +83,7 @@ class ModuleAntiBotCTCP : public Module
 	{
 		if (command == "NOTICE" && !validated && parameters.size() > 1 && ext.get(user))
 		{
-			tmp = "\001" + ctcp      + " ";
-			if (parameters[1].compare(0, tmp.length(), tmp) == 0)
+			if (parameters[1].size() > 1 && parameters[1][0] == 0x1 && parameters[1].compare(1, ctcp.length(), ctcp) == 0)
 			{
 				ext.set(user, 0);
 				if (msgonreply)
@@ -112,17 +112,18 @@ class ModuleAntiBotCTCP : public Module
 				if (declined.empty())
 				{
 					ServerInstance->Users->QuitUser(user, "You have been blocked!Please get a better client.");
-					ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
 				}
 				else
 				{
 					ServerInstance->Users->QuitUser(user, declined);
-					ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
 				}
 			}
 			else
 			{
 				ServerInstance->Users->QuitUser(user, "Disconnected");
+			}
+			if (showlogs)
+			{
 				ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
 			}
 			return MOD_RES_DENY;
