@@ -65,13 +65,13 @@ class ModuleAntiBotCTCP : public Module
 
 	ModResult OnUserRegister(LocalUser* user)
 	{
-		if (ctcp.empty())
-		{
-			ctcp = "VERSION";
-		}
 		ConfigTag* tag = user->MyClass->config;
 		if (tag->getBool("antibotctcp", true))
 		{
+			if (ctcp.empty())
+			{
+				ctcp = "VERSION";
+			}
 			user->WriteServ("PRIVMSG %s :\001%s\001", user->nick.c_str(), ctcp.c_str());
 			ext.set(user, 1);
 		}
