@@ -19,7 +19,7 @@
 
 /* $ModAuthor: Peter "SaberUK" Powell */
 /* $ModAuthorMail: petpow@saberuk.com */
-/* $ModConfig: <blockhighlight minlen="50" minusernum="10" reason="Mass highlight" stripcolor="yes"> */ 
+/* $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes"> */
 /* $ModDesc: Adds a channel mode which kills clients that mass highlight spam. */
 /* $ModDepends: core 2.0 */
 
@@ -28,6 +28,7 @@
 class ModuleBlockHighlight : public Module
 {
 	SimpleChannelModeHandler mode;
+	bool ignoreextmsg;
 	unsigned int minlen;
 	unsigned int minusers;
 	std::string reason;
@@ -44,14 +45,16 @@ public:
 		OnRehash(NULL);
 		Implementation eventList[] = { I_OnRehash, I_OnUserPreMessage, I_OnUserPreNotice };
 		ServerInstance->Modules->Attach(eventList, this, sizeof(eventList)/sizeof(Implementation));
+		ServerInstance->Modules->AddService(mode);
 	}
 
 	void OnRehash(User*)
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("blockhighlight");
+		ignoreextmsg = tag->getBool("ignoreextmsg", true);
 		minlen = tag->getInt("minlen", 50);
 		minusers = tag->getInt("minusernum", 10);
-		reason = tag->getString("reason", "Mass highlight");
+		reason = tag->getString("reason", "Mass highlight spam is not allowed");
 		stripcolor = tag->getBool("stripcolor", true);
 
 		if (minlen < 1)
@@ -72,6 +75,14 @@ public:
 
 		Channel* const chan = static_cast<Channel*>(dest);
 		if (chan->GetUsers()->size() < minusers)
+			return MOD_RES_PASSTHRU;
+
+		// We only work if the channel mode is enabled.
+		if (!chan->IsModeSet(mode.GetModeChar()))
+			return MOD_RES_PASSTHRU;
+
+		// Prevent the enumeration of channel members if enabled.
+		if (!chan->IsModeSet('n') && !chan->HasUser(user) && ignoreextmsg)
 			return MOD_RES_PASSTHRU;
 
 		std::string message = text;
