@@ -124,7 +124,7 @@ class ModuleAntiBotCTCP : public Module
 			}
 			if (showlogs)
 			{
-				ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection from %s (%s) was blocked by m_antibotctcp", user->GetFullRealHost().c_str(), user->GetIPString());
+				ServerInstance->SNO->WriteGlobalSno('a', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_antibotctcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
 			}
 			return MOD_RES_DENY;
 		}
