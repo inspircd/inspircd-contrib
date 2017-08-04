@@ -154,7 +154,7 @@ module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
 module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
  depends core 2.0
-module m_blockhighlight 2.0.320 https://raw.github.com/inspircd/inspircd-extras/5f22696b9c96b37278307b909680ff31fa6171ce/2.0/m_blockhighlight.cpp
+module m_blockhighlight 2.0.325 https://raw.github.com/inspircd/inspircd-extras/ca27730011addef8cfbba872e998a9d6b54b79fc/2.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 2.0
 module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
@@ -242,6 +242,9 @@ module m_joinpartspam 2.0.279 https://raw.github.com/inspircd/inspircd-extras/f7
  depends core 2.0
 module m_lusersnoservices 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
  description Adds an extra line to LUSERS output to show global user count minus "clients" from U-Lines servers
+ depends core 2.0
+module m_messagelength 2.0.320 https://raw.github.com/inspircd/inspircd-extras/c88df995b197e3f19e5243f3636037baae6079e1/2.0/m_messagelength.cpp
+ description Adds a channel mode which limits the length of messages.
  depends core 2.0
 module m_namedstats 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_namedstats.cpp
  description Allows /STATS queries by name
@@ -353,6 +356,9 @@ module m_forceident 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17
 module m_identmeta 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_identmeta.cpp
  depends core 3.0
  description Stores the ident given in USER as metadata.
+module m_messagelength 3.0.320 https://raw.github.com/inspircd/inspircd-extras/c88df995b197e3f19e5243f3636037baae6079e1/3.0/m_messagelength.cpp
+ description Adds a channel mode which limits the length of messages.
+ depends core 3.0
 module m_rotatelog 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_rotatelog.cpp
  depends core 3.0
  description Rotates the log files after a defined period.
