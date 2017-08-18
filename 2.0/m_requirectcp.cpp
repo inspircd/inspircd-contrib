@@ -41,6 +41,7 @@ class ModuleRequireCTCP : public Module
 
 	void init()
 	{
+		ServerInstance->SNO->EnableSnomask('p', "REQUIRECTCP");
 		ServerInstance->Modules->AddService(ext);
 		Implementation eventlist[] = { I_OnUserRegister, I_OnPreCommand, I_OnCheckReady, I_OnRehash };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
@@ -99,7 +100,7 @@ class ModuleRequireCTCP : public Module
 			{
 				ServerInstance->Users->QuitUser(user, declined);
 			}
-			ServerInstance->SNO->WriteGlobalSno('S', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
+			ServerInstance->SNO->WriteGlobalSno('p', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
