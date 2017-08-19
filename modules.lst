@@ -175,6 +175,9 @@ module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f
 module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extras/b517adbc1aedcabdc9bc9e5fd4d895d85fca82dd/2.0/m_conn_delayed_join.cpp
  description Replaces m_conn_join.so and forces users to join the specified channel(s) after a specified delay on connect
  depends core 2.0
+module m_conn_vhost 2.0.320 https://raw.github.com/inspircd/inspircd-extras/ac065a98c32a190cc08b91111d3529c586cc9caa/2.0/m_conn_vhost.cpp
+ description Adds a "vhost" option to connect blocks
+ depends core 2.0
 module m_custompenalty 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
  depends core 2.0
@@ -295,6 +298,9 @@ module m_replaymsg 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169
  depends core 2.0
 module m_require_auth 2.0.276 https://raw.github.com/inspircd/inspircd-extras/5e2bbe2dfee12b96914b90dd8734988947cbc1db/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
+ depends core 2.0
+module m_requirectcp 2.0.249 https://raw.github.com/inspircd/inspircd-extras/fd3681de045ce3f91ee2ac59eb186511a343d329/2.0/m_requirectcp.cpp
+ description Blocks clients not replying to CTCP like botnets/spambots/floodbots.
  depends core 2.0
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
  description Rotates the log files after a defined period.
