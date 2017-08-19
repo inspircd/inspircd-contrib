@@ -23,8 +23,8 @@
 /* $ModDepends: core 2.0 */
 
 /*
- * Supports connect class param & Sno(S).
- * Add requirectcp="true" which enables or disables the module on that port(s).
+ * Supports connect class param & Sno(p).
+ * Add requirectcp="false" to disable the module on that port(s).
  */
 
 class ModuleRequireCTCP : public Module
