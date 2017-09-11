@@ -138,6 +138,9 @@ module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
+module m_anticaps 2.0.346 https://raw.github.com/inspircd/inspircd-extras/9dcc3c67787ef10453c845533f915858018fb247/2.0/m_anticaps.cpp
+ description Provides support for punishing users that send capitalised messages.
+ depends core 2.0
 module m_antirandom 2.0.307 https://raw.github.com/inspircd/inspircd-extras/d1b4de0e2e17ca0beb56a419b57cf0b86834e4f9/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
@@ -261,8 +264,8 @@ module m_nickin001 2.0.209 https://raw.github.com/inspircd/inspircd-extras/dffe5
 module m_nocreate 2.0.295 https://raw.github.com/inspircd/inspircd-extras/ea7e20a85bbc81f02866e30ec9b3afe510ee1e1e/2.0/m_nocreate.cpp
  description Adds oper command '/nocreate' to block a user from creating new channels
  depends core 2.0
-module m_noctcp_user 2.0.139 https://raw.github.com/inspircd/inspircd-extras/cc6ac2536e51800f208ea58c73028bb196bf8f48/2.0/m_noctcp_user.cpp
- description Provides support for unreal-style user mode +T
+module m_noctcp_user 2.0.345 https://raw.github.com/inspircd/inspircd-extras/554758a4bb29a4b5c8a1dabdb564be3e01bb4871/2.0/m_noctcp_user.cpp
+ description Provides user mode +T to block CTCPs
  depends core 2.0
 module m_nooponcreate 2.0.210 https://raw.github.com/inspircd/inspircd-extras/87e016252d6f6fd4968a5fbe2ba87073e69219ab/2.0/m_nooponcreate.cpp
  description Don't op normal users when they create a new channel
