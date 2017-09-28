@@ -44,9 +44,9 @@ class STSCap
 			data->wanted.push_back(cap);
 	}
 
-	void SetPolicy(const std::string& newpolicystr)
+	void SetPolicy(const std::string& name, const std::string& newpolicystr)
 	{
-		cap = "draft/sts=" + newpolicystr;
+		cap = name + "=" + newpolicystr;
 	}
 };
 
@@ -82,6 +82,7 @@ class STSPolicy
 class ModuleIRCv3STS : public Module
 {
 	STSCap cap;
+	STSCap draftcap;
 	STSPolicy policy;
 
  public:
@@ -118,12 +119,14 @@ class ModuleIRCv3STS : public Module
 		policy = newpolicy;
 		const std::string newpolicystr = policy.GetString();
 		ServerInstance->Logs->Log("m_ircv3_sts", DEFAULT, "STS: policy changed to \"%s\"", newpolicystr.c_str());
-		cap.SetPolicy(newpolicystr);
+		cap.SetPolicy("sts", newpolicystr);
+		draftcap.SetPolicy("draft/sts", newpolicystr);
 	}
 
 	void OnEvent(Event& ev)
 	{
 		cap.HandleEvent(ev);
+		draftcap.HandleEvent(ev);
 	}
 
 	Version GetVersion()
