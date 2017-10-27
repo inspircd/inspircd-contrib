@@ -782,17 +782,11 @@ class ModuleAntiRandom : public Module
 
 	virtual void OnRehash(User* user)
 	{
-		ConfigReader myConf;
-		std::string tmp;
+		ConfigTag* conftag = ServerInstance->Config->ConfValue("antirandom");
 
-		this->ShowFailedConnects = myConf.ReadFlag("antirandom", "showfailedconnects", "1", 0);
-		this->DebugMode = myConf.ReadFlag("antirandom", "debugmode", "0", 0);
-
-		tmp = myConf.ReadValue("antirandom", "threshold", 0);
-		if (!tmp.empty())
-			this->Threshold = atoi(tmp.c_str());
-		else
-			this->Threshold = 10; // fairly safe
+		this->ShowFailedConnects = conftag->getBool("showfailedconnects", true);
+		this->DebugMode = conftag->getBool("debugmode");
+		this->Threshold = conftag->getInt("threshold", 10);
 
 		// Sanity checks
 		if (this->Threshold < 1)
@@ -802,7 +796,7 @@ class ModuleAntiRandom : public Module
 			this->Threshold = 100;
 
 		this->BanAction = ANTIRANDOM_ACT_NONE;
-		tmp = myConf.ReadValue("antirandom", "banaction", 0);
+		std::string tmp = conftag->getString("banaction");
 
 		if (tmp == "GLINE")
 		{
@@ -817,7 +811,7 @@ class ModuleAntiRandom : public Module
 			this->BanAction = ANTIRANDOM_ACT_KILL;
 		}
 
-		tmp = myConf.ReadValue("antirandom", "banduration", 0);
+		tmp = conftag->getString("banduration");
 		if (!tmp.empty())
 			this->BanDuration = ServerInstance->Duration(tmp.c_str());
 			// Sanity check
@@ -826,7 +820,7 @@ class ModuleAntiRandom : public Module
 		else
 			this->BanDuration = 86400; // One day.
 
-		tmp = myConf.ReadValue("antirandom", "banreason", 0);
+		tmp = conftag->getString("banreason");
 		if (!tmp.empty())
 			this->BanReason = tmp;
 		else

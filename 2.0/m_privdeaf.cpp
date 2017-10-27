@@ -75,9 +75,9 @@ class ModulePrivdeaf : public Module
 
 	virtual void OnRehash(User* user)
 	{
-		ConfigReader conf;
-		operoverride = conf.ReadFlag("privdeaf", "operoverride", "1", 0);
-		ulineoverride = conf.ReadFlag("privdeaf", "ulineoverride", "1", 0);
+		ConfigTag* tag = ServerInstance->Config->ConfValue("privdeaf");
+		operoverride = tag->getBool("operoverride", true);
+		ulineoverride = tag->getBool("ulineoverride", true);
 	}
 
 	virtual ModResult OnUserPreNotice(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
