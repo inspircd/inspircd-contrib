@@ -141,7 +141,7 @@ module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f
 module m_anticaps 2.0.346 https://raw.github.com/inspircd/inspircd-extras/9dcc3c67787ef10453c845533f915858018fb247/2.0/m_anticaps.cpp
  description Provides support for punishing users that send capitalised messages.
  depends core 2.0
-module m_antirandom 2.0.307 https://raw.github.com/inspircd/inspircd-extras/d1b4de0e2e17ca0beb56a419b57cf0b86834e4f9/2.0/m_antirandom.cpp
+module m_antirandom 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_ascii 2.0.287 https://raw.github.com/inspircd/inspircd-extras/de316014068178ac74ac5464729a0f9bbe98f353/2.0/m_ascii.cpp
@@ -285,8 +285,11 @@ module m_override_umode 2.0.242 https://raw.github.com/inspircd/inspircd-extras/
 module m_pretenduser 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_pretenduser.cpp
  description Provides the PRETENDUSER command that lets opers execute commands on behalf of other users
  depends core 2.0
-module m_privdeaf 2.0.161 https://raw.github.com/inspircd/inspircd-extras/e980fcaa447272a3cd7b4a8f9dc64589b3271d7d/2.0/m_privdeaf.cpp
+module m_privdeaf 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_privdeaf.cpp
  description Provides support for blocking any private messages (umode +D)
+ depends core 2.0
+module m_qrcode 2.0.354 https://raw.github.com/inspircd/inspircd-extras/ec259a7bd4cd0fc18a4439821a0187c350088a1a/2.0/m_qrcode.cpp
+ description Provides support for QR code generation via the /QRCODE command.
  depends core 2.0
 module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e1cd4534490ea345a68c8931c9f17ade6a8/2.0/m_quietban.cpp
  description Provides channel mode +q for 'quiet' bans.
