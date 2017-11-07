@@ -225,9 +225,6 @@ module m_hideidle 2.0.247 https://raw.github.com/inspircd/inspircd-extras/a499f8
 module m_identmeta 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_identmeta.cpp
  description Stores the ident given in USER as metadata.
  depends core 2.0
-module m_invisible 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_invisible.cpp
- description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
- depends core 2.0
 module m_invitenotify 2.0.181 https://raw.github.com/inspircd/inspircd-extras/cf9b1d041f8c8bf5917f67d90470dfc4cb800d43/2.0/m_invitenotify.cpp
  description Implements invite-notify
  depends core 2.0
@@ -314,7 +311,7 @@ module m_requirectcp 2.0.249 https://raw.github.com/inspircd/inspircd-extras/fd3
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
  description Rotates the log files after a defined period.
  depends core 2.0
-module m_rpg 2.0.269 https://raw.github.com/inspircd/inspircd-extras/a6b9ab0191a8a33e2b719bc43b591d8ebe362718/2.0/m_rpg.cpp
+module m_rpg 2.0.358 https://raw.github.com/inspircd/inspircd-extras/f508cf46da55c9921790861b35c89a10fb90cdbb/2.0/m_rpg.cpp
  description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
  depends core 2.0
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
@@ -338,24 +335,6 @@ module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c90
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 2.0
-module m_invisible 2.1.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.1/m_invisible.cpp
- description Allows for opered clients to join channels without being seen, similar to unreal 3.1 +I mode
- depends core 2.1
-module m_antibear 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_antibear.cpp
- description Sends a numeric on connect which cripples a common type of trojan/spambot
- depends core 2.2
-module m_antibottler 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_antibottler.cpp
- description Changes the ident of connecting bottler clients to 'bottler'
- depends core 2.2
-module m_antirandom 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_antirandom.cpp
- description A module to prevent against bots using random patterns.
- depends core 2.2
-module m_changecap 2.2.182 https://raw.github.com/inspircd/inspircd-extras/8fbd4d8af8c050ff2183828e11fe57bf13ca7a16/2.2/m_changecap.cpp
- description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name
- depends core 2.2
-module m_noctcp_user 2.2.176 https://raw.github.com/inspircd/inspircd-extras/3bd31ed11b69f393a87dbe8d94acbd7033654785/2.2/m_noctcp_user.cpp
- description Provides support for unreal-style user mode +T
- depends core 2.2
 module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autodrop.cpp
  depends core 3.0
  description Allows clients to be automatically dropped if they execute certain commands before registration.
