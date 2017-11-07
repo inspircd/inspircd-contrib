@@ -49,7 +49,7 @@ static void send_message(Channel *c, const std::string &source, std::string text
 	/* 510 - colon prefixing source - PRIVMSG - colon prefixing text - 3 spaces = 498
 	 * Subtracting the source and the channel name to get how many characters we are allowed left
 	 * If doing an action, subtract an additional 9 for the startind and ending ASCII character 1, ACTION and space */
-	int allowedMessageLength = 498 - source.size() - c->name.size() - (action ? 9 : 0);
+	size_t allowedMessageLength = 498 - source.size() - c->name.size() - (action ? 9 : 0);
 	/* This will keep attempting to determine if there is text to send */
 	do
 	{
