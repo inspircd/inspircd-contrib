@@ -14,7 +14,7 @@
 #include "inspircd.h"
 #include "xline.h"
 
-/* $ModDesc: Sends a numeric on connect which cripples a common type of trojan/spambot */
+/* $ModDesc: Sends a numeric on connect which cripples the bear.txt trojan/spambot */
 /* $ModDepends: core 2.0-2.1 */
 
 class ModuleAntiBear : public Module
@@ -40,7 +40,7 @@ class ModuleAntiBear : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("Sends a numeric on connect which cripples a common type of trojan/spambot",VF_NONE);
+		return Version("Sends a numeric on connect which cripples the bear.txt trojan/spambot");
 	}
 
 	virtual ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser *user, bool validated, const std::string &original_line)
