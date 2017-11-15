@@ -132,8 +132,8 @@ module m_xmlsocket 1.2.81 https://raw.github.com/inspircd/inspircd-extras/0ae678
 module m_accounthost 2.0.220 https://raw.github.com/inspircd/inspircd-extras/c421705f80863c1d27bd59c33732975ef739cd7e/2.0/m_accounthost.cpp
  description Allows setting hosts on users based on their account name on login.
  depends core 2.0
-module m_antibear 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibear.cpp
- description Sends a numeric on connect which cripples a common type of trojan/spambot
+module m_antibear 2.0.363 https://raw.github.com/inspircd/inspircd-extras/c0994b7a60c6a683fa4fc156fbfc16cc2ca805df/2.0/m_antibear.cpp
+ description Sends a numeric on connect which cripples the bear.txt trojan/spambot
  depends core 2.0-2.1
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
@@ -171,6 +171,9 @@ module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e229
  depends core 2.0
 module m_ciphersuitejoin 2.0.245 https://raw.github.com/inspircd/inspircd-extras/2739d28db74fcaaf6699a88c15c92f2fe0d19623/2.0/m_ciphersuitejoin.cpp
  description Adds channel list mode +Z which only lets clients join who use a ciphersuite on the list
+ depends core 2.0
+module m_classban 2.0.361 https://raw.github.com/inspircd/inspircd-extras/3db8bf7af3fc55d4f8d43534f59e05a62a43963d/2.0/m_classban.cpp
+ description Provides extban 'n' - Connect class ban
  depends core 2.0
 module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_conn_banner.cpp
  description Displays a static text to every connecting user before registration
@@ -335,12 +338,18 @@ module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c90
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 2.0
+module m_anticaps 3.0.364 https://raw.github.com/inspircd/inspircd-extras/e8fc63a9c70c32e56874e935b06969a22ed6fc61/3.0/m_anticaps.cpp
+ description Provides support for punishing users that send capitalised messages.
+ depends core 3.0
 module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autodrop.cpp
  depends core 3.0
  description Allows clients to be automatically dropped if they execute certain commands before registration.
 module m_autokick 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autokick.cpp
  depends core 3.0
  description Automatically kicks people who match a banned mask.
+module m_blockhighlight 3.0.364 https://raw.github.com/inspircd/inspircd-extras/e8fc63a9c70c32e56874e935b06969a22ed6fc61/3.0/m_blockhighlight.cpp
+ description Adds a channel mode which kills clients that mass highlight spam.
+ depends core 3.0
 module m_custompenalty 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_custompenalty.cpp
  depends core 3.0
  description Allows the customisation of penalty levels.
@@ -352,6 +361,9 @@ module m_identmeta 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee177
  description Stores the ident given in USER as metadata.
 module m_messagelength 3.0.320 https://raw.github.com/inspircd/inspircd-extras/c88df995b197e3f19e5243f3636037baae6079e1/3.0/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
+ depends core 3.0
+module m_qrcode 3.0.364 https://raw.github.com/inspircd/inspircd-extras/e8fc63a9c70c32e56874e935b06969a22ed6fc61/3.0/m_qrcode.cpp
+ description Provides support for QR code generation via the /QRCODE command.
  depends core 3.0
 module m_rotatelog 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_rotatelog.cpp
  depends core 3.0
