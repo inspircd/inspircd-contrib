@@ -23,8 +23,8 @@
 /* $ModDepends: core 2.0 */
 
 /*
- * Supports connect class param & Sno(p).
- * Add requirectcp="false" to disable the module on that port(s).
+ * Supports Snomask(p)
+ * Supports connect class param requirectcp="false" to disable the module on that port(s).
  */
 
 class ModuleRequireCTCP : public Module
