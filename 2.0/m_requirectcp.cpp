@@ -19,7 +19,7 @@
 /* $ModConfig: <requirectcp ctcp="VERSION" accepted="Howdy buddy,you are authorized to use this server!" declined="You have been blocked!Please get a better client."> */
 /* $ModDesc: Blocks clients not replying to CTCP like botnets/spambots/floodbots. */
 /* $ModAuthor: Nikos `UrL` Papakonstantinou */
-/* $ModAuthorMail: url.euro@gmail.com */
+/* $ModAuthorMail: info@0x1.gr */
 /* $ModDepends: core 2.0 */
 
 /*
