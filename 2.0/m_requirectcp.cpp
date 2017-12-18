@@ -100,7 +100,11 @@ class ModuleRequireCTCP : public Module
 			{
 				ServerInstance->Users->QuitUser(user, declined);
 			}
-			ServerInstance->SNO->WriteGlobalSno('p', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
+			if (ext.get(user) != 3)
+			{
+				ext.set(user, 3);
+				ServerInstance->SNO->WriteGlobalSno('p', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
+			}
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
