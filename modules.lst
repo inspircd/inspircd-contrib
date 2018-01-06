@@ -157,6 +157,9 @@ module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
 module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
  depends core 2.0
+module m_bannegate 2.0.368 https://raw.github.com/inspircd/inspircd-extras/23c3fba9f768e061df71425144cd53465f53ecfb/2.0/m_bannegate.cpp
+ description Enables ban negation by prefixing the match sequence with ~
+ depends core 2.0
 module m_blockhighlight 2.0.325 https://raw.github.com/inspircd/inspircd-extras/ca27730011addef8cfbba872e998a9d6b54b79fc/2.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 2.0
@@ -334,6 +337,12 @@ module m_stats_unlinked 2.0.279 https://raw.github.com/inspircd/inspircd-extras/
  depends core 2.0
 module m_svsoper 2.0.189 https://raw.github.com/inspircd/inspircd-extras/ea70c902274356d9aada0ac28d49ec7ea636fe40/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
+ depends core 2.0
+module m_timedstaticquit 2.0.366 https://raw.github.com/inspircd/inspircd-extras/4c86eddaccf3c81ef1c6edc0e354a31bfc40f585/2.0/m_timedstaticquit.cpp
+ description Replaces the quit message of a quitting user if they have been connected for less than a configurable time
+ depends core 2.0
+module m_topicall 2.0.367 https://raw.github.com/inspircd/inspircd-extras/c75c4f6e058868c9eff31bd2292985f702e2d2c1/2.0/m_topicall.cpp
+ description Provides the /TOPICALL command that changes the topic on all channels
  depends core 2.0
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
