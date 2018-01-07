@@ -45,7 +45,7 @@ class AntiCapsSettings
 	const uint16_t minlen;
 	const uint8_t percent;
 
-	AntiCapsSettings(AntiCapsMethod Method, uint16_t MinLen, uint8_t Percent)
+	AntiCapsSettings(const AntiCapsMethod& Method, const uint16_t& MinLen, const uint8_t& Percent)
 		: method(Method)
 		, minlen(MinLen)
 		, percent(Percent)
@@ -199,12 +199,12 @@ class ModuleAntiCaps : public Module
 		uppercase.reset();
 		const std::string upper = tag->getString("uppercase", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		for (std::string::const_iterator iter = upper.begin(); iter != upper.end(); ++iter)
-			uppercase.set(*iter);
+			uppercase.set(static_cast<unsigned char>(*iter));
 
 		lowercase.reset();
 		const std::string lower = tag->getString("lowercase", "abcdefghijklmnopqrstuvwxyz");
 		for (std::string::const_iterator iter = lower.begin(); iter != lower.end(); ++iter)
-			lowercase.set(*iter);
+			lowercase.set(static_cast<unsigned char>(*iter));
 	}
 
 	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char, CUList&, MessageType) CXX11_OVERRIDE
@@ -262,9 +262,10 @@ class ModuleAntiCaps : public Module
 		size_t upper = 0;
 		for (std::string::const_iterator iter = text_begin; iter != text_end; ++iter)
 		{
-			if (uppercase.test(*iter))
+			unsigned char chr = static_cast<unsigned char>(*iter);
+			if (uppercase.test(chr))
 				upper += 1;
-			else if (!lowercase.test(*iter))
+			else if (!lowercase.test(chr))
 				length -= 1;
 		}
 
@@ -278,7 +279,7 @@ class ModuleAntiCaps : public Module
 		if (percent < config->percent)
 			return MOD_RES_PASSTHRU;
 
-		std::string message = InspIRCd::Format("Your messsage exceeded the %d%% upper case character threshold for %s",
+		std::string message = InspIRCd::Format("Your message exceeded the %d%% upper case character threshold for %s",
 			config->percent, channel->name.c_str());
 
 		switch (config->method)
