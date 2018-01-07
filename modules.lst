@@ -138,7 +138,7 @@ module m_antibear 2.0.363 https://raw.github.com/inspircd/inspircd-extras/c0994b
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_anticaps 2.0.346 https://raw.github.com/inspircd/inspircd-extras/9dcc3c67787ef10453c845533f915858018fb247/2.0/m_anticaps.cpp
+module m_anticaps 2.0.371 https://raw.github.com/inspircd/inspircd-extras/2b99aa31b4795f370199f7376d7d5b1116659cb7/2.0/m_anticaps.cpp
  description Provides support for punishing users that send capitalised messages.
  depends core 2.0
 module m_antirandom 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_antirandom.cpp
@@ -347,7 +347,7 @@ module m_topicall 2.0.367 https://raw.github.com/inspircd/inspircd-extras/c75c4f
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 2.0
-module m_anticaps 3.0.364 https://raw.github.com/inspircd/inspircd-extras/e8fc63a9c70c32e56874e935b06969a22ed6fc61/3.0/m_anticaps.cpp
+module m_anticaps 3.0.371 https://raw.github.com/inspircd/inspircd-extras/2b99aa31b4795f370199f7376d7d5b1116659cb7/3.0/m_anticaps.cpp
  description Provides support for punishing users that send capitalised messages.
  depends core 3.0
 module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autodrop.cpp
