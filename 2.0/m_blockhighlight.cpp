@@ -1,6 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
+ *   Copyright (C) 2018 Techtronix Development Team <info@techtronix.net>
  *   Copyright (C) 2017 Peter Powell <petpow@saberuk.com>
  *   Copyright (C) 2015 Attila Molnar <attilamolnar@hush.com>
  *
@@ -19,7 +20,7 @@
 
 /* $ModAuthor: Peter "SaberUK" Powell */
 /* $ModAuthorMail: petpow@saberuk.com */
-/* $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes"> */
+/* $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes" operoverride="yes"> */
 /* $ModDesc: Adds a channel mode which kills clients that mass highlight spam. */
 /* $ModDepends: core 2.0 */
 
@@ -33,6 +34,7 @@ class ModuleBlockHighlight : public Module
 	unsigned int minusers;
 	std::string reason;
 	bool stripcolor;
+	bool operoverride;
 
 public:
 	ModuleBlockHighlight()
@@ -56,6 +58,7 @@ public:
 		minusers = tag->getInt("minusernum", 10);
 		reason = tag->getString("reason", "Mass highlight spam is not allowed");
 		stripcolor = tag->getBool("stripcolor", true);
+		operoverride = tag->getBool("operoverride", true);
 
 		if (minlen < 1)
 			minlen = 1;
@@ -79,6 +82,14 @@ public:
 
 		// We only work if the channel mode is enabled.
 		if (!chan->IsModeSet(mode.GetModeChar()))
+			return MOD_RES_PASSTHRU;
+
+		// Exempt IRC operators if enabled
+		if (operoverride && IS_OPER(user))
+			return MOD_RES_PASSTHRU;
+
+		// Play nice with exemptchanops
+		if (ServerInstance->OnCheckExemption(user, chan, "blockhighlight") == MOD_RES_ALLOW)
 			return MOD_RES_PASSTHRU;
 
 		// Prevent the enumeration of channel members if enabled.
