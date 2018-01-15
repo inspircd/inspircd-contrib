@@ -53,16 +53,16 @@ public:
 		stripcolor = tag->getBool("stripcolor", true);
 	}
 
-	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char, CUList&, MessageType)
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
-		if ((target_type != TYPE_CHANNEL) || (!IS_LOCAL(user)))
+		if ((target.type != MessageTarget::TYPE_CHANNEL) || (!IS_LOCAL(user)))
 			return MOD_RES_PASSTHRU;
 
 		// Must be at least minlen long
-		if (text.length() < minlen)
+		if (details.text.length() < minlen)
 			return MOD_RES_PASSTHRU;
 
-		Channel* const chan = static_cast<Channel*>(dest);
+		Channel* const chan = target.Get<Channel>();
 		if (chan->GetUsers().size() < minusers)
 			return MOD_RES_PASSTHRU;
 
@@ -74,7 +74,7 @@ public:
 		if (!chan->IsModeSet(noextmsgmode) && !chan->HasUser(user) && ignoreextmsg)
 			return MOD_RES_PASSTHRU;
 
-		std::string message = text;
+		std::string message(details.text);
 		if (stripcolor)
 			InspIRCd::StripColor(message);
 

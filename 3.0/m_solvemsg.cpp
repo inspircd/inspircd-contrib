@@ -94,13 +94,13 @@ class ModuleSolveMessage : public Module
 		ext.set(user, problem);
 	}
 
-	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string&, char, CUList&, MessageType) CXX11_OVERRIDE
+	ModResult OnUserPreMessage(User* user, const MessageTarget& msgtarget, MessageDetails& details) CXX11_OVERRIDE
 	{
 		LocalUser* source = IS_LOCAL(user);
-		if (!source || source->exempt || target_type != TYPE_USER)
+		if (!source || source->exempt || msgtarget.type != MessageTarget::TYPE_USER)
 			return MOD_RES_PASSTHRU;
 
-		User* target = static_cast<User*>(dest);
+		User* target = msgtarget.Get<User>();
 		if (target->server->IsULine())
 			return MOD_RES_PASSTHRU;
 

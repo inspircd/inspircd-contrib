@@ -19,8 +19,8 @@
 /// $CompilerFlags: find_compiler_flags("libqrencode")
 /// $LinkerFlags: find_linker_flags("libqrencode")
 
-/// $ModAuthor: Peter "SaberUK" Powell */
-/// $ModAuthorMail: petpow@saberuk.com */
+/// $ModAuthor: Peter "SaberUK" Powell
+/// $ModAuthorMail: petpow@saberuk.com
 /// $ModDesc: Provides support for QR code generation via the /QRCODE command.
 /// $ModConfig: <qrcode blockchar=" " darkcolour="black" lightcolour="white">
 /// $ModDepends: core 3.0

@@ -34,8 +34,8 @@ class MessageLengthMode : public ParamMode<MessageLengthMode, LocalIntExt>
 
 	ModeAction OnSet(User*, Channel* channel, std::string& parameter)
 	{
-		long length = ConvToInt(parameter);
-		if (length < 1 || length > ServerInstance->Config->Limits.MaxLine)
+		size_t length = ConvToNum<size_t>(parameter);
+		if (length == 0 || length > ServerInstance->Config->Limits.MaxLine)
 			return MODEACTION_DENY;
 
 		this->ext.set(channel, length);
@@ -59,23 +59,23 @@ class ModuleMessageLength : public Module
 	{
 	}
 
-	ModResult OnUserPreMessage(User*, void* dest, int target_type, std::string& text, char, CUList&, MessageType)
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
-		if (target_type != TYPE_CHANNEL)
+		if (target.type != MessageTarget::TYPE_CHANNEL)
 			return MOD_RES_PASSTHRU;
 
-		Channel* channel = static_cast<Channel*>(dest);
+		Channel* channel = target.Get<Channel>();
 		if (!channel->IsModeSet(&mode))
 			return MOD_RES_PASSTHRU;
 
-		int msglength = mode.ext.get(channel);
-		if (text.length() > msglength)
-			text.resize(msglength);
+		unsigned int msglength = mode.ext.get(channel);
+		if (details.text.length() > msglength)
+			details.text.resize(msglength);
 
 		return MOD_RES_PASSTHRU;
 	}
 
-	Version GetVersion()
+	Version GetVersion() CXX11_OVERRIDE
 	{
 		return Version("Adds a channel mode which limits the length of messages.", VF_COMMON);
 	}

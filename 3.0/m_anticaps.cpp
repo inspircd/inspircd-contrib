@@ -207,41 +207,40 @@ class ModuleAntiCaps : public Module
 			lowercase.set(static_cast<unsigned char>(*iter));
 	}
 
-	ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string& text, char, CUList&, MessageType) CXX11_OVERRIDE
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
 		// We only want to operate on messages from local users.
 		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;
 
 		// The mode can only be applied to channels.
-		if (target_type != TYPE_CHANNEL)
+		if (target.type != MessageTarget::TYPE_CHANNEL)
 			return MOD_RES_PASSTHRU;
 
 		// We only act if the channel has the mode set.
-		Channel* channel = static_cast<Channel*>(dest);
+		Channel* channel = target.Get<Channel>();
 		if (!channel->IsModeSet(&mode))
 			return MOD_RES_PASSTHRU;
 
 		// If the user is exempt from anticaps then we don't need
 		// to do anything else.
-		ModResult result;
-		FIRST_MOD_RESULT_CUSTOM(exemptionprov, CheckExemption::EventListener, OnCheckExemption, result, (user, channel, "anticaps"));
-		if (result == MOD_RES_ALLOW)
+		ModResult result = CheckExemption::Call(exemptionprov, user, channel, "anticaps");
+			if (result == MOD_RES_ALLOW)
 			return MOD_RES_PASSTHRU;
 
 		// If the message is a CTCP then we skip it unless it is
 		// an ACTION in which case we skip the prefix and suffix.
-		std::string::const_iterator text_begin = text.begin();
-		std::string::const_iterator text_end = text.end();
-		if (text[0] == '\1')
+		std::string::const_iterator text_begin = details.text.begin();
+		std::string::const_iterator text_end = details.text.end();
+		if (details.text[0] == '\1')
 		{
 			// If the CTCP is not an action then skip it.
-			if (text.compare(0, 8, "\1ACTION ", 8))
+			if (details.text.compare(0, 8, "\1ACTION ", 8))
 				return MOD_RES_PASSTHRU;
 
 			// Skip the CTCP message characters.
 			text_begin += 8;
-			if (*text.rbegin() == '\1')
+			if (*details.text.rbegin() == '\1')
 				text_end -= 1;
 		}
 
