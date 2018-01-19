@@ -30,6 +30,12 @@
 /* $ModDepends: core 2.0 */
 /* $LinkerFlags: -lGeoIP */
 
+enum
+{
+	// InspIRCd-specific.
+	RPL_WHOISCOUNTRY = 344
+};
+
 class ModuleGeoIPBan : public Module
 {
 	LocalStringExt ext;
@@ -95,7 +101,7 @@ class ModuleGeoIPBan : public Module
 		if (!d)
 			d = "UNKNOWN";
 
-		ServerInstance->SendWhoisLine(src, dst, 335, src->nick+" "+dst->nick+" :is connected from "+d +" ("+*cc+")");
+		ServerInstance->SendWhoisLine(src, dst, RPL_WHOISCOUNTRY, src->nick+" "+dst->nick+" :is connected from "+d +" ("+*cc+")");
 	}
 };
 
