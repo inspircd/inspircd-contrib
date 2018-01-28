@@ -20,7 +20,13 @@
 /* $ModAuthorMail: genius3000@g3k.solutions */
 /* $ModDesc: Provides extban 'x' - Regex matching to n!u@h\sr */
 /* $ModDepends: core 2.0 */
-/* $ModConfig: <extbanregex engine="pcre"> */
+/* $ModConfig: <extbanregex engine="pcre" opersonly="yes"> */
+
+/* Since regex matching can be very CPU intensive, a config option is available
+ * to limit the use of this extban to opers only (defaults to true).
+ * A SNOTICE is sent to the 'a' SNOMASK if a match from this extban takes
+ * more than half a second.
+ */
 
 /* Helpop Lines for the EXTBANS section
  * Find: '<helpop key="extbans" value="Extended Bans'
@@ -45,13 +51,16 @@ bool IsExtBanRegex(const std::string& mask)
 	return ((mask.length() > 2) && (mask[0] == 'x') && (mask[1] == ':'));
 }
 
-bool ModeCheck(User* user, std::string& param, bool adding, ModeType modetype, dynamic_reference<RegexFactory>& rxfactory)
+bool ModeCheck(User* user, std::string& param, bool adding, ModeType modetype, bool& opersonly, dynamic_reference<RegexFactory>& rxfactory)
 {
 		if (!adding || modetype != MODETYPE_CHANNEL)
 			return true;
 
 		if (!IS_LOCAL(user) || !IsExtBanRegex(param))
 			return true;
+
+		if (opersonly && !IS_OPER(user))
+			return false;
 
 		if (!rxfactory)
 		{
@@ -89,8 +98,12 @@ void ModeLine(const std::string& chan, char modechar, const std::vector<std::str
 	modestr.push_back(chan);
 	modestr.push_back("-");
 
-	// Total length of message "MODE <chan> -" so far
-	unsigned int strlength = 7 + chan.length();
+	// Static length of "MODE  -"
+	const std::string::size_type modefixed = 7;
+	// Static length of an additional mode character and a space between parameters
+	const std::string::size_type charandspace = 2;
+	// Current length of "MODE <chan> -"
+	std::string::size_type strlength = modefixed + chan.length();
 
 	for (unsigned int i = 0; i < masks.size(); ++i)
 	{
@@ -100,11 +113,11 @@ void ModeLine(const std::string& chan, char modechar, const std::vector<std::str
 			ServerInstance->SendMode(modestr, ServerInstance->FakeClient);
 			modestr.resize(1);
 			modestr.push_back("-");
-			strlength = 7 + chan.length();
+			strlength = modefixed + chan.length();
 		}
 		modestr[1].push_back(modechar);
 		modestr.push_back(masks[i]);
-		strlength += 2 + masks[i].length();
+		strlength += charandspace + masks[i].length();
 	}
 
 	ServerInstance->SendMode(modestr, ServerInstance->FakeClient);
@@ -187,62 +200,31 @@ void RemoveAll(const std::string& engine, bool runexceptions, bool runinvex)
 	}
 }
 
-class BanWatcher : public ModeWatcher
+class WatchedMode : public ModeWatcher
 {
+	bool& opersonly;
 	dynamic_reference<RegexFactory>& rxfactory;
 
  public:
-	BanWatcher(Module* mod, dynamic_reference<RegexFactory>& rf)
-		: ModeWatcher(mod, 'b', MODETYPE_CHANNEL)
+	WatchedMode(Module *mod, bool& oo, dynamic_reference<RegexFactory>& rf, const char modechar)
+		: ModeWatcher(mod, modechar, MODETYPE_CHANNEL)
+		, opersonly(oo)
 		, rxfactory(rf)
 	{
 	}
 
 	bool BeforeMode(User* user, User*, Channel* chan, std::string& param, bool adding, ModeType modetype)
 	{
-		return ModeCheck(user, param, adding, modetype, rxfactory);
-	}
-};
-
-class ExceptionWatcher : public ModeWatcher
-{
-	dynamic_reference<RegexFactory>& rxfactory;
-
- public:
-	ExceptionWatcher(Module* mod, dynamic_reference<RegexFactory>& rf)
-		: ModeWatcher(mod, 'e', MODETYPE_CHANNEL)
-		, rxfactory(rf)
-	{
-	}
-
-	bool BeforeMode(User* user, User*, Channel* chan, std::string& param, bool adding, ModeType modetype)
-	{
-		return ModeCheck(user, param, adding, modetype, rxfactory);
-	}
-};
-
-class InviteExceptionWatcher : public ModeWatcher
-{
-	dynamic_reference<RegexFactory>& rxfactory;
-
- public:
-	InviteExceptionWatcher(Module* mod, dynamic_reference<RegexFactory>& rf)
-		: ModeWatcher(mod, 'I', MODETYPE_CHANNEL)
-		, rxfactory(rf)
-	{
-	}
-
-	bool BeforeMode(User* user, User*, Channel* chan, std::string& param, bool adding, ModeType modetype)
-	{
-		return ModeCheck(user, param, adding, modetype, rxfactory);
+		return ModeCheck(user, param, adding, modetype, opersonly, rxfactory);
 	}
 };
 
 class ModuleExtBanRegex : public Module
 {
-	BanWatcher banwatcher;
-	ExceptionWatcher exceptionwatcher;
-	InviteExceptionWatcher inviteexceptionwatcher;
+	bool opersonly;
+	WatchedMode banwatcher;
+	WatchedMode exceptionwatcher;
+	WatchedMode inviteexceptionwatcher;
 	bool ewactive;
 	bool iewactive;
 	bool initing;
@@ -252,9 +234,10 @@ class ModuleExtBanRegex : public Module
 
  public:
 	ModuleExtBanRegex()
-		: banwatcher(this, rxfactory)
-		, exceptionwatcher(this, rxfactory)
-		, inviteexceptionwatcher(this, rxfactory)
+		: opersonly(true)
+		, banwatcher(this, opersonly, rxfactory, 'b')
+		, exceptionwatcher(this, opersonly, rxfactory, 'e')
+		, inviteexceptionwatcher(this, opersonly, rxfactory, 'I')
 		, ewactive(false)
 		, iewactive(false)
 		, initing(true)
@@ -303,7 +286,9 @@ class ModuleExtBanRegex : public Module
 
 	void OnRehash(User* user)
 	{
-		std::string newrxengine = ServerInstance->Config->ConfValue("extbanregex")->getString("engine");
+		ConfigTag* tag = ServerInstance->Config->ConfValue("extbanregex");
+		opersonly = tag->getBool("opersonly", true);
+		std::string newrxengine = tag->getString("engine");
 		factory = rxfactory ? rxfactory.operator->() : NULL;
 
 		if (newrxengine.empty())
@@ -341,9 +326,17 @@ class ModuleExtBanRegex : public Module
 		std::string host = user->nick + "!" + user->ident + "@" + user->host + " " + user->fullname;
 		std::string ip = user->nick + "!" + user->ident + "@" + user->GetIPString() + " " + user->fullname;
 
+		struct timeval pretv, posttv;
+		gettimeofday(&pretv, NULL);
+
 		Regex* regex = factory->Create(mask.substr(2));
 		bool matched = (regex->Matches(dhost) || regex->Matches(host) || regex->Matches(ip));
 		delete regex;
+
+		gettimeofday(&posttv, NULL);
+		float timediff = ((double)(posttv.tv_usec - pretv.tv_usec) / 1000000) + (double)(posttv.tv_sec - pretv.tv_sec);
+		if (timediff > 0.5)
+			ServerInstance->SNO->WriteGlobalSno('a', "*** extbanregex match took %f seconds on %s %s", timediff, c->name.c_str(), mask.substr(2).c_str());
 
 		return (matched ? MOD_RES_DENY : MOD_RES_PASSTHRU);
 	}
