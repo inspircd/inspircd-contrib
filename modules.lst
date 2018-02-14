@@ -282,7 +282,7 @@ module m_nouidnick 2.0.195 https://raw.github.com/inspircd/inspircd-extras/ce92e
 module m_opmoderated 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_opmoderated.cpp
  description Implements channel mode +U and extban 'U' - moderator mute
  depends core 2.0
-module m_override_umode 2.0.242 https://raw.github.com/inspircd/inspircd-extras/f57d88050e1b0fb8bec4d20e48540e69f796282d/2.0/m_override_umode.cpp
+module m_override_umode 2.0.376 https://raw.github.com/inspircd/inspircd-extras/874ae79df5dfa5c1505b7ac249519ecf7894a00e/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
  depends core 2.0
 module m_pretenduser 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_pretenduser.cpp
