@@ -24,11 +24,13 @@
 /// $ModDepends: core 3.0
 
 #include "inspircd.h"
+#include "modules/exemption.h"
 
 class ModuleBlockHighlight : public Module
 {
 	SimpleChannelModeHandler mode;
 	ChanModeReference noextmsgmode;
+	CheckExemption::EventProvider exemptionprov;
 
 	bool ignoreextmsg;
 	unsigned int minlen;
@@ -40,6 +42,7 @@ public:
 	ModuleBlockHighlight()
 		: mode(this, "blockhighlight", 'V')
 		, noextmsgmode(this, "noextmsg")
+		, exemptionprov(this)
 	{
 	}
 
@@ -68,6 +71,14 @@ public:
 
 		// We only work if the channel mode is enabled.
 		if (!chan->IsModeSet(mode))
+			return MOD_RES_PASSTHRU;
+
+		// Exempt operators with the channels/mass-highlight privilege.
+		if (user->HasPrivPermission("channels/mass-highlight"))
+			return MOD_RES_PASSTHRU;
+
+		// Exempt users who match a blockhighlight entry.
+		if (CheckExemption::Call(exemptionprov, user, chan, "blockhighlight") == MOD_RES_ALLOW)
 			return MOD_RES_PASSTHRU;
 
 		// Prevent the enumeration of channel members if enabled.

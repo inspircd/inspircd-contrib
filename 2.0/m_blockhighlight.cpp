@@ -81,6 +81,14 @@ public:
 		if (!chan->IsModeSet(mode.GetModeChar()))
 			return MOD_RES_PASSTHRU;
 
+		// Exempt operators with the channels/mass-highlight privilege.
+		if (user->HasPrivPermission("channels/mass-highlight"))
+			return MOD_RES_PASSTHRU;
+
+		// Exempt users who match a blockhighlight entry.
+		if (ServerInstance->OnCheckExemption(user, chan, "blockhighlight") == MOD_RES_ALLOW)
+			return MOD_RES_PASSTHRU;
+
 		// Prevent the enumeration of channel members if enabled.
 		if (!chan->IsModeSet('n') && !chan->HasUser(user) && ignoreextmsg)
 			return MOD_RES_PASSTHRU;
