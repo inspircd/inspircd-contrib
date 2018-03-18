@@ -61,7 +61,7 @@ class slowmodesettings
 		}
 
 		if (user)
-			if (IS_LOCAL(user))
+			if (IS_LOCAL(who))
 				return ++((*user_counter)[who]) >= lines;
 			else
 				return false;
