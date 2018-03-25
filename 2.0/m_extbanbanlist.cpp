@@ -43,28 +43,32 @@ class ExtbanBanlist : public ModeWatcher
 		if (!IS_LOCAL(source) || type != MODETYPE_CHANNEL || !channel || !adding || param.length() < 3)
 			return true;
 
-		if (param[0] != 'b' || param[1] != ':')
+		// Check for a match to both a regular and nested extban
+		if ((param[0] != 'b' || param[1] != ':') && param.find(":b:") == std::string::npos)
 			return true;
 
-		Channel* chan = ServerInstance->FindChan(param.substr(2));
-		if (!chan)
+		std::string chan = param.substr(param.find("b:") + 2);
+
+		Channel* c = ServerInstance->FindChan(chan);
+		if (!c)
 		{
-			source->WriteNumeric(ERR_NOSUCHCHANNEL, "%s %s :No such channel", source->nick.c_str(), param.substr(2).c_str());
+			source->WriteNumeric(ERR_NOSUCHCHANNEL, "%s %s :No such channel", source->nick.c_str(), chan.c_str());
 			return false;
 		}
 
-		if (chan == channel)
+		if (c == channel)
 		{
-			source->WriteNumeric(ERR_NOSUCHCHANNEL, "%s %s :Target channel must be a different channel", source->nick.c_str(), param.substr(2).c_str());
+			source->WriteNumeric(ERR_NOSUCHCHANNEL, "%s %s :Target channel must be a different channel", source->nick.c_str(), chan.c_str());
 			return false;
 		}
 
 		ModeHandler* mh = ServerInstance->Modes->FindMode('b', MODETYPE_CHANNEL);
-		if (mh->GetLevelRequired() > chan->GetPrefixValue(source))
+		if (mh->GetLevelRequired() > c->GetPrefixValue(source))
 		{
-			source->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You must have access to modify the banlist to use it", source->nick.c_str(), param.substr(2).c_str());
+			source->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You must have access to modify the banlist to use it", source->nick.c_str(), chan.c_str());
 			return false;
 		}
+
 		return true;
 	}
 };
@@ -72,9 +76,10 @@ class ExtbanBanlist : public ModeWatcher
 class ModuleExtbanBanlist : public Module
 {
 	ExtbanBanlist eb;
+	bool checking;
 
  public:
-	ModuleExtbanBanlist() : eb(this)
+	ModuleExtbanBanlist() : eb(this), checking(false)
 	{
 	}
 
@@ -94,7 +99,7 @@ class ModuleExtbanBanlist : public Module
 
 	ModResult OnCheckBan(User* user, Channel* c, const std::string& mask)
 	{
-		if ((mask.length() > 2) && (mask[0] == 'b') && (mask[1] == ':'))
+		if (!checking && (mask.length() > 2) && (mask[0] == 'b') && (mask[1] == ':'))
 		{
 			Channel* chan = ServerInstance->FindChan(mask.substr(2));
 			if (!chan)
@@ -102,13 +107,11 @@ class ModuleExtbanBanlist : public Module
 
 			for (BanList::iterator ban = chan->bans.begin(); ban != chan->bans.end(); ++ban)
 			{
-				std::string& banmask = ban->data;
+				checking = true;
+				bool hit = chan->CheckBan(user, ban->data);
+				checking = false;
 
-				// Prevent multiple (and circular) banlist loops
-				if (banmask.length() > 2 && banmask[0] == 'b' && banmask[1] == ':')
-					continue;
-
-				if (chan->CheckBan(user, banmask))
+				if (hit)
 					return MOD_RES_DENY;
 			}
 		}
