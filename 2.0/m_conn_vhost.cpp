@@ -18,9 +18,10 @@
 
 /* $ModAuthor: genius3000 */
 /* $ModAuthorMail: genius3000@g3k.solutions */
-/* $ModDesc: Adds a "vhost" option to connect blocks */
+/* $ModDesc: Sets a connect block configured vhost on users when they connect */
 /* $ModDepends: core 2.0 */
 /* $ModConfig: Within connect block: vhost="vhost.here" */
+/* The use of '$ident' will be replaced with the user's ident */
 
 
 #include "inspircd.h"
@@ -61,6 +62,13 @@ class ModuleVhostOnConnect : public Module
 
 		if (vhost.empty())
 			return;
+
+		const std::string replace = "$ident";
+		std::string ident = user->ident;
+		if (ident[0] == '~')
+			ident.erase(0, 1);
+
+		SearchAndReplace(vhost, replace, ident);
 
 		if (vhost.length() > 64)
 		{
