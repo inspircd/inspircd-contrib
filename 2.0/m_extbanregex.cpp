@@ -51,12 +51,17 @@ bool IsExtBanRegex(const std::string& mask)
 	return ((mask.length() > 2) && (mask[0] == 'x') && (mask[1] == ':'));
 }
 
+bool IsNestedExtBanRegex(const std::string &mask)
+{
+	return ((mask.length() > 3) && (mask.find(":x:") != std::string::npos));
+}
+
 bool ModeCheck(User* user, std::string& param, bool adding, ModeType modetype, bool& opersonly, dynamic_reference<RegexFactory>& rxfactory)
 {
 		if (!adding || modetype != MODETYPE_CHANNEL)
 			return true;
 
-		if (!IS_LOCAL(user) || !IsExtBanRegex(param))
+		if (!IS_LOCAL(user) || (!IsExtBanRegex(param) && !IsNestedExtBanRegex(param)))
 			return true;
 
 		if (opersonly && !IS_OPER(user))
@@ -69,7 +74,7 @@ bool ModeCheck(User* user, std::string& param, bool adding, ModeType modetype, b
 		}
 
 		// Ensure mask is at least "!@", beyond that is up to the user
-		std::string mask = param.substr(2);
+		std::string mask = param.substr(param.find("x:" + 2));
 		std::string::size_type plink = mask.find('!');
 		if (plink == std::string::npos || mask.find('@', plink) == std::string::npos)
 		{
