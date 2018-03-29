@@ -19,12 +19,12 @@
 /* $ModConfig: <requirectcp ctcp="VERSION" accepted="Howdy buddy,you are authorized to use this server!" declined="You have been blocked!Please get a better client."> */
 /* $ModDesc: Blocks clients not replying to CTCP like botnets/spambots/floodbots. */
 /* $ModAuthor: Nikos `UrL` Papakonstantinou */
-/* $ModAuthorMail: url.euro@gmail.com */
+/* $ModAuthorMail: info@0x1.gr */
 /* $ModDepends: core 2.0 */
 
 /*
- * Supports connect class param & Sno(S).
- * Add requirectcp="true" which enables or disables the module on that port(s).
+ * Supports Snomask(p)
+ * Supports connect class param requirectcp="false" to disable the module on that port(s).
  */
 
 class ModuleRequireCTCP : public Module
@@ -100,7 +100,11 @@ class ModuleRequireCTCP : public Module
 			{
 				ServerInstance->Users->QuitUser(user, declined);
 			}
-			ServerInstance->SNO->WriteGlobalSno('p', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
+			if (ext.get(user) != 3)
+			{
+				ext.set(user, 3);
+				ServerInstance->SNO->WriteGlobalSno('p', "Suspicious connection on port %d (class %s) from %s (%s) was blocked by m_requirectcp", user->GetServerPort(), user->MyClass->name.c_str(), user->GetFullRealHost().c_str(), user->GetIPString());
+			}
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
