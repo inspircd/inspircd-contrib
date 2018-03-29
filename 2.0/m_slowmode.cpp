@@ -1,6 +1,8 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
+ *   Copyright (C) 2018 linuxdaemon <linuxdaemon@snoonet.org>
+ *   Copyright (C) 2016 Foxlet <foxlet@furcode.co>
  *   Copyright (C) 2015 Adam <Adam@anope.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
@@ -29,27 +31,53 @@
 class slowmodesettings
 {
  public:
+	typedef std::map<User*, unsigned int> user_counter_t;
+
 	unsigned int lines;
 	unsigned int secs;
 
-	unsigned int counter;
+	bool user;
+
+	union
+	{
+		unsigned int counter;
+		user_counter_t* user_counter;
+	};
+
 	time_t reset;
 
-	slowmodesettings(int l, int s) : lines(l), secs(s)
+	slowmodesettings(int l, int s, bool u = false) : lines(l), secs(s), user(u), user_counter(0)
 	{
-		counter = 0;
+		this->clear();
 		reset = ServerInstance->Time() + secs;
 	}
 
-	bool addmessage()
+	bool addmessage(User *who)
 	{
 		if (ServerInstance->Time() > reset)
 		{
-			counter = 0;
+			this->clear();
 			reset = ServerInstance->Time() + secs;
 		}
 
-		return ++counter >= lines;
+		if (user)
+			if (IS_LOCAL(who))
+				return ++((*user_counter)[who]) >= lines;
+			else
+				return false;
+		else
+			return ++counter >= lines;
+	}
+
+	void clear()
+	{
+		if (user)
+			if (user_counter)
+				user_counter->clear();
+			else
+				user_counter = new user_counter_t;
+		else
+			counter = 0;
 	}
 };
 
@@ -77,6 +105,22 @@ class MsgFlood : public ModeHandler
 				return MODEACTION_DENY;
 			}
 
+			bool user;
+			switch (parameter[0])
+			{
+				case 'u':
+					user = true;
+					parameter.erase(0, 1);
+					colon--;
+					break;
+				case 'c':
+					parameter.erase(0, 1);
+					colon--;
+				default:
+					user = false;
+					break;
+			}
+
 			/* Set up the slowmode parameters for this channel */
 			unsigned int nlines = ConvToInt(parameter.substr(0, colon));
 			unsigned int nsecs = ConvToInt(parameter.substr(colon+1));
@@ -88,12 +132,12 @@ class MsgFlood : public ModeHandler
 			}
 
 			slowmodesettings* f = ext.get(channel);
-			if (f && nlines == f->lines && nsecs == f->secs)
+			if (f && nlines == f->lines && nsecs == f->secs && user == f->user)
 				// mode params match
 				return MODEACTION_DENY;
 
-			ext.set(channel, new slowmodesettings(nlines, nsecs));
-			parameter = ConvToStr(nlines) + ":" + ConvToStr(nsecs);
+			ext.set(channel, new slowmodesettings(nlines, nsecs, user));
+			parameter = std::string(user ? "u" : "c") + ConvToStr(nlines) + ":" + ConvToStr(nsecs);
 			channel->SetModeParam(GetModeChar(), parameter);
 			return MODEACTION_ALLOW;
 		}
@@ -123,7 +167,7 @@ class ModuleMsgFlood : public Module
 			return MOD_RES_PASSTHRU;
 
 		slowmodesettings *f = ext.get(dest);
-		if (f == NULL || !f->addmessage())
+		if (f == NULL || !f->addmessage(user))
 			return MOD_RES_PASSTHRU;
 
 		if (!IS_LOCAL(user))
@@ -168,7 +212,8 @@ class ModuleMsgFlood : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides channel mode +" + ConvToStr(mf.GetModeChar()) + " (slowmode)");
+		std::string valid_param("[u|c]<lines>:<secs>");
+		return Version("Provides channel mode +" + ConvToStr(mf.GetModeChar()) + " (slowmode)", VF_COMMON, valid_param);
 	}
 };
 
