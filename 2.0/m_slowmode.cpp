@@ -212,7 +212,8 @@ class ModuleMsgFlood : public Module
 
 	Version GetVersion()
 	{
-		return Version("Provides channel mode +" + ConvToStr(mf.GetModeChar()) + " (slowmode)");
+		std::string valid_param("[u|c]<lines>:<secs>");
+		return Version("Provides channel mode +" + ConvToStr(mf.GetModeChar()) + " (slowmode)", VF_COMMON, valid_param);
 	}
 };
 
