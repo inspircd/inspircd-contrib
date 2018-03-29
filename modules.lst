@@ -160,14 +160,20 @@ module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
 module m_bannegate 2.0.368 https://raw.github.com/inspircd/inspircd-extras/23c3fba9f768e061df71425144cd53465f53ecfb/2.0/m_bannegate.cpp
  description Enables ban negation by prefixing the match sequence with ~
  depends core 2.0
-module m_blockhighlight 2.0.325 https://raw.github.com/inspircd/inspircd-extras/ca27730011addef8cfbba872e998a9d6b54b79fc/2.0/m_blockhighlight.cpp
+module m_blockhighlight 2.0.380 https://raw.github.com/inspircd/inspircd-extras/1aca2d399aaf1e14f0b131574362f53f171d56b0/2.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
+ depends core 2.0
+module m_blockinvite 2.0.381 https://raw.github.com/inspircd/inspircd-extras/cf84627884c5fb2292267632afb4003d8681830c/2.0/m_blockinvite.cpp
+ description Provides usermode 'V' - block all INVITEs
  depends core 2.0
 module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
  description Implements CAP chghost
  depends core 2.0
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
+ depends core 2.0
+module m_cgiircban 2.0.384 https://raw.github.com/inspircd/inspircd-extras/cc84a1538fe5cca48379624845c8216c78189c04/2.0/m_cgiircban.cpp
+ description Implements extban W: - CGI:IRC bans
  depends core 2.0
 module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e2293e186bbd393e58079b800887c52bff5e777/2.0/m_changecap.cpp
  description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name
@@ -204,6 +210,9 @@ module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a8
  depends core 2.0
 module m_extbanredirect 2.0.277 https://raw.github.com/inspircd/inspircd-extras/95c5bd68c6580c963903fcfbf7d6c37ea12e5c46/2.0/m_extbanredirect.cpp
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
+ depends core 2.0
+module m_extbanregex 2.0.385 https://raw.github.com/inspircd/inspircd-extras/75191cc7c4e2d8e0b8873ee9e95f47638a2e43f9/2.0/m_extbanregex.cpp
+ description Provides extban 'x' - Regex matching to n!u@h\sr
  depends core 2.0
 module m_findxline 2.0.320 https://raw.github.com/inspircd/inspircd-extras/dea6ae556b8145ab318e5d60d64f13dffddaf848/2.0/m_findxline.cpp
  description Provides the FINDXLINE and RMXLINE commands which lets opers search and remove XLines
@@ -311,7 +320,7 @@ module m_replaymsg 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169
 module m_require_auth 2.0.276 https://raw.github.com/inspircd/inspircd-extras/5e2bbe2dfee12b96914b90dd8734988947cbc1db/2.0/m_require_auth.cpp
  description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 2.0
-module m_requirectcp 2.0.249 https://raw.github.com/inspircd/inspircd-extras/fd3681de045ce3f91ee2ac59eb186511a343d329/2.0/m_requirectcp.cpp
+module m_requirectcp 2.0.383 https://raw.github.com/inspircd/inspircd-extras/2ca5f51861b85f06d8f9748579bb0653753f9c9e/2.0/m_requirectcp.cpp
  description Blocks clients not replying to CTCP like botnets/spambots/floodbots.
  depends core 2.0
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
@@ -347,16 +356,16 @@ module m_topicall 2.0.367 https://raw.github.com/inspircd/inspircd-extras/c75c4f
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 2.0
-module m_anticaps 3.0.373 https://raw.github.com/inspircd/inspircd-extras/21eae6bb8805664bb2aef3cb1bd970bd56134cee/3.0/m_anticaps.cpp
- description Provides support for punishing users that send capitalised messages.
- depends core 3.0
+module m_xmlsocket 2.0.386 https://raw.github.com/inspircd/inspircd-extras/8096f7e0acb6938b66aa158fbb457f524db9ac15/2.0/m_xmlsocket.cpp
+ description Provides XML socket support for Flash
+ depends core 2.0
 module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autodrop.cpp
  depends core 3.0
  description Allows clients to be automatically dropped if they execute certain commands before registration.
 module m_autokick 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autokick.cpp
  depends core 3.0
  description Automatically kicks people who match a banned mask.
-module m_blockhighlight 3.0.373 https://raw.github.com/inspircd/inspircd-extras/21eae6bb8805664bb2aef3cb1bd970bd56134cee/3.0/m_blockhighlight.cpp
+module m_blockhighlight 3.0.380 https://raw.github.com/inspircd/inspircd-extras/1aca2d399aaf1e14f0b131574362f53f171d56b0/3.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 3.0
 module m_custompenalty 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_custompenalty.cpp
