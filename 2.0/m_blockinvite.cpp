@@ -20,6 +20,12 @@
 /* $ModAuthorMail: genius3000@g3k.solutions */
 /* $ModDesc: Provides usermode 'V' - block all INVITEs */
 /* $ModDepends: core 2.0 */
+/* $ModConfig: <blockinvite reply="no"> */
+/* Set whether to reply with a blocked message to the source (inviter)
+ * with the 'reply' config option. Defaults to no.
+ * To allow oper overriding, add the privilege 'users/override-blockinvite'
+ * to your preferred oper class.
+ */
 
 /* Helpop Lines for the UMODES section
  * Find: '<helpop key="umodes" value="User Modes'
@@ -31,27 +37,48 @@
 #include "inspircd.h"
 
 
+enum
+{
+	// From UnrealIRCd (channel mode, but same concept)
+	ERR_NOINVITE = 518
+};
+
 class ModuleBlockInvite : public Module
 {
  private:
 	SimpleUserModeHandler bi;
+	bool reply;
 
  public:
 	ModuleBlockInvite()
 		: bi(this, "blockinvite", 'V')
+		, reply(false)
 	{
 	}
 
 	void init()
 	{
+		OnRehash(NULL);
+		Implementation eventList[] = { I_OnRehash, I_OnUserPreInvite };
+		ServerInstance->Modules->Attach(eventList, this, sizeof(eventList)/sizeof(Implementation));
 		ServerInstance->Modules->AddService(bi);
-		ServerInstance->Modules->Attach(I_OnUserPreInvite, this);
 	}
 
-	ModResult OnUserPreInvite(User*, User* dest, Channel*, time_t)
+	void OnRehash(User*)
 	{
-		if (!IS_LOCAL(dest) || !dest->IsModeSet(bi.GetModeChar()))
+		reply = ServerInstance->Config->ConfValue("blockinvite")->getBool("reply");
+	}
+
+	ModResult OnUserPreInvite(User* source, User* dest, Channel*, time_t)
+	{
+		if (!IS_LOCAL(source) || !dest->IsModeSet(bi.GetModeChar()))
 			return MOD_RES_PASSTHRU;
+
+		if (source->HasPrivPermission("users/override-blockinvite"))
+			return MOD_RES_PASSTHRU;
+
+		if (reply)
+			source->WriteNumeric(ERR_NOINVITE, "%s :Can't INVITE %s, they have +%c set", source->nick.c_str(), dest->nick.c_str(), bi.GetModeChar());
 
 		return MOD_RES_DENY;
 	}
