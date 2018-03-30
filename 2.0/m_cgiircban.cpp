@@ -50,7 +50,7 @@ class ModuleCGIircBan : public Module
 			if(webirc_host.empty())
 				return MOD_RES_PASSTHRU;
 
-			if (InspIRCd::Match(webirc_host, mask.substr(2)))
+			if (InspIRCd::MatchCIDR(webirc_host, mask.substr(2)))
 				return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
