@@ -25,7 +25,7 @@
 
 enum
 {
-	ERR_INVALIDPARAM = 696
+	ERR_INVALIDMODEPARAM = 696
 };
 
 enum AntiCapsMethod
@@ -126,8 +126,8 @@ class AntiCapsMode : public ModeHandler
 			// Attempt to parse the method.
 			if (!ParseMethod(stream, method) || !ParseMinimumLength(stream, minlen) || !ParsePercent(stream, percent))
 			{
-				user->WriteNumeric(ERR_INVALIDPARAM, "%s %s %s :Invalid anticaps parameter",
-					user->nick.c_str(), channel->name.c_str(), parameter.c_str());
+				user->WriteNumeric(ERR_INVALIDMODEPARAM, "%s %s %c %s :Invalid anticaps mode parameter",
+					user->nick.c_str(), channel->name.c_str(), GetModeChar(), parameter.c_str());
 				return MODEACTION_DENY;
 			}
 
