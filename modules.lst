@@ -138,7 +138,7 @@ module m_antibear 2.0.363 https://raw.github.com/inspircd/inspircd-extras/c0994b
 module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f027e93157860173200d1b7d6ea9a708889ef7/2.0/m_antibottler.cpp
  description Changes the ident of connecting bottler clients to 'bottler'
  depends core 2.0-2.1
-module m_anticaps 2.0.371 https://raw.github.com/inspircd/inspircd-extras/2b99aa31b4795f370199f7376d7d5b1116659cb7/2.0/m_anticaps.cpp
+module m_anticaps 2.0.392 https://raw.github.com/inspircd/inspircd-extras/e5912614c95d17af2424a40a05aed8d80ef5e91a/2.0/m_anticaps.cpp
  description Provides support for punishing users that send capitalised messages.
  depends core 2.0
 module m_antirandom 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_antirandom.cpp
@@ -163,7 +163,7 @@ module m_bannegate 2.0.368 https://raw.github.com/inspircd/inspircd-extras/23c3f
 module m_blockhighlight 2.0.380 https://raw.github.com/inspircd/inspircd-extras/1aca2d399aaf1e14f0b131574362f53f171d56b0/2.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 2.0
-module m_blockinvite 2.0.381 https://raw.github.com/inspircd/inspircd-extras/cf84627884c5fb2292267632afb4003d8681830c/2.0/m_blockinvite.cpp
+module m_blockinvite 2.0.389 https://raw.github.com/inspircd/inspircd-extras/7cfdfc1ef86ea649fd7cbdee4c183306c523b3df/2.0/m_blockinvite.cpp
  description Provides usermode 'V' - block all INVITEs
  depends core 2.0
 module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
@@ -172,7 +172,7 @@ module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1
 module m_capnotify 2.0.203 https://raw.github.com/inspircd/inspircd-extras/676f7d447b5dd9d51f753fac500c4798fc2dac82/2.0/m_capnotify.cpp
  description Implements IRC v3.2 cap-notify
  depends core 2.0
-module m_cgiircban 2.0.384 https://raw.github.com/inspircd/inspircd-extras/cc84a1538fe5cca48379624845c8216c78189c04/2.0/m_cgiircban.cpp
+module m_cgiircban 2.0.390 https://raw.github.com/inspircd/inspircd-extras/3717df61512679cc2fda2b66a471b7e029d05754/2.0/m_cgiircban.cpp
  description Implements extban W: - CGI:IRC bans
  depends core 2.0
 module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e2293e186bbd393e58079b800887c52bff5e777/2.0/m_changecap.cpp
@@ -308,6 +308,9 @@ module m_quietban 2.0.171 https://raw.github.com/inspircd/inspircd-extras/89317e
  depends core 2.0-2.1
  conflicts m_muteban.so
  conflicts m_chanprotect.so
+module m_randomnotice 2.0.391 https://raw.github.com/inspircd/inspircd-extras/25e9a5976ccb8682ee6704d383209224522adb81/2.0/m_randomnotice.cpp
+ description Send a random notice (quote) from a file to all users at a set interval.
+ depends core 2.0
 module m_regex_re2 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_regex_re2.cpp
  description Regex Provider Module for RE2.
  depends core 2.0
@@ -332,7 +335,7 @@ module m_rpg 2.0.358 https://raw.github.com/inspircd/inspircd-extras/f508cf46da5
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
  depends core 2.0
-module m_slowmode 2.0.263 https://raw.github.com/inspircd/inspircd-extras/94b8993e5750933a8d8d2ee89cea15c96fd5b342/2.0/m_slowmode.cpp
+module m_slowmode 2.0.388 https://raw.github.com/inspircd/inspircd-extras/99beb629dc66341238bda791bbea8ec775307454/2.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 2.0
 module m_solvemsg 2.0.261 https://raw.github.com/inspircd/inspircd-extras/55659fb0148513e6bab6fa09004b8f49e1214cf9/2.0/m_solvemsg.cpp
