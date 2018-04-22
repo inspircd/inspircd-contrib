@@ -368,10 +368,10 @@ module m_autodrop 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee1775
 module m_autokick 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_autokick.cpp
  depends core 3.0
  description Automatically kicks people who match a banned mask.
-module m_blockhighlight 3.0.380 https://raw.github.com/inspircd/inspircd-extras/1aca2d399aaf1e14f0b131574362f53f171d56b0/3.0/m_blockhighlight.cpp
+module m_blockhighlight 3.0.394 https://raw.github.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 3.0
-module m_custompenalty 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_custompenalty.cpp
+module m_custompenalty 3.0.394 https://raw.github.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_custompenalty.cpp
  depends core 3.0
  description Allows the customisation of penalty levels.
 module m_forceident 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_forceident.cpp
@@ -386,13 +386,13 @@ module m_messagelength 3.0.373 https://raw.github.com/inspircd/inspircd-extras/2
 module m_qrcode 3.0.373 https://raw.github.com/inspircd/inspircd-extras/21eae6bb8805664bb2aef3cb1bd970bd56134cee/3.0/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 3.0
-module m_rotatelog 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_rotatelog.cpp
+module m_rotatelog 3.0.394 https://raw.github.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_rotatelog.cpp
  depends core 3.0
  description Rotates the log files after a defined period.
 module m_solvemsg 3.0.373 https://raw.github.com/inspircd/inspircd-extras/21eae6bb8805664bb2aef3cb1bd970bd56134cee/3.0/m_solvemsg.cpp
  depends core 3.0
  description Requires users to solve a basic maths problem before messaging others.
-module m_stats_unlinked 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_stats_unlinked.cpp
+module m_stats_unlinked 3.0.394 https://raw.github.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_stats_unlinked.cpp
  depends core 3.0
  description Adds stats character 'X' which shows unlinked servers.
 module m_svsoper 3.0.280 https://raw.github.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_svsoper.cpp
