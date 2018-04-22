@@ -23,11 +23,12 @@
 
 
 #include "inspircd.h"
+#include "modules/stats.h"
 
-class ModuleStatsUnlinked : public Module
+class ModuleStatsUnlinked : public Module, public Stats::EventListener
 {
  private:
-	std::map<std::string, int> LinkableServers;
+	std::map<std::string, unsigned int> LinkableServers;
 
 	static bool IsServerLinked(const ProtocolInterface::ServerList& linkedServers, const std::string& serverName)
 	{
@@ -40,6 +41,11 @@ class ModuleStatsUnlinked : public Module
 	}
 
  public:
+	ModuleStatsUnlinked()
+		:  Stats::EventListener(this)
+	{
+	}
+
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		LinkableServers.clear();
@@ -48,7 +54,7 @@ class ModuleStatsUnlinked : public Module
 		for (ConfigIter it = tags.first; it != tags.second; ++it)
 		{
 			std::string serverName = it->second->getString("name");
-			int serverPort = it->second->getInt("port");
+			unsigned int serverPort = it->second->getUInt("port", 0, 0, UINT16_MAX);
 			if (!serverName.empty() && serverName.size() <= 64 && serverName.find('.') != std::string::npos && serverPort)
 			{
 				// There is currently no way to prioritize the init() function so we
@@ -66,7 +72,7 @@ class ModuleStatsUnlinked : public Module
 		ProtocolInterface::ServerList linkedServers;
 		ServerInstance->PI->GetServerList(linkedServers);
 
-		for (std::map<std::string, int>::iterator it = LinkableServers.begin(); it != LinkableServers.end(); ++it)
+		for (std::map<std::string, unsigned int>::const_iterator it = LinkableServers.begin(); it != LinkableServers.end(); ++it)
 		{
 			if (!IsServerLinked(linkedServers, it->first))
 			{

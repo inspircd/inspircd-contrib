@@ -50,8 +50,8 @@ public:
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("blockhighlight");
 		ignoreextmsg = tag->getBool("ignoreextmsg", true);
-		minlen = tag->getInt("minlen", 50, 1, ServerInstance->Config->Limits.MaxLine);
-		minusers = tag->getInt("minusernum", 10, 2);
+		minlen = tag->getUInt("minlen", 50, 1, ServerInstance->Config->Limits.MaxLine);
+		minusers = tag->getUInt("minusernum", 10, 2);
 		reason = tag->getString("reason", "Mass highlight spam is not allowed");
 		stripcolor = tag->getBool("stripcolor", true);
 	}

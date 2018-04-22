@@ -65,7 +65,7 @@ class ModuleRotateLog : public Module
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("rotatelog");
-		timer->SetInterval(tag->getInt("period", 3600));
+		timer->SetInterval(tag->getDuration("period", 3600, 60));
 	}
 
 	Version GetVersion() CXX11_OVERRIDE

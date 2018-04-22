@@ -36,7 +36,7 @@ class ModuleCustomPenalty : public Module
 			ConfigTag* tag = i->second;
 
 			std::string name = tag->getString("name");
-			int penalty = (int)tag->getInt("value", 1, 1);
+			unsigned int penalty = tag->getUInt("value", 1, 1);
 
 			Command* command = ServerInstance->Parser.GetHandler(name);
 			if (!command)
