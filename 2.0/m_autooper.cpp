@@ -20,32 +20,32 @@
 class ModuleAutoOper : public Module
 {
 public:
-        void init()
-        {
-                ServerInstance->Modules->Attach(I_OnUserConnect, this);
-        }
+	void init()
+	{
+		ServerInstance->Modules->Attach(I_OnUserConnect, this);
+	}
 
-        void OnUserConnect(LocalUser* user)
-        {
-                ConfigTag* tag = user->MyClass->config;
-                std::string opertype = tag->getString("opertype");
+	void OnUserConnect(LocalUser* user)
+	{
+		ConfigTag* tag = user->MyClass->config;
+		std::string opertype = tag->getString("opertype");
 
-                if (opertype.empty())
-                        return;
+		if (opertype.empty())
+			return;
 
-                OperIndex::iterator opit = ServerInstance->Config->oper_blocks.find(" " + opertype);
-                if (opit == ServerInstance->Config->oper_blocks.end())
-                {
-                        ServerInstance->Logs->Log("m_autooper", DEFAULT, "m_autooper: Oper type %s in connect block %s not found", opertype.c_str(), user->MyClass->name.c_str());
-                        return;
-                }
-                user->Oper(opit->second);
-        }
+		OperIndex::iterator opit = ServerInstance->Config->oper_blocks.find(" " + opertype);
+		if (opit == ServerInstance->Config->oper_blocks.end())
+		{
+			ServerInstance->Logs->Log("m_autooper", DEFAULT, "m_autooper: Oper type %s in connect block %s not found", opertype.c_str(), user->MyClass->name.c_str());
+			return;
+		}
+		user->Oper(opit->second);
+	}
 
-        Version GetVersion()
-        {
-                return Version("Adds a opertype option to connect blocks so operators can get autologged in via IP");
-        }
+	Version GetVersion()
+	{
+		return Version("Adds a opertype option to connect blocks so operators can get autologged in via IP");
+	}
 };
 
 MODULE_INIT(ModuleAutoOper)
