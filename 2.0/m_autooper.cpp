@@ -22,8 +22,7 @@ class ModuleAutoOper : public Module
 public:
         void init()
         {
-                Implementation eventlist[] = { I_OnUserConnect };
-                ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
+                ServerInstance->Modules->Attach(I_OnUserConnect, this);
         }
 
         void OnUserConnect(LocalUser* user)
