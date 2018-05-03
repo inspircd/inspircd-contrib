@@ -30,7 +30,7 @@ public:
 	ModResult OnRawMode(User* user, Channel* chan, const char mode, const std::string &param, bool adding, int pcnt)
 	{
 		if (chan && IS_LOCAL(user) && !IS_OPER(user) && !ServerInstance->ULine(user->server)) {
-	    		Membership* transmitter = chan->GetUser(user);
+			Membership* transmitter = chan->GetUser(user);
 			if ((mode == 'b') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->modes.find('q') == std::string::npos))
 			{
 				user->WriteNumeric(482, "%s %s : You must have channel owner access or oper to be able to set or unset extban o", user->nick.c_str(), chan->name.c_str());
