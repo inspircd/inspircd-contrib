@@ -16,23 +16,23 @@
 #include "inspircd.h"
 class ModuleOPBan : public Module {
 public:
-  void init()
-  {
-    Implementation eventlist[] = { I_OnRawMode, I_On005Numeric };
-    ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
-  }
+	void init()
+	{
+		Implementation eventlist[] = { I_OnRawMode, I_On005Numeric };
+		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
+	}
   
-  Version GetVersion()
-  {
-    return Version("Implements extban +b o: Prevents these persons from aquiring a privilegied position",VF_OPTCOMMON);
-  }
+	Version GetVersion()
+	{
+		return Version("Implements extban +b o: Prevents these persons from aquiring a privilegied position",VF_OPTCOMMON);
+	}
 
-  ModResult OnRawMode(User* user, Channel* chan, const char mode, const std::string &param, bool adding, int pcnt)
-  {
-    if (chan && IS_LOCAL(user) && !IS_OPER(user) && !ServerInstance->ULine(user->server)) {
-      Membership* transmitter = chan->GetUser(user);
-      if ((mode == 'b') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->modes.find('q') == std::string::npos))
-      {
+	ModResult OnRawMode(User* user, Channel* chan, const char mode, const std::string &param, bool adding, int pcnt)
+	{
+		if (chan && IS_LOCAL(user) && !IS_OPER(user) && !ServerInstance->ULine(user->server)) {
+	    		Membership* transmitter = chan->GetUser(user);
+			if ((mode == 'b') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->modes.find('q') == std::string::npos))
+			{
 				user->WriteNumeric(482, "%s %s : You must have channel owner access or oper to be able to set or unset extban o", user->nick.c_str(), chan->name.c_str());
 				return MOD_RES_DENY;
 			}
