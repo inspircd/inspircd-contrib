@@ -40,9 +40,10 @@ public:
 			if (adding && !param.empty())
 			{
 				User *u = ServerInstance->FindNick(param);
-				if (u)
+				ModeHandler *mh = ServerInstance->Modes->FindMode(mode, MODETYPE_CHANNEL);
+				if (u && mh)
 				{
-					if ((chan->GetExtBanStatus(u, 'o') == MOD_RES_DENY) && !IS_OPER(u) && (mode == 'a' || mode == 'o' || mode == 'h' || mode == 'v'))
+					if ((chan->GetExtBanStatus(u, 'o') == MOD_RES_DENY) && !IS_OPER(u) && (mh->GetPrefixRank() > 0))
 					{
 						user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : %s is banned from having a privileged position", user->nick.c_str(), chan->name.c_str(), u->nick.c_str());
 						return MOD_RES_DENY;
