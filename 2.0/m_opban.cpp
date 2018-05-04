@@ -10,11 +10,12 @@
 
 /* $ModAuthor: Sebastian Nielsen */
 /* $ModAuthorMail: sebastian@sebbe.eu */
-/* $ModDesc: Implements extban +b o: Prevents these persons from aquiring a privilegied position */
+/* $ModDesc: Implements extban +b o: Prevents these persons from aquiring a privileged position */
 /* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
-class ModuleOPBan : public Module {
+class ModuleOPBan : public Module
+{
 public:
 	void init()
 	{
@@ -24,7 +25,7 @@ public:
   
 	Version GetVersion()
 	{
-		return Version("Implements extban +b o: Prevents these persons from aquiring a privilegied position",VF_OPTCOMMON);
+		return Version("Implements extban +b o: Prevents these persons from aquiring a privileged position",VF_OPTCOMMON);
 	}
 
 	ModResult OnRawMode(User* user, Channel* chan, const char mode, const std::string &param, bool adding, int pcnt)
@@ -33,7 +34,7 @@ public:
 			Membership* transmitter = chan->GetUser(user);
 			if ((mode == 'b') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->modes.find('q') == std::string::npos))
 			{
-				user->WriteNumeric(482, "%s %s : You must have channel owner access or oper to be able to set or unset extban o", user->nick.c_str(), chan->name.c_str());
+				user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You must have channel owner access or oper to be able to set or unset extban o", user->nick.c_str(), chan->name.c_str());
 				return MOD_RES_DENY;
 			}
 			if (adding && !param.empty())
@@ -43,7 +44,7 @@ public:
 				{
 					if ((chan->GetExtBanStatus(u, 'o') == MOD_RES_DENY) && !IS_OPER(u) && (mode == 'a' || mode == 'o' || mode == 'h' || mode == 'v'))
 					{
-						user->WriteNumeric(482, "%s %s : %s is banned from having a privilegied position", user->nick.c_str(), chan->name.c_str(), u->nick.c_str());
+						user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : %s is banned from having a privileged position", user->nick.c_str(), chan->name.c_str(), u->nick.c_str());
 						return MOD_RES_DENY;
 					}
 				}
