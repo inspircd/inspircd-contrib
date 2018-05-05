@@ -1,3 +1,4 @@
+
 /*
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -24,6 +25,7 @@ class ModuleOPBan : public Module
 	{
 		Implementation eventlist[] = { I_OnRawMode, I_On005Numeric, I_OnRehash };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
+		OnRehash(NULL);
 	}
 	Version GetVersion()
 	{
@@ -32,10 +34,8 @@ class ModuleOPBan : public Module
 
 	void OnRehash(User* user)
 	{
-		this->RequiredRank = 50000;
 		ConfigTag* conftag = ServerInstance->Config->ConfValue("opban");
-		if (conftag)
-			this->RequiredRank = conftag->getInt("requiredrank", 50000);
+		this->RequiredRank = conftag->getInt("requiredrank", 50000);
 	}
 
 	ModResult OnRawMode(User* user, Channel* chan, const char mode, const std::string &param, bool adding, int pcnt)
