@@ -42,7 +42,7 @@ public:
 		{
 			if (InspIRCd::Match(newnick, badnick))
 			{
-				user->WriteNumeric(432, "%s %s :This nick is prohibited for your connect class", (this->registered & REG_NICK ? this->nick.c_str() : "*"), newnick.c_str());
+				user->WriteNumeric(432, "%s %s :This nick is prohibited for your connect class", (user->registered & REG_NICK ? user->nick.c_str() : "*"), newnick.c_str());
 				return MOD_RES_DENY;
 			}
 		}
