@@ -44,7 +44,7 @@ class ModuleOPBan : public Module
 			return MOD_RES_PASSTHRU;
 
 		Membership* transmitter = chan->GetUser(user);
-		if ((mode == 'b') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->getRank() < this->RequiredRank))
+		if ((mode == 'b' || mode == 'e') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->getRank() < this->RequiredRank))
 		{
 			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You do not have sufficient privileges to set or unset extban o", user->nick.c_str(), chan->name.c_str());
 			return MOD_RES_DENY;
