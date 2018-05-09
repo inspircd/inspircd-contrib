@@ -18,33 +18,31 @@
 class Banprotector
 {
  public:
-	std::map<std::string, unsigned int> banrank;
+	std::map<char, std::map<std::string, unsigned int>> banrank;
 	Banprotector() {}
 
 	void addrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		std::string fullban = ConvToStr(modeparam) + "%" + ConvToStr(banparam);
-		if (!banrank[fullban])
-			banrank[fullban] = rank;
+		if (!banrank[modeparam][banparam])
+			banrank[modeparam][banparam] = rank;
 	}
 
 	bool checkrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		std::string fullban = ConvToStr(modeparam) + "%" + ConvToStr(banparam);
-		if (!banrank[fullban])
+		if (!banrank[modeparam][banparam])
 			return true;
-		if (banrank[fullban] > rank)
+		if (banrank[modeparam][banparam] > rank)
 			return false;
 		return true;
 	}
 
 	void delrank(const char& modeparam, const std::string& banparam)
 	{
-		std::string fullban = ConvToStr(modeparam) + "%" + ConvToStr(banparam);
+		std::map<std::string, unsigned int> innerban = banrank[modeparam];
 		std::map<std::string, unsigned int>::iterator removeindex;
-		removeindex = banrank.find(fullban);
-		if (removeindex != banrank.end())
-			banrank.erase(removeindex);
+		removeindex = innerban.find(banparam);
+		if (removeindex != innerban.end())
+			innerban.erase(removeindex);
 	}
 };
 
