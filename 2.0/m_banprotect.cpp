@@ -96,7 +96,8 @@ class ModuleBanprotect : public Module
 			return MOD_RES_PASSTHRU;
 		}
 
-		if (adding) {
+		if (adding)
+		{
 			banp->addrank(mode, param, transmitter->getRank());
 			return MOD_RES_PASSTHRU;
 		}
