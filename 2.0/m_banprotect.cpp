@@ -24,7 +24,8 @@ class Banprotector
 	void addrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
 		std::string fullban = ConvToStr(modeparam) + "%" + ConvToStr(banparam);
-		banrank[fullban] = rank;
+		if (!banrank[fullban])
+			banrank[fullban] = rank;
 	}
 
 	bool checkrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
