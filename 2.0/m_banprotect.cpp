@@ -63,11 +63,12 @@ class Banprotector
 			innerban = obindex->second;
 			removeindex = innerban.find(banparam);
 			if (removeindex != innerban.end())
+			{
 				innerban.erase(removeindex);
 				banrank[modeparam] = innerban;
+			}
 		}
 	}
-
 };
 
 class ModuleBanprotect : public Module
