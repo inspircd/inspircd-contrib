@@ -23,27 +23,51 @@ class Banprotector
 
 	void addrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		if (!banrank[modeparam][banparam])
-			banrank[modeparam][banparam] = rank;
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
+		std::map<std::string, unsigned int> innerban;
+		std::map<std::string, unsigned int>::iterator ibindex;
+		obindex = banrank.find(modeparam);
+		if (obindex != banrank.end()) {
+			innerban = obindex->second;
+			ibindex = innerban.find(banparam);
+			if (ibindex != innerban.end())
+				return;
+		}
+		banrank[modeparam][banparam] = rank;
 	}
 
 	bool checkrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		if (!banrank[modeparam][banparam])
-			return true;
-		if (banrank[modeparam][banparam] > rank)
-			return false;
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
+		std::map<std::string, unsigned int> innerban;
+		std::map<std::string, unsigned int>::iterator ibindex;
+		obindex = banrank.find(modeparam);
+		if (obindex != banrank.end()) {
+			innerban = obindex->second;
+			ibindex = innerban.find(banparam);
+			if (ibindex == innerban.end())
+				return true;
+			if (ibindex->second > rank)
+				return false;
+		}
 		return true;
 	}
 
 	void delrank(const char& modeparam, const std::string& banparam)
 	{
-		std::map<std::string, unsigned int> innerban = banrank[modeparam];
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
+		std::map<std::string, unsigned int> innerban;
 		std::map<std::string, unsigned int>::iterator removeindex;
-		removeindex = innerban.find(banparam);
-		if (removeindex != innerban.end())
-			innerban.erase(removeindex);
+		obindex = banrank.find(modeparam);
+		if (obindex != banrank.end()) {
+			innerban = obindex->second;
+			removeindex = innerban.find(banparam);
+			if (removeindex != innerban.end())
+				innerban.erase(removeindex);
+				banrank[modeparam] = innerban;
+		}
 	}
+
 };
 
 class ModuleBanprotect : public Module
@@ -76,7 +100,7 @@ class ModuleBanprotect : public Module
 		if (!mh)
 			return MOD_RES_PASSTHRU;
 
-		if (!mh->IsListMode())
+		if (!mh->IsListMode() || mh->GetPrefixRank() > 0)
 			return MOD_RES_PASSTHRU;
 
 		Banprotector* banp = ext.get(chan);
