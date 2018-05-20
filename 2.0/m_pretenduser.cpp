@@ -62,6 +62,12 @@ class CommandPretendUser : public Command
 			return CMD_FAILURE;
 		}
 
+		if (IS_OPER(u))
+		{
+			user->WriteServ("NOTICE %s :*** Cannot target an IRC operator", user->nick.c_str());
+			return CMD_FAILURE;
+		}
+
 		if (IS_LOCAL(u))
 		{
 			if (!ServerInstance->ULine(user->server))
