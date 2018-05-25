@@ -23,13 +23,10 @@ class Banprotector
 
 	void addrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
-		std::map<std::string, unsigned int> innerban;
-		std::map<std::string, unsigned int>::iterator ibindex;
-		obindex = banrank.find(modeparam);
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex = banrank.find(modeparam);
 		if (obindex != banrank.end()) {
-			innerban = obindex->second;
-			ibindex = innerban.find(banparam);
+			std::map<std::string, unsigned int> innerban = obindex->second;
+			std::map<std::string, unsigned int>::iterator ibindex = innerban.find(banparam);
 			if (ibindex != innerban.end())
 				return;
 		}
@@ -38,13 +35,10 @@ class Banprotector
 
 	bool checkrank(const char& modeparam, const std::string& banparam, const unsigned int& rank)
 	{
-		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
-		std::map<std::string, unsigned int> innerban;
-		std::map<std::string, unsigned int>::iterator ibindex;
-		obindex = banrank.find(modeparam);
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex = banrank.find(modeparam);
 		if (obindex != banrank.end()) {
-			innerban = obindex->second;
-			ibindex = innerban.find(banparam);
+			std::map<std::string, unsigned int> innerban = obindex->second;
+			std::map<std::string, unsigned int>::iterator ibindex = innerban.find(banparam);
 			if (ibindex == innerban.end())
 				return true;
 			if (ibindex->second > rank)
@@ -55,13 +49,10 @@ class Banprotector
 
 	void delrank(const char& modeparam, const std::string& banparam)
 	{
-		std::map<char, std::map<std::string, unsigned int>>::iterator obindex;
-		std::map<std::string, unsigned int> innerban;
-		std::map<std::string, unsigned int>::iterator removeindex;
-		obindex = banrank.find(modeparam);
+		std::map<char, std::map<std::string, unsigned int>>::iterator obindex = banrank.find(modeparam);;
 		if (obindex != banrank.end()) {
-			innerban = obindex->second;
-			removeindex = innerban.find(banparam);
+			std::map<std::string, unsigned int> innerban = obindex->second;
+			std::map<std::string, unsigned int>::iterator removeindex = innerban.find(banparam);
 			if (removeindex != innerban.end())
 			{
 				innerban.erase(removeindex);
