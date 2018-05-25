@@ -55,15 +55,13 @@ class ModuleModeRestrict : public Module
 		if (!transmitter)
 			return MOD_RES_PASSTHRU;
 
-		std::map<char, unsigned int>::iterator mc;
-		mc = requiredrank.find(mode);
+		std::map<char, unsigned int>::iterator mc = requiredrank.find(mode);
 		if (mc == requiredrank.end())
 			return MOD_RES_PASSTHRU;
 
 		if (transmitter->getRank() < mc->second)
 		{
-			std::string modestring = ConvToStr(mode);
-			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You do not have sufficient privileges to set or unset mode %s", user->nick.c_str(), chan->name.c_str(), modestring.c_str());
+			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You do not have sufficient privileges to set or unset mode %c", user->nick.c_str(), chan->name.c_str(), mode);
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
