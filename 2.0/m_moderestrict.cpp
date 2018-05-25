@@ -34,6 +34,7 @@ class ModuleModeRestrict : public Module
 
 	void OnRehash(User* user)
 	{
+		requiredrank.clear();
 		ConfigTagList tags = ServerInstance->Config->ConfTags("moderestrict");
 		for (ConfigIter i = tags.first; i != tags.second; ++i)
 		{
