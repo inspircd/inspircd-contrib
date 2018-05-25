@@ -61,7 +61,7 @@ class ModuleModeRestrict : public Module
 
 		if (transmitter->getRank() < mc->second)
 		{
-			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You do not have sufficient privileges to set or unset mode %c", user->nick.c_str(), chan->name.c_str(), mode);
+			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You do not have sufficient privileges to set or unset mode %c", user->nick.c_str(), chan->name.c_str(), mode);
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
