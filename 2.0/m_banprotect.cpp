@@ -118,7 +118,7 @@ class ModuleBanprotect : public Module
 		
 		if (!banp->checkrank(mode, param, transmitter->getRank()) && IS_LOCAL(user) && !IS_OPER(user) && !ServerInstance->ULine(user->server))
 		{
-			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You need a privilege equal or higher than the person who set the entry, to remove it.", user->nick.c_str(), chan->name.c_str());
+			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You need a privilege equal or higher than the person who set the entry, to remove it.", user->nick.c_str(), chan->name.c_str());
 			return MOD_RES_DENY;
 		}
 		banp->delrank(mode, param);
