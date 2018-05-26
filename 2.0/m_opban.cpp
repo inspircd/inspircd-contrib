@@ -46,7 +46,7 @@ class ModuleOPBan : public Module
 		Membership* transmitter = chan->GetUser(user);
 		if ((mode == 'b' || mode == 'e') && (param.length() > 2) && (param[0] == 'o') && (param[1] == ':') && (transmitter->getRank() < this->RequiredRank))
 		{
-			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : You do not have sufficient privileges to set or unset extban o", user->nick.c_str(), chan->name.c_str());
+			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You do not have sufficient privileges to set or unset extban o", user->nick.c_str(), chan->name.c_str());
 			return MOD_RES_DENY;
 		}
 		
@@ -60,7 +60,7 @@ class ModuleOPBan : public Module
 				
 		if ((chan->GetExtBanStatus(u, 'o') == MOD_RES_DENY) && !IS_OPER(u) && (mh->GetPrefixRank() > 0))
 		{
-			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s : %s is banned from having a privileged position", user->nick.c_str(), chan->name.c_str(), u->nick.c_str());
+			user->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :%s is banned from having a privileged position", user->nick.c_str(), chan->name.c_str(), u->nick.c_str());
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
