@@ -62,6 +62,17 @@ class CommandPretendUser : public Command
 			return CMD_FAILURE;
 		}
 
+		if (IS_OPER(u) && IS_OPER(user))
+		{
+			unsigned int dest_level = ConvToInt(u->oper->getConfig("level"));
+			unsigned int source_level = ConvToInt(user->oper->getConfig("level"));
+			if (dest_level > source_level)
+			{
+				user->WriteServ("NOTICE %s :*** Cannot target IRC operator with higher level than yourself", user->nick.c_str());
+				return CMD_FAILURE;
+			}
+		}
+
 		if (IS_LOCAL(u))
 		{
 			if (!ServerInstance->ULine(user->server))
