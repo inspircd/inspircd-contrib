@@ -64,11 +64,8 @@ class CommandPretendUser : public Command
 
 		if (IS_OPER(u) && IS_OPER(user))
 		{
-			std::string level = u->oper->getConfig("level");
-			long dest_level = atol(level.c_str());
-			level = user->oper->getConfig("level");
-			long source_level = atol(level.c_str());
-
+			unsigned int dest_level = ConvToInt(u->oper->getConfig("level"));
+			unsigned int source_level = ConvToInt(user->oper->getConfig("level"));
 			if (dest_level > source_level)
 			{
 				user->WriteServ("NOTICE %s :*** Cannot target IRC operator with higher level than yourself", user->nick.c_str());
