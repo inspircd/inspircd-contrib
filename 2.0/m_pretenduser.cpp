@@ -62,10 +62,18 @@ class CommandPretendUser : public Command
 			return CMD_FAILURE;
 		}
 
-		if (IS_OPER(u))
+		if (IS_OPER(u) && IS_OPER(user))
 		{
-			user->WriteServ("NOTICE %s :*** Cannot target an IRC operator", user->nick.c_str());
-			return CMD_FAILURE;
+			std::string level = u->oper->getConfig("level");
+			long dest_level = atol(level.c_str());
+			level = user->oper->getConfig("level");
+			long source_level = atol(level.c_str());
+
+			if (dest_level > source_level)
+			{
+				user->WriteServ("NOTICE %s :*** Cannot target IRC operator with higher level than yourself", user->nick.c_str());
+				return CMD_FAILURE;
+			}
 		}
 
 		if (IS_LOCAL(u))
