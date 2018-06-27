@@ -157,8 +157,17 @@ module m_autodrop 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169d
 module m_autokick 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_autokick.cpp
  description Automatically kicks people who match a banned mask.
  depends core 2.0
+module m_autooper 2.0.396 https://raw.github.com/inspircd/inspircd-extras/d4a616b81e88ae3809b5b5544e20ef52d0a9da8e/2.0/m_autooper.cpp
+ description Adds a opertype option to connect blocks so operators can get autologged in via IP
+ depends core 2.0
+module m_badnicks 2.0.397 https://raw.github.com/inspircd/inspircd-extras/f7c2dae21bbabbf4d0b87a33c4c8dc70593d1cb5/2.0/m_badnicks.cpp
+ description Adds a badnicks option to connect block, allowing you to specify prohibited nicks
+ depends core 2.0
 module m_bannegate 2.0.368 https://raw.github.com/inspircd/inspircd-extras/23c3fba9f768e061df71425144cd53465f53ecfb/2.0/m_bannegate.cpp
  description Enables ban negation by prefixing the match sequence with ~
+ depends core 2.0
+module m_banprotect 2.0.407 https://raw.github.com/inspircd/inspircd-extras/74670ff7bf8d1a0cdd5ba1fac972f9799f1d8db7/2.0/m_banprotect.cpp
+ description Prevents a lower rank from removing a listmode item set by a higher rank
  depends core 2.0
 module m_blockhighlight 2.0.380 https://raw.github.com/inspircd/inspircd-extras/1aca2d399aaf1e14f0b131574362f53f171d56b0/2.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
@@ -178,11 +187,17 @@ module m_cgiircban 2.0.390 https://raw.github.com/inspircd/inspircd-extras/3717d
 module m_changecap 2.0.202 https://raw.github.com/inspircd/inspircd-extras/2e2293e186bbd393e58079b800887c52bff5e777/2.0/m_changecap.cpp
  description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name
  depends core 2.0
+module m_checkbans 2.0.405 https://raw.github.com/inspircd/inspircd-extras/2914f186f21282d445641af4c30aae4bfe441649/2.0/m_checkbans.cpp
+ description Adds commands /checkbans, /testban, and /whyban
+ depends core 2.0
 module m_ciphersuitejoin 2.0.245 https://raw.github.com/inspircd/inspircd-extras/2739d28db74fcaaf6699a88c15c92f2fe0d19623/2.0/m_ciphersuitejoin.cpp
  description Adds channel list mode +Z which only lets clients join who use a ciphersuite on the list
  depends core 2.0
 module m_classban 2.0.361 https://raw.github.com/inspircd/inspircd-extras/3db8bf7af3fc55d4f8d43534f59e05a62a43963d/2.0/m_classban.cpp
  description Provides extban 'n' - Connect class ban
+ depends core 2.0
+module m_conn_accounts 2.0.404 https://raw.github.com/inspircd/inspircd-extras/1f926775983dc4dd852c0058c348d76a53dad693/2.0/m_conn_accounts.cpp
+ description Limit SASL connect classes by account(s).
  depends core 2.0
 module m_conn_banner 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_conn_banner.cpp
  description Displays a static text to every connecting user before registration
@@ -193,8 +208,11 @@ module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extr
 module m_conn_matchident 2.0.350 https://raw.github.com/inspircd/inspircd-extras/8fbf3703d0c42fcaab0249078f7cdbe6ce171b67/2.0/m_conn_matchident.cpp
  description Allows a connect class to match by ident.
  depends core 2.0
-module m_conn_vhost 2.0.320 https://raw.github.com/inspircd/inspircd-extras/ac065a98c32a190cc08b91111d3529c586cc9caa/2.0/m_conn_vhost.cpp
- description Adds a "vhost" option to connect blocks
+module m_conn_require 2.0.410 https://raw.github.com/inspircd/inspircd-extras/f961a16e3fb06ec3563d3d59cb5346226878839e/2.0/m_conn_require.cpp
+ description Allow or block connections based on multiple criteria
+ depends core 2.0
+module m_conn_vhost 2.0.402 https://raw.github.com/inspircd/inspircd-extras/b8cf097f2fe4af7a9e1b20a12083e4f4a10d5891/2.0/m_conn_vhost.cpp
+ description Sets a connect block configured vhost on users when they connect
  depends core 2.0
 module m_custompenalty 2.0.279 https://raw.github.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_custompenalty.cpp
  description Allows the customisation of penalty levels.
@@ -207,6 +225,9 @@ module m_deferaccept 2.0.197 https://raw.github.com/inspircd/inspircd-extras/78a
  depends core 2.0
 module m_disablemodes 2.0.198 https://raw.github.com/inspircd/inspircd-extras/a82352127ff38e1e48fe92f58a4f020ca3ca5753/2.0/m_disablemodes.cpp
  description Disable modes for users in specific connect blocks
+ depends core 2.0
+module m_extbanbanlist 2.0.406 https://raw.github.com/inspircd/inspircd-extras/3c8fd7607722669605be6f12d9798ba6b3363df1/2.0/m_extbanbanlist.cpp
+ description Provides extban 'b' - Ban list from another channel
  depends core 2.0
 module m_extbanredirect 2.0.277 https://raw.github.com/inspircd/inspircd-extras/95c5bd68c6580c963903fcfbf7d6c37ea12e5c46/2.0/m_extbanredirect.cpp
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
@@ -258,14 +279,17 @@ module m_joinoninvite 2.0.233 https://raw.github.com/inspircd/inspircd-extras/b2
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 2.0-2.1
-module m_joinpartspam 2.0.279 https://raw.github.com/inspircd/inspircd-extras/f791e9fe16904a9120194e614f61fca252a015e9/2.0/m_joinpartspam.cpp
- description Adds channel mode +V to ban a user after x per y joins and parts/quits (join/part spam)
+module m_joinpartspam 2.0.408 https://raw.github.com/inspircd/inspircd-extras/b74e50c5b7aa2e82582f44648136d763b530cec2/2.0/m_joinpartspam.cpp
+ description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
  depends core 2.0
 module m_lusersnoservices 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
  description Adds an extra line to LUSERS output to show global user count minus "clients" from U-Lines servers
  depends core 2.0
 module m_messagelength 2.0.320 https://raw.github.com/inspircd/inspircd-extras/c88df995b197e3f19e5243f3636037baae6079e1/2.0/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
+ depends core 2.0
+module m_moderestrict 2.0.401 https://raw.github.com/inspircd/inspircd-extras/9410fa29c9b7018c4f5caa1d840d46a310157a3e/2.0/m_moderestrict.cpp
+ description Allows locking down channel modes to specific prefix ranks
  depends core 2.0
 module m_namedstats 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_namedstats.cpp
  description Allows /STATS queries by name
@@ -288,13 +312,16 @@ module m_nooponcreate 2.0.210 https://raw.github.com/inspircd/inspircd-extras/87
 module m_nouidnick 2.0.195 https://raw.github.com/inspircd/inspircd-extras/ce92ed3d637bce893d247b73f5eabbac9d1610cf/2.0/m_nouidnick.cpp
  description Disallows changing nick to UID using /NICK
  depends core 2.0
+module m_opban 2.0.400 https://raw.github.com/inspircd/inspircd-extras/1c050e83bcc8243c34a2618154f521a4b78e27d6/2.0/m_opban.cpp
+ description Implements extban +b o: Prevents these persons from aquiring a privileged position
+ depends core 2.0
 module m_opmoderated 2.0.301 https://raw.github.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_opmoderated.cpp
  description Implements channel mode +U and extban 'U' - moderator mute
  depends core 2.0
 module m_override_umode 2.0.376 https://raw.github.com/inspircd/inspircd-extras/874ae79df5dfa5c1505b7ac249519ecf7894a00e/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
  depends core 2.0
-module m_pretenduser 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_pretenduser.cpp
+module m_pretenduser 2.0.403 https://raw.github.com/inspircd/inspircd-extras/d5e72d0983aa6de4f8fc6be2a092c083a649aa57/2.0/m_pretenduser.cpp
  description Provides the PRETENDUSER command that lets opers execute commands on behalf of other users
  depends core 2.0
 module m_privdeaf 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_privdeaf.cpp
@@ -358,6 +385,9 @@ module m_topicall 2.0.367 https://raw.github.com/inspircd/inspircd-extras/c75c4f
  depends core 2.0
 module m_totp 2.0.211 https://raw.github.com/inspircd/inspircd-extras/866a57af3b4c6a34f19885f1d7f7bf80fbdadbec/2.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
+ depends core 2.0
+module m_xlinetools 2.0.409 https://raw.github.com/inspircd/inspircd-extras/2f92e50ec2237d40453b5dbc456c8c589ac3b2c2/2.0/m_xlinetools.cpp
+ description X-Line management with XSEARCH, XREMOVE, and XCOPY
  depends core 2.0
 module m_xmlsocket 2.0.386 https://raw.github.com/inspircd/inspircd-extras/8096f7e0acb6938b66aa158fbb457f524db9ac15/2.0/m_xmlsocket.cpp
  description Provides XML socket support for Flash
