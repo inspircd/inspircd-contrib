@@ -469,7 +469,7 @@ class ModuleConnRequire : public Module
 
 	Version GetVersion()
 	{
-		return Version("Allow or block connections based on multiple criteria", VF_OPTCOMMON);
+		return Version("Allow or block connections based on multiple criteria");
 	}
 };
 
