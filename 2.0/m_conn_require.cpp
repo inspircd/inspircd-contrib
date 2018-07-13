@@ -129,6 +129,7 @@ class ModuleConnRequire : public Module
 	const std::string ctcpversion;
 	const std::string::size_type len_part;
 	const std::string::size_type len_all;
+	bool disableversion;
 	std::string ctcpstring;
 	std::string blockmessage;
 	time_t timeout;
@@ -206,6 +207,7 @@ class ModuleConnRequire : public Module
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("connrequire");
 		timeout = tag->getInt("timeout", 5);
+		disableversion = tag->getBool("disableversion");
 		ctcpstring = tag->getString("ctcpstring");
 		blockmessage = tag->getString("blockmessage");
 		std::transform(ctcpstring.begin(), ctcpstring.end(), ctcpstring.begin(), ::toupper);
@@ -281,7 +283,9 @@ class ModuleConnRequire : public Module
 			return MOD_RES_PASSTHRU;
 
 		// Hold while waiting for replies
-		if (ud->firstversionreply.empty() || (dualversion && ud->secondversionreply.empty()) || (!ctcpstring.empty() && !ud->ctcpreply))
+		if ((!disableversion && ud->firstversionreply.empty()) ||
+		   (dualversion && ud->secondversionreply.empty()) ||
+		   (!ctcpstring.empty() && !ud->ctcpreply))
 			return MOD_RES_DENY;
 
 		return MOD_RES_PASSTHRU;
@@ -312,7 +316,7 @@ class ModuleConnRequire : public Module
 			return MOD_RES_PASSTHRU;
 
 		// VERSION reply
-		if (!param.compare(1, ctcpversion.length(), ctcpversion))
+		if (!disableversion && !param.compare(1, ctcpversion.length(), ctcpversion))
 		{
 			const std::string& rplversion = (param.length() > len_part ? param.substr(len_part, param.length() - len_all) : "");
 			const std::string& firstversionreply = ud->firstversionreply;
@@ -397,7 +401,7 @@ class ModuleConnRequire : public Module
 
 		// Check class requirements against our UserData
 		if ((!cc->config->getBool("requirecap") || ud->sentcap) &&
-		   (!cc->config->getBool("requireversion") || !ud->firstversionreply.empty()) &&
+		   (disableversion || !cc->config->getBool("requireversion") || !ud->firstversionreply.empty()) &&
 		   (ctcpstring.empty() || !cc->config->getBool("requirectcp") || ud->ctcpreply))
 			return MOD_RES_PASSTHRU;
 
@@ -410,9 +414,12 @@ class ModuleConnRequire : public Module
 		UserData ud;
 		userdata.set(user, ud);
 
-		user->WriteServ("PRIVMSG %s :%c%s%c", user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
+		if (!disableversion)
+			user->WriteServ("PRIVMSG %s :%c%s%c",
+				user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
 		if (!ctcpstring.empty())
-			user->WriteServ("PRIVMSG %s :%c%s%c", user->nick.c_str(), wrapper, ctcpstring.c_str(), wrapper);
+			user->WriteServ("PRIVMSG %s :%c%s%c",
+				user->nick.c_str(), wrapper, ctcpstring.c_str(), wrapper);
 	}
 
 	void OnUserConnect(LocalUser* user)
@@ -441,7 +448,7 @@ class ModuleConnRequire : public Module
 
 		bool noCap = !ud->sentcap;
 		bool noRpl = (!ctcpstring.empty() && !ud->ctcpreply);
-		bool noVer = ud->firstversionreply.empty();
+		bool noVer = (!disableversion && ud->firstversionreply.empty());
 
 		// We didn't do it
 		if (!noCap && !noRpl && !noVer)
