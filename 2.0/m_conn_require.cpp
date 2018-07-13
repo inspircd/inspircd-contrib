@@ -20,9 +20,10 @@
 /* $ModAuthorMail: genius3000@g3k.solutions */
 /* $ModDesc: Allow or block connections based on multiple criteria */
 /* $ModDepends: core 2.0 */
-/* $ModConfig: <connrequire timeout="5" ctcpstring="TIME"> and see below comments */
+/* $ModConfig: <connrequire timeout="5" ctcpstring="TIME" blockmessage="Your client isn't up to spec!"> */
 
-/* <dualversion active="yes" show="yes" ban="yes" duration="7d" reason="Fix your client!">
+/* More available config tags:
+ * <dualversion active="yes" show="yes" ban="yes" duration="7d" reason="Fix your client!">
  * <badversion mask="*terrible script*" reason="Your script is terrible, bye bye!">
  * <badversion mask="xchat*" ban="yes" duration="7d" reason="Time to upgrade to Hexchat!">
  * <banmissing cap="yes" version="yes" duration="14d" reason="Upgrade your client!">
@@ -30,25 +31,27 @@
  *
  * Descriptions and defaults:
  * <connrequire >
- * timeout:	max number of seconds to hold a user while waiting for replies. Default: 5
- * ctcpstring:	a secondary CTCP request, aside from "VERSION". Default: blank
+ * timeout:        max number of seconds to hold a user while waiting for replies. Default: 5
+ * ctcpstring:     a secondary CTCP request, aside from "VERSION". Default: blank
+ * blockmessage:   a message sent to the user upon disconnect if we likely caused it. Default: blank
+ * disableversion: disable the CTCP "VERSION" request (leaves just CAP and ctcpstring useful). Default: no
  * <dualversion >
- * active:	controls the second "VERSION" request that blocks on mismatch. Default: no
- * show:	send a SNOTICE of the two replies when they don't match. Default: no
- * ban:		Z-Line the IP on a mismatch. Default: no
- * duration:	time string for the Z-Line duration. Default: 7d
- * reason:	used for both the block and Z-Line. Default: Fix your client!
+ * active:         controls the second "VERSION" request that blocks on mismatch. Default: no
+ * show:           send a SNOTICE of the two replies when they don't match. Default: no
+ * ban:            Z-Line the IP on a mismatch. Default: no
+ * duration:       time string for the Z-Line duration. Default: 7d
+ * reason:         used for both the block and Z-Line. Default: Fix your client!
  * <badversion >
- * mask:	wildcard mask to block/ban of an unwanted client version. Default: blank
- * ban:		Z-Line the IP on a match. Default: no
- * duration:	time string for the Z-Line duration. Default: 7d
- * reason:	used for both the block and Z-Line. Default: Upgrade your client!
+ * mask:           wildcard mask to block/ban of an unwanted client version. Default: blank
+ * ban:            Z-Line the IP on a match. Default: no
+ * duration:       time string for the Z-Line duration. Default: 7d
+ * reason:         used for both the block and Z-Line. Default: Upgrade your client!
  * <banmissing >
- * cap:		whether a lack of CAP matches this tag. Default: no
- * ctcp:	whether a lack of secondary CTCP (if enabled) reply matches this tag. Default: no
- * version:	whether a lack of VERSION reply matches this tag. Default: no
- * duration:	time string for the Z-Line duration. Default: 1d
- * reason:	used for the Z-Line. Default: Fix your client!
+ * cap:            whether a lack of CAP matches this tag. Default: no
+ * ctcp:           whether a lack of secondary CTCP (if enabled) reply matches this tag. Default: no
+ * version:        whether a lack of VERSION reply matches this tag. Default: no
+ * duration:       time string for the Z-Line duration. Default: 1d
+ * reason:         used for the Z-Line. Default: Fix your client!
  *
  * <badversion> and <banmissing> tags will be matched in the same order as they appear
  * in the config.
