@@ -130,6 +130,7 @@ class ModuleConnRequire : public Module
 	const std::string::size_type len_part;
 	const std::string::size_type len_all;
 	std::string ctcpstring;
+	std::string blockmessage;
 	time_t timeout;
 
 	void SetZLine(User* user, time_t duration, const std::string& reason, const std::string& from)
@@ -206,6 +207,7 @@ class ModuleConnRequire : public Module
 		ConfigTag* tag = ServerInstance->Config->ConfValue("connrequire");
 		timeout = tag->getInt("timeout", 5);
 		ctcpstring = tag->getString("ctcpstring");
+		blockmessage = tag->getString("blockmessage");
 		std::transform(ctcpstring.begin(), ctcpstring.end(), ctcpstring.begin(), ::toupper);
 
 		tag = ServerInstance->Config->ConfValue("dualversion");
@@ -444,6 +446,10 @@ class ModuleConnRequire : public Module
 		// We didn't do it
 		if (!noCap && !noRpl && !noVer)
 			return;
+
+		// Send them a message if configured
+		if (!blockmessage.empty())
+			user->WriteServ("NOTICE %s :%s", user->nick.c_str(), blockmessage.c_str());
 
 		// Check for a match to our BanMissing and then Z-Line
 		for (std::vector<BanMissing>::const_iterator it = banmissings.begin(); it != banmissings.end(); ++it)
