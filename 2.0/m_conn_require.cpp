@@ -80,12 +80,14 @@ struct UserData
 {
 	bool sentcap;
 	bool ctcpreply;
+	bool selfquit;
 	std::string firstversionreply;
 	std::string secondversionreply;
 
 	UserData()
 		: sentcap(false)
 		, ctcpreply(false)
+		, selfquit(false)
 	{
 	}
 };
@@ -285,6 +287,15 @@ class ModuleConnRequire : public Module
 
 	ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser* user, bool validated, const std::string &original_line)
 	{
+		// Mark self quitters to avoid messaging or Z-Lining them
+		if (command == "QUIT")
+		{
+			UserData* ud = userdata.get(user);
+			if (ud)
+				ud->selfquit = true;
+			return MOD_RES_PASSTHRU;
+		}
+
 		// Make sure it's a NOTICE to us, with at least one more parameter
 		if (command != "NOTICE" || validated || parameters.size() < 2 || parameters[0] != ServerInstance->Config->ServerName)
 			return MOD_RES_PASSTHRU;
@@ -416,8 +427,9 @@ class ModuleConnRequire : public Module
 		if (user->registered == REG_ALL)
 			return;
 
+		// Skip users we don't know about or that self quit
 		UserData* ud = userdata.get(user);
-		if (!ud)
+		if (!ud || ud->selfquit)
 			return;
 
 		bool noCap = !ud->sentcap;
