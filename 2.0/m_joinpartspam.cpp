@@ -24,6 +24,7 @@
 
 /* Set 'allowredirect' to "yes" to allow channel redirection. Defaults to no.
  * Set 'freeredirect' to "yes" to skip the channel operator check. Defaults to no.
+ * You can remove a block on a user with a /INVITE
  */
 
 /* Helpop Lines for the CHMODES section
@@ -137,6 +138,13 @@ class joinpartspamsettings
 			return true;
 
 		return false;
+	}
+
+	void removeblock(const std::string& mask)
+	{
+		std::map<std::string, time_t>::iterator it = blocked.find(mask);
+		if (it != blocked.end())
+			blocked.erase(it);
 	}
 
 	// Clear expired entries of non cyclers and blocked cyclers
@@ -322,7 +330,7 @@ class ModuleJoinPartSpam : public Module
 		OnRehash(NULL);
 		ServiceProvider* servicelist[] = { &ext, &jps };
 		ServerInstance->Modules->AddServices(servicelist, sizeof(servicelist)/sizeof(ServiceProvider*));
-		Implementation eventlist[] = { I_OnRehash, I_OnUserPreJoin, I_OnUserJoin };
+		Implementation eventlist[] = { I_OnRehash, I_OnUserPreJoin, I_OnUserJoin, I_OnUserInvite };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
@@ -390,6 +398,20 @@ class ModuleJoinPartSpam : public Module
 			const std::string& mask(memb->user->MakeHost());
 			jpss->addcycle(mask);
 		}
+	}
+
+	// Remove a block on a user on a successful invite
+	void OnUserInvite(User*, User* user, Channel* chan, time_t)
+	{
+		if (!chan->IsModeSet(jps.GetModeChar()))
+			return;
+
+		joinpartspamsettings* jpss = ext.get(chan);
+		if (!jpss)
+			return;
+
+		const std::string& mask(user->MakeHost());
+		jpss->removeblock(mask);
 	}
 
 	Version GetVersion()
