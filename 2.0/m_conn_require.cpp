@@ -432,6 +432,11 @@ class ModuleConnRequire : public Module
 		if (!ud || ud->selfquit)
 			return;
 
+		// Skip users with a socket level error
+		// This ignores things like port scans, ZNC cert errors, etc.
+		if (!user->eh.getError().empty())
+			return;
+
 		bool noCap = !ud->sentcap;
 		bool noRpl = (!ctcpstring.empty() && !ud->ctcpreply);
 		bool noVer = ud->firstversionreply.empty();
