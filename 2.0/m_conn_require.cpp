@@ -20,9 +20,10 @@
 /* $ModAuthorMail: genius3000@g3k.solutions */
 /* $ModDesc: Allow or block connections based on multiple criteria */
 /* $ModDepends: core 2.0 */
-/* $ModConfig: <connrequire timeout="5" ctcpstring="TIME"> and see below comments */
+/* $ModConfig: <connrequire timeout="5" ctcpstring="TIME" blockmessage="Your client isn't up to spec!"> */
 
-/* <dualversion active="yes" show="yes" ban="yes" duration="7d" reason="Fix your client!">
+/* More available config tags:
+ * <dualversion active="yes" show="yes" ban="yes" duration="7d" reason="Fix your client!">
  * <badversion mask="*terrible script*" reason="Your script is terrible, bye bye!">
  * <badversion mask="xchat*" ban="yes" duration="7d" reason="Time to upgrade to Hexchat!">
  * <banmissing cap="yes" version="yes" duration="14d" reason="Upgrade your client!">
@@ -30,25 +31,27 @@
  *
  * Descriptions and defaults:
  * <connrequire >
- * timeout:	max number of seconds to hold a user while waiting for replies. Default: 5
- * ctcpstring:	a secondary CTCP request, aside from "VERSION". Default: blank
+ * timeout:        max number of seconds to hold a user while waiting for replies. Default: 5
+ * ctcpstring:     a secondary CTCP request, aside from "VERSION". Default: blank
+ * blockmessage:   a message sent to the user upon disconnect if we likely caused it. Default: blank
+ * disableversion: disable the CTCP "VERSION" request (leaves just CAP and ctcpstring useful). Default: no
  * <dualversion >
- * active:	controls the second "VERSION" request that blocks on mismatch. Default: no
- * show:	send a SNOTICE of the two replies when they don't match. Default: no
- * ban:		Z-Line the IP on a mismatch. Default: no
- * duration:	time string for the Z-Line duration. Default: 7d
- * reason:	used for both the block and Z-Line. Default: Fix your client!
+ * active:         controls the second "VERSION" request that blocks on mismatch. Default: no
+ * show:           send a SNOTICE of the two replies when they don't match. Default: no
+ * ban:            Z-Line the IP on a mismatch. Default: no
+ * duration:       time string for the Z-Line duration. Default: 7d
+ * reason:         used for both the block and Z-Line. Default: Fix your client!
  * <badversion >
- * mask:	wildcard mask to block/ban of an unwanted client version. Default: blank
- * ban:		Z-Line the IP on a match. Default: no
- * duration:	time string for the Z-Line duration. Default: 7d
- * reason:	used for both the block and Z-Line. Default: Upgrade your client!
+ * mask:           wildcard mask to block/ban of an unwanted client version. Default: blank
+ * ban:            Z-Line the IP on a match. Default: no
+ * duration:       time string for the Z-Line duration. Default: 7d
+ * reason:         used for both the block and Z-Line. Default: Upgrade your client!
  * <banmissing >
- * cap:		whether a lack of CAP matches this tag. Default: no
- * ctcp:	whether a lack of secondary CTCP (if enabled) reply matches this tag. Default: no
- * version:	whether a lack of VERSION reply matches this tag. Default: no
- * duration:	time string for the Z-Line duration. Default: 1d
- * reason:	used for the Z-Line. Default: Fix your client!
+ * cap:            whether a lack of CAP matches this tag. Default: no
+ * ctcp:           whether a lack of secondary CTCP (if enabled) reply matches this tag. Default: no
+ * version:        whether a lack of VERSION reply matches this tag. Default: no
+ * duration:       time string for the Z-Line duration. Default: 1d
+ * reason:         used for the Z-Line. Default: Fix your client!
  *
  * <badversion> and <banmissing> tags will be matched in the same order as they appear
  * in the config.
@@ -80,12 +83,14 @@ struct UserData
 {
 	bool sentcap;
 	bool ctcpreply;
+	bool selfquit;
 	std::string firstversionreply;
 	std::string secondversionreply;
 
 	UserData()
 		: sentcap(false)
 		, ctcpreply(false)
+		, selfquit(false)
 	{
 	}
 };
@@ -127,7 +132,9 @@ class ModuleConnRequire : public Module
 	const std::string ctcpversion;
 	const std::string::size_type len_part;
 	const std::string::size_type len_all;
+	bool disableversion;
 	std::string ctcpstring;
+	std::string blockmessage;
 	time_t timeout;
 
 	void SetZLine(User* user, time_t duration, const std::string& reason, const std::string& from)
@@ -203,7 +210,9 @@ class ModuleConnRequire : public Module
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("connrequire");
 		timeout = tag->getInt("timeout", 5);
+		disableversion = tag->getBool("disableversion");
 		ctcpstring = tag->getString("ctcpstring");
+		blockmessage = tag->getString("blockmessage");
 		std::transform(ctcpstring.begin(), ctcpstring.end(), ctcpstring.begin(), ::toupper);
 
 		tag = ServerInstance->Config->ConfValue("dualversion");
@@ -277,7 +286,9 @@ class ModuleConnRequire : public Module
 			return MOD_RES_PASSTHRU;
 
 		// Hold while waiting for replies
-		if (ud->firstversionreply.empty() || (dualversion && ud->secondversionreply.empty()) || (!ctcpstring.empty() && !ud->ctcpreply))
+		if ((!disableversion && ud->firstversionreply.empty()) ||
+		   (dualversion && ud->secondversionreply.empty()) ||
+		   (!ctcpstring.empty() && !ud->ctcpreply))
 			return MOD_RES_DENY;
 
 		return MOD_RES_PASSTHRU;
@@ -285,6 +296,15 @@ class ModuleConnRequire : public Module
 
 	ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser* user, bool validated, const std::string &original_line)
 	{
+		// Mark self quitters to avoid messaging or Z-Lining them
+		if (command == "QUIT")
+		{
+			UserData* ud = userdata.get(user);
+			if (ud)
+				ud->selfquit = true;
+			return MOD_RES_PASSTHRU;
+		}
+
 		// Make sure it's a NOTICE to us, with at least one more parameter
 		if (command != "NOTICE" || validated || parameters.size() < 2 || parameters[0] != ServerInstance->Config->ServerName)
 			return MOD_RES_PASSTHRU;
@@ -299,7 +319,7 @@ class ModuleConnRequire : public Module
 			return MOD_RES_PASSTHRU;
 
 		// VERSION reply
-		if (!param.compare(1, ctcpversion.length(), ctcpversion))
+		if (!disableversion && !param.compare(1, ctcpversion.length(), ctcpversion))
 		{
 			const std::string& rplversion = (param.length() > len_part ? param.substr(len_part, param.length() - len_all) : "");
 			const std::string& firstversionreply = ud->firstversionreply;
@@ -384,7 +404,7 @@ class ModuleConnRequire : public Module
 
 		// Check class requirements against our UserData
 		if ((!cc->config->getBool("requirecap") || ud->sentcap) &&
-		   (!cc->config->getBool("requireversion") || !ud->firstversionreply.empty()) &&
+		   (disableversion || !cc->config->getBool("requireversion") || !ud->firstversionreply.empty()) &&
 		   (ctcpstring.empty() || !cc->config->getBool("requirectcp") || ud->ctcpreply))
 			return MOD_RES_PASSTHRU;
 
@@ -397,9 +417,12 @@ class ModuleConnRequire : public Module
 		UserData ud;
 		userdata.set(user, ud);
 
-		user->WriteServ("PRIVMSG %s :%c%s%c", user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
+		if (!disableversion)
+			user->WriteServ("PRIVMSG %s :%c%s%c",
+				user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
 		if (!ctcpstring.empty())
-			user->WriteServ("PRIVMSG %s :%c%s%c", user->nick.c_str(), wrapper, ctcpstring.c_str(), wrapper);
+			user->WriteServ("PRIVMSG %s :%c%s%c",
+				user->nick.c_str(), wrapper, ctcpstring.c_str(), wrapper);
 	}
 
 	void OnUserConnect(LocalUser* user)
@@ -416,17 +439,27 @@ class ModuleConnRequire : public Module
 		if (user->registered == REG_ALL)
 			return;
 
+		// Skip users we don't know about or that self quit
 		UserData* ud = userdata.get(user);
-		if (!ud)
+		if (!ud || ud->selfquit)
+			return;
+
+		// Skip users with a socket level error
+		// This ignores things like port scans, ZNC cert errors, etc.
+		if (!user->eh.getError().empty())
 			return;
 
 		bool noCap = !ud->sentcap;
 		bool noRpl = (!ctcpstring.empty() && !ud->ctcpreply);
-		bool noVer = ud->firstversionreply.empty();
+		bool noVer = (!disableversion && ud->firstversionreply.empty());
 
 		// We didn't do it
 		if (!noCap && !noRpl && !noVer)
 			return;
+
+		// Send them a message if configured
+		if (!blockmessage.empty())
+			user->WriteServ("NOTICE %s :%s", user->nick.c_str(), blockmessage.c_str());
 
 		// Check for a match to our BanMissing and then Z-Line
 		for (std::vector<BanMissing>::const_iterator it = banmissings.begin(); it != banmissings.end(); ++it)
@@ -469,7 +502,7 @@ class ModuleConnRequire : public Module
 
 	Version GetVersion()
 	{
-		return Version("Allow or block connections based on multiple criteria", VF_OPTCOMMON);
+		return Version("Allow or block connections based on multiple criteria");
 	}
 };
 
