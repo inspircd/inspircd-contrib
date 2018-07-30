@@ -330,7 +330,7 @@ class ModuleJoinPartSpam : public Module
 		OnRehash(NULL);
 		ServiceProvider* servicelist[] = { &ext, &jps };
 		ServerInstance->Modules->AddServices(servicelist, sizeof(servicelist)/sizeof(ServiceProvider*));
-		Implementation eventlist[] = { I_OnRehash, I_OnUserPreJoin, I_OnUserJoin, I_OnUserInvite };
+		Implementation eventlist[] = { I_OnRehash, I_OnPreCommand, I_OnUserPreJoin, I_OnUserJoin, I_OnUserInvite };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
@@ -347,28 +347,30 @@ class ModuleJoinPartSpam : public Module
 		freeredirect = tag->getBool("freeredirect");
 	}
 
-	// Stop the join and clear the user's counter if they've hit the limit
-	ModResult OnUserPreJoin(User* user, Channel* chan, const char* cname, std::string& privs, const std::string& keygiven)
+	// Check if the user is blocked or should now be blocked
+	bool BlockJoin(User* user, Channel* chan, bool quiet = false)
 	{
-		if (!chan || !chan->IsModeSet(jps.GetModeChar()))
-			return MOD_RES_PASSTHRU;
-		if (IS_OPER(user))
-			return MOD_RES_PASSTHRU;
-
 		joinpartspamsettings* jpss = ext.get(chan);
 		if (!jpss)
-			return MOD_RES_PASSTHRU;
+			return false;
 
 		const std::string& mask(user->MakeHost());
 
 		if (jpss->isblocked(mask))
 		{
+			if (quiet)
+				return true;
+
 			user->WriteNumeric(RPL_CHANBLOCKED, "%s %s :Channel join/part spam triggered (limit is %u cycles in %u secs). Please try again later.",
 				user->nick.c_str(), chan->name.c_str(), jpss->cycles, jpss->secs);
-			return MOD_RES_DENY;
+
+			return true;
 		}
 		else if (jpss->zapme(mask))
 		{
+			if (quiet)
+				return true;
+
 			// The user is now in the blocked list, deny the join, and if
 			// redirect is wanted and allowed, we join the user to that channel.
 			user->WriteNumeric(RPL_CHANBLOCKED, "%s %s :Channel join/part spam triggered (limit is %u cycles in %u secs). Please try again in %u seconds.",
@@ -376,10 +378,40 @@ class ModuleJoinPartSpam : public Module
 
 			if (allowredirect && !jpss->redirect.empty())
 				Channel::JoinUser(user, jpss->redirect.c_str(), false, "", false, ServerInstance->Time());
-			return MOD_RES_DENY;
+			return true;
 		}
 
-		return MOD_RES_PASSTHRU;
+		return false;
+	}
+
+	// Catch /CYCLE, deny if the user is going to be blocked
+	ModResult OnPreCommand(std::string& command, std::vector<std::string>& parameters, LocalUser* user, bool validated, const std::string&)
+	{
+		if (!validated || command != "CYCLE" || IS_OPER(user))
+			return MOD_RES_PASSTHRU;
+
+		Channel* chan = ServerInstance->FindChan(parameters[0]);
+		if (!chan || !chan->IsModeSet(jps.GetModeChar()))
+			return MOD_RES_PASSTHRU;
+
+		bool deny = BlockJoin(user, chan, true);
+		if (!deny)
+			return MOD_RES_PASSTHRU;
+
+		user->WriteServ("NOTICE %s :*** You may not cycle, as you would then trigger the join/part spam protection on channel %s",
+			user->nick.c_str(), chan->name.c_str());
+		return MOD_RES_DENY;
+	}
+
+	// Block the join if the user is blocked (already or as of now)
+	ModResult OnUserPreJoin(User* user, Channel* chan, const char* cname, std::string& privs, const std::string& keygiven)
+	{
+		if (!chan || !chan->IsModeSet(jps.GetModeChar()))
+			return MOD_RES_PASSTHRU;
+		if (IS_OPER(user))
+			return MOD_RES_PASSTHRU;
+
+		return BlockJoin(user, chan) ? MOD_RES_DENY : MOD_RES_PASSTHRU;
 	}
 
 	// Only count successful joins
