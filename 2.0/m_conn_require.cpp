@@ -278,7 +278,7 @@ class ModuleConnRequire : public Module
 	ModResult OnCheckReady(LocalUser* user)
 	{
 		// Allow user to be held here for up to 'timeout' seconds
-		if (user->signon + timeout > ServerInstance->Time())
+		if (user->signon + timeout <= ServerInstance->Time())
 			return MOD_RES_PASSTHRU;
 
 		UserData* ud = userdata.get(user);
