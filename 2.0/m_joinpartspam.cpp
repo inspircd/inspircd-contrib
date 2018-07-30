@@ -82,8 +82,8 @@ class joinpartspamsettings
 	{
 		/* If mask isn't already tracked, set reset time
 		 * If tracked and reset time is up, reset counter and reset time
-		 * Also assume another server denied join and set ban, with a user removing
-		 * the ban if counter >= cycles, reset counter and reset time
+		 * Also assume another server blocked, with the block timing out or a
+		 * user removed it if counter >= cycles, reset counter and reset time
 		 */
 		Tracking& tracking = cycler[mask];
 
