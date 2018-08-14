@@ -67,11 +67,11 @@ class ModuleUserPM : public Module
 		{
 			if (this->ExpandNicks == 1)
 			{
-				ServerInstance->SNO->WriteGlobalSno('p', "<%s!%s@%s>,<%s!%s@%s>: %s", user->nick.c_str(), user->ident.c_str(), user->dhost.c$
+				ServerInstance->SNO->WriteGlobalSno('p', "<%s!%s@%s>,<%s!%s@%s>: %s", user->nick.c_str(), user->ident.c_str(), user->dhost.c_str(), duser->nick.c_str(), duser->ident.c_str(), duser->dhost.c_str(), pm.c_str() );
 			}
 			else
 			{
-				ServerInstance->SNO->WriteGlobalSno('p', "<%s!%s@%s>,<%s!%s@%s>: %s", user->nick.c_str(), user->ident.c_str(), user->host.c_$
+				ServerInstance->SNO->WriteGlobalSno('p', "<%s!%s@%s>,<%s!%s@%s>: %s", user->nick.c_str(), user->ident.c_str(), user->host.c_str(), duser->nick.c_str(), duser->ident.c_str(), duser->host.c_str(), pm.c_str() );
 			}
 		}
 	}
