@@ -33,7 +33,7 @@ class CommandSVSOper : public Command
 		flags_needed = FLAG_SERVERONLY;
 	}
 
-	CmdResult Handle(const std::vector<std::string>& parameters, User* user) CXX11_OVERRIDE
+	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		if (!user->server->IsULine())
 			return CMD_FAILURE;
@@ -53,7 +53,7 @@ class CommandSVSOper : public Command
 		return CMD_SUCCESS;
 	}
 
-	RouteDescriptor GetRouting(User* user, const std::vector<std::string>& parameters) CXX11_OVERRIDE
+	RouteDescriptor GetRouting(User* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		User* target = ServerInstance->FindUUID(parameters[0]);
 		if (!target)

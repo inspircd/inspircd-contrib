@@ -116,7 +116,8 @@ private:
 
 	void WriteMessage(LocalUser* user, const std::string& message)
 	{
-		user->WriteServ("PRIVMSG %s :%s", user->nick.c_str(), message.c_str());
+		ClientProtocol::Messages::Privmsg privmsg(ClientProtocol::Messages::Privmsg::nocopy, ServerInstance->FakeClient, user, message);
+		user->Send(ServerInstance->GetRFCEvents().privmsg, privmsg);
 	}
 
  public:
@@ -133,7 +134,7 @@ private:
 		allow_empty_last_param = false;
 	}
 
-	CmdResult HandleLocal(const std::vector<std::string>& parameters, LocalUser* source) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* source, const Params& parameters) CXX11_OVERRIDE
 	{
 		std::string url;
 		if (!parameters.empty())
@@ -143,7 +144,7 @@ private:
 				Channel* channel = ServerInstance->FindChan(parameters[0]);
 				if (!channel || ((channel->IsModeSet(privatemode) || channel->IsModeSet(secretmode)) && !channel->HasUser(source)))
 				{
-					source->WriteNumeric(ERR_NOSUCHCHANNEL, "%s %s :No such channel", source->nick.c_str(), parameters[0].c_str());
+					source->WriteNumeric(Numerics::NoSuchChannel(parameters[0]));
 					return CMD_FAILURE;
 				}
 
@@ -156,7 +157,7 @@ private:
 				User* user = ServerInstance->FindNickOnly(parameters[0]);
 				if (!user)
 				{
-					source->WriteNumeric(ERR_NOSUCHNICK, "%s %s :No such nick", source->nick.c_str(), parameters[0].c_str());
+					source->WriteNumeric(Numerics::NoSuchNick(parameters[0]));
 					return CMD_FAILURE;
 				}
 				url = URLEncode(user->nick) + ",isnick";
@@ -173,7 +174,7 @@ private:
 		QRCode code(url);
 		if (code.GetError())
 		{
-			source->WriteServ("NOTICE %s :QR generation failed: %s", source->nick.c_str(), strerror(code.GetError()));
+			source->WriteNotice(InspIRCd::Format("QR generation failed: %s", strerror(code.GetError())));
 			return CMD_FAILURE;
 		}
 
