@@ -414,7 +414,7 @@ class ModuleConnRequire : public Module
 	void OnUserInit(LocalUser* user)
 	{
 		// Initialize their UserData and send the CTCP request(s)
-		UserData ud;
+		UserData* ud = new UserData;
 		userdata.set(user, ud);
 
 		if (!disableversion)
