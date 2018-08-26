@@ -84,6 +84,7 @@ struct UserData
 	bool sentcap;
 	bool ctcpreply;
 	bool selfquit;
+	bool zapped;
 	std::string firstversionreply;
 	std::string secondversionreply;
 
@@ -91,6 +92,7 @@ struct UserData
 		: sentcap(false)
 		, ctcpreply(false)
 		, selfquit(false)
+		, zapped(false)
 	{
 	}
 };
@@ -117,7 +119,6 @@ struct BanMissing
 class ModuleConnRequire : public Module
 {
 	SimpleExtItem<UserData> userdata;
-	LocalIntExt zapped;
 
 	std::vector<BadVersion> badversions;
 	std::vector<BanMissing> banmissings;
@@ -168,7 +169,6 @@ class ModuleConnRequire : public Module
  public:
 	ModuleConnRequire ()
 		: userdata("USERDATA", this)
-		, zapped("ZAPPED", this)
 		, wrapper('\001')
 		, ctcpversion("VERSION")
 		, len_part(ctcpversion.length() + 2)
@@ -341,7 +341,7 @@ class ModuleConnRequire : public Module
 
 				ServerInstance->SNO->WriteToSnoMask('u', "Blocked user %s (%s) [%s] on port %d, version reply \"%s\" matched badversion mask \"%s\"",
 					user->GetFullRealHost().c_str(), user->GetIPString(), user->fullname.c_str(), user->GetServerPort(), rplversion.c_str(), bv.mask.c_str());
-				zapped.set(user, 1);
+				ud->zapped = true;
 				ServerInstance->Users->QuitUser(user, bv.reason);
 
 				return MOD_RES_DENY;
@@ -369,7 +369,7 @@ class ModuleConnRequire : public Module
 				if (dualshow)
 					ServerInstance->SNO->WriteToSnoMask('u', "Version replies \"%s\" and \"%s\"", firstversionreply.c_str(), secondversionreply.c_str());
 
-				zapped.set(user, 1);
+				ud->zapped = true;
 				ServerInstance->Users->QuitUser(user, dualreason);
 			}
 		}
@@ -457,6 +457,10 @@ class ModuleConnRequire : public Module
 		if (!noCap && !noRpl && !noVer)
 			return;
 
+		// We already disconnected (and possibly banned) these users
+		if (ud->zapped)
+			return;
+
 		// Send them a message if configured
 		if (!blockmessage.empty())
 			user->WriteServ("NOTICE %s :%s", user->nick.c_str(), blockmessage.c_str());
@@ -476,10 +480,6 @@ class ModuleConnRequire : public Module
 
 			SetZLine(user, bm.duration, bm.reason, "banmissing");
 		}
-
-		// We already sent a SNOTICE for these users
-		if (zapped.get(user))
-			return;
 
 		// Send out a SNOTICE that we likely caused this user to not get through
 		std::string buffer = "Disconnecting unregistered user " + user->GetFullRealHost();
