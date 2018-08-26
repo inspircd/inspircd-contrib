@@ -813,10 +813,12 @@ class ModuleAntiRandom : public Module
 
 		tmp = conftag->getString("banduration");
 		if (!tmp.empty())
+		{
 			this->BanDuration = ServerInstance->Duration(tmp.c_str());
 			// Sanity check
 			if ((int)this->BanDuration <= 0)
 				this->BanDuration = 1;
+		}
 		else
 			this->BanDuration = 86400; // One day.
 
