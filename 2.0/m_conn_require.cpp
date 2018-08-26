@@ -81,16 +81,22 @@
 // ExtItem per User, tracking CAP request and CTCP replies
 struct UserData
 {
-	bool sentcap;
 	bool ctcpreply;
+	bool expectctcp;
+	bool expectversion;
 	bool selfquit;
+	bool sentcap;
+	bool zapped;
 	std::string firstversionreply;
 	std::string secondversionreply;
 
 	UserData()
-		: sentcap(false)
-		, ctcpreply(false)
+		: ctcpreply(false)
+		, expectctcp(false)
+		, expectversion(false)
 		, selfquit(false)
+		, sentcap(false)
+		, zapped(false)
 	{
 	}
 };
@@ -117,7 +123,6 @@ struct BanMissing
 class ModuleConnRequire : public Module
 {
 	SimpleExtItem<UserData> userdata;
-	LocalIntExt zapped;
 
 	std::vector<BadVersion> badversions;
 	std::vector<BanMissing> banmissings;
@@ -168,7 +173,6 @@ class ModuleConnRequire : public Module
  public:
 	ModuleConnRequire ()
 		: userdata("USERDATA", this)
-		, zapped("ZAPPED", this)
 		, wrapper('\001')
 		, ctcpversion("VERSION")
 		, len_part(ctcpversion.length() + 2)
@@ -296,16 +300,22 @@ class ModuleConnRequire : public Module
 
 	ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser* user, bool validated, const std::string &original_line)
 	{
+		// Make sure we care about this user first
+		UserData* ud = userdata.get(user);
+		if (!ud)
+			return MOD_RES_PASSTHRU;
+
 		// Mark self quitters to avoid messaging or Z-Lining them
 		if (command == "QUIT")
 		{
-			UserData* ud = userdata.get(user);
-			if (ud)
-				ud->selfquit = true;
+			ud->selfquit = true;
 			return MOD_RES_PASSTHRU;
 		}
 
-		// Make sure it's a NOTICE to us, with at least one more parameter
+		// Now we check for three important things:
+		// 1) The command is a NOTICE (not yet validated)
+		// 2) The NOTICE is to us
+		// 3) The NOTICE contains at least one parameter after the target
 		if (command != "NOTICE" || validated || parameters.size() < 2 || parameters[0] != ServerInstance->Config->ServerName)
 			return MOD_RES_PASSTHRU;
 
@@ -314,16 +324,14 @@ class ModuleConnRequire : public Module
 		if (param.length() < 2 || param[0] != wrapper)
 			return MOD_RES_PASSTHRU;
 
-		UserData* ud = userdata.get(user);
-		if (!ud)
-			return MOD_RES_PASSTHRU;
-
-		// VERSION reply
-		if (!disableversion && !param.compare(1, ctcpversion.length(), ctcpversion))
+		// VERSION reply that we are expecting
+		if (!disableversion && ud->expectversion && !param.compare(1, ctcpversion.length(), ctcpversion))
 		{
 			const std::string& rplversion = (param.length() > len_part ? param.substr(len_part, param.length() - len_all) : "");
 			const std::string& firstversionreply = ud->firstversionreply;
 			const std::string& secondversionreply = ud->secondversionreply;
+
+			ud->expectversion = false;
 
 			// Ignore empty replies
 			if (rplversion.empty())
@@ -341,7 +349,7 @@ class ModuleConnRequire : public Module
 
 				ServerInstance->SNO->WriteToSnoMask('u', "Blocked user %s (%s) [%s] on port %d, version reply \"%s\" matched badversion mask \"%s\"",
 					user->GetFullRealHost().c_str(), user->GetIPString(), user->fullname.c_str(), user->GetServerPort(), rplversion.c_str(), bv.mask.c_str());
-				zapped.set(user, 1);
+				ud->zapped = true;
 				ServerInstance->Users->QuitUser(user, bv.reason);
 
 				return MOD_RES_DENY;
@@ -352,7 +360,10 @@ class ModuleConnRequire : public Module
 			{
 				ud->firstversionreply = rplversion;
 				if (dualversion)
+				{
+					ud->expectversion = true;
 					user->WriteServ("PRIVMSG %s :%c%s%c", user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
+				}
 			}
 			// Second reply
 			else if (secondversionreply.empty())
@@ -369,15 +380,22 @@ class ModuleConnRequire : public Module
 				if (dualshow)
 					ServerInstance->SNO->WriteToSnoMask('u', "Version replies \"%s\" and \"%s\"", firstversionreply.c_str(), secondversionreply.c_str());
 
-				zapped.set(user, 1);
+				ud->zapped = true;
 				ServerInstance->Users->QuitUser(user, dualreason);
 			}
+
+			return MOD_RES_DENY;
 		}
-		// Configurable second CTCP string reply
-		else if (!ctcpstring.empty() && !param.compare(1, ctcpstring.length(), ctcpstring))
+		// Configurable CTCP string reply that we are expecting
+		else if (!ctcpstring.empty() && ud->expectctcp && !param.compare(1, ctcpstring.length(), ctcpstring))
+		{
+			ud->expectctcp = false;
 			ud->ctcpreply = true;
 
-		return MOD_RES_DENY;
+			return MOD_RES_DENY;
+		}
+
+		return MOD_RES_PASSTHRU;
 	}
 
 	void OnPostCommand(const std::string& command, const std::vector<std::string>& parameters, LocalUser* user, CmdResult result, const std::string& original_line)
@@ -414,15 +432,21 @@ class ModuleConnRequire : public Module
 	void OnUserInit(LocalUser* user)
 	{
 		// Initialize their UserData and send the CTCP request(s)
-		UserData ud;
+		UserData* ud = new UserData;
 		userdata.set(user, ud);
 
 		if (!disableversion)
+		{
+			ud->expectversion = true;
 			user->WriteServ("PRIVMSG %s :%c%s%c",
 				user->nick.c_str(), wrapper, ctcpversion.c_str(), wrapper);
+		}
 		if (!ctcpstring.empty())
+		{
+			ud->expectctcp = true;
 			user->WriteServ("PRIVMSG %s :%c%s%c",
 				user->nick.c_str(), wrapper, ctcpstring.c_str(), wrapper);
+		}
 	}
 
 	void OnUserConnect(LocalUser* user)
@@ -457,6 +481,10 @@ class ModuleConnRequire : public Module
 		if (!noCap && !noRpl && !noVer)
 			return;
 
+		// We already disconnected (and possibly banned) these users
+		if (ud->zapped)
+			return;
+
 		// Send them a message if configured
 		if (!blockmessage.empty())
 			user->WriteServ("NOTICE %s :%s", user->nick.c_str(), blockmessage.c_str());
@@ -476,10 +504,6 @@ class ModuleConnRequire : public Module
 
 			SetZLine(user, bm.duration, bm.reason, "banmissing");
 		}
-
-		// We already sent a SNOTICE for these users
-		if (zapped.get(user))
-			return;
 
 		// Send out a SNOTICE that we likely caused this user to not get through
 		std::string buffer = "Disconnecting unregistered user " + user->GetFullRealHost();
