@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
+ *	 Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -13,7 +13,7 @@
  * details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.	 If not, see <http://www.gnu.org/licenses/>.
  */
 
 
@@ -40,25 +40,25 @@ class ModuleGeoIPBan : public Module
 {
 	LocalStringExt ext;
 	GeoIP* gi;
-    GeoIP* fi;
-    
+	GeoIP* fi;
+	
 	std::string* SetExt(User* user)
 	{
-        char buf[16];
-        const char* c = "UNK";
-        
-        if (inet_pton(AF_INET, user->GetIPString(), buf)) {
+		char buf[16];
+		const char* c = "UNK";
+		
+		if (inet_pton(AF_INET, user->GetIPString(), buf)) {
 
-    		c = GeoIP_country_code_by_addr(gi, user->GetIPString());
-    		if (!c)
-    			c = "UNK";
-        } else if (inet_pton(AF_INET6, user->GetIPString(), buf)) {
+			c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+			
+		} else if (inet_pton(AF_INET6, user->GetIPString(), buf)) {
  
-     		c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
-    		if (!c)
-    			c = "UNK";
-            
-        }
+	 		c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
+	
+		}
+
+		if (!c)
+			c = "UNK";
 
 		std::string* cc = new std::string(c);
 		ext.set(user, cc);
@@ -113,21 +113,21 @@ class ModuleGeoIPBan : public Module
 		if (!cc)
 			cc = SetExt(dst);
 
-        char buf[16];
-        const char* d = "UNKNOWN";
-        
-        if (inet_pton(AF_INET, dst->GetIPString(), buf)) {
+		char buf[16];
+		const char* d = "UNKNOWN";
+		
+		if (inet_pton(AF_INET, dst->GetIPString(), buf)) {
 
-    		d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
-    		if (!d)
-    			d = "UNKNOWN";
-        } else if (inet_pton(AF_INET6, dst->GetIPString(), buf)) {
+			d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+
+		} else if (inet_pton(AF_INET6, dst->GetIPString(), buf)) {
  
-     		d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
-    		if (!d)
-    			d = "UNKNOWN";
-            
-        }
+	 		d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
+
+		}
+
+		if (!d)
+			d = "UNKNOWN";
 
 		ServerInstance->SendWhoisLine(src, dst, RPL_WHOISCOUNTRY, src->nick+" "+dst->nick+" :is connected from "+d +" ("+*cc+")");
 	}
