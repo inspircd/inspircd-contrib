@@ -40,7 +40,8 @@ class ModuleGeoIPBan : public Module
 {
 	LocalStringExt ext;
 	GeoIP* gi;
-
+    GeoIP* fi;
+    
 	std::string* SetExt(User* user)
 	{
         char buf[16];
@@ -53,7 +54,7 @@ class ModuleGeoIPBan : public Module
     			c = "UNK";
         } else if (inet_pton(AF_INET6, user->GetIPString(), buf)) {
  
-     		c = GeoIP_country_code_by_addr_v6(gi, user->GetIPString());
+     		c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
     		if (!c)
     			c = "UNK";
             
@@ -74,6 +75,9 @@ class ModuleGeoIPBan : public Module
 		gi = GeoIP_new(GEOIP_STANDARD);
 		if (gi == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIP.dat?");
+		fi = GeoIP_open("/usr/share/GeoIP/GeoIPv6.dat", GEOIP_STANDARD);
+		if (fi == NULL)
+			throw ModuleException("Unable to initialize geoip, are you missing GeoIPv6.dat?");
 		ServerInstance->Modules->AddService(ext);
 		Implementation eventlist[] = { I_OnCheckBan, I_On005Numeric, I_OnWhois };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
@@ -119,7 +123,7 @@ class ModuleGeoIPBan : public Module
     			d = "UNKNOWN";
         } else if (inet_pton(AF_INET6, dst->GetIPString(), buf)) {
  
-     		d = GeoIP_country_name_by_addr_v6(gi, dst->GetIPString());
+     		d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
     		if (!d)
     			d = "UNKNOWN";
             
