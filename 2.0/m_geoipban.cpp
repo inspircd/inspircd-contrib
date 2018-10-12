@@ -43,9 +43,21 @@ class ModuleGeoIPBan : public Module
 
 	std::string* SetExt(User* user)
 	{
-		const char* c = GeoIP_country_code_by_addr(gi, user->GetIPString());
-		if (!c)
-			c = "UNK";
+        char buf[16];
+        const char* c = "UNK";
+        
+        if (inet_pton(AF_INET, user->GetIPString(), buf)) {
+
+    		c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+    		if (!c)
+    			c = "UNK";
+        } else if (inet_pton(AF_INET6, user->GetIPString(), buf)) {
+ 
+     		c = GeoIP_country_code_by_addr_v6(gi, user->GetIPString());
+    		if (!c)
+    			c = "UNK";
+            
+        }
 
 		std::string* cc = new std::string(c);
 		ext.set(user, cc);
@@ -97,9 +109,21 @@ class ModuleGeoIPBan : public Module
 		if (!cc)
 			cc = SetExt(dst);
 
-		const char* d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
-		if (!d)
-			d = "UNKNOWN";
+        char buf[16];
+        const char* d = "UNKNOWN";
+        
+        if (inet_pton(AF_INET, dst->GetIPString(), buf)) {
+
+    		d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+    		if (!d)
+    			d = "UNKNOWN";
+        } else if (inet_pton(AF_INET6, dst->GetIPString(), buf)) {
+ 
+     		d = GeoIP_country_name_by_addr_v6(gi, dst->GetIPString());
+    		if (!d)
+    			d = "UNKNOWN";
+            
+        }
 
 		ServerInstance->SendWhoisLine(src, dst, RPL_WHOISCOUNTRY, src->nick+" "+dst->nick+" :is connected from "+d +" ("+*cc+")");
 	}
