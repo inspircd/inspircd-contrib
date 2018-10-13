@@ -75,7 +75,7 @@ class ModuleGeoIPBan : public Module
 		gi = GeoIP_new(GEOIP_STANDARD);
 		if (gi == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIP.dat?");
-		fi = GeoIP_open("/usr/share/GeoIP/GeoIPv6.dat", GEOIP_STANDARD);
+		fi = GeoIP_open(GEOIP_COUNTRY_EDITION_V6, GEOIP_STANDARD);
 		if (fi == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIPv6.dat?");
 		ServerInstance->Modules->AddService(ext);
