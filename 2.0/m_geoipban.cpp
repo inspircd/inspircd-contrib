@@ -44,7 +44,7 @@ class ModuleGeoIPBan : public Module
 	
 	std::string* SetExt(User* user)
 	{
-		const char* c = "UNK";
+		const char* c = NULL;
 		
 		switch (user->client_sa.sa.sa_family)
 		{
@@ -113,7 +113,7 @@ class ModuleGeoIPBan : public Module
 		if (!cc)
 			cc = SetExt(dst);
 
-		const char* d = "UNKNOWN";
+		const char* d = NULL;
 		
 		switch (dst->client_sa.sa.sa_family)
 		{
