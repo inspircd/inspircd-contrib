@@ -44,17 +44,17 @@ class ModuleGeoIPBan : public Module
 	
 	std::string* SetExt(User* user)
 	{
-		char buf[16];
 		const char* c = "UNK";
 		
-		if (inet_pton(AF_INET, user->GetIPString(), buf)) {
+		switch (user->client_sa.sa.sa_family)
+		{
+			case AF_INET:
+                c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+				break;
 
-			c = GeoIP_country_code_by_addr(gi, user->GetIPString());
-			
-		} else if (inet_pton(AF_INET6, user->GetIPString(), buf)) {
- 
-	 		c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
-	
+			case AF_INET6:
+                c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
+				break;
 		}
 
 		if (!c)
@@ -113,17 +113,17 @@ class ModuleGeoIPBan : public Module
 		if (!cc)
 			cc = SetExt(dst);
 
-		char buf[16];
 		const char* d = "UNKNOWN";
 		
-		if (inet_pton(AF_INET, dst->GetIPString(), buf)) {
+		switch (dst->client_sa.sa.sa_family)
+		{
+			case AF_INET:
+                d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+				break;
 
-			d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
-
-		} else if (inet_pton(AF_INET6, dst->GetIPString(), buf)) {
- 
-	 		d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
-
+			case AF_INET6:
+                d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
+				break;
 		}
 
 		if (!d)
