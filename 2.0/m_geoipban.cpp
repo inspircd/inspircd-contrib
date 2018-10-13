@@ -40,7 +40,7 @@ class ModuleGeoIPBan : public Module
 {
 	LocalStringExt ext;
 	GeoIP* gi;
-	GeoIP* fi;
+	GeoIP* gi6;
 	
 	std::string* SetExt(User* user)
 	{
@@ -53,7 +53,7 @@ class ModuleGeoIPBan : public Module
 				break;
 
 			case AF_INET6:
-                c = GeoIP_country_code_by_addr_v6(fi, user->GetIPString());
+                c = GeoIP_country_code_by_addr_v6(gi6, user->GetIPString());
 				break;
 		}
 
@@ -75,8 +75,8 @@ class ModuleGeoIPBan : public Module
 		gi = GeoIP_new(GEOIP_STANDARD);
 		if (gi == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIP.dat?");
-		fi = GeoIP_open_type(GEOIP_COUNTRY_EDITION_V6, GEOIP_STANDARD);
-		if (fi == NULL)
+		gi6 = GeoIP_open_type(GEOIP_COUNTRY_EDITION_V6, GEOIP_STANDARD);
+		if (gi6 == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIPv6.dat?");
 		ServerInstance->Modules->AddService(ext);
 		Implementation eventlist[] = { I_OnCheckBan, I_On005Numeric, I_OnWhois };
@@ -122,7 +122,7 @@ class ModuleGeoIPBan : public Module
 				break;
 
 			case AF_INET6:
-                d = GeoIP_country_name_by_addr_v6(fi, dst->GetIPString());
+                d = GeoIP_country_name_by_addr_v6(gi6, dst->GetIPString());
 				break;
 		}
 
