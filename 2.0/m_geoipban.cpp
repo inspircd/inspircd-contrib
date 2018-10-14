@@ -45,15 +45,15 @@ class ModuleGeoIPBan : public Module
 	std::string* SetExt(User* user)
 	{
 		const char* c = NULL;
-		
+
 		switch (user->client_sa.sa.sa_family)
 		{
 			case AF_INET:
-                c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+				c = GeoIP_country_code_by_addr(gi, user->GetIPString());
 				break;
 
 			case AF_INET6:
-                c = GeoIP_country_code_by_addr_v6(gi6, user->GetIPString());
+				c = GeoIP_country_code_by_addr_v6(gi6, user->GetIPString());
 				break;
 		}
 
