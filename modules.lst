@@ -141,7 +141,7 @@ module m_antibottler 2.0.135 https://raw.github.com/inspircd/inspircd-extras/93f
 module m_anticaps 2.0.392 https://raw.github.com/inspircd/inspircd-extras/e5912614c95d17af2424a40a05aed8d80ef5e91a/2.0/m_anticaps.cpp
  description Provides support for punishing users that send capitalised messages.
  depends core 2.0
-module m_antirandom 2.0.355 https://raw.github.com/inspircd/inspircd-extras/abb89525e5c64825ee0ac125200db281369bb8f6/2.0/m_antirandom.cpp
+module m_antirandom 2.0.417 https://raw.github.com/inspircd/inspircd-extras/daf9f63538d4b80e80aba8c61c74a59a77c2e868/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
 module m_ascii 2.0.287 https://raw.github.com/inspircd/inspircd-extras/de316014068178ac74ac5464729a0f9bbe98f353/2.0/m_ascii.cpp
@@ -174,6 +174,9 @@ module m_blockhighlight 2.0.380 https://raw.github.com/inspircd/inspircd-extras/
  depends core 2.0
 module m_blockinvite 2.0.389 https://raw.github.com/inspircd/inspircd-extras/7cfdfc1ef86ea649fd7cbdee4c183306c523b3df/2.0/m_blockinvite.cpp
  description Provides usermode 'V' - block all INVITEs
+ depends core 2.0
+module m_blocklistmode 2.0.423 https://raw.github.com/inspircd/inspircd-extras/60e874e9a6d9dbe6d559b7f8a05b512963914995/2.0/m_blocklistmode.cpp
+ description Allow requiring channel membership to see listmode lists
  depends core 2.0
 module m_cap_chghost 2.0.279 https://raw.github.com/inspircd/inspircd-extras/dd1cf5f666bd405509ef39b65679086c28e7d83f/2.0/m_cap_chghost.cpp
  description Implements CAP chghost
@@ -208,7 +211,7 @@ module m_conn_delayed_join 2.0.271 https://raw.github.com/inspircd/inspircd-extr
 module m_conn_matchident 2.0.350 https://raw.github.com/inspircd/inspircd-extras/8fbf3703d0c42fcaab0249078f7cdbe6ce171b67/2.0/m_conn_matchident.cpp
  description Allows a connect class to match by ident.
  depends core 2.0
-module m_conn_require 2.0.414 https://raw.github.com/inspircd/inspircd-extras/0bbaa1b697876fe255650ecc9b5b33d6fbdd5e4c/2.0/m_conn_require.cpp
+module m_conn_require 2.0.418 https://raw.github.com/inspircd/inspircd-extras/8265f1adb42a85f92c341039c96150a2e1a30392/2.0/m_conn_require.cpp
  description Allow or block connections based on multiple criteria
  depends core 2.0
 module m_conn_vhost 2.0.402 https://raw.github.com/inspircd/inspircd-extras/b8cf097f2fe4af7a9e1b20a12083e4f4a10d5891/2.0/m_conn_vhost.cpp
@@ -279,7 +282,7 @@ module m_joinoninvite 2.0.233 https://raw.github.com/inspircd/inspircd-extras/b2
 module m_joinpartsno 2.0.192 https://raw.github.com/inspircd/inspircd-extras/56f3ccc0c2b5710bdbd62ea851f29703830c1d78/2.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 2.0-2.1
-module m_joinpartspam 2.0.412 https://raw.github.com/inspircd/inspircd-extras/6691e12f1f20a25d57c9f28d6cc1fbd593575fbf/2.0/m_joinpartspam.cpp
+module m_joinpartspam 2.0.421 https://raw.github.com/inspircd/inspircd-extras/e32db31dd59bfa85d7e7b659da02080dfc577933/2.0/m_joinpartspam.cpp
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
  depends core 2.0
 module m_lusersnoservices 2.0.265 https://raw.github.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
@@ -353,6 +356,9 @@ module m_require_auth 2.0.276 https://raw.github.com/inspircd/inspircd-extras/5e
 module m_requirectcp 2.0.383 https://raw.github.com/inspircd/inspircd-extras/2ca5f51861b85f06d8f9748579bb0653753f9c9e/2.0/m_requirectcp.cpp
  description Blocks clients not replying to CTCP like botnets/spambots/floodbots.
  depends core 2.0
+module m_restrictmsg_duration 2.0.419 https://raw.github.com/inspircd/inspircd-extras/484e12b2305aa7200143c539ca68f6431e51398e/2.0/m_restrictmsg_duration.cpp
+ description Restrict messages until a user has been connected for a specified duration.
+ depends core 2.0
 module m_rotatelog 2.0.253 https://raw.github.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
  description Rotates the log files after a defined period.
  depends core 2.0
@@ -362,11 +368,17 @@ module m_rpg 2.0.358 https://raw.github.com/inspircd/inspircd-extras/f508cf46da5
 module m_sha1 2.0.227 https://raw.github.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
  depends core 2.0
+module m_showfile 2.0.420 https://raw.github.com/inspircd/inspircd-extras/366012437ab491a69398fbf9677aa375495805c3/2.0/m_showfile.cpp
+ description Provides support for showing text files to users
+ depends core 2.0
 module m_slowmode 2.0.388 https://raw.github.com/inspircd/inspircd-extras/99beb629dc66341238bda791bbea8ec775307454/2.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 2.0
 module m_solvemsg 2.0.261 https://raw.github.com/inspircd/inspircd-extras/55659fb0148513e6bab6fa09004b8f49e1214cf9/2.0/m_solvemsg.cpp
  description Requires users to solve a basic maths problem before messaging others.
+ depends core 2.0
+module m_sslmodeuser 2.0.422 https://raw.github.com/inspircd/inspircd-extras/2c6e800e73f98d91c5c0f7bef4ccd6ec4d1c3a73/2.0/m_sslmodeuser.cpp
+ description Provides user mode +z to allow for Secure/SSL only queries and user notices
  depends core 2.0
 module m_sslstats_gnutls 2.0.240 https://raw.github.com/inspircd/inspircd-extras/905a7f91f5cdf03d8225dd6e96ad7889a4d2c7ac/2.0/m_sslstats_gnutls.cpp
  description Provides stats about SSL ciphersuites in use by users
