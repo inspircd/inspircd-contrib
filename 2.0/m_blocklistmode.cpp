@@ -60,10 +60,10 @@ public:
 		if (!adding || pcnt)
 			return MOD_RES_PASSTHRU;
 
-		if (blockmodes.find_first_of(mode) == std::string::npos || channel->HasUser(source))
+		if (blockmodes.find_first_of(mode) == std::string::npos || channel->HasUser(source) || source->HasPrivPermission("channels/auspex"))
 			return MOD_RES_PASSTHRU;
 
-		source->WriteNumeric(ERR_CHANOPRIVSNEEDED, "%s %s :You do not have access to view the +%c list", source->nick.c_str(), channel->name.c_str(), mode);
+		source->WriteNumeric(ERR_NOTONCHANNEL, "%s %s :You're not on that channel", source->nick.c_str(), channel->name.c_str());
 		return MOD_RES_DENY;
 	}
 
