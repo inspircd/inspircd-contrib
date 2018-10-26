@@ -17,7 +17,10 @@
  */
 
 
-/* $ModDesc: Allow requiering channel membership to see listmode lists */
+/* $ModAuthor: Daniel Vassdal */
+/* $ModAuthorMail: shutter@canternet.org */
+/* $ModDesc: Allow requiring channel membership to see listmode lists */
+/* $ModDepends: core 2.0 */
 
 #include "inspircd.h"
 
@@ -38,7 +41,7 @@ public:
 
 	Version GetVersion()
 	{
-		return Version("Allow requiering channel membership to see listmode lists");
+		return Version("Allow requiring channel membership to see listmode lists");
 	}
 
 	void OnRehash(User* user)
