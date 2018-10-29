@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *	 Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
+ * Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -114,15 +114,15 @@ class ModuleGeoIPBan : public Module
 			cc = SetExt(dst);
 
 		const char* d = NULL;
-		
+
 		switch (dst->client_sa.sa.sa_family)
 		{
 			case AF_INET:
-                d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+				d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
 				break;
 
 			case AF_INET6:
-                d = GeoIP_country_name_by_addr_v6(gi6, dst->GetIPString());
+				d = GeoIP_country_name_by_addr_v6(gi6, dst->GetIPString());
 				break;
 		}
 
