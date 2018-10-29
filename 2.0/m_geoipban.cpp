@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- * Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
+ *   Copyright (C) 2013 Filippo Cortigiani <simos@simosnap.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
