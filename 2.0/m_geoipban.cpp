@@ -40,10 +40,23 @@ class ModuleGeoIPBan : public Module
 {
 	LocalStringExt ext;
 	GeoIP* gi;
-
+	GeoIP* gi6;
+	
 	std::string* SetExt(User* user)
 	{
-		const char* c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+		const char* c = NULL;
+
+		switch (user->client_sa.sa.sa_family)
+		{
+			case AF_INET:
+				c = GeoIP_country_code_by_addr(gi, user->GetIPString());
+				break;
+
+			case AF_INET6:
+				c = GeoIP_country_code_by_addr_v6(gi6, user->GetIPString());
+				break;
+		}
+
 		if (!c)
 			c = "UNK";
 
@@ -62,6 +75,9 @@ class ModuleGeoIPBan : public Module
 		gi = GeoIP_new(GEOIP_STANDARD);
 		if (gi == NULL)
 			throw ModuleException("Unable to initialize geoip, are you missing GeoIP.dat?");
+		gi6 = GeoIP_open_type(GEOIP_COUNTRY_EDITION_V6, GEOIP_STANDARD);
+		if (gi6 == NULL)
+			throw ModuleException("Unable to initialize geoip, are you missing GeoIPv6.dat?");
 		ServerInstance->Modules->AddService(ext);
 		Implementation eventlist[] = { I_OnCheckBan, I_On005Numeric, I_OnWhois };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
@@ -97,7 +113,19 @@ class ModuleGeoIPBan : public Module
 		if (!cc)
 			cc = SetExt(dst);
 
-		const char* d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+		const char* d = NULL;
+
+		switch (dst->client_sa.sa.sa_family)
+		{
+			case AF_INET:
+				d = GeoIP_country_name_by_addr(gi, dst->GetIPString());
+				break;
+
+			case AF_INET6:
+				d = GeoIP_country_name_by_addr_v6(gi6, dst->GetIPString());
+				break;
+		}
+
 		if (!d)
 			d = "UNKNOWN";
 
