@@ -23,7 +23,8 @@
 /* $ModAuthor: Damian West */
 /* $ModDesc: Invites all users to a channel when they connect to the network. */
 /* $ModDepends: core 2.0 */
-/* $ModConfig: <autoinvite channel="#one,#two,#three"> */ static void InviteChannels(LocalUser* u, const std::string& chanlist) {
+/* $ModConfig: <autoinvite channel="#one,#two,#three"> */
+static void InviteChannels(LocalUser* u, const std::string& chanlist) {
 	irc::commasepstream chans(chanlist);
 	std::string chan;
  
