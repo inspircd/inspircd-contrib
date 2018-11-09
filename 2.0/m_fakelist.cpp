@@ -54,7 +54,7 @@ class ModuleFakeList : public Module
 
 	virtual Version GetVersion()
 	{
-		return Version("Turns /list into a honeypot for newly connected users", VF_VENDOR);
+		return Version("Turns /list into a honeypot for newly connected users");
 	}
 
 	void OnRehash(User* user)
