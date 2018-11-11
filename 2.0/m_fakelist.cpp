@@ -83,7 +83,7 @@ class ModuleFakeList : public Module
 	 * OnPreCommand()
 	 *   Intercept the LIST command.
 	 */
-	virtual ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser *user, bool validated, const std::string &original_line)
+	virtual ModResult OnPreCommand(std::string& command, std::vector<std::string>& parameters, LocalUser* user, bool validated, const std::string& original_line)
 	{
 		/* If the command doesnt appear to be valid, we dont want to mess with it. */
 		if (!validated)
@@ -107,7 +107,7 @@ class ModuleFakeList : public Module
 		return MOD_RES_PASSTHRU;
 	}
 
-	virtual ModResult OnUserPreJoin(User *user, Channel *chan, const char *cname, std::string &privs, const std::string &keygiven)
+	virtual ModResult OnUserPreJoin(User* user, Channel* chan, const char* cname, std::string& privs, const std::string& keygiven)
 	{
 		if (killOnJoin && cname == targetChannel) {
 			if (!IS_OPER(user))
