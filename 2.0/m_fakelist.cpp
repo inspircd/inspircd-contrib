@@ -48,10 +48,6 @@ class ModuleFakeList : public Module
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
-	virtual ~ModuleFakeList()
-	{
-	}
-
 	virtual Version GetVersion()
 	{
 		return Version("Turns /list into a honeypot for newly connected users");
@@ -97,7 +93,7 @@ class ModuleFakeList : public Module
 					return MOD_RES_PASSTHRU;
 
 			// Yeah, just give them some fake channels to ponder.
-			unsigned long int userCount = minUsers + (rand() % static_cast<int>(maxUsers - minUsers + 1));
+			unsigned long int userCount = ServerInstance->GenRandomInt(maxUsers-minUsers) + minUsers;
 			user->WriteNumeric(321, "%s Channel :Users Name", user->nick.c_str());
 			user->WriteNumeric(322, "%s %s %lu :%s", user->nick.c_str(), targetChannel.c_str(), userCount,
 			                   targetTopic.c_str());
@@ -109,12 +105,14 @@ class ModuleFakeList : public Module
 
 	virtual ModResult OnUserPreJoin(User* user, Channel* chan, const char* cname, std::string& privs, const std::string& keygiven)
 	{
-		if (killOnJoin && cname == targetChannel) {
+		if (killOnJoin && cname == targetChannel)
+		{
 			if (!IS_OPER(user))
 			{
 				// They did the unspeakable, kill them!
 				ServerInstance->Users->QuitUser(user, reason);
-			} else
+			}
+			else
 			{
 				// Berate opers who try to do the same. (this uses the same numeric as CBAN in 3.0)
 				user->WriteNumeric(926, "%s %s :Cannot join channel (Reserved spamtrap channel for fakelist)",
