@@ -158,7 +158,7 @@ class CommandWho : public SplitCommand
 		: SplitCommand(parent, "WHO", 1, 3)
 	{
 		allow_empty_last_param = false;
-		syntax = "<server>|<nickname>|<channel>|<realname>|<host>|0 [[Aafhilmnoprstu] <server>|<nickname>|<channel>|<realname>|<host>|0]";
+		syntax = "<server>|<nickname>|<channel>|<realname>|<host>|0 [[Aafhilmnoprstux][%acdfhilnorstu] <server>|<nickname>|<channel>|<realname>|<host>|0]";
 	}
 
 	/** Sends a WHO reply to a user. */
@@ -481,7 +481,7 @@ void CommandWho::SendWhoLine(LocalUser* source, const std::vector<std::string>& 
 
 		// Include the user's real name.
 		if (data.whox_fields['r'])
-			wholine.append(" ").append(user->fullname);
+			wholine.append(" :").append(user->fullname);
 	}
 	else
 	{
