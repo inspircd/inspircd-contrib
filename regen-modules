@@ -28,6 +28,8 @@ use warnings FATAL => qw(all);
 
 use File::Basename;
 
+use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-extras';
+
 if (system 'git --version > /dev/null 2>&1') {
 	say 'Error: Git is not installed and available in the PATH!';
 	exit 1;
@@ -44,7 +46,7 @@ for my $file (<*/m_*.cpp>) {
 	chomp(my $revision = `git rev-list HEAD --max-count=1 -- $file`);
 	chomp(my $version = `git rev-list $revision | wc -l`);
 	$version =~ s/\s//g;
-	say LIST "module $name $branch.$version https://raw.github.com/inspircd/inspircd-extras/$revision/$file";
+	say LIST "module $name $branch.$version ${\RM_BASE_URL}/$revision/$file";
 	open(MODULE, $file);
 	while (<MODULE>) {
 		if ($_ =~ /^\/\* \$(\S+): (.+) \*\/$/ || $_ =~ /^\/\/\/ \$(\S+): (.+)/) {
