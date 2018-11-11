@@ -19,6 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthorMail: petpow@saberuk.com */
+/* $ModDesc: Provides the WHOX extension. */
+/* $ModDepends: core 2.0 */
+
 
 #include "inspircd.h"
 #include "account.h"
@@ -560,22 +565,45 @@ class ModuleWhoX : public Module
 {
  private:
 	CommandWho cmd;
+	bool syntax;
 
  public:
 	ModuleWhoX()
 		: cmd(this)
+		, syntax(false)
 	{
 	}
 
 	void init()
 	{
-		Implementation eventlist[] = { I_On005Numeric, I_OnPreCommand };
+		Implementation eventlist[] = { I_On005Numeric, I_OnNumeric, I_OnPreCommand };
 		ServerInstance->Modules->Attach(eventlist, this, sizeof(eventlist)/sizeof(Implementation));
 	}
 
 	void On005Numeric(std::string& output)
 	{
 		output.append(" WHOX");
+	}
+
+	ModResult OnNumeric(User* user, unsigned int numeric, const std::string& text)
+	{
+		if (numeric != RPL_SYNTAX || syntax)
+			return MOD_RES_PASSTHRU;
+
+		// Check we are parsing a syntax numeric.
+		std::string token;
+		irc::spacesepstream tokenstream(text);
+		if (!tokenstream.GetToken(token) || !tokenstream.GetToken(token) || token != ":SYNTAX")
+			return MOD_RES_PASSTHRU;
+
+		// Check we are parsing a WHO syntax numeric.
+		if (!tokenstream.GetToken(token) || token != "WHO")
+			return MOD_RES_PASSTHRU;
+
+		syntax = true;
+		user->WriteNumeric(RPL_SYNTAX, "%s :SYNTAX %s %s", user->nick.c_str(), cmd.name.c_str(), cmd.syntax.c_str());
+		syntax = false;
+		return MOD_RES_DENY;
 	}
 
 	ModResult OnPreCommand(std::string& command, std::vector<std::string>& parameters, LocalUser* user, bool validated, const std::string&)
