@@ -257,7 +257,14 @@ class ModuleQRCode : public Module
 		if (name == "lightgray" || name == "lightgrey")
 			return "15";
 
-		throw ModuleException("<qrcode:" + name + "> is not a valid colour!");
+		if (name.find_first_not_of("0123456789") == std::string::npos)
+		{
+			const long value = ConvToInt(name);
+			if (value >= 0 && value <= 99)
+				return ConvToStr(value);
+		}
+
+		throw ModuleException("<" + tag->tag + ":" + key + "> is not a valid colour!");
 	}
 
  public:
