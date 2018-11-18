@@ -39,6 +39,9 @@
  * new X-Line of same type with a new mask.
  * Original reason and expiry time are copied but can be
  * overridden with the 'duration' or 'reason' arguments.
+ *
+ * Note: Both XCOPY and XREMOVE will check for the appropriate
+ * command permissions before acting.
  */
 
 /* Helpop Lines for the COPER section
@@ -98,166 +101,177 @@ struct Criteria
 	}
 };
 
-bool ProcessArgs(const std::vector<std::string>& params, Criteria& args)
+namespace
 {
-	if (!params.size())
-		return false;
-
-	// Track arg reason to include space separated params
-	bool argreason = false;
-
-	const std::string mtype("-type=");
-	const std::string mmask("-mask=");
-	const std::string mreason("-reason=");
-	const std::string msource("-source=");
-	const std::string msetby("-setby=");
-	const std::string mset("-set=");
-	const std::string mduration("-duration=");
-	const std::string mexpires("-expires=");
-
-	for (std::vector<std::string>::const_iterator p = params.begin(); p != params.end(); ++p)
+	bool HasPermission(LocalUser* user, std::string type)
 	{
-		const std::string param = *p;
+		if (type.length() <= 2)
+			type.append("LINE");
 
-		if (param.find(mtype) != std::string::npos)
+		return user->HasPermission(type);
+	}
+
+	bool ProcessArgs(const std::vector<std::string>& params, Criteria& args)
+	{
+		if (!params.size())
+			return false;
+
+		// Track arg reason to include space separated params
+		bool argreason = false;
+
+		const std::string mtype("-type=");
+		const std::string mmask("-mask=");
+		const std::string mreason("-reason=");
+		const std::string msource("-source=");
+		const std::string msetby("-setby=");
+		const std::string mset("-set=");
+		const std::string mduration("-duration=");
+		const std::string mexpires("-expires=");
+
+		for (std::vector<std::string>::const_iterator p = params.begin(); p != params.end(); ++p)
 		{
-			argreason = false;
-			const std::string& val(param.substr(mtype.length()));
-			args.type = (!val.empty() ? val : "*");
-		}
-		else if (param.find(mmask) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val(param.substr(mmask.length()));
-			args.mask = (!val.empty() ? val : "*");
-		}
-		else if (param.find(mreason) != std::string::npos)
-		{
-			argreason = true;
-			const std::string& val(param.substr(mreason.length()));
-			args.reason = (!val.empty() ? val : "*");
-		}
-		else if (param.find(msource) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val(param.substr(msource.length()));
-			args.source = (!val.empty() ? val : "*");
-		}
-		else if (param.find(msetby) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val(param.substr(msetby.length()));
-			args.source = (!val.empty() ? val : "*");
-		}
-		else if (param.find(mset) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val = param.substr(mset.length());
-			args.set = (ServerInstance->Duration(val) ? val : "");
-		}
-		else if (param.find(mduration) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val = param.substr(mduration.length());
-			// 0 is a special case here, to match no expires
-			if (val == "0")
-				args.duration = val;
+			const std::string param = *p;
+
+			if (param.find(mtype) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val(param.substr(mtype.length()));
+				args.type = (!val.empty() ? val : "*");
+			}
+			else if (param.find(mmask) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val(param.substr(mmask.length()));
+				args.mask = (!val.empty() ? val : "*");
+			}
+			else if (param.find(mreason) != std::string::npos)
+			{
+				argreason = true;
+				const std::string& val(param.substr(mreason.length()));
+				args.reason = (!val.empty() ? val : "*");
+			}
+			else if (param.find(msource) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val(param.substr(msource.length()));
+				args.source = (!val.empty() ? val : "*");
+			}
+			else if (param.find(msetby) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val(param.substr(msetby.length()));
+				args.source = (!val.empty() ? val : "*");
+			}
+			else if (param.find(mset) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val = param.substr(mset.length());
+				args.set = (ServerInstance->Duration(val) ? val : "");
+			}
+			else if (param.find(mduration) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val = param.substr(mduration.length());
+				// 0 is a special case here, to match no expires
+				if (val == "0")
+					args.duration = val;
+				else
+					args.duration = (ServerInstance->Duration(val) ? val : "");
+			}
+			else if (param.find(mexpires) != std::string::npos)
+			{
+				argreason = false;
+				const std::string& val = param.substr(mexpires.length());
+				args.expires = (ServerInstance->Duration(val) ? val : "");
+			}
 			else
-				args.duration = (ServerInstance->Duration(val) ? val : "");
+			{
+				if (argreason)
+					args.reason.append(" " + param);
+				else
+					return false;
+			}
 		}
-		else if (param.find(mexpires) != std::string::npos)
-		{
-			argreason = false;
-			const std::string& val = param.substr(mexpires.length());
-			args.expires = (ServerInstance->Duration(val) ? val : "");
-		}
+
+		return true;
+	}
+
+	const std::string BuildCriteriaStr(const Criteria& args)
+	{
+		std::string criteria;
+		const std::string sep(", ");
+
+		if (args.mask != "*")
+			criteria.append("Mask: " + args.mask + sep);
+		if (args.reason != "*")
+			criteria.append("Reason: " + args.reason + sep);
+		if (args.source != "*")
+			criteria.append("Source: " + args.source + sep);
+		if (!args.set.empty())
+			criteria.append("Set: " + args.set + sep);
+		if (!args.duration.empty())
+			criteria.append("Duration: " + args.duration + sep);
+		if (!args.expires.empty())
+			criteria.append("Expires: " + args.expires + sep);
+
+		if (criteria.empty())
+			criteria.append("No specific criteria");
+		// Remove trailing separator
+		else if (criteria[criteria.length() - 1] == ' ')
+			criteria.erase(criteria.length() - 2, 2);
+
+		return criteria;
+	}
+
+	const std::string BuildTypeStr(const std::string& type)
+	{
+		std::string typestr;
+
+		// Core/Vendor *-Lines are single character, some -extras are two
+		// Other X-Lines look better without -Lines
+		if (type.length() <= 2)
+			typestr = type + "-Line";
+		else
+			typestr = type;
+
+		return typestr;
+	}
+
+	// Snagged this from Anope: https://github.com/anope/anope/blob/2.0/src/misc.cpp
+	// Modified to return short text format
+	const std::string BuildDurationStr(time_t t)
+	{
+		/* We first calculate everything */
+		time_t years = t / 31536000;
+		time_t days = (t / 86400) % 365;
+		time_t hours = (t / 3600) % 24;
+		time_t minutes = (t / 60) % 60;
+		time_t seconds = (t) % 60;
+
+		if (!years && !days && !hours && !minutes)
+			return ConvToStr(seconds) + "s";
 		else
 		{
-			if (argreason)
-				args.reason.append(" " + param);
-			else
-				return false;
+			std::string buffer;
+			if (years)
+				buffer = ConvToStr(years) + "y";
+			if (days)
+				buffer += ConvToStr(days) + "d";
+			if (hours)
+				buffer += ConvToStr(hours) + "h";
+			if (minutes)
+				buffer += ConvToStr(minutes) + "m";
+			if (seconds)
+				buffer += ConvToStr(seconds) + "s";
+
+			return buffer;
 		}
 	}
-
-	return true;
 }
 
-const std::string BuildCriteriaStr(const Criteria& args)
+class CommandXBase : public SplitCommand
 {
-	std::string criteria;
-	const std::string sep(", ");
-
-	if (args.mask != "*")
-		criteria.append("Mask: " + args.mask + sep);
-	if (args.reason != "*")
-		criteria.append("Reason: " + args.reason + sep);
-	if (args.source != "*")
-		criteria.append("Source: " + args.source + sep);
-	if (!args.set.empty())
-		criteria.append("Set: " + args.set + sep);
-	if (!args.duration.empty())
-		criteria.append("Duration: " + args.duration + sep);
-	if (!args.expires.empty())
-		criteria.append("Expires: " + args.expires + sep);
-
-	if (criteria.empty())
-		criteria.append("No specific criteria");
-	// Remove trailing separator
-	else if (criteria[criteria.length() - 1] == ' ')
-		criteria.erase(criteria.length() - 2, 2);
-
-	return criteria;
-}
-
-const std::string BuildTypeStr(const std::string& type)
-{
-	std::string typestr;
-
-	// Core/Vendor *-Lines are single character, some -extras are two
-	// Other X-Lines look better without -Lines
-	if (type.length() <= 2)
-		typestr = type + "-Line";
-	else
-		typestr = type;
-
-	return typestr;
-}
-
-// Snagged this from Anope: https://github.com/anope/anope/blob/2.0/src/misc.cpp
-// Modified to return short text format
-const std::string BuildDurationStr(time_t t)
-{
-	/* We first calculate everything */
-	time_t years = t / 31536000;
-	time_t days = (t / 86400) % 365;
-	time_t hours = (t / 3600) % 24;
-	time_t minutes = (t / 60) % 60;
-	time_t seconds = (t) % 60;
-
-	if (!years && !days && !hours && !minutes)
-		return ConvToStr(seconds) + "s";
-	else
-	{
-		std::string buffer;
-		if (years)
-			buffer = ConvToStr(years) + "y";
-		if (days)
-			buffer += ConvToStr(days) + "d";
-		if (hours)
-			buffer += ConvToStr(hours) + "h";
-		if (minutes)
-			buffer += ConvToStr(minutes) + "m";
-		if (seconds)
-			buffer += ConvToStr(seconds) + "s";
-
-		return buffer;
-	}
-}
-
-class CommandXBase : public Command
-{
-	void ProcessLines(User* user, const Criteria& args, const std::string& linetype, XLineLookup* xlines, unsigned int& matched, unsigned int& total, const bool count, const bool remove)
+	void ProcessLines(LocalUser* user, const Criteria& args, const std::string& linetype, XLineLookup* xlines, unsigned int& matched, unsigned int& total, const bool count, const bool remove)
 	{
 		total += xlines->size();
 		LookupIter safei;
@@ -370,7 +384,7 @@ class CommandXBase : public Command
 		}
 	}
 
-	bool HandleCmd(User* user, const Criteria& args, Command* cmd)
+	bool HandleCmd(LocalUser* user, const Criteria& args, Command* cmd)
 	{
 		bool count = (cmd->name == "XCOUNT" ? true : false);
 		bool remove = (cmd->name == "XREMOVE" ? true : false);
@@ -387,13 +401,21 @@ class CommandXBase : public Command
 			std::vector<std::string> xlinetypes = ServerInstance->XLines->GetAllTypes();
 			for (std::vector<std::string>::const_iterator x = xlinetypes.begin(); x != xlinetypes.end(); ++x)
 			{
+				// If removing, check for the command permission for this type
+				if (remove && !HasPermission(user, *x))
+				{
+					user->WriteServ("NOTICE %s :Skipping type '%s' as oper type '%s' does not have access to remove these.",
+							   user->nick.c_str(), (*x).c_str(), user->oper->NameStr());
+					continue;
+				}
+
 				XLineLookup* xlines = ServerInstance->XLines->GetAll(*x);
 				if (xlines)
 					ProcessLines(user, args, *x, xlines, matched, total, count, remove);
 			}
 
 			if (count)
-				user->WriteServ("NOTICE %s :%u of %u all X-Lines matched (%s)", user->nick.c_str(), matched, total, criteria.c_str());
+				user->WriteServ("NOTICE %s :%u of %u X-Lines matched (%s)", user->nick.c_str(), matched, total, criteria.c_str());
 			else
 				user->WriteServ("NOTICE %s :End of list, %u/%u X-Lines %s", user->nick.c_str(), matched, total, (remove ? "removed" : "matched"));
 		}
@@ -401,6 +423,14 @@ class CommandXBase : public Command
 		{
 			std::string linetype = args.type;
 			std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
+
+			// Check for the command permission to remove X-Lines of this type
+			if (remove && !HasPermission(user, linetype))
+			{
+				user->WriteNumeric(ERR_NOPRIVILEGES, "%s :Permission Denied - Oper type '%s' does not have access to remove X-Lines of type '%s'",
+						   user->nick.c_str(), user->oper->NameStr(), linetype.c_str());
+				return false;
+			}
 
 			XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 			if (!xlines)
@@ -429,13 +459,13 @@ class CommandXBase : public Command
 	}
 
  public:
-	CommandXBase(Module* Creator, const std::string& cmdname) : Command(Creator, cmdname, 1)
+	CommandXBase(Module* Creator, const std::string& cmdname) : SplitCommand(Creator, cmdname, 1)
 	{
 		syntax = "-type=<type|*> -mask=[!]<> -reason=[!]<> -source=[!]<> -set=[-]<time> -duration=[-+]<time> -expires=[+]<time>";
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(const std::vector<std::string>& parameters, User* user)
+	CmdResult HandleLocal(const std::vector<std::string>& parameters, LocalUser* user)
 	{
 		if (parameters[0][0] != '-' || parameters[0].find('=') == std::string::npos)
 		{
@@ -459,16 +489,16 @@ class CommandXBase : public Command
 	}
 };
 
-class CommandXCopy : public Command
+class CommandXCopy : public SplitCommand
 {
  public:
-	CommandXCopy(Module* Creator) : Command(Creator, "XCOPY", 3)
+	CommandXCopy(Module* Creator) : SplitCommand(Creator, "XCOPY", 3)
 	{
 		syntax = "<xline type> <old mask> <new mask> [-duration=<> -reason=<>]";
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(const std::vector<std::string>& parameters, User* user)
+	CmdResult HandleLocal(const std::vector<std::string>& parameters, LocalUser* user)
 	{
 		const std::string& xtype = parameters[0];
 		const std::string& oldmask = parameters[1];
@@ -488,6 +518,14 @@ class CommandXCopy : public Command
 		// Lookup the X-Line matching what we were given
 		std::string linetype = xtype;
 		std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
+
+		// Check for the command permission to copy this type of X-Line
+		if (!HasPermission(user, linetype))
+		{
+			user->WriteNumeric(ERR_NOPRIVILEGES, "%s :Permission Denied - Oper type '%s' does not have access to copy an X-Line of type '%s'",
+					   user->nick.c_str(), user->oper->NameStr(), linetype.c_str());
+			return CMD_FAILURE;
+		}
 
 		XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 		if (!xlines)
