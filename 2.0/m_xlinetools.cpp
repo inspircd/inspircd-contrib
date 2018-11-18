@@ -275,6 +275,8 @@ class CommandXBase : public SplitCommand
 	{
 		total += xlines->size();
 		LookupIter safei;
+		bool negate;
+		bool match;
 
 		for (LookupIter i = xlines->begin(); i != xlines->end(); )
 		{
@@ -284,24 +286,27 @@ class CommandXBase : public SplitCommand
 			XLine* xline = i->second;
 
 			// CIDR and glob mask matching, with negation
-			if ((args.mask[0] == '!' && InspIRCd::MatchCIDR(xline->Displayable(), args.mask.substr(1))) ||
-			    (args.mask[0] != '!' && !InspIRCd::MatchCIDR(xline->Displayable(), args.mask)))
+			negate = args.mask[0] == '!';
+			match = InspIRCd::MatchCIDR(xline->Displayable(), (negate ? args.mask.substr(1) : args.mask));
+			if ((negate && match) || (!negate && !match))
 			{
 				i = safei;
 				continue;
 			}
 
 			// Glob reason matching, with negation
-			if ((args.reason[0] == '!' && InspIRCd::Match(xline->reason, args.reason.substr(1))) ||
-			    (args.reason[0] != '!' && !InspIRCd::Match(xline->reason, args.reason)))
+			negate = args.reason[0] == '!';
+			match = InspIRCd::Match(xline->reason, (negate ? args.reason.substr(1) : args.reason));
+			if ((negate && match) || (!negate && !match))
 			{
 				i = safei;
 				continue;
 			}
 
 			// Glob source matching, with negation
-			if ((args.source[0] == '!' && InspIRCd::Match(xline->source, args.source.substr(1))) ||
-			    (args.source[0] != '!' && !InspIRCd::Match(xline->source, args.source)))
+			negate = args.source[0] == '!';
+			match = InspIRCd::Match(xline->source, (negate ? args.source.substr(1) : args.source));
+			if ((negate && match) || (!negate && !match))
 			{
 				i = safei;
 				continue;
