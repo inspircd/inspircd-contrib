@@ -18,12 +18,14 @@
 
 /* $ModAuthor: genius3000 */
 /* $ModAuthorMail: genius3000@g3k.solutions */
-/* $ModDesc: X-Line management with XSEARCH, XREMOVE, and XCOPY */
+/* $ModDesc: X-Line management with XCOUNT, XREMOVE, XSEARCH, and XCOPY */
 /* $ModDepends: core 2.0 */
 
-/* XSEARCH and XREMOVE are the same except for one difference:
- * one lists matches and the other removes them.
- * Syntax is argument and value style "-arg=val" and is the same for both.
+/* XCOUNT, XREMOVE, and XSEARCH are the same except for the end action:
+ * XCOUNT will just return a count of matching X-Lines.
+ * XREMOVE will remove the matching X-Lines and return that count.
+ * XSEARCH will list the matching X-Lines and that count.
+ * Syntax is argument and value style "-arg=val" and is the same for each.
  * All arguments are optional:
  * -type=<xline type or *>
  * -mask=<mask> CIDR supported>
@@ -41,13 +43,14 @@
 
 /* Helpop Lines for the COPER section
  * Find: '<helpop key="coper" value="Oper Commands
- * Place '     XSEARCH     XREMOVE  XCOPY' after 'OJOIN'
+ * Place 'XCOUNT    XREMOVE   XSEARCH     XCOPY' on a new
+ * line after 'FILTER OJOIN'.
  * Find: '<helpop key="clones" ...'
  * Place just above that line:
-<helpop key="xsearch" value="/XSEARCH -type=<xline type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
+<helpop key="xcount" value="/XCOUNT -type=<xline type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
 
-Lists matching X-Lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
-is a nick, server, or <Config>. Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
+Returns a count of matching X-Lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
+is a nick, server, or <Config>. 'Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
 time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
 
 <helpop key="xremove" value="/XREMOVE -type=<xline type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
@@ -56,6 +59,12 @@ Removes matching X-Lines of the specified type (or all types). Mask(m) supports 
 is a nick, server, or <Config>. 'Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
 time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
 Use /XSEARCH to test before removing.">
+
+<helpop key="xsearch" value="/XSEARCH -type=<xline type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
+
+Lists matching X-Lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
+is a nick, server, or <Config>. Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
+time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
 
 <helpop key="xcopy" value="/XCOPY <xline type> <old mask> <new mask> [-duration=<> -reason=<>]
 
@@ -239,9 +248,9 @@ const std::string BuildDurationStr(time_t t)
 	}
 }
 
-class CommandXBaseSR : public Command
+class CommandXBase : public Command
 {
-	void ListOrRemove(User* user, const Criteria& args, const std::string& linetype, XLineLookup* xlines, unsigned int& matched, unsigned int& total, const bool remove)
+	void ProcessLines(User* user, const Criteria& args, const std::string& linetype, XLineLookup* xlines, unsigned int& matched, unsigned int& total, const bool count, const bool remove)
 	{
 		total += xlines->size();
 		LookupIter safei;
@@ -319,6 +328,15 @@ class CommandXBaseSR : public Command
 				}
 			}
 
+			matched++;
+
+			// Skip the rest when just counting matches
+			if (count)
+			{
+				i = safei;
+				continue;
+			}
+
 			std::string expires;
 			const std::string display = xline->Displayable();
 			const std::string duration = (xline->duration == 0 ? "permanent" : BuildDurationStr(xline->duration));
@@ -341,13 +359,13 @@ class CommandXBaseSR : public Command
 						settime.c_str(), duration.c_str(), expires.c_str(), reason.c_str());
 			}
 
-			matched++;
 			i = safei;
 		}
 	}
 
-	bool HandleType(User* user, const Criteria& args, Command* cmd)
+	bool HandleCmd(User* user, const Criteria& args, Command* cmd)
 	{
+		bool count = (cmd->name == "XCOUNT" ? true : false);
 		bool remove = (cmd->name == "XREMOVE" ? true : false);
 		const std::string action = (remove ? "Removing" : "Listing");
 		const std::string criteria = BuildCriteriaStr(args);
@@ -356,15 +374,21 @@ class CommandXBaseSR : public Command
 
 		if (args.type == "*")
 		{
-			user->WriteServ("NOTICE %s :%s matches from all X-Line types (%s)", user->nick.c_str(), action.c_str(), criteria.c_str());
+			if (!count)
+				user->WriteServ("NOTICE %s :%s matches from all X-Line types (%s)", user->nick.c_str(), action.c_str(), criteria.c_str());
 
 			std::vector<std::string> xlinetypes = ServerInstance->XLines->GetAllTypes();
 			for (std::vector<std::string>::const_iterator x = xlinetypes.begin(); x != xlinetypes.end(); ++x)
 			{
 				XLineLookup* xlines = ServerInstance->XLines->GetAll(*x);
 				if (xlines)
-					ListOrRemove(user, args, *x, xlines, matched, total, remove);
+					ProcessLines(user, args, *x, xlines, matched, total, count, remove);
 			}
+
+			if (count)
+				user->WriteServ("NOTICE %s :%u of %u all X-Lines matched (%s)", user->nick.c_str(), matched, total, criteria.c_str());
+			else
+				user->WriteServ("NOTICE %s :End of list, %u/%u X-Lines %s", user->nick.c_str(), matched, total, (remove ? "removed" : "matched"));
 		}
 		else
 		{
@@ -383,16 +407,22 @@ class CommandXBaseSR : public Command
 				return false;
 			}
 
-			user->WriteServ("NOTICE %s :%s matches of X-Line type '%s' (%s)", user->nick.c_str(), action.c_str(), linetype.c_str(), criteria.c_str());
-			ListOrRemove(user, args, linetype, xlines, matched, total, remove);
+			if (!count)
+				user->WriteServ("NOTICE %s :%s matches of X-Line type '%s' (%s)", user->nick.c_str(), action.c_str(), linetype.c_str(), criteria.c_str());
+
+			ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
+
+			if (count)
+				user->WriteServ("NOTICE %s :%u of %u X-Lines of type '%s' matched (%s)", user->nick.c_str(), matched, total, linetype.c_str(), criteria.c_str());
+			else
+				user->WriteServ("NOTICE %s :End of list, %u/%u X-Lines of type '%s' %s", user->nick.c_str(), matched, total, linetype.c_str(), (remove ? "removed" : "matched"));
 		}
 
-		user->WriteServ("NOTICE %s :End of list, %u/%u X-Lines %s", user->nick.c_str(), matched, total, (remove ? "removed" : "matched"));
 		return true;
 	}
 
  public:
-	CommandXBaseSR(Module* Creator, const std::string& cmdname) : Command(Creator, cmdname, 1)
+	CommandXBase(Module* Creator, const std::string& cmdname) : Command(Creator, cmdname, 1)
 	{
 		syntax = "-type=<type|*> -mask=[!]<> -reason=[!]<> -source=[!]<> -set=[-]<time> -duration=[-+]<time> -expires=[+]<time>";
 		flags_needed = 'o';
@@ -414,8 +444,8 @@ class CommandXBaseSR : public Command
 			return CMD_FAILURE;
 		}
 
-		// Failure message is sent from HandleType()
-		if (!HandleType(user, args, this))
+		// Failure message is sent from HandleCmd()
+		if (!HandleCmd(user, args, this))
 			return CMD_FAILURE;
 
 		return CMD_SUCCESS;
@@ -521,21 +551,23 @@ class CommandXCopy : public Command
 
 class ModuleXLineTools : public Module
 {
-	CommandXBaseSR xsearch;
-	CommandXBaseSR xremove;
+	CommandXBase xcount;
+	CommandXBase xremove;
+	CommandXBase xsearch;
 	CommandXCopy xcopy;
 
  public:
 	ModuleXLineTools()
-		: xsearch(this, "XSEARCH")
+		: xcount(this, "XCOUNT")
 		, xremove(this, "XREMOVE")
+		, xsearch(this, "XSEARCH")
 		, xcopy(this)
 	{
 	}
 
 	void init()
 	{
-		ServiceProvider* providerlist[] = { &xsearch, &xremove, &xcopy };
+		ServiceProvider* providerlist[] = { &xcount, &xremove, &xsearch, &xcopy };
 		ServerInstance->Modules->AddServices(providerlist, sizeof(providerlist)/sizeof(ServiceProvider*));
 	}
 
