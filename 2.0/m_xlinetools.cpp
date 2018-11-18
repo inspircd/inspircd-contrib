@@ -30,7 +30,7 @@
  * -type=<xline type or *>
  * -mask=<mask> CIDR supported>
  * -reason=<reason> Spaces allowed
- * -source=<source> Nick, server, or "<Config>"
+ * -source=<source> Nick, server, or "<Config>" ("setby" can be used instead of "source")
  * -set=<time string> (time ago) Prefix with '-' for less than
  * -duration=<time string> (actual set duration) Exact match, prefix '+' for longer than, or '-' for shorter than
  * -expires=<time string> (time ahead) Prefix with '+' for more than
@@ -110,6 +110,7 @@ bool ProcessArgs(const std::vector<std::string>& params, Criteria& args)
 	const std::string mmask("-mask=");
 	const std::string mreason("-reason=");
 	const std::string msource("-source=");
+	const std::string msetby("-setby=");
 	const std::string mset("-set=");
 	const std::string mduration("-duration=");
 	const std::string mexpires("-expires=");
@@ -140,6 +141,12 @@ bool ProcessArgs(const std::vector<std::string>& params, Criteria& args)
 		{
 			argreason = false;
 			const std::string& val(param.substr(msource.length()));
+			args.source = (!val.empty() ? val : "*");
+		}
+		else if (param.find(msetby) != std::string::npos)
+		{
+			argreason = false;
+			const std::string& val(param.substr(msetby.length()));
 			args.source = (!val.empty() ? val : "*");
 		}
 		else if (param.find(mset) != std::string::npos)
