@@ -19,7 +19,7 @@
 
 #include "inspircd.h"
 
-/* $ModDesc: Implements channel mode +U and extban 'U' - moderator mute */
+/* $ModDesc: Implements channel mode +U and extban 'u' - moderator mute */
 /* $ModDepends: core 2.0 */
 
 class OpModeratedMode : public SimpleChannelModeHandler
