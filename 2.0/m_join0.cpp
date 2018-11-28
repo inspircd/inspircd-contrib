@@ -35,7 +35,7 @@ class ModuleJoinZero : public Module
 
 	ModResult OnPreCommand(std::string &command, std::vector<std::string> &parameters, LocalUser *user, bool validated, const std::string &original_line)
 	{
-		if (validated && command == "JOIN" && (parameters.size() == 1) && parameters[0] == "0")
+		if (validated && command == "PARTALL")
 		{
 			UserChanList cl(user->chans);
 			for(UCListIter ci=cl.begin();ci != cl.end(); ++ci) {
