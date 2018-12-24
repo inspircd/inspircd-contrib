@@ -30,7 +30,7 @@
 
 class ModuleVhostOnConnect : public Module
 {
-	char hostmap[256];
+	std::bitset<UCHAR_MAX> hostmap;
 
 	const std::string GetAccount(LocalUser* user)
 	{
@@ -60,9 +60,9 @@ class ModuleVhostOnConnect : public Module
 		/* from m_sethost: use the same configured host character map if it exists */
 		std::string hmap = ServerInstance->Config->ConfValue("hostname")->getString("charmap", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_/0123456789");
 
-		memset(hostmap, 0, sizeof(hostmap));
+		hostmap.reset();
 		for (std::string::iterator n = hmap.begin(); n != hmap.end(); n++)
-			hostmap[(unsigned char)*n] = 1;
+			hostmap.set(static_cast<unsigned char>(*n));
 	}
 
 	void Prioritize()
@@ -110,7 +110,7 @@ class ModuleVhostOnConnect : public Module
 		/* from m_sethost: validate the characters */
 		for (std::string::const_iterator x = vhost.begin(); x != vhost.end(); x++)
 		{
-			if (!hostmap[(const unsigned char)*x])
+			if (!hostmap.test(static_cast<unsigned char>(*x)))
 			{
 				ServerInstance->Logs->Log("m_conn_vhost", DEFAULT, "m_conn_vhost: vhost in connect block %s has invalid characters", user->MyClass->name.c_str());
 				return;
