@@ -20,14 +20,17 @@
 /* $ModAuthorMail: genius3000@g3k.solutions */
 /* $ModDesc: Restrict messages until a user has been connected for a specified duration. */
 /* $ModDepends: core 2.0 */
-/* $ModConfig: <restrictmsg_duration duration="1m" notify="no" exemptoper="yes" exemptuline="yes" exemptregistered="yes">  */
+/* $ModConfig: <restrictmsg_duration duration="1m" target="both" notify="no" exemptoper="yes" exemptuline="yes" exemptregistered="yes">  */
 
 /* Config descriptions:
  * duration:         time string for how long after sign on to restrict messages. Default: 1m
+ * target:           which targets to block: user, chan, or both. Default: both
  * notify:           whether to let the user know their message was blocked. Default: no
  * exemptoper:       whether to exempt messages to opers. Default: yes
  * exemptuline:      whether to exempt messages to U-Lined clients (services). Default: yes
  * exemptregistered: whether to exempt messages from registered (and identified) users. Default: yes
+ * Connect Class exemption (add to any connect class block you wish to exempt from this):
+ * exemptrestrictmsg="yes"
  */
 
 #include "inspircd.h"
@@ -36,6 +39,8 @@
 
 class ModuleRestrictMsgDuration : public Module
 {
+	bool blockuser;
+	bool blockchan;
 	bool exemptoper;
 	bool exemptuline;
 	bool exemptregistered;
@@ -59,6 +64,15 @@ class ModuleRestrictMsgDuration : public Module
 	void OnRehash(User*)
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("restrictmsg_duration");
+
+		const std::string target = tag->getString("target", "both");
+		if (target != "user" && target != "chan" && target != "both")
+		{
+			throw ModuleException("Invalid \"target\" of '" + target + "' in <restrictmsg_duration>. Default of both will be used.");
+		}
+
+		blockuser = (target != "chan");
+		blockchan = (target != "user");
 		exemptoper = tag->getBool("exemptoper", true);
 		exemptuline = tag->getBool("exemptuline", true);
 		exemptregistered = tag->getBool("exemptregistered", true);
@@ -77,8 +91,15 @@ class ModuleRestrictMsgDuration : public Module
 		if (src->signon + duration <= ServerInstance->Time())
 			return MOD_RES_PASSTHRU;
 
+		// Check for connect class exemption
+		if (src->MyClass->config->getBool("exemptrestrictmsg"))
+			return MOD_RES_PASSTHRU;
+
 		if (target_type == TYPE_USER)
 		{
+			if (!blockuser)
+				return MOD_RES_PASSTHRU;
+
 			User* dst = (User*)dest;
 
 			// Target is Oper exemption
@@ -88,6 +109,8 @@ class ModuleRestrictMsgDuration : public Module
 			if (exemptuline && ServerInstance->ULine(dst->server))
 				return MOD_RES_PASSTHRU;
 		}
+		else if (target_type == TYPE_CHANNEL && !blockchan)
+			return MOD_RES_PASSTHRU;
 
 		// Source is registered (and identified) exemption
 		if (exemptregistered)
