@@ -201,6 +201,9 @@ module m_ciphersuitejoin 2.0.245 https://raw.githubusercontent.com/inspircd/insp
 module m_classban 2.0.361 https://raw.githubusercontent.com/inspircd/inspircd-extras/3db8bf7af3fc55d4f8d43534f59e05a62a43963d/2.0/m_classban.cpp
  description Provides extban 'n' - Connect class ban
  depends core 2.0
+module m_cloaking_extended 2.0.437 https://raw.githubusercontent.com/inspircd/inspircd-extras/a2999722373b7d98c0ea5f6f5dd0f342e518afb4/2.0/m_cloaking_extended.cpp
+ description Provides masking of user hostnames (backport from v3).
+ depends core 2.0
 module m_conn_accounts 2.0.404 https://raw.githubusercontent.com/inspircd/inspircd-extras/1f926775983dc4dd852c0058c348d76a53dad693/2.0/m_conn_accounts.cpp
  description Limit SASL connect classes by account(s).
  depends core 2.0
@@ -219,7 +222,10 @@ module m_conn_matchident 2.0.350 https://raw.githubusercontent.com/inspircd/insp
 module m_conn_require 2.0.418 https://raw.githubusercontent.com/inspircd/inspircd-extras/8265f1adb42a85f92c341039c96150a2e1a30392/2.0/m_conn_require.cpp
  description Allow or block connections based on multiple criteria
  depends core 2.0
-module m_conn_vhost 2.0.402 https://raw.githubusercontent.com/inspircd/inspircd-extras/b8cf097f2fe4af7a9e1b20a12083e4f4a10d5891/2.0/m_conn_vhost.cpp
+module m_conn_strictsasl 2.0.439 https://raw.githubusercontent.com/inspircd/inspircd-extras/0339f18cd64823a2aa54a4f1ed09861cdeba6c32/2.0/m_conn_strictsasl.cpp
+ description Disconnect users that fail a SASL auth.
+ depends core 2.0
+module m_conn_vhost 2.0.442 https://raw.githubusercontent.com/inspircd/inspircd-extras/c70971b6bed05abce6c1030f506f4b3a0f84de18/2.0/m_conn_vhost.cpp
  description Sets a connect block configured vhost on users when they connect
  depends core 2.0
 module m_custompenalty 2.0.279 https://raw.githubusercontent.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_custompenalty.cpp
@@ -326,8 +332,8 @@ module m_nouidnick 2.0.195 https://raw.githubusercontent.com/inspircd/inspircd-e
 module m_opban 2.0.400 https://raw.githubusercontent.com/inspircd/inspircd-extras/1c050e83bcc8243c34a2618154f521a4b78e27d6/2.0/m_opban.cpp
  description Implements extban +b o: Prevents these persons from aquiring a privileged position
  depends core 2.0
-module m_opmoderated 2.0.301 https://raw.githubusercontent.com/inspircd/inspircd-extras/c4aa6e4bd76bf25a40369d700b1e51e27146a1f6/2.0/m_opmoderated.cpp
- description Implements channel mode +U and extban 'U' - moderator mute
+module m_opmoderated 2.0.438 https://raw.githubusercontent.com/inspircd/inspircd-extras/bf00258a328aca7c46a8b94cd76579f1c0040b1d/2.0/m_opmoderated.cpp
+ description Implements channel mode +U and extban 'u' - moderator mute
  depends core 2.0
 module m_override_umode 2.0.376 https://raw.githubusercontent.com/inspircd/inspircd-extras/874ae79df5dfa5c1505b7ac249519ecf7894a00e/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
@@ -364,7 +370,7 @@ module m_require_auth 2.0.276 https://raw.githubusercontent.com/inspircd/inspirc
 module m_requirectcp 2.0.383 https://raw.githubusercontent.com/inspircd/inspircd-extras/2ca5f51861b85f06d8f9748579bb0653753f9c9e/2.0/m_requirectcp.cpp
  description Blocks clients not replying to CTCP like botnets/spambots/floodbots.
  depends core 2.0
-module m_restrictmsg_duration 2.0.419 https://raw.githubusercontent.com/inspircd/inspircd-extras/484e12b2305aa7200143c539ca68f6431e51398e/2.0/m_restrictmsg_duration.cpp
+module m_restrictmsg_duration 2.0.443 https://raw.githubusercontent.com/inspircd/inspircd-extras/694f7d4fad60ea79243d4b8c01489f1d4ea14199/2.0/m_restrictmsg_duration.cpp
  description Restrict messages until a user has been connected for a specified duration.
  depends core 2.0
 module m_rotatelog 2.0.253 https://raw.githubusercontent.com/inspircd/inspircd-extras/319c65de4f95efb1f505267a155e65ee0fca3981/2.0/m_rotatelog.cpp
@@ -372,6 +378,9 @@ module m_rotatelog 2.0.253 https://raw.githubusercontent.com/inspircd/inspircd-e
  depends core 2.0
 module m_rpg 2.0.358 https://raw.githubusercontent.com/inspircd/inspircd-extras/f508cf46da55c9921790861b35c89a10fb90cdbb/2.0/m_rpg.cpp
  description Provides NPC, NPCA, AMBIANCE, NARRATOR, and NARRATORA commands for use by Game Masters doing pen & paper RPGs via IRC
+ depends core 2.0
+module m_sasl_servercheck 2.0.440 https://raw.githubusercontent.com/inspircd/inspircd-extras/a9dd5c10dd7cd483211d5215e4cb083b944b24da/2.0/m_sasl_servercheck.cpp
+ description Fail SASL auth if the defined target is unavailable.
  depends core 2.0
 module m_sha1 2.0.227 https://raw.githubusercontent.com/inspircd/inspircd-extras/fb3b470ebec1b86af801ca68d14e80f06aff8adb/2.0/m_sha1.cpp
  description Implements SHA-1 hashing
