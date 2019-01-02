@@ -281,6 +281,9 @@ module m_identmeta 2.0.279 https://raw.githubusercontent.com/inspircd/inspircd-e
 module m_invitenotify 2.0.181 https://raw.githubusercontent.com/inspircd/inspircd-extras/cf9b1d041f8c8bf5917f67d90470dfc4cb800d43/2.0/m_invitenotify.cpp
  description Implements invite-notify
  depends core 2.0
+module m_ircv3_ctctags 2.0.445 https://raw.githubusercontent.com/inspircd/inspircd-extras/5263808c656ce24540f7ac9025e6358fc4598d56/2.0/m_ircv3_ctctags.cpp
+ description Dummy module to allow usage of the ircv3_ctctags module on 3.0 servers.
+ depends core 2.0
 module m_ircv3_sts 2.0.352 https://raw.githubusercontent.com/inspircd/inspircd-extras/67c53003e650c7ac6da792a969c7317cc896072c/2.0/m_ircv3_sts.cpp
  description Implements IRCv3 STS (Strict Transport Security) policy advertisement
  depends core 2.0
