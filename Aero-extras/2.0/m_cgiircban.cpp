@@ -1,6 +1,6 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
- *
+ *   Copyright (C) 2018 KoraggKnightWolf
  *   Copyright (C) 2016 Colgate Minuette <colgate.inspircd@canternet.org>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
