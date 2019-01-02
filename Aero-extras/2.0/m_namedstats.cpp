@@ -2,7 +2,7 @@
  * InspIRCd -- Internet Relay Chat Daemon
  *
  *   Copyright (C) 2012 Attila Molnar <attilamolnar@hush.com>
- *
+ *   Copyright (C) 2018 KoraggKnightWolf
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, version 2.
