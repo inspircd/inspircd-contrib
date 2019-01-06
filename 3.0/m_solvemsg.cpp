@@ -58,7 +58,7 @@ class CommandSolve : public SplitCommand
 			return CMD_FAILURE;
 		}
 
-		int result = ConvToInt(parameters[0]);
+		int result = ConvToNum<int>(parameters[0]);
 		if (result != (problem->first + problem->second))
 		{
 			user->WriteNotice(InspIRCd::Format("*** %s is not the correct answer.", parameters[0].c_str()));

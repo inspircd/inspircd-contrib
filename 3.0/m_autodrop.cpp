@@ -51,7 +51,7 @@ class ModuleAutoDrop : public Module
 		}
 	}
 
-	ModResult OnPreCommand(std::string& command, std::vector<std::string>&, LocalUser* user, bool, const std::string&) CXX11_OVERRIDE
+	ModResult OnPreCommand(std::string& command, Command::Params&, LocalUser* user, bool) CXX11_OVERRIDE
 	{
 		if (user->registered == REG_ALL || std::find(Commands.begin(), Commands.end(), command) == Commands.end())
 			return MOD_RES_PASSTHRU;
