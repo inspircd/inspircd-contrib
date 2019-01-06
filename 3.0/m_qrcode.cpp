@@ -258,7 +258,7 @@ class ModuleQRCode : public Module
 		if (name == "pink")
 			return "13";
 
-		if (name == "gray" | name == "grey")
+		if (name == "gray" || name == "grey")
 			return "14";
 
 		if (name == "lightgray" || name == "lightgrey")
