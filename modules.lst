@@ -270,6 +270,9 @@ module m_fullversion 2.0.196 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geoipban 2.0.426 https://raw.githubusercontent.com/inspircd/inspircd-extras/33d64b6d469c024d3ff3220db7541d358f978e7c/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
  depends core 2.0
+module m_groups 2.0.452 https://raw.githubusercontent.com/inspircd/inspircd-extras/6d44e76015482e84259e2ee17df27eeb175bb501/2.0/m_groups.cpp
+ depends core 2.0
+ description Allows users to be managed using services-assigned groups.
 module m_hash_gnutls 2.0.295 https://raw.githubusercontent.com/inspircd/inspircd-extras/287545046fe070e835921e55877395f37b9a86e2/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
@@ -424,8 +427,8 @@ module m_totp 2.0.211 https://raw.githubusercontent.com/inspircd/inspircd-extras
 module m_whox 2.0.433 https://raw.githubusercontent.com/inspircd/inspircd-extras/d2f6c89be76d2d61a1a7cd8d39d7ad5d107c3448/2.0/m_whox.cpp
  description Provides the WHOX extension.
  depends core 2.0
-module m_xlinetools 2.0.409 https://raw.githubusercontent.com/inspircd/inspircd-extras/2f92e50ec2237d40453b5dbc456c8c589ac3b2c2/2.0/m_xlinetools.cpp
- description X-Line management with XSEARCH, XREMOVE, and XCOPY
+module m_xlinetools 2.0.451 https://raw.githubusercontent.com/inspircd/inspircd-extras/4aea6c851f044bd784d5eb35ed10554852797f2e/2.0/m_xlinetools.cpp
+ description X-line management with XCOUNT, XREMOVE, XSEARCH, and XCOPY
  depends core 2.0
 module m_xmlsocket 2.0.386 https://raw.githubusercontent.com/inspircd/inspircd-extras/8096f7e0acb6938b66aa158fbb457f524db9ac15/2.0/m_xmlsocket.cpp
  description Provides XML socket support for Flash
@@ -445,6 +448,9 @@ module m_custompenalty 3.0.394 https://raw.githubusercontent.com/inspircd/inspir
 module m_forceident 3.0.280 https://raw.githubusercontent.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_forceident.cpp
  depends core 3.0
  description Allows forcing idents on users based on their connect class.
+module m_groups 3.0.452 https://raw.githubusercontent.com/inspircd/inspircd-extras/6d44e76015482e84259e2ee17df27eeb175bb501/3.0/m_groups.cpp
+ depends core 3.0
+ description Allows users to be managed using services-assigned groups.
 module m_identmeta 3.0.280 https://raw.githubusercontent.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_identmeta.cpp
  depends core 3.0
  description Stores the ident given in USER as metadata.
