@@ -55,6 +55,7 @@ class ModuleFixInheritance : public Module
 	void init()
 	{
 		ServerInstance->Modules->Attach(I_OnRehash, this);
+		OnRehash(NULL);
 	}
 
 	void OnRehash(User*)
