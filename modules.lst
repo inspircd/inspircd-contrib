@@ -255,7 +255,7 @@ module m_fakelist 2.0.434 https://raw.githubusercontent.com/inspircd/inspircd-ex
 module m_findxline 2.0.320 https://raw.githubusercontent.com/inspircd/inspircd-extras/dea6ae556b8145ab318e5d60d64f13dffddaf848/2.0/m_findxline.cpp
  description Provides the FINDXLINE and RMXLINE commands which lets opers search and remove XLines
  depends core 2.0
-module m_fix_class_inheritance 2.0.447 https://raw.githubusercontent.com/inspircd/inspircd-extras/e367605772908e331c2c8ca86f2365e1c64d695e/2.0/m_fix_class_inheritance.cpp
+module m_fix_class_inheritance 2.0.454 https://raw.githubusercontent.com/inspircd/inspircd-extras/63f7767121f9ea7687749a1be34d9ba20199135e/2.0/m_fix_class_inheritance.cpp
  description Backport of the fixes for <connect> class inheritance from 3.0
  depends core 2.0
 module m_flashpolicyd 2.0.271 https://raw.githubusercontent.com/inspircd/inspircd-extras/77e2fa673315a54538a26f2ebb5ab593b0457006/2.0/m_flashpolicyd.cpp
