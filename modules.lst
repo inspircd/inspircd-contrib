@@ -144,7 +144,8 @@ module m_anticaps 2.0.392 https://raw.githubusercontent.com/inspircd/inspircd-ex
 module m_antirandom 2.0.417 https://raw.githubusercontent.com/inspircd/inspircd-extras/daf9f63538d4b80e80aba8c61c74a59a77c2e868/2.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 2.0
-module m_apacheauth 2.0.425 https://raw.githubusercontent.com/inspircd/inspircd-extras/385275a2dbc391ac594bcc24baee4a34fa5d5ab5/2.0/m_apacheauth.cpp
+module m_apacheauth 2.0.457 https://raw.githubusercontent.com/inspircd/inspircd-extras/6285830d548d247b1380f98d31ea715b30ac50dc/2.0/m_apacheauth.cpp
+ depends core 2.0
  description Allow/Deny connections based upon an apache auth file
 module m_ascii 2.0.287 https://raw.githubusercontent.com/inspircd/inspircd-extras/de316014068178ac74ac5464729a0f9bbe98f353/2.0/m_ascii.cpp
  description Implements CASEMAPPING=ascii
@@ -344,7 +345,7 @@ module m_opban 2.0.400 https://raw.githubusercontent.com/inspircd/inspircd-extra
 module m_opmoderated 2.0.438 https://raw.githubusercontent.com/inspircd/inspircd-extras/bf00258a328aca7c46a8b94cd76579f1c0040b1d/2.0/m_opmoderated.cpp
  description Implements channel mode +U and extban 'u' - moderator mute
  depends core 2.0
-module m_override_umode 2.0.376 https://raw.githubusercontent.com/inspircd/inspircd-extras/874ae79df5dfa5c1505b7ac249519ecf7894a00e/2.0/m_override_umode.cpp
+module m_override_umode 2.0.456 https://raw.githubusercontent.com/inspircd/inspircd-extras/f32380dd49a20c3873136165d7841e8892766bc3/2.0/m_override_umode.cpp
  description Adds usermode +O that must be set on opers to permit override
  depends core 2.0
 module m_pretenduser 2.0.403 https://raw.githubusercontent.com/inspircd/inspircd-extras/d5e72d0983aa6de4f8fc6be2a092c083a649aa57/2.0/m_pretenduser.cpp
