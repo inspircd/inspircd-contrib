@@ -73,7 +73,7 @@ class OverrideMode : public ModeHandler
 {
  public:
 	OverrideMode(Module* mod, unsigned char modechar)
-		: ModeHandler(mod, "permitoverride", modechar, PARAM_NONE, MODETYPE_USER)
+		: ModeHandler(mod, "override", modechar, PARAM_NONE, MODETYPE_USER)
 	{
 		oper = true;
 	}
