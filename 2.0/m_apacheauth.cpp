@@ -20,6 +20,9 @@
 #include "inspircd.h"
 #include "hash.h"
 
+/* $ModAuthor: Collabora Ltd */
+/* $ModAuthorMail: vincent@collabora.co.uk */
+/* $ModDepends: core 2.0 */
 /* $ModDesc: Allow/Deny connections based upon an apache auth file */
 /* $LinkerFlags: -lcrypt */
 
