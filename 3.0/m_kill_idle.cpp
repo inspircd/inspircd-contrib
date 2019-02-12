@@ -2,6 +2,9 @@
 /// $ModAuthorMail: linuxdaemonirc@gmail.com
 /// $ModDepends: core 3.0
 /// $ModDesc: Disconnect idle users matching configured conditions
+/// $ModConfig: <idleprofile name="example" ignoreopers="yes" nochans="true" idletime="7200" ignoreloggedin="no" reason="Disconnected for inactivity" away="only">
+
+// Idle profiles are selected via the <connect:idleprofile> setting
 
 #include "inspircd.h"
 #include "modules/account.h"
@@ -30,7 +33,8 @@ struct IdleProfile
 	/** Minimum time since last message */
 	unsigned long mintime;
 
-	enum AwayCondition {
+	enum AwayCondition
+	{
 		AWAY_IGNORE,
 		AWAY_ONLY,
 		AWAY_NONE
