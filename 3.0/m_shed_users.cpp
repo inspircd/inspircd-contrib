@@ -34,20 +34,21 @@ static volatile sig_atomic_t notified;
 class CommandShed
 	: public Command
 {
+	bool enable;
  public:
-	CommandShed(Module* me)
-		: Command(me, "SHEDUSERS", 1, 1)
+	CommandShed(Module* me, const std::string& name, bool Enable)
+		: Command(me, name, 0, 1)
+		, enable(Enable)
 	{
 		flags_needed = 'o';
-		syntax = "<servermask>";
-		allow_empty_last_param = false;
+		syntax = "[servermask]";
 	}
 
 	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
 	{
-		if (InspIRCd::Match(ServerInstance->Config->ServerName, parameters[0]))
+		if (parameters.empty() || InspIRCd::Match(ServerInstance->Config->ServerName, parameters[0]))
 		{
-			active = 1;
+			active = enable;
 			notified = 0;
 		}
 
@@ -56,6 +57,8 @@ class CommandShed
 
 	RouteDescriptor GetRouting(User* user, const CommandBase::Params& parameters) CXX11_OVERRIDE
 	{
+		if (parameters.empty())
+			return ROUTE_LOCALONLY;
 		return ROUTE_OPT_BCAST;
 	}
 };
@@ -73,7 +76,7 @@ class ModuleShedUsers
 	}
 
  private:
-	CommandShed cmd;
+	CommandShed startcmd, stopcmd;
 
 	std::string message;
 	std::string blockmessage;
@@ -88,7 +91,8 @@ class ModuleShedUsers
 
  public:
 	ModuleShedUsers()
-		: cmd(this)
+		: startcmd(this, "SHEDUSERS", true)
+		, stopcmd(this, "STOPSHED", false)
 		, maxusers(0)
 		, minidle(0)
 		, shedopers(false)
