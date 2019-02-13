@@ -20,11 +20,18 @@
 /// $ModAuthorMail: linuxdaemonirc@gmail.com
 /// $ModDepends: core 3.0
 /// $ModDesc: Disconnect idle users matching configured conditions
-/// $ModConfig: <idleprofile name="example" ignoreopers="yes" nochans="true" idletime="7200" ignoreloggedin="no" reason="Disconnected for inactivity" away="only">
+/// $ModConfig: <idleprofile name="example" nochans="true" idletime="7200" ignoreloggedin="no" reason="Disconnected for inactivity" away="only">
 
 // Idle profiles are selected via the <connect:idleprofile> setting
 
 // Opers with the "users/no-idle-kill" privilege will be ignored
+
+// <idleprofile:away> allows the module to:
+//   "only": only disconnect idle users who are also marked /away
+//   "ignore": only disconnect idle users who are NOT marked /away
+//   "none": disconnect idle users regardless of their away status
+
+// <idleprofile:nochans> controls whether the module will only kill off users who are in no channels
 
 #include "inspircd.h"
 #include "modules/account.h"
