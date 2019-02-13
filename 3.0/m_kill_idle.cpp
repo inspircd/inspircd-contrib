@@ -24,6 +24,8 @@
 
 // Idle profiles are selected via the <connect:idleprofile> setting
 
+// Opers with the "users/no-idle-kill" privilege will be ignored
+
 #include "inspircd.h"
 #include "modules/account.h"
 
@@ -61,9 +63,6 @@ struct IdleProfile
 	/** Does the user need to be in no channels to match */
 	bool nochans;
 
-	/** Should we ignore opers */
-	bool ignoreopers;
-
 	/** Should we ignore users who are logged in to an account */
 	bool ignoreloggedin;
 
@@ -71,7 +70,6 @@ struct IdleProfile
 		: mintime(7200)
 		, away(AWAY_NONE)
 		, nochans(true)
-		, ignoreopers(true)
 		, ignoreloggedin(false)
 	{
 	}
@@ -81,7 +79,7 @@ struct IdleProfile
 		if (lu->registered != REG_ALL)
 			return false;
 
-		if (ignoreopers && lu->IsOper())
+		if (lu->HasPrivPermission("users/no-idle-kill"))
 			return false;
 
 		if (ignoreloggedin && GetUserAccount(lu))
@@ -154,7 +152,6 @@ class ModuleKillIdle
 
 			IdleProfile& profile = newprofiles[name];
 			profile.name = name;
-			profile.ignoreopers = tag->getBool("ignoreopers", profile.ignoreopers);
 			profile.nochans = tag->getBool("nochans", profile.nochans);
 			profile.mintime = tag->getDuration("idletime", profile.mintime, 60);
 			profile.ignoreloggedin = tag->getBool("ignoreloggedin", profile.ignoreloggedin);
