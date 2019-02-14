@@ -12,6 +12,7 @@
 #define		LDAPSERVERPORT	LDAP_PORT
 
 /* $ModDesc: Provides support for the +U channel mode */
+/* $ModDepends: core 2.0 */
 /* $ModDep: ../../include/u_listmode.h */
 /* $LinkerFlags: -lldap */
 

@@ -25,6 +25,7 @@
 #include "xline.h"
 
 /* $ModDesc: Provides the /STUN command, which stops a user from receiving messages/notices to channels */
+/* $ModDepends: core 2.0 */
 
 class Stun : public XLine
 {
