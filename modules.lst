@@ -226,6 +226,9 @@ module m_conn_require 2.0.418 https://raw.githubusercontent.com/inspircd/inspirc
 module m_conn_strictsasl 2.0.439 https://raw.githubusercontent.com/inspircd/inspircd-extras/0339f18cd64823a2aa54a4f1ed09861cdeba6c32/2.0/m_conn_strictsasl.cpp
  description Disconnect users that fail a SASL auth.
  depends core 2.0
+module m_conn_throttle 2.0.464 https://raw.githubusercontent.com/inspircd/inspircd-extras/49387ffb3197a909a812e3a87f9c70c4c780589c/2.0/m_conn_throttle.cpp
+ description Incoming connection throttle
+ depends core 2.0
 module m_conn_vhost 2.0.442 https://raw.githubusercontent.com/inspircd/inspircd-extras/c70971b6bed05abce6c1030f506f4b3a0f84de18/2.0/m_conn_vhost.cpp
  description Sets a connect block configured vhost on users when they connect
  depends core 2.0
@@ -285,6 +288,9 @@ module m_hideidle 2.0.247 https://raw.githubusercontent.com/inspircd/inspircd-ex
 module m_identmeta 2.0.279 https://raw.githubusercontent.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_identmeta.cpp
  description Stores the ident given in USER as metadata.
  depends core 2.0
+module m_inviteldapexception 2.0.467 https://raw.githubusercontent.com/inspircd/inspircd-extras/95469b3f172f9b0c049a866efb1eafbffbba77a3/2.0/m_inviteldapexception.cpp
+ description Provides support for the +U channel mode
+ depends core 2.0
 module m_invitenotify 2.0.181 https://raw.githubusercontent.com/inspircd/inspircd-extras/cf9b1d041f8c8bf5917f67d90470dfc4cb800d43/2.0/m_invitenotify.cpp
  description Implements invite-notify
  depends core 2.0
@@ -309,6 +315,9 @@ module m_joinpartsno 2.0.192 https://raw.githubusercontent.com/inspircd/inspircd
 module m_joinpartspam 2.0.421 https://raw.githubusercontent.com/inspircd/inspircd-extras/e32db31dd59bfa85d7e7b659da02080dfc577933/2.0/m_joinpartspam.cpp
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
  depends core 2.0
+module m_kill_idle 2.0.462 https://raw.githubusercontent.com/inspircd/inspircd-extras/c239eb61b35fdd9aafc694c78f31934361da4738/2.0/m_kill_idle.cpp
+ depends core 2.0
+ description Disconnect idle users matching configured conditions
 module m_lusersnoservices 2.0.265 https://raw.githubusercontent.com/inspircd/inspircd-extras/324c93969a479e0237ec2e98b5285c5582df899e/2.0/m_lusersnoservices.cpp
  description Adds an extra line to LUSERS output to show global user count minus "clients" from U-Lines servers
  depends core 2.0
@@ -413,8 +422,14 @@ module m_sslstats_gnutls 2.0.240 https://raw.githubusercontent.com/inspircd/insp
 module m_stats_unlinked 2.0.279 https://raw.githubusercontent.com/inspircd/inspircd-extras/9d169dc688639542a0e1bbb6b61d11ed0cb049ff/2.0/m_stats_unlinked.cpp
  description Adds stats character 'X' which shows unlinked servers.
  depends core 2.0
+module m_stun 2.0.468 https://raw.githubusercontent.com/inspircd/inspircd-extras/3a37511745e5b6191ccec68178c670b6de16b4b8/2.0/m_stun.cpp
+ description Provides the /STUN command, which stops a user from receiving messages/notices to channels
+ depends core 2.0
 module m_svsoper 2.0.189 https://raw.githubusercontent.com/inspircd/inspircd-extras/ea70c902274356d9aada0ac28d49ec7ea636fe40/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
+ depends core 2.0
+module m_tgchange 2.0.463 https://raw.githubusercontent.com/inspircd/inspircd-extras/27ac0016f14d22471b41cd8749f488d82d30b8f9/2.0/m_tgchange.cpp
+ description Implements "target change" detection to help prevent spam bots
  depends core 2.0
 module m_timedstaticquit 2.0.366 https://raw.githubusercontent.com/inspircd/inspircd-extras/4c86eddaccf3c81ef1c6edc0e354a31bfc40f585/2.0/m_timedstaticquit.cpp
  description Replaces the quit message of a quitting user if they have been connected for less than a configurable time
@@ -443,6 +458,9 @@ module m_autokick 3.0.280 https://raw.githubusercontent.com/inspircd/inspircd-ex
 module m_blockhighlight 3.0.394 https://raw.githubusercontent.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 3.0
+module m_conn_vhost 3.0.459 https://raw.githubusercontent.com/inspircd/inspircd-extras/cd0eb7ca38c1174acb980529f3f09ef785538fac/3.0/m_conn_vhost.cpp
+ depends core 3.0
+ description Sets a connect block configured vhost on users when they connect
 module m_custompenalty 3.0.394 https://raw.githubusercontent.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_custompenalty.cpp
  depends core 3.0
  description Allows the customisation of penalty levels.
@@ -455,6 +473,9 @@ module m_groups 3.0.452 https://raw.githubusercontent.com/inspircd/inspircd-extr
 module m_identmeta 3.0.280 https://raw.githubusercontent.com/inspircd/inspircd-extras/ee17759c008815c9f52809ac48ff976cb2b3e138/3.0/m_identmeta.cpp
  depends core 3.0
  description Stores the ident given in USER as metadata.
+module m_kill_idle 3.0.460 https://raw.githubusercontent.com/inspircd/inspircd-extras/c5a1fe07f2c77b918055fd85063c2e12561bf3c1/3.0/m_kill_idle.cpp
+ depends core 3.0
+ description Disconnect idle users matching configured conditions
 module m_messagelength 3.0.373 https://raw.githubusercontent.com/inspircd/inspircd-extras/21eae6bb8805664bb2aef3cb1bd970bd56134cee/3.0/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 3.0
@@ -464,6 +485,9 @@ module m_qrcode 3.0.449 https://raw.githubusercontent.com/inspircd/inspircd-extr
 module m_rotatelog 3.0.394 https://raw.githubusercontent.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_rotatelog.cpp
  depends core 3.0
  description Rotates the log files after a defined period.
+module m_shed_users 3.0.461 https://raw.githubusercontent.com/inspircd/inspircd-extras/f5246614092046412aefbf99cdae352d35376ff9/3.0/m_shed_users.cpp
+ depends core 3.0
+ description Slowly disconnects idle users for maintenance
 module m_solvemsg 3.0.448 https://raw.githubusercontent.com/inspircd/inspircd-extras/428f1f973cf794ed1094c070310994eedcc59b7e/3.0/m_solvemsg.cpp
  depends core 3.0
  description Requires users to solve a basic maths problem before messaging others.
