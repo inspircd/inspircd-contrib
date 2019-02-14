@@ -122,7 +122,7 @@ class CommandStun : public Command
 			}
 			else
 			{
-				user->WriteServ("NOTICE %s :*** Stun %s not found in list, try /stats K.",user->nick.c_str(),target.c_str());
+				user->WriteServ("NOTICE %s :*** Stun %s not found in list, try /stats N.",user->nick.c_str(),target.c_str());
 				return CMD_FAILURE;
 			}
 		}
@@ -219,7 +219,7 @@ class ModuleStun : public Module
 
 	virtual ModResult OnStats(char symbol, User* user, string_list& out)
 	{
-		if (symbol != 'K')
+		if (symbol != 'N')
 			return MOD_RES_PASSTHRU;
 
 		ServerInstance->XLines->InvokeStats("STUN", 223, user, out);
