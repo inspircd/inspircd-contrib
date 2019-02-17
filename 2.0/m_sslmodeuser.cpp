@@ -55,8 +55,19 @@ class SSLModeUser : public ModeHandler
 		{
 			if (!dest->IsModeSet(this->GetModeChar()))
 			{
-				if(!IsSSLUser(creator, dest))
-					return MODEACTION_DENY;
+				// Special case for local users, so conn_umodes works if intended.
+				LocalUser* lu = IS_LOCAL(dest);
+				if (lu)
+				{
+					SocketCertificateRequest req(&lu->eh, creator);
+					if (!req.cert)
+						return MODEACTION_DENY;
+				}
+				else
+				{
+					if(!IsSSLUser(creator, dest))
+						return MODEACTION_DENY;
+				}
 
 				dest->SetMode(this->GetModeChar(), true);
 				return MODEACTION_ALLOW;
