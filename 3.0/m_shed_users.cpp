@@ -41,8 +41,8 @@ class CommandShed
 {
 	bool enable;
  public:
-	CommandShed(Module* me, const std::string& name, bool Enable)
-		: Command(me, name, 0, 1)
+	CommandShed(Module* me, const std::string& Name, bool Enable)
+		: Command(me, Name, 0, 1)
 		, enable(Enable)
 	{
 		flags_needed = 'o';
