@@ -33,19 +33,6 @@ inline unsigned long GetIdle(LocalUser* lu)
 	return ServerInstance->Time() - lu->idle_lastmsg;
 }
 
-struct UserSorter
-{
-	bool operator()(LocalUser* a, LocalUser* b) const
-	{
-		// Order: NULL, NULL, InactiveUser, ActiveUser, MoreActiveUser
-		if (a && b)
-			if (a->idle_lastmsg != b->idle_lastmsg)
-				return a->idle_lastmsg < b->idle_lastmsg;
-
-		return a < b;
-	}
-};
-
 static volatile sig_atomic_t active;
 static volatile sig_atomic_t notified;
 
@@ -54,8 +41,8 @@ class CommandShed
 {
 	bool enable;
  public:
-	CommandShed(Module* me, const std::string& name, bool Enable)
-		: Command(me, name, 0, 1)
+	CommandShed(Module* me, const std::string& Name, bool Enable)
+		: Command(me, Name, 0, 1)
 		, enable(Enable)
 	{
 		flags_needed = 'o';
@@ -85,8 +72,6 @@ class ModuleShedUsers
 	: public Module
 {
  public:
-	typedef std::set<LocalUser*, UserSorter> NewUserList;
-
 	static void sighandler(int)
 	{
 		active = 1;
@@ -162,18 +147,6 @@ class ModuleShedUsers
 			ServerInstance->Users.QuitUser(user, blockmessage);
 	}
 
-	void GetSortedUsers(NewUserList& users) const
-	{
-		users.clear();
-		UserManager::LocalList localusers = ServerInstance->Users.GetLocalUsers();
-		for (UserManager::LocalList::iterator it = localusers.begin(); it != localusers.end(); ++it)
-		{
-			LocalUser* lu = *it;
-			if (CanShed(lu))
-				users.insert(lu);
-		}
-	}
-
 	void OnBackgroundTimer(time_t) CXX11_OVERRIDE
 	{
 		if (!active)
@@ -204,20 +177,19 @@ class ModuleShedUsers
 		if (!kill)
 			return;
 
-		NewUserList users;
-		GetSortedUsers(users);
+		LocalUser* to_quit = NULL;
+		const UserManager::LocalList& localusers = ServerInstance->Users.GetLocalUsers();
+		for (UserManager::LocalList::const_iterator it = localusers.begin(); it != localusers.end(); ++it)
+		{
+			LocalUser* lu = *it;
+			if (CanShed(lu) && (!to_quit || lu->idle_lastmsg < to_quit->idle_lastmsg))
+				to_quit = lu;
+		}
 
-		NewUserList::iterator it = users.begin();
-		if (it == users.end())
+		if (!to_quit)
 			return;
 
-		LocalUser* lu = *it;
-		users.erase(it);
-
-		if (!lu)
-			return;
-
-		ServerInstance->Users.QuitUser(lu, message);
+		ServerInstance->Users.QuitUser(to_quit, message);
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
