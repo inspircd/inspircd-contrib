@@ -83,6 +83,13 @@ class ModuleBlockInvite : public Module
 		return MOD_RES_DENY;
 	}
 
+	void Prioritize()
+	{
+		// Go before m_allowinvite as it returns ALLOW.
+		Module* allowinvite = ServerInstance->Modules->Find("m_allowinvite.so");
+		ServerInstance->Modules->SetPriority(this, I_OnUserPreInvite, PRIORITY_BEFORE, allowinvite);
+	}
+
 	Version GetVersion()
 	{
 		return Version("Provides usermode +" + ConvToStr(bi.GetModeChar()) + " to block all INVITEs", VF_OPTCOMMON);
