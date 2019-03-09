@@ -81,6 +81,7 @@
 // ExtItem per User, tracking CAP request and CTCP replies
 struct UserData
 {
+	bool ccblocked;
 	bool ctcpreply;
 	bool expectctcp;
 	bool expectversion;
@@ -91,7 +92,8 @@ struct UserData
 	std::string secondversionreply;
 
 	UserData()
-		: ctcpreply(false)
+		: ccblocked(false)
+		, ctcpreply(false)
 		, expectctcp(false)
 		, expectversion(false)
 		, selfquit(false)
@@ -426,6 +428,7 @@ class ModuleConnRequire : public Module
 		   (ctcpstring.empty() || !cc->config->getBool("requirectcp") || ud->ctcpreply))
 			return MOD_RES_PASSTHRU;
 
+		ud->ccblocked = true;
 		return MOD_RES_DENY;
 	}
 
@@ -463,31 +466,35 @@ class ModuleConnRequire : public Module
 		if (user->registered == REG_ALL)
 			return;
 
-		// Skip users we don't know about or that self quit
-		UserData* ud = userdata.get(user);
-		if (!ud || ud->selfquit)
-			return;
-
 		// Skip users with a socket level error
 		// This ignores things like port scans, ZNC cert errors, etc.
 		if (!user->eh.getError().empty())
 			return;
 
-		bool noCap = !ud->sentcap;
-		bool noRpl = (!ctcpstring.empty() && !ud->ctcpreply);
-		bool noVer = (!disableversion && ud->firstversionreply.empty());
-
-		// We didn't do it
-		if (!noCap && !noRpl && !noVer)
+		// Skip users we don't know about or that self quit
+		UserData* ud = userdata.get(user);
+		if (!ud || ud->selfquit)
 			return;
 
 		// We already disconnected (and possibly banned) these users
 		if (ud->zapped)
 			return;
 
+		// We didn't block any connect classes for this user.
+		if (!ud->ccblocked)
+		{
+			ServerInstance->Logs->Log("m_conn_require", DEBUG, "Unregistered user exiting for unknown reasons: %s (%s) [%s]",
+				user->GetFullRealHost().c_str(), user->GetIPString(), user->fullname.c_str());
+			return;
+		}
+
 		// Send them a message if configured
 		if (!blockmessage.empty())
 			user->WriteServ("NOTICE %s :%s", user->nick.c_str(), blockmessage.c_str());
+
+		bool noCap = !ud->sentcap;
+		bool noRpl = (!ctcpstring.empty() && !ud->ctcpreply);
+		bool noVer = (!disableversion && ud->firstversionreply.empty());
 
 		// Check for a match to our BanMissing and then Z-Line
 		for (std::vector<BanMissing>::const_iterator it = banmissings.begin(); it != banmissings.end(); ++it)
@@ -506,10 +513,10 @@ class ModuleConnRequire : public Module
 		}
 
 		// Send out a SNOTICE that we likely caused this user to not get through
-		std::string buffer = "Disconnecting unregistered user " + user->GetFullRealHost();
+		std::string buffer = "Unregistered user exiting: " + user->GetFullRealHost();
 		buffer.append(" (" + std::string(user->GetIPString()) + ") [" + user->fullname + "]");
 		buffer.append(" on port " + ConvToStr(user->GetServerPort()));
-		buffer.append(" that was missing: ");
+		buffer.append(". Possibly due to missing: ");
 		if (noCap)
 			buffer.append("CAP, ");
 		if (noRpl)
