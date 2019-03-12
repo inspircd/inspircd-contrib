@@ -108,13 +108,10 @@ class ModuleRestrictMsgDuration : public Module
 		// Source is registered (and identified) exemption
 		if (exemptregistered)
 		{
-			const AccountExtItem* accountname = GetAccountExtItem();
-			if (accountname)
-			{
-				const std::string* account = accountname->get(src);
-				if (account && !account->empty())
-					return MOD_RES_PASSTHRU;
-			}
+			const AccountExtItem* accountext = GetAccountExtItem();
+			const std::string* account = accountext ? accountext->get(src) : NULL;
+			if (account)
+				return MOD_RES_PASSTHRU;
 		}
 
 		if (notify)

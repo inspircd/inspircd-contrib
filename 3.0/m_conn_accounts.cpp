@@ -46,10 +46,7 @@ class ModuleConnAccounts : public Module
 			return MOD_RES_PASSTHRU;
 
 		const AccountExtItem* accountext = GetAccountExtItem();
-		if (!accountext)
-			return MOD_RES_DENY;
-
-		std::string* account = accountext->get(user);
+		const std::string* account = accountext ? accountext->get(user) : NULL;
 		if (!account)
 			return MOD_RES_DENY;
 

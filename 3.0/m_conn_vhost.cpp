@@ -37,10 +37,7 @@ class ModuleVhostOnConnect : public Module
 		std::string result;
 
 		const AccountExtItem* accountext = GetAccountExtItem();
-		if (!accountext)
-			return result;
-
-		std::string* account = accountext->get(user);
+		const std::string* account = accountext ? accountext->get(user) : NULL;
 		if (account)
 			result = *account;
 
