@@ -135,6 +135,9 @@ class ModuleShedUsers
 		if (!shedopers && lu->IsOper())
 			return false;
 
+		if (lu->registered != REG_ALL)
+			return false;
+
 		if (GetIdle(lu) < minidle)
 			return false;
 
