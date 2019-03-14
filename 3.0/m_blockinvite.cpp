@@ -23,7 +23,7 @@
 /// $ModDesc: Provides usermode 'V' - block all INVITEs
 /* Set whether to reply with a blocked message to the source (inviter)
  * with the 'reply' config option. Defaults to no.
- * To allow oper overriding, add the privilege 'users/override-blockinvite'
+ * To allow oper overriding, add the privilege 'users/blockinvite-override'
  * to your preferred oper class.
  */
 
@@ -31,7 +31,7 @@
  * Find: '<helpop key="umodes" value="User Modes'
  * Place just before the 'W    Receives notif...' line
  V            Blocks all INVITEs from other users (requires
-              blockinvite extras-module).
+              the blockinvite extras-module).
  */
 
 
@@ -73,7 +73,7 @@ class ModuleBlockInvite : public Module
 		if (!IS_LOCAL(source) || !dest->IsModeSet(bi.GetModeChar()))
 			return MOD_RES_PASSTHRU;
 
-		if (source->HasPrivPermission("users/override-blockinvite"))
+		if (source->HasPrivPermission("users/blockinvite-override"))
 			return MOD_RES_PASSTHRU;
 
 		if (reply)
