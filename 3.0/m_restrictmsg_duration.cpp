@@ -75,8 +75,12 @@ class ModuleRestrictMsgDuration : public Module
 
 	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
-		LocalUser* src = IS_LOCAL(user);
+		// Only check messages targeting a user or channel
+		if (target.type != MessageTarget::TYPE_USER && target.type != MessageTarget::TYPE_CHANNEL)
+			return MOD_RES_PASSTHRU;
+
 		// Only check against non-oper local users
+		LocalUser* src = IS_LOCAL(user);
 		if (!src || src->IsOper())
 			return MOD_RES_PASSTHRU;
 
@@ -88,23 +92,6 @@ class ModuleRestrictMsgDuration : public Module
 		if (src->MyClass->config->getBool("exemptrestrictmsg"))
 			return MOD_RES_PASSTHRU;
 
-		if (target.type == MessageTarget::TYPE_USER)
-		{
-			if (!blockuser)
-				return MOD_RES_PASSTHRU;
-
-			User* const dst = target.Get<User>();
-
-			// Target is Oper exemption
-			if (exemptoper && dst->IsOper())
-				return MOD_RES_PASSTHRU;
-			// Target is on a U-Lined server exemption
-			if (exemptuline && dst->server->IsULine())
-				return MOD_RES_PASSTHRU;
-		}
-		else if (target.type == MessageTarget::TYPE_CHANNEL && !blockchan)
-			return MOD_RES_PASSTHRU;
-
 		// Source is registered (and identified) exemption
 		if (exemptregistered)
 		{
@@ -114,24 +101,37 @@ class ModuleRestrictMsgDuration : public Module
 				return MOD_RES_PASSTHRU;
 		}
 
-		if (notify)
+		if (blockuser && target.type == MessageTarget::TYPE_USER)
 		{
-			if (target.type == MessageTarget::TYPE_USER)
+			User* const dst = target.Get<User>();
+
+			// Target is Oper exemption
+			if (exemptoper && dst->IsOper())
+				return MOD_RES_PASSTHRU;
+			// Target is on a U-Lined server exemption
+			if (exemptuline && dst->server->IsULine())
+				return MOD_RES_PASSTHRU;
+
+			if (notify)
 			{
 				src->WriteNumeric(ERR_CANTSENDTOUSER, target.Get<User>()->nick,
 					InspIRCd::Format("You cannot send messages within the first %lu seconds of connecting.",
 					duration));
 			}
-			else
-			{
+
+			return MOD_RES_DENY;
+		}
+		else if (blockchan && target.type == MessageTarget::TYPE_CHANNEL)
+		{
+			if (notify)
 				src->WriteNumeric(ERR_CANNOTSENDTOCHAN, target.Get<Channel>()->name,
 					InspIRCd::Format("You cannot send messages within the first %lu seconds of connecting.",
 					duration));
-			}
+
+			return MOD_RES_DENY;
 		}
 
-		// Finally, deny them the message sending ability :D
-		return MOD_RES_DENY;
+		return MOD_RES_PASSTHRU;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
