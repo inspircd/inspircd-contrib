@@ -46,6 +46,12 @@ Get a list of bans and exceptions that match current users on the channel.">
 #include "inspircd.h"
 #include "listmode.h"
 
+namespace
+{
+Module* me;
+ChanModeReference ban(me, "ban");
+ChanModeReference exc(me, "banexception");
+
 enum
 {
 	RPL_BANMATCH = 540,
@@ -53,14 +59,11 @@ enum
 	RPL_ENDLIST = 542
 };
 
-namespace
-{
 bool CanCheck(Channel* chan, User* user)
 {
 	if (user->HasPrivPermission("channels/auspex"))
 		return true;
 
-	ModeHandler* ban = ServerInstance->Modes->FindMode("ban", MODETYPE_CHANNEL);
 	if (ban->GetLevelRequired(true) > chan->GetPrefixValue(user))
 	{
 		user->WriteNumeric(ERR_CHANOPRIVSNEEDED, chan->name, "You do not have access to modify the ban list.");
@@ -74,11 +77,9 @@ void CheckLists(User* source, Channel* chan, User* user)
 {
 	ListModeBase::ModeList* list;
 	ListModeBase::ModeList::const_iterator iter;
-	ModeHandler* ban = ServerInstance->Modes->FindMode("ban", MODETYPE_CHANNEL);
-	ModeHandler* exc = ServerInstance->Modes->FindMode("banexception", MODETYPE_CHANNEL);
 
-	ListModeBase* banlm = static_cast<ListModeBase*>(ban);
-	list = banlm->GetList(chan);
+	ListModeBase* banlm = ban->IsListModeBase();
+	list = banlm ? banlm->GetList(chan) : NULL;
 	if (list)
 	{
 		for (iter = list->begin(); iter != list->end(); ++iter)
@@ -92,11 +93,8 @@ void CheckLists(User* source, Channel* chan, User* user)
 		}
 	}
 
-	if (!exc)
-		return;
-
-	ListModeBase* exclm = static_cast<ListModeBase*>(exc);
-	list = exclm->GetList(chan);
+	ListModeBase* exclm = exc ? exc->IsListModeBase() : NULL;
+	list = exclm ? exclm->GetList(chan) : NULL;
 	if (list)
 	{
 		for (iter = list->begin(); iter != list->end(); ++iter)
@@ -249,6 +247,7 @@ class ModuleCheckBans : public Module
 		, ctb(this)
 		, cwb(this)
 	{
+		me = this;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE

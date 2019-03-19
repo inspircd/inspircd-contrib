@@ -99,8 +99,8 @@ class ModuleExtbanBanlist : public Module
 			if (!chan)
 				return MOD_RES_PASSTHRU;
 
-			ListModeBase* banlm = static_cast<ListModeBase*>(*banmode);
-			const ListModeBase::ModeList* bans = banlm->GetList(chan);
+			ListModeBase* banlm = banmode->IsListModeBase();
+			const ListModeBase::ModeList* bans = banlm ? banlm->GetList(chan) : NULL;
 			if (!bans)
 				return MOD_RES_PASSTHRU;
 

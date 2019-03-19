@@ -23,7 +23,8 @@
 /// $ModDesc: Provides extban 'x' - Regex matching to n!u@h\sr
 
 /* Since regex matching can be very CPU intensive, a config option is available
- * to limit the use of this extban to opers only (defaults to true).
+ * to limit the use of this extban to opers only and with an oper privilege
+ * for control (channels/regex-extban). Default is true.
  * A SNOTICE is sent to the 'a' SNOMASK if a match from this extban takes
  * more than half a second.
  */
@@ -61,9 +62,11 @@ bool IsNestedExtBanRegex(const std::string &mask)
 void RemoveAll(const std::string& engine, ChanModeReference& ban, ChanModeReference& exc, ChanModeReference& inv)
 {
 	std::vector<ListModeBase*> listmodes;
-	listmodes.push_back(static_cast<ListModeBase*>(*ban));
-	listmodes.push_back(static_cast<ListModeBase*>(*exc));
-	listmodes.push_back(static_cast<ListModeBase*>(*inv));
+	listmodes.push_back(ban->IsListModeBase());
+	if (exc)
+		listmodes.push_back(exc->IsListModeBase());
+	if (inv)
+		listmodes.push_back(inv->IsListModeBase());
 
 	// Loop each channel checking for any regex extbans
 	// Batch removals with a Modes::ChangeList and Process()
@@ -125,7 +128,7 @@ class WatchedMode : public ModeWatcher
 		if (!IsExtBanRegex(param) && !IsNestedExtBanRegex(param))
 			return true;
 
-		if (opersonly && !user->IsOper())
+		if (opersonly && !user->HasPrivPermission("channels/regex-extban"))
 			return false;
 
 		if (!rxfactory)
