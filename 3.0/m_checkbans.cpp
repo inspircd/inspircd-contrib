@@ -48,10 +48,6 @@ Get a list of bans and exceptions that match current users on the channel.">
 
 namespace
 {
-Module* me;
-ChanModeReference ban(me, "ban");
-ChanModeReference exc(me, "banexception");
-
 enum
 {
 	RPL_BANMATCH = 540,
@@ -59,7 +55,7 @@ enum
 	RPL_ENDLIST = 542
 };
 
-bool CanCheck(Channel* chan, User* user)
+bool CanCheck(Channel* chan, User* user, ChanModeReference& ban)
 {
 	if (user->HasPrivPermission("channels/auspex"))
 		return true;
@@ -73,7 +69,7 @@ bool CanCheck(Channel* chan, User* user)
 	return true;
 }
 
-void CheckLists(User* source, Channel* chan, User* user)
+void CheckLists(User* source, Channel* chan, User* user, ChanModeReference& ban, ChanModeReference& exc)
 {
 	ListModeBase::ModeList* list;
 	ListModeBase::ModeList::const_iterator iter;
@@ -112,8 +108,14 @@ void CheckLists(User* source, Channel* chan, User* user)
 
 class CommandCheckBans : public Command
 {
+	ChanModeReference& ban;
+	ChanModeReference& exc;
+
  public:
-	CommandCheckBans(Module* Creator) : Command(Creator, "CHECKBANS", 1, 1)
+	CommandCheckBans(Module* Creator, ChanModeReference& _ban, ChanModeReference& _exc)
+		: Command(Creator, "CHECKBANS", 1, 1)
+		, ban(_ban)
+		, exc(_exc)
 	{
 		this->syntax = "<channel>";
 		this->Penalty = 6;
@@ -129,13 +131,13 @@ class CommandCheckBans : public Command
 		}
 
 		// Only allow checking for matching users if you have access to the ban list
-		if (!CanCheck(chan, user))
+		if (!CanCheck(chan, user, ban))
 			return CMD_FAILURE;
 
 		// Loop through all users of the channel, checking for matches to bans and exceptions (if available)
 		const Channel::MemberMap& users = chan->GetUsers();
 		for (Channel::MemberMap::const_iterator u = users.begin(); u != users.end(); ++u)
-			CheckLists(user, chan, u->first);
+			CheckLists(user, chan, u->first, ban, exc);
 
 		user->WriteNumeric(RPL_ENDLIST, chan->name, "End of check bans list");
 		return CMD_SUCCESS;
@@ -144,8 +146,12 @@ class CommandCheckBans : public Command
 
 class CommandTestBan : public Command
 {
+	ChanModeReference& ban;
+
  public:
-	CommandTestBan(Module* Creator) : Command(Creator, "TESTBAN", 2, 2)
+	CommandTestBan(Module* Creator, ChanModeReference& _ban)
+		: Command(Creator, "TESTBAN", 2, 2)
+		, ban(_ban)
 	{
 		this->syntax = "<channel> <mask>";
 		this->Penalty = 6;
@@ -161,7 +167,7 @@ class CommandTestBan : public Command
 		}
 
 		// Only allow testing bans if the user has access to set a ban on the channel
-		if (!CanCheck(chan, user))
+		if (!CanCheck(chan, user, ban))
 			return CMD_FAILURE;
 
 		unsigned int matched = 0;
@@ -190,8 +196,14 @@ class CommandTestBan : public Command
 
 class CommandWhyBan : public Command
 {
+	ChanModeReference& ban;
+	ChanModeReference& exc;
+
  public:
-	CommandWhyBan(Module* Creator) : Command(Creator, "WHYBAN", 1, 2)
+	CommandWhyBan(Module* Creator, ChanModeReference& _ban, ChanModeReference& _exc)
+		: Command(Creator, "WHYBAN", 1, 2)
+		, ban(_ban)
+		, exc(_exc)
 	{
 		this->syntax = "<channel> [user]";
 	}
@@ -216,7 +228,7 @@ class CommandWhyBan : public Command
 			if (lu)
 				lu->CommandFloodPenalty += 10000;
 
-			if (!CanCheck(chan, user))
+			if (!CanCheck(chan, user, ban))
 				return CMD_FAILURE;
 
 			u = ServerInstance->FindNick(parameters[1]);
@@ -228,7 +240,7 @@ class CommandWhyBan : public Command
 		}
 
 		// Check for matching bans and exceptions (if available)
-		CheckLists(user, chan, u);
+		CheckLists(user, chan, u, ban, exc);
 
 		user->WriteNumeric(RPL_ENDLIST, chan->name, u->nick, "End of why ban list");
 		return CMD_SUCCESS;
@@ -237,17 +249,20 @@ class CommandWhyBan : public Command
 
 class ModuleCheckBans : public Module
 {
+	ChanModeReference ban;
+	ChanModeReference exc;
 	CommandCheckBans ccb;
 	CommandTestBan ctb;
 	CommandWhyBan cwb;
 
  public:
 	ModuleCheckBans()
-		: ccb(this)
-		, ctb(this)
-		, cwb(this)
+		: ban(this, "ban")
+		, exc(this, "banexception")
+		, ccb(this, ban, exc)
+		, ctb(this, ban)
+		, cwb(this, ban, exc)
 	{
-		me = this;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
