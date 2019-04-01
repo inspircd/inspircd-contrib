@@ -429,6 +429,9 @@ class ModuleConnRequire : public Module
 	// This matches with 2.0's placement of OnUserInit.
 	void OnSetUserIP(LocalUser* user) CXX11_OVERRIDE
 	{
+		if (user->registered != REG_NONE)
+			return;
+
 		// Initialize their UserData and send the CTCP request(s)
 		UserData* ud = new UserData;
 		userdata.set(user, ud);
