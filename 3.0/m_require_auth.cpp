@@ -18,7 +18,7 @@
  */
 
 /// $ModAuthor: WindowsUser
-/// $ModDesc: Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
+/// $ModDesc: Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
 /// $ModDepends: core 3.0
 
 #include "inspircd.h"
@@ -57,15 +57,15 @@ class GALine : public XLine
 	{
 		if (!isLoggedIn(u))
 		{
-			u->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is " + type + "-Lined).");
-			ServerInstance->Users->QuitUser(u, type + "-Lined: "+this->reason);
+			u->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is " + type + "-lined).");
+			ServerInstance->Users->QuitUser(u, type + "-lined: "+this->reason);
 		}
 	}
 
 	void DisplayExpiry() CXX11_OVERRIDE
 	{
-		ServerInstance->SNO->WriteToSnoMask('x',"Removing expired %s-Line %s@%s (set by %s %ld seconds ago)",
-			type.c_str(), identmask.c_str(),hostmask.c_str(),source.c_str(),(long)(ServerInstance->Time() - this->set_time));
+		ServerInstance->SNO->WriteToSnoMask('x', "Removing expired %s-line %s@%s (set by %s %s ago): %s",
+			type.c_str(), identmask.c_str(), hostmask.c_str(), source.c_str(), InspIRCd::DurationString(ServerInstance->Time() - this->set_time).c_str(), reason.c_str());
 	}
 
 	bool Matches(User* u) CXX11_OVERRIDE
@@ -147,7 +147,7 @@ class CommandGALine: public Command
 		: Command(c, linetype+"LINE", 1, 3)
 	{
 		flags_needed = 'o';
-		this->syntax = "<ident@host> [<duration> :<reason>]";
+		this->syntax = "<user@host> [<duration> :<reason>]";
 		this->linename = linetype;
 		statschar = stats;
 	}
@@ -170,13 +170,13 @@ class CommandGALine: public Command
 
 			if (ih.first.empty())
 			{
-				user->WriteNotice("*** Target not found");
+				user->WriteNotice("*** Target not found.");
 				return CMD_FAILURE;
 			}
 
 			else if (target.find('!') != std::string::npos)
 			{
-				user->WriteNotice(linename + "-Line cannot operate on nick!user@host masks");
+				user->WriteNotice(linename + "-line cannot operate on nick!user@host masks.");
 				return CMD_FAILURE;
 			}
 
@@ -184,26 +184,31 @@ class CommandGALine: public Command
 			if (!xlf)
 				return CMD_FAILURE;
 
-			unsigned long duration = InspIRCd::Duration(parameters[1]);
+			unsigned long duration;
+			if (!InspIRCd::Duration(parameters[1], duration))
+			{
+				user->WriteNotice("*** Invalid duration for " + linename + "-line.");
+				return CMD_FAILURE;
+			}
 			XLine* al = xlf->Generate(ServerInstance->Time(), duration, user->nick, parameters[2], target);
 			if (ServerInstance->XLines->AddLine(al, user))
 			{
 				if (!duration)
 				{
-					ServerInstance->SNO->WriteToSnoMask('x', "%s added permanent %s-line for %s: %s",user->nick.c_str(), linename.c_str(), target.c_str(), parameters[2].c_str());
+					ServerInstance->SNO->WriteToSnoMask('x', "%s added permanent %s-line for %s: %s", user->nick.c_str(), linename.c_str(), target.c_str(), parameters[2].c_str());
 				}
 				else
 				{
-					time_t c_requires_crap = duration + ServerInstance->Time();
-					std::string timestr = ServerInstance->TimeString(c_requires_crap);
-					ServerInstance->SNO->WriteToSnoMask('x',"%s added timed %s-line for %s, expires on %s: %s",user->nick.c_str(),linename.c_str(),target.c_str(),timestr.c_str(), parameters[2].c_str());
+					ServerInstance->SNO->WriteToSnoMask('x', "%s added timed %s-line for %s, expires in %s (on %s): %s",
+						user->nick.c_str(), linename.c_str(), target.c_str(), InspIRCd::DurationString(duration).c_str(),
+						InspIRCd::TimeString(ServerInstance->Time() + duration).c_str(), parameters[2].c_str());
 				}
 				ServerInstance->XLines->ApplyLines();
 			}
 			else
 			{
 				delete al;
-				user->WriteNotice("*** " + linename + "-Line for " + target + " already exists");
+				user->WriteNotice("*** " + linename + "-line for " + target + " already exists.");
 			}
 		}
 		else
@@ -211,12 +216,12 @@ class CommandGALine: public Command
 			std::string reason;
 			if (ServerInstance->XLines->DelLine(target.c_str(), linename, reason, user))
 			{
-				ServerInstance->SNO->WriteToSnoMask('x',"%s removed %s-line on %s: %s",
+				ServerInstance->SNO->WriteToSnoMask('x', "%s removed %s-line on %s: %s",
 					user->nick.c_str(), linename.c_str(), target.c_str(), reason.c_str());
 			}
 			else
 			{
-				user->WriteNotice("*** " + linename + "-Line " + target + " not found in list, try /stats " + ConvToStr(statschar) + ".");
+				user->WriteNotice("*** " + linename + "-line " + target + " not found in list, try /stats " + ConvToStr(statschar) + ".");
 			}
 		}
 
@@ -278,7 +283,7 @@ class ModuleRequireAuth : public Module, public Stats::EventListener
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.", VF_COMMON);
+		return Version("Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.", VF_COMMON);
 	}
 
 	ModResult OnCheckReady(LocalUser* user) CXX11_OVERRIDE
@@ -290,14 +295,14 @@ class ModuleRequireAuth : public Module, public Stats::EventListener
 			XLine* globallines = ServerInstance->XLines->MatchesLine("GA", user);
 			if (locallines)
 			{
-				user->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is A-Lined).");
-				ServerInstance->Users->QuitUser(user, "A-Lined: "+locallines->reason);
+				user->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is A-lined).");
+				ServerInstance->Users->QuitUser(user, "A-lined: "+locallines->reason);
 				return MOD_RES_DENY;
 			}
 			else if (globallines)
 			{
-				user->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is GA-Lined).");
-				ServerInstance->Users->QuitUser(user, "GA-Lined: "+globallines->reason);
+				user->WriteNotice("*** NOTICE -- You need to identify via SASL to use this server (your host is GA-lined).");
+				ServerInstance->Users->QuitUser(user, "GA-lined: "+globallines->reason);
 				return MOD_RES_DENY;
 			}
 		}
