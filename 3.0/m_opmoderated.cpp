@@ -58,15 +58,13 @@ class ModuleOpModerated : public Module
 
 		if (!chan->GetExtBanStatus(user, 'u').check(!chan->IsModeSet(&opmod)) && chan->GetPrefixValue(user) < VOICE_VALUE)
 		{
-			MessageTarget newtarget = target;
-			newtarget.status = '@';
-
-			FOREACH_MOD(OnUserMessage, (user, newtarget, details));
-			ClientProtocol::Messages::Privmsg msg(user, chan, details.text, details.type);
-			chan->Write(ServerInstance->GetRFCEvents().privmsg, msg, newtarget.status, details.exemptions);
-			FOREACH_MOD(OnUserPostMessage, (user, newtarget, details));
-
-			return MOD_RES_DENY;
+			// Add any unprivileged users to the exemption list.
+			const Channel::MemberMap& users = chan->GetUsers();
+			for (Channel::MemberMap::const_iterator i = users.begin(); i != users.end(); ++i)
+			{
+				if (i->second->getRank() < OP_VALUE)
+					details.exemptions.insert(i->first);
+			}
 		}
 
 		return MOD_RES_PASSTHRU;
@@ -79,7 +77,7 @@ class ModuleOpModerated : public Module
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Implements opmoderated channel mode +U (non-voiced messages sent to ops) and extban 'u'", VF_OPTCOMMON|VF_VENDOR);
+		return Version("Implements opmoderated channel mode +U (non-voiced messages sent to ops) and extban 'u'", VF_OPTCOMMON);
 	}
 };
 
