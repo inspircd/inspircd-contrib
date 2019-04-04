@@ -426,12 +426,8 @@ class ModuleConnRequire : public Module
 		return MOD_RES_DENY;
 	}
 
-	// This matches with 2.0's placement of OnUserInit.
-	void OnSetUserIP(LocalUser* user) CXX11_OVERRIDE
+	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
 	{
-		if (userdata.get(user))
-			return;
-
 		// Initialize their UserData and send the CTCP request(s)
 		UserData* ud = new UserData;
 		userdata.set(user, ud);
