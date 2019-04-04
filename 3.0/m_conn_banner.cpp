@@ -27,35 +27,18 @@
 
 class ModuleConnBanner : public Module
 {
-	LocalIntExt init;
 	std::string text;
 
  public:
-	ModuleConnBanner()
-		: init("user_init", ExtensionItem::EXT_USER, this)
-	{
-	}
-
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		text = ServerInstance->Config->ConfValue("connbanner")->getString("text");
 	}
 
-	void OnSetUserIP(LocalUser* user) CXX11_OVERRIDE
+	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
 	{
-		if (init.get(user))
-			return;
-
 		if (!text.empty())
 			user->WriteNotice("*** " + text);
-
-		init.set(user, 1);
-	}
-
-	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE
-	{
-		if (init.get(user))
-			init.unset(user);
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
