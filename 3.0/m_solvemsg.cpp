@@ -85,7 +85,7 @@ class ModuleSolveMessage : public Module
 	{
 	}
 
-	void OnUserInit(LocalUser* user) CXX11_OVERRIDE
+	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
 	{
 		Problem problem;
 		problem.first = ServerInstance->GenRandomInt(9);
