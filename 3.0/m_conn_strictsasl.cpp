@@ -61,13 +61,10 @@ class ModuleConnStrictSasl : public Module
 		if (!sentauth.get(user))
 			return MOD_RES_PASSTHRU;
 
-		const AccountExtItem* accountname = GetAccountExtItem();
-		if (!accountname)
-			return MOD_RES_PASSTHRU;
-
 		// Let them through if they have an account
-		std::string* account = accountname->get(user);
-		if (account && !account->empty())
+		const AccountExtItem* accountext = GetAccountExtItem();
+		const std::string* account = accountext ? accountext->get(user) : NULL;
+		if (account)
 			return MOD_RES_PASSTHRU;
 
 		ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Failed SASL auth from: %s (%s) [%s]",
