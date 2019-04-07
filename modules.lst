@@ -351,7 +351,7 @@ module m_nouidnick 2.0.195 https://raw.githubusercontent.com/inspircd/inspircd-e
 module m_opban 2.0.400 https://raw.githubusercontent.com/inspircd/inspircd-extras/1c050e83bcc8243c34a2618154f521a4b78e27d6/2.0/m_opban.cpp
  description Implements extban +b o: Prevents these persons from aquiring a privileged position
  depends core 2.0
-module m_opmoderated 2.0.438 https://raw.githubusercontent.com/inspircd/inspircd-extras/bf00258a328aca7c46a8b94cd76579f1c0040b1d/2.0/m_opmoderated.cpp
+module m_opmoderated 2.0.479 https://raw.githubusercontent.com/inspircd/inspircd-extras/9c4d19ed4ee60220b071c57626d888af1c07d61c/2.0/m_opmoderated.cpp
  description Implements channel mode +U and extban 'u' - moderator mute
  depends core 2.0
 module m_override_umode 2.0.456 https://raw.githubusercontent.com/inspircd/inspircd-extras/f32380dd49a20c3873136165d7841e8892766bc3/2.0/m_override_umode.cpp
@@ -500,22 +500,25 @@ module m_messagelength 3.0.373 https://raw.githubusercontent.com/inspircd/inspir
 module m_namedstats 3.0.475 https://raw.githubusercontent.com/inspircd/inspircd-extras/e0c12ce974a8e285ca3cb8bb914d76831a529b17/3.0/m_namedstats.cpp
  description Allows /STATS queries by name
  depends core 3.0
+module m_noprivatemode 3.0.481 https://raw.githubusercontent.com/inspircd/inspircd-extras/bcfd1fdbbdfab1ca0f58ccd1139d7318c498df5d/3.0/m_noprivatemode.cpp
+ description Sets channel mode +s (secret) when users try to set channel mode +p (private).
+ depends core 3.0
 module m_qrcode 3.0.449 https://raw.githubusercontent.com/inspircd/inspircd-extras/3bf35b5148fe7b74548455bfce4cae163b08c731/3.0/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 3.0
-module m_require_auth 3.0.475 https://raw.githubusercontent.com/inspircd/inspircd-extras/e0c12ce974a8e285ca3cb8bb914d76831a529b17/3.0/m_require_auth.cpp
- description Gives /aline and /galine, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
+module m_require_auth 3.0.478 https://raw.githubusercontent.com/inspircd/inspircd-extras/8981f1bbcc02486c2b827b98e3f57dcfc0e0254f/3.0/m_require_auth.cpp
+ description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 3.0
 module m_rotatelog 3.0.394 https://raw.githubusercontent.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_rotatelog.cpp
  depends core 3.0
  description Rotates the log files after a defined period.
-module m_shed_users 3.0.472 https://raw.githubusercontent.com/inspircd/inspircd-extras/8d5f543cf76917c7d2a191a55932d0a9e20b16f3/3.0/m_shed_users.cpp
+module m_shed_users 3.0.477 https://raw.githubusercontent.com/inspircd/inspircd-extras/4ba17bfdd28859cd02a9e61518568218fb38123d/3.0/m_shed_users.cpp
  depends core 3.0
  description Slowly disconnects idle users for maintenance
 module m_slowmode 3.0.475 https://raw.githubusercontent.com/inspircd/inspircd-extras/e0c12ce974a8e285ca3cb8bb914d76831a529b17/3.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 3.0
-module m_solvemsg 3.0.448 https://raw.githubusercontent.com/inspircd/inspircd-extras/428f1f973cf794ed1094c070310994eedcc59b7e/3.0/m_solvemsg.cpp
+module m_solvemsg 3.0.480 https://raw.githubusercontent.com/inspircd/inspircd-extras/e9e778388ad1b65d0c0641cbf4f48a05cf980ab9/3.0/m_solvemsg.cpp
  depends core 3.0
  description Requires users to solve a basic maths problem before messaging others.
 module m_stats_unlinked 3.0.394 https://raw.githubusercontent.com/inspircd/inspircd-extras/dba97d6eae964b064e543455b927d9185d194e28/3.0/m_stats_unlinked.cpp
