@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "inspircd.h"
+
 /* $ModAuthor: Damian West */
 /* $ModDesc: Invites all users to a channel when they connect to the network. */
 /* $ModDepends: core 2.0 */
 /* $ModConfig: <autoinvite channel="#one,#two,#three"> */
+
+#include "inspircd.h"
+
 static void InviteChannels(LocalUser* u, const std::string& chanlist) {
 	irc::commasepstream chans(chanlist);
 	std::string chan;
- 
+
 	while (chans.GetToken(chan))
 	{
 		if (IS_LOCAL(u)) {
@@ -36,7 +39,7 @@ static void InviteChannels(LocalUser* u, const std::string& chanlist) {
 		}
 	}
 }
- 
+
 class ModuleConnInvite : public Module {
 	public:
 		void init()
@@ -58,7 +61,7 @@ class ModuleConnInvite : public Module {
 			if (!localuser)
 				return;
 			std::string chanlist = localuser->GetClass()->config->getString("autoinvite");
-			
+
 			if (chanlist.empty())
 			{
 				ConfigTag* tag = ServerInstance->Config->ConfValue("autoinvite");
@@ -66,7 +69,7 @@ class ModuleConnInvite : public Module {
 			}
 			if (chanlist.empty())
 				return;
- 
+
 			InviteChannels(localuser, chanlist);
 		}
 };
