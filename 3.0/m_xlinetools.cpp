@@ -102,12 +102,12 @@ struct Criteria
 
 namespace
 {
-	bool HasPermission(LocalUser* user, std::string type)
+	bool HasCommandPermission(LocalUser* user, std::string type)
 	{
 		if (type.length() <= 2)
 			type.append("LINE");
 
-		return user->HasPermission(type);
+		return user->HasCommandPermission(type);
 	}
 
 	bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
@@ -379,7 +379,7 @@ class CommandXBase : public SplitCommand
 			for (std::vector<std::string>::const_iterator x = xlinetypes.begin(); x != xlinetypes.end(); ++x)
 			{
 				// If removing, check for the command permission for this type
-				if (remove && !HasPermission(user, *x))
+				if (remove && !HasCommandPermission(user, *x))
 				{
 					user->WriteNotice(InspIRCd::Format("Skipping type '%s' as oper type '%s' does not have access to remove these.",
 						(*x).c_str(), user->oper->name.c_str()));
@@ -404,7 +404,7 @@ class CommandXBase : public SplitCommand
 			std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
 
 			// Check for the command permission to remove X-lines of this type
-			if (remove && !HasPermission(user, linetype))
+			if (remove && !HasCommandPermission(user, linetype))
 			{
 				user->WriteNumeric(ERR_NOPRIVILEGES, "%s :Permission Denied - Oper type '%s' does not have access to remove X-lines of type '%s'",
 					user->nick.c_str(), user->oper->name.c_str(), linetype.c_str());
@@ -503,7 +503,7 @@ class CommandXCopy : public SplitCommand
 		std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
 
 		// Check for the command permission to copy this type of X-line
-		if (!HasPermission(user, linetype))
+		if (!HasCommandPermission(user, linetype))
 		{
 			user->WriteNumeric(ERR_NOPRIVILEGES, "%s :Permission Denied - Oper type '%s' does not have access to copy an X-line of type '%s'",
 				user->nick.c_str(), user->oper->name.c_str(), linetype.c_str());
