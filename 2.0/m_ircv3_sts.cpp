@@ -82,7 +82,6 @@ class STSPolicy
 class ModuleIRCv3STS : public Module
 {
 	STSCap cap;
-	STSCap draftcap;
 	STSPolicy policy;
 
  public:
@@ -120,13 +119,11 @@ class ModuleIRCv3STS : public Module
 		const std::string newpolicystr = policy.GetString();
 		ServerInstance->Logs->Log("m_ircv3_sts", DEFAULT, "STS: policy changed to \"%s\"", newpolicystr.c_str());
 		cap.SetPolicy("sts", newpolicystr);
-		draftcap.SetPolicy("draft/sts", newpolicystr);
 	}
 
 	void OnEvent(Event& ev)
 	{
 		cap.HandleEvent(ev);
-		draftcap.HandleEvent(ev);
 	}
 
 	Version GetVersion()
