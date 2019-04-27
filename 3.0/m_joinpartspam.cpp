@@ -286,7 +286,7 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 		return MODEACTION_ALLOW;
 	}
 
-	void SerializeParam(Channel* chan, joinpartspamsettings* jpss, std::string& out) CXX11_OVERRIDE
+	void SerializeParam(Channel* chan, joinpartspamsettings* jpss, std::string& out)
 	{
 		out.append(ConvToStr(jpss->cycles)).push_back(':');
 		out.append(ConvToStr(jpss->secs)).push_back(':');
