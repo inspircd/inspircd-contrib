@@ -25,8 +25,11 @@
 // Maintenance mode can be triggered with the /SHEDUSERS command
 // as well as sending SIGUSR2 to the inspircd process
 
+// If shedding is enabled, the inspircd.org/shedding cap will be advertised
+
 #include "inspircd.h"
 #include "exitcodes.h"
+#include "modules/cap.h"
 
 inline unsigned long GetIdle(LocalUser* lu)
 {
@@ -35,6 +38,47 @@ inline unsigned long GetIdle(LocalUser* lu)
 
 static volatile sig_atomic_t active;
 static volatile sig_atomic_t notified;
+
+bool IsShedding()
+{
+	return active;
+}
+
+bool HasNotified()
+{
+	return notified;
+}
+
+bool SetNotified(bool b)
+{
+	notified = b;
+}
+
+void StartShedding()
+{
+	active = 1;
+	notified = 0;
+}
+
+void StopShedding()
+{
+	notified = active = 0;
+}
+
+class SheddingCap
+	: public Cap::Capability
+{
+ public:
+	SheddingCap(Module* Mod, const std::string& Name)
+		: Cap::Capability(Mod, Name)
+	{
+	}
+
+	bool OnList(LocalUser* user) CXX11_OVERRIDE
+	{
+		return IsShedding();
+	}
+};
 
 class CommandShed
 	: public Command
@@ -53,8 +97,10 @@ class CommandShed
 	{
 		if (parameters.empty() || InspIRCd::Match(ServerInstance->Config->ServerName, parameters[0]))
 		{
-			active = enable;
-			notified = 0;
+			if (enable)
+				StartShedding();
+			else
+				StopShedding();
 		}
 
 		return CMD_SUCCESS;
@@ -74,12 +120,12 @@ class ModuleShedUsers
  public:
 	static void sighandler(int)
 	{
-		active = 1;
-		notified = 0;
+		StartShedding();
 	}
 
  private:
 	CommandShed startcmd, stopcmd;
+	SheddingCap cap;
 
 	std::string message;
 	std::string blockmessage;
@@ -96,6 +142,7 @@ class ModuleShedUsers
 	ModuleShedUsers()
 		: startcmd(this, "SHEDUSERS", true)
 		, stopcmd(this, "STOPSHED", false)
+		, cap(this, "inspircd.org/shedding")
 		, maxusers(0)
 		, minidle(0)
 		, shedopers(false)
@@ -107,7 +154,7 @@ class ModuleShedUsers
 
 	void init() CXX11_OVERRIDE
 	{
-		notified = active = 0;
+		StopShedding();
 		signal(SIGUSR2, sighandler);
 	}
 
@@ -146,16 +193,16 @@ class ModuleShedUsers
 
 	void OnSetUserIP(LocalUser* user) CXX11_OVERRIDE
 	{
-		if (active && blockconnects && user->registered != REG_ALL)
+		if (IsShedding() && blockconnects && user->registered != REG_ALL)
 			ServerInstance->Users.QuitUser(user, blockmessage);
 	}
 
 	void OnBackgroundTimer(time_t) CXX11_OVERRIDE
 	{
-		if (!active)
+		if (!IsShedding())
 			return;
 
-		if (!notified)
+		if (!HasNotified())
 		{
 			ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy, ServerInstance->FakeClient, ServerInstance->Config->ServerName, message, MSG_NOTICE);
 			ClientProtocol::Event msgevent(ServerInstance->GetRFCEvents().privmsg, msg);
@@ -165,7 +212,7 @@ class ModuleShedUsers
 				LocalUser* user = *i;
 				user->Send(msgevent);
 			}
-			notified = true;
+			SetNotified(true);
 		}
 
 		if (ServerInstance->Users.LocalUserCount() <= maxusers)
@@ -173,7 +220,7 @@ class ModuleShedUsers
 			if (shutdown)
 				ServerInstance->Exit(EXIT_STATUS_NOERROR);
 
-			active = 0;
+			StopShedding();
 			return;
 		}
 
