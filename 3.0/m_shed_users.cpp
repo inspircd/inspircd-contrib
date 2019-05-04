@@ -27,9 +27,14 @@
 
 // If shedding is enabled, the inspircd.org/shedding cap will be advertised
 
+// If shedding is enabled while a user is online, the user will received a CAP ADD with the cap,
+// if capnotify is available
+
 #include "inspircd.h"
 #include "exitcodes.h"
 #include "modules/cap.h"
+
+#define CAP_NAME "inspircd.org/shedding"
 
 inline unsigned long GetIdle(LocalUser* lu)
 {
@@ -38,6 +43,8 @@ inline unsigned long GetIdle(LocalUser* lu)
 
 static volatile sig_atomic_t active;
 static volatile sig_atomic_t notified;
+
+static Module* me;
 
 bool IsShedding()
 {
@@ -54,39 +61,42 @@ bool SetNotified(bool b)
 	notified = b;
 }
 
+Cap::Capability* GetCap()
+{
+	if (!me)
+		return NULL;
+
+	dynamic_reference<Cap::Capability> ref(me, "cap/" CAP_NAME);
+	if (!ref)
+		return NULL;
+
+	return *ref;
+}
+
 void StartShedding()
 {
 	active = 1;
 	notified = 0;
+	Cap::Capability* cap = GetCap();
+	if (cap)
+		cap->SetActive(true);
 }
 
 void StopShedding()
 {
 	notified = active = 0;
+	Cap::Capability* cap = GetCap();
+	if (cap)
+		cap->SetActive(false);
 }
-
-class SheddingCap
-	: public Cap::Capability
-{
- public:
-	SheddingCap(Module* Mod, const std::string& Name)
-		: Cap::Capability(Mod, Name)
-	{
-	}
-
-	bool OnList(LocalUser* user) CXX11_OVERRIDE
-	{
-		return IsShedding();
-	}
-};
 
 class CommandShed
 	: public Command
 {
 	bool enable;
  public:
-	CommandShed(Module* me, const std::string& Name, bool Enable)
-		: Command(me, Name, 0, 1)
+	CommandShed(Module* Mod, const std::string& Name, bool Enable)
+		: Command(Mod, Name, 0, 1)
 		, enable(Enable)
 	{
 		flags_needed = 'o';
@@ -125,7 +135,7 @@ class ModuleShedUsers
 
  private:
 	CommandShed startcmd, stopcmd;
-	SheddingCap cap;
+	Cap::Capability cap;
 
 	std::string message;
 	std::string blockmessage;
@@ -142,7 +152,7 @@ class ModuleShedUsers
 	ModuleShedUsers()
 		: startcmd(this, "SHEDUSERS", true)
 		, stopcmd(this, "STOPSHED", false)
-		, cap(this, "inspircd.org/shedding")
+		, cap(this, CAP_NAME)
 		, maxusers(0)
 		, minidle(0)
 		, shedopers(false)
@@ -150,6 +160,7 @@ class ModuleShedUsers
 		, blockconnects(false)
 		, kill(false)
 	{
+		me = this;
 	}
 
 	void init() CXX11_OVERRIDE
@@ -161,6 +172,7 @@ class ModuleShedUsers
 	~ModuleShedUsers() CXX11_OVERRIDE
 	{
 		signal(SIGUSR2, SIG_DFL);
+		me = NULL;
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
