@@ -2,7 +2,7 @@
 #
 # InspIRCd -- Internet Relay Chat Daemon
 #
-#   Copyright (C) 2013 Peter Powell <petpow@saberuk.com>
+#   Copyright (C) 2013-2019 Peter Powell <petpow@saberuk.com>
 #
 # This file is part of InspIRCd.  InspIRCd is free software: you can
 # redistribute it and/or modify it under the terms of the GNU General Public
@@ -29,6 +29,7 @@ use warnings FATAL => qw(all);
 use File::Basename;
 
 use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-extras';
+use constant RM_EXCLUDE  => qw(1.1 1.2);
 
 if (system 'git --version > /dev/null 2>&1') {
 	say 'Error: Git is not installed and available in the PATH!';
@@ -41,8 +42,9 @@ for my $file (<*/m_*.cpp>) {
 		say STDERR "Skipping $file which is not in Git!";
 		next;
 	}
-	my $name = basename($file, '.cpp');
 	my $branch = dirname($file);
+	next if grep { $_ eq $branch } RM_EXCLUDE;
+	my $name = basename($file, '.cpp');
 	chomp(my $revision = `git rev-list HEAD --max-count=1 -- $file`);
 	chomp(my $version = `git rev-list $revision | wc -l`);
 	$version =~ s/\s//g;
