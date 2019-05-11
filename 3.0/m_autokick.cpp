@@ -19,7 +19,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModConfig: <autokick message="Banned">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Automatically kicks people who match a banned mask.
 
 

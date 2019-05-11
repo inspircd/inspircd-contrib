@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <connect accounts="sally22 BillBob someoneElse">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Limit SASL connect classes by account(s).
 // "accounts" is a space separated list of EXACT matching account names.
 // This module requires that 'm_services_account' be loaded and will

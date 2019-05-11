@@ -19,7 +19,7 @@
 /// $ModAuthor: Attila Molnar
 /// $ModAuthorMail: attilamolnar@hush.com
 /// $ModConfig: <connbanner text="Banner text goes here.">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Displays a static text to every connecting user before registration
 
 

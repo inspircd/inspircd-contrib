@@ -19,7 +19,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModConfig: <rotatelog period="3600">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Rotates the log files after a defined period.
 
 

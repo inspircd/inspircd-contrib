@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <restrictmsg_duration duration="1m" target="both" notify="no" exemptoper="yes" exemptuline="yes" exemptregistered="yes">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Restrict messages until a user has been connected for a specified duration.
 
 /* Config descriptions:

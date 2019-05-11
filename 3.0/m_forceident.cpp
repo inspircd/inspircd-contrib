@@ -19,7 +19,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModConfig: <connect forceident="example">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allows forcing idents on users based on their connect class.
 
 

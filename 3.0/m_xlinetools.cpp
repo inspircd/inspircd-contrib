@@ -18,7 +18,7 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
 
 /* XCOUNT, XREMOVE, and XSEARCH are the same except for the end action:

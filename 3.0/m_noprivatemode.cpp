@@ -20,7 +20,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModDesc: Sets channel mode +s (secret) when users try to set channel mode +p (private).
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 #include "inspircd.h"
 

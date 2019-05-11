@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Implements channel mode +U and extban 'u' - moderator mute
 
 

@@ -50,7 +50,7 @@
 /// $ModDesc: A module to prevent against bots using random patterns.
 /// $ModAuthor: lnx85
 /// $ModAuthorMail: lnx85@lnxlabs.it
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 #define ANTIRANDOM_ACT_KILL     0
 #define ANTIRANDOM_ACT_ZLINE    1

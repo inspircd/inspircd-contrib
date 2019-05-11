@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <extbanregex engine="pcre" opersonly="yes">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Provides extban 'x' - Regex matching to n!u@h\sr
 
 /* Since regex matching can be very CPU intensive, a config option is available

@@ -19,7 +19,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModConfig: <penalty name="INVITE" value="60">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allows the customisation of penalty levels.
 
 

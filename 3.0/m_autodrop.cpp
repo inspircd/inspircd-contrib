@@ -19,7 +19,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModConfig: <autodrop commands="CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allows clients to be automatically dropped if they execute certain commands before registration.
 
 

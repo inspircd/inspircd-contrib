@@ -20,7 +20,7 @@
 
 /// $ModAuthor: InspIRCd Developers
 /// $ModAuthorMail: noreply@inspircd.org
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Provides support for the RPL_REDIR numeric and the /JUMPSERVER command.
 
 

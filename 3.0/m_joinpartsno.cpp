@@ -20,7 +20,7 @@
 
 /// $ModAuthor: Shawn Smith
 /// $ModDesc: Sends server notices when a user joins/parts a channel.
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 class ModuleJoinPartSNO : public Module
 {

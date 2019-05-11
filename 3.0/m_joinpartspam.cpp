@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <joinpartspam allowredirect="no" freeredirect="no">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
 
 /* Configuration and defaults:

@@ -20,7 +20,7 @@
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModDesc: Adds a channel mode which limits the length of messages.
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 #include "inspircd.h"
 

@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <connect matchident="myIdent">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allows a connect class to match by ident.
 
 

@@ -19,7 +19,7 @@
 /// $ModAuthor: bigfoot547
 /// $ModAuthorMail: bigfoot@bigfootslair.net
 /// $ModConfig: <timedstaticquit quitmsg="Client Quit" mintime="5m">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Replaces the quit message of a quitting user if they have been connected for less than a configurable time
 
 

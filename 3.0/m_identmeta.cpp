@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Stores the ident given in USER as metadata.
 
 

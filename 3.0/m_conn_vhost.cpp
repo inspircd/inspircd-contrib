@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <connect vhost="vhost.here">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Sets a connect block configured vhost on users when they connect
 // The use of '$ident' will be replaced with the user's ident
 // The use of '$account' will be replaced with the user's account name

@@ -18,7 +18,7 @@
 
 /// $ModAuthor: linuxdaemon
 /// $ModAuthorMail: linuxdaemonirc@gmail.com
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Slowly disconnects idle users for maintenance
 /// $ModConfig: <shedusers shedopers="no" kill="yes" shutdown="no" blockconnect="yes" minidle="3600" maxusers="0" message="This server has entered maintenance mode." blockmessage="This server is in maintenance mode.">
 

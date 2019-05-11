@@ -19,7 +19,7 @@
 
 /// $ModAuthor: WindowsUser
 /// $ModDesc: Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 #include "inspircd.h"
 #include "xline.h"

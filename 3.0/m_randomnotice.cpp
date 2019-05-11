@@ -24,7 +24,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <randomnotice file="randomnotices.txt" interval="30m" prefix="" suffix="">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Send a random notice (quote) from a file to all users at a set interval.
 // "file" needs to be a text file with each 'notice' on a new line
 // "interval" is a time-string (1y7d8h6m3s format)

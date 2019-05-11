@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <blockinvite reply="no">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Provides usermode 'V' - block all INVITEs
 /* Set whether to reply with a blocked message to the source (inviter)
  * with the 'reply' config option. Defaults to no.

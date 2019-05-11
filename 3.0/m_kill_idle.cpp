@@ -18,7 +18,7 @@
 
 /// $ModAuthor: linuxdaemon
 /// $ModAuthorMail: linuxdaemonirc@gmail.com
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Disconnect idle users matching configured conditions
 /// $ModConfig: <idleprofile name="example" nochans="true" idletime="7200" ignoreloggedin="no" reason="Disconnected for inactivity" away="only">
 

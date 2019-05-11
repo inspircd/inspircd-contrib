@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Attila Molnar
 /// $ModAuthorMail: attilamolnar@hush.com
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
 
 

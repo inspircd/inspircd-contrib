@@ -22,7 +22,7 @@
 /// $ModAuthor: Manuel Leiner
 /// $ModAuthorMail: satmd@euirc.net
 /// $ModDesc: Implement JOIN 0 (joining 0 makes a user part all channels), RFC2812
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 class ModuleJoinZero : public Module
 {

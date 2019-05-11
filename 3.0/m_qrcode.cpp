@@ -23,7 +23,7 @@
 /// $ModAuthorMail: petpow@saberuk.com
 /// $ModDesc: Provides support for QR code generation via the /QRCODE command.
 /// $ModConfig: <qrcode blockchar=" " darkcolour="black" lightcolour="white">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 
 #include "inspircd.h"

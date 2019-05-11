@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Peter "SaberUK" Powell
 /// $ModAuthorMail: petpow@saberuk.com
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allows services to forcibly oper a user.
 
 

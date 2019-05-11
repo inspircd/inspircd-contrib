@@ -26,7 +26,7 @@
 #include "inspircd.h"
 
 /// $ModDesc: Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 typedef std::map<User*, unsigned int> counter_t;
 

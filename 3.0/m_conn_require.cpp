@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <connrequire timeout="5" ctcpstring="TIME" blockmessage="Your client isn't up to spec!">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Allow or block connections based on multiple criteria
 
 /* More available config tags:

@@ -19,7 +19,7 @@
 /// $ModAuthor: Daniel Vassdal
 /// $ModAuthorMail: shutter@canternet.org
 /// $ModDesc: Enables two factor authentification for oper blocks
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModConfig: <totp hash="sha256" window="5">
 
 /*

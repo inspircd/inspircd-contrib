@@ -18,7 +18,7 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Adds commands /checkbans, /testban, and /whyban
 
 /* Helpop Lines for the CUSER section

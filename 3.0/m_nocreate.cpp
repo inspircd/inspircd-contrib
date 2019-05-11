@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <nocreate telluser="no" noisy="yes">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Adds oper command '/nocreate' to block a user from creating new channels
 
 /* Credit due to the authors and maintainers of 'm_cban', as most of this code is directly borrowed to work in the same manner

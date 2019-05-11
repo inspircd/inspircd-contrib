@@ -19,7 +19,7 @@
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
 /// $ModConfig: <strictsasl reason="Fix your SASL authentication settings and try again.">
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 /// $ModDesc: Disconnect users that fail a SASL auth.
 
 

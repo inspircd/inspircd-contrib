@@ -25,7 +25,7 @@
 /// $ModAuthor: Adam
 /// $ModAuthorMail: adam@anope.org
 /// $ModDesc: Provides channel mode +W (slow mode)
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 /** Holds slowmode settings and state for mode +W
  */

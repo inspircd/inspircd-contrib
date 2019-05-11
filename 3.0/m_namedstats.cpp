@@ -19,7 +19,7 @@
 /// $ModAuthor: Attila Molnar
 /// $ModAuthorMail: attilamolnar@hush.com
 /// $ModDesc: Allows /STATS queries by name
-/// $ModDepends: core 3.0
+/// $ModDepends: core 3
 
 #include "inspircd.h"
 
