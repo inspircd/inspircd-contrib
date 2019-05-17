@@ -30,9 +30,17 @@
 // If shedding is enabled while a user is online, the user will received a CAP ADD with the cap,
 // if capnotify is available
 
+// Shedding can also be controlled via the HTTPApi
+// - /shedding or /shedding/status - Get the current shedding status
+// - /shedding/start - Enable shedding
+// - /shedding/stop - Disable shedding
+//
+// Note: Requires m_httpd be loaded, the rest of the module will work without it though
+
 #include "inspircd.h"
 #include "exitcodes.h"
 #include "modules/cap.h"
+#include "modules/httpd.h"
 
 #define CAP_NAME "inspircd.org/shedding"
 
@@ -128,6 +136,96 @@ class CommandShed
 	}
 };
 
+class SheddingHTTPApi
+	: public HTTPRequestEventListener
+{
+	Module* creator;
+	HTTPdAPI httpd;
+	const std::string urlprefix;
+
+	enum Endpoint
+	{
+		STATUS,
+		START,
+		STOP,
+
+		NOT_FOUND,
+		WRONG_PREFIX
+	};
+
+ public:
+	SheddingHTTPApi(Module* Creator, const std::string& Urlprefix = "/shedding")
+		: HTTPRequestEventListener(Creator)
+		, creator(Creator)
+		, httpd(Creator)
+		, urlprefix(Urlprefix)
+	{
+	}
+
+	Endpoint PathToEndpoint(const std::string& path) const
+	{
+		if (path.compare(0, urlprefix.length(), urlprefix) != 0)
+			return WRONG_PREFIX;
+
+		// Remove `urlprefix` plus the leading `/`
+		const std::string stripped = path.substr(urlprefix.length() + 1);
+
+		if (stripped.empty() || stripped == "status")
+			return STATUS;
+		else if (stripped == "start")
+			return START;
+		else if (stripped == "stop")
+			return STOP;
+
+		return NOT_FOUND;
+	}
+
+	ModResult OnHTTPRequest(HTTPRequest& req) CXX11_OVERRIDE
+	{
+		Endpoint endpoint = PathToEndpoint(req.GetPath());
+
+		std::stringstream sstr;
+
+		switch (endpoint)
+		{
+			case STATUS:
+				sstr << "{\"active\":" << (IsShedding() ? "true" : "false") << "}";
+				break;
+			case START:
+				if (IsShedding())
+					sstr << "{\"error\":\"already_shedding\",\"message\":\"Shedding is already enabled\"}";
+				else
+				{
+					StartShedding();
+					sstr << "{\"status\":\"success\"}";
+				}
+				break;
+			case STOP:
+				if (!IsShedding())
+					sstr << "{\"error\":\"not_shedding\",\"message\":\"Shedding is not enabled\"}";
+				else
+				{
+					StopShedding();
+					sstr << "{\"status\":\"success\"}";
+				}
+				break;
+			case NOT_FOUND:
+				sstr << "{\"error\":\"unknown_action\"}";
+				break;
+			case WRONG_PREFIX:
+				return MOD_RES_PASSTHRU;
+				break;
+		}
+
+		/* Send the document back to m_httpd */
+		HTTPDocumentResponse response(creator, req, &sstr, endpoint != NOT_FOUND ? 200 : 404);
+		response.headers.SetHeader("X-Powered-By", MODNAME);
+		response.headers.SetHeader("Content-Type", "application/json");
+		httpd->SendResponse(response);
+		return MOD_RES_DENY; // Handled
+	}
+};
+
 class ModuleShedUsers
 	: public Module
 {
@@ -140,6 +238,7 @@ class ModuleShedUsers
  private:
 	CommandShed startcmd, stopcmd;
 	Cap::Capability cap;
+	SheddingHTTPApi httpapi;
 
 	std::string message;
 	std::string blockmessage;
@@ -157,6 +256,7 @@ class ModuleShedUsers
 		: startcmd(this, "SHEDUSERS", true)
 		, stopcmd(this, "STOPSHED", false)
 		, cap(this, CAP_NAME)
+		, httpapi(this, "/shedding")
 		, maxusers(0)
 		, minidle(0)
 		, shedopers(false)
