@@ -56,7 +56,7 @@ bool HasNotified()
 	return notified;
 }
 
-bool SetNotified(bool b)
+void SetNotified(bool b)
 {
 	notified = b;
 }
