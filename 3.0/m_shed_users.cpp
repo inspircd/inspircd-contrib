@@ -75,8 +75,11 @@ Cap::Capability* GetCap()
 
 void StartShedding()
 {
+	if (IsShedding())
+		return;
+
 	active = 1;
-	notified = 0;
+	SetNotified(false);
 	Cap::Capability* cap = GetCap();
 	if (cap)
 		cap->SetActive(true);
@@ -84,7 +87,8 @@ void StartShedding()
 
 void StopShedding()
 {
-	notified = active = 0;
+	active = 0;
+	SetNotified(false);
 	Cap::Capability* cap = GetCap();
 	if (cap)
 		cap->SetActive(false);
