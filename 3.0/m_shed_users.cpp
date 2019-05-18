@@ -170,7 +170,7 @@ class SheddingHTTPApi
 		// Remove `urlprefix` plus the leading `/`
 		std::string stripped = path.substr(urlprefix.length() + 1);
 
-		if (!stripped.empty() && *(stripped.end() - 1) == '/')
+		if (!stripped.empty() && *stripped.rbegin() == '/')
 			stripped.erase(stripped.size() - 1, 1);
 
 		if (stripped.empty() || stripped == "status")
