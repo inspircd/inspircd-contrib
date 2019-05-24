@@ -405,6 +405,9 @@ module m_namedstats 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_nocreate 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-extras/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_nocreate.cpp
  depends core 3
  description Adds oper command '/nocreate' to block a user from creating new channels
+module m_noidletyping 3.0.505 https://raw.githubusercontent.com/inspircd/inspircd-extras/6e139dbb9ffd1d6536303facb1fb65f147b3d687/3.0/m_noidletyping.cpp
+ depends core 3
+ description Prevents typing notifications from being sent to idle users.
 module m_noprivatemode 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-extras/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_noprivatemode.cpp
  description Sets channel mode +s (secret) when users try to set channel mode +p (private).
  depends core 3
@@ -426,7 +429,7 @@ module m_restrictmsg_duration 3.0.496 https://raw.githubusercontent.com/inspircd
 module m_rotatelog 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-extras/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_rotatelog.cpp
  depends core 3
  description Rotates the log files after a defined period.
-module m_shed_users 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-extras/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_shed_users.cpp
+module m_shed_users 3.0.504 https://raw.githubusercontent.com/inspircd/inspircd-extras/fea7395feb96d899888ec72a51da77dcd7a7096f/3.0/m_shed_users.cpp
  depends core 3
  description Slowly disconnects idle users for maintenance
 module m_slowmode 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-extras/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_slowmode.cpp
