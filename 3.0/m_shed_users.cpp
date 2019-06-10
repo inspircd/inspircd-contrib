@@ -285,7 +285,7 @@ class ModuleShedUsers
 
 	~ModuleShedUsers() CXX11_OVERRIDE
 	{
-		signal(SIGUSR2, SIG_DFL);
+		signal(SIGUSR2, SIG_IGN);
 		me = NULL;
 	}
 
