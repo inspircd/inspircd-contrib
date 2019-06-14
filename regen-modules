@@ -28,7 +28,7 @@ use warnings FATAL => qw(all);
 
 use File::Basename;
 
-use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-extras';
+use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-contrib';
 use constant RM_EXCLUDE  => qw(1.1 1.2);
 
 if (system 'git --version > /dev/null 2>&1') {
