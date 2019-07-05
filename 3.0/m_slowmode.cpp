@@ -90,6 +90,9 @@ class MsgFlood : public ParamMode<MsgFlood, SimpleExtItem<slowmodesettings> >
 	MsgFlood(Module* Creator)
 		: ParamMode<MsgFlood, SimpleExtItem<slowmodesettings> >(Creator, "slowmode", 'W')
 	{
+#if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
+		syntax = "[cu]<lines:<seconds>";
+#endif
 	}
 
 	ModeAction OnSet(User* source, Channel* channel, std::string& parameter) CXX11_OVERRIDE

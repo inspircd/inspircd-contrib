@@ -257,6 +257,9 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 		, allowredirect(allow)
 		, freeredirect(free)
 	{
+#if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
+		syntax = "<cycles>:<seconds:<block-time>";
+#endif
 	}
 
 	ModeAction OnSet(User* source, Channel* chan, std::string& parameter) CXX11_OVERRIDE

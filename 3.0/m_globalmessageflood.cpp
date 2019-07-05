@@ -76,6 +76,9 @@ class GlobalMsgFlood : public ParamMode<GlobalMsgFlood, SimpleExtItem<globalfloo
 	GlobalMsgFlood(Module* Creator)
 		: ParamMode<GlobalMsgFlood, SimpleExtItem<globalfloodsettings> >(Creator, "globalflood", 'x')
 	{
+#if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
+		syntax = "[*]<lines:<seconds>";
+#endif
 		oper = true;
 	}
 
