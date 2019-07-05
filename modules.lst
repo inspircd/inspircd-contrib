@@ -345,6 +345,12 @@ module m_conn_accounts 3.0.496 https://raw.githubusercontent.com/inspircd/inspir
 module m_conn_banner 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_banner.cpp
  depends core 3
  description Displays a static text to every connecting user before registration
+module m_conn_join_geoip 3.0.512 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bc02b957bcd9a738592695a0e58a9dec7cd4e5c6/3.0/m_conn_join_geoip.cpp
+ depends core 3
+ description Autojoin users to a channel based on GeoIP.
+module m_conn_join_ident 3.0.512 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bc02b957bcd9a738592695a0e58a9dec7cd4e5c6/3.0/m_conn_join_ident.cpp
+ depends core 3
+ description Autojoin users to a channel based on their ident.
 module m_conn_matchident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_matchident.cpp
  depends core 3
  description Allows a connect class to match by ident.
@@ -372,7 +378,7 @@ module m_forceident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_geocmd 3.0.510 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3d1f0c4dc98e4f59195e65b4bf6275ba0ff0431c/3.0/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 3
-module m_globalmessageflood 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_globalmessageflood.cpp
+module m_globalmessageflood 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
 module m_groups 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_groups.cpp
@@ -390,7 +396,7 @@ module m_join0 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contr
 module m_joinpartsno 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 3
-module m_joinpartspam 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_joinpartspam.cpp
+module m_joinpartspam 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_joinpartspam.cpp
  depends core 3
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
 module m_jumpserver 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_jumpserver.cpp
@@ -399,7 +405,7 @@ module m_jumpserver 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_kill_idle 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_kill_idle.cpp
  depends core 3
  description Disconnect idle users matching configured conditions
-module m_messagelength 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_messagelength.cpp
+module m_messagelength 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 3
 module m_namedstats 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_namedstats.cpp
@@ -435,7 +441,7 @@ module m_rotatelog 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
  depends core 3
  description Slowly disconnects idle users for maintenance
-module m_slowmode 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_slowmode.cpp
+module m_slowmode 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 3
 module m_solvemsg 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_solvemsg.cpp
