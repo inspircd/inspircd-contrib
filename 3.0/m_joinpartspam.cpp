@@ -258,7 +258,7 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 		, freeredirect(free)
 	{
 #if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
-		syntax = "<cycles>:<seconds:<block-time>";
+		syntax = "<cycles>:<seconds>:<block-time>";
 #endif
 	}
 
