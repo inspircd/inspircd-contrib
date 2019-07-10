@@ -327,6 +327,9 @@ module m_autodrop 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_autokick 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_autokick.cpp
  depends core 3
  description Automatically kicks people who match a banned mask.
+module m_bannegate 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/793211671359b0b89506cc9437052f35f4247bcf/3.0/m_bannegate.cpp
+ depends core 3
+ description Enables ban negation by prefixing the match sequence with ~
 module m_blockhighlight 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 3
@@ -369,6 +372,9 @@ module m_custompenalty 3.0.496 https://raw.githubusercontent.com/inspircd/inspir
 module m_extbanbanlist 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_extbanbanlist.cpp
  depends core 3
  description Provides extban 'b' - Ban list from another channel
+module m_extbanredirect 3.0.518 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b49a95f57e6991837eaf4fdc0344d701270f3d0d/3.0/m_extbanredirect.cpp
+ depends core 3
+ description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
 module m_extbanregex 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_extbanregex.cpp
  depends core 3
  description Provides extban 'x' - Regex matching to n!u@h\sr
@@ -378,7 +384,7 @@ module m_forceident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_geocmd 3.0.510 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3d1f0c4dc98e4f59195e65b4bf6275ba0ff0431c/3.0/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 3
-module m_globalmessageflood 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_globalmessageflood.cpp
+module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
 module m_groups 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_groups.cpp
@@ -396,7 +402,7 @@ module m_join0 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contr
 module m_joinpartsno 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 3
-module m_joinpartspam 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_joinpartspam.cpp
+module m_joinpartspam 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_joinpartspam.cpp
  depends core 3
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
 module m_jumpserver 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_jumpserver.cpp
@@ -441,7 +447,7 @@ module m_rotatelog 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
  depends core 3
  description Slowly disconnects idle users for maintenance
-module m_slowmode 3.0.513 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3a481689afb588dac91e510f2b849a4df7ea0964/3.0/m_slowmode.cpp
+module m_slowmode 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 3
 module m_solvemsg 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_solvemsg.cpp
