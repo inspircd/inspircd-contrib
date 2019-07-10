@@ -119,7 +119,7 @@ class ModuleExtBanRedirect : public Module
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("extbanredirect");
-		banwatcher.extbanchar = tag->getString("char", "d").c_str()[0];
+		banwatcher.extbanchar = tag->getString("char", "d", 1, 1)[0];
 	}
 
 	void On005Numeric(std::map<std::string, std::string>& tokens) CXX11_OVERRIDE
