@@ -381,7 +381,7 @@ module m_extbanregex 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd
 module m_forceident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_forceident.cpp
  depends core 3
  description Allows forcing idents on users based on their connect class.
-module m_geocmd 3.0.510 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3d1f0c4dc98e4f59195e65b4bf6275ba0ff0431c/3.0/m_geocmd.cpp
+module m_geocmd 3.0.520 https://raw.githubusercontent.com/inspircd/inspircd-contrib/deec4b182f35854c5dd6805271a48dcce7750fb2/3.0/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 3
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
