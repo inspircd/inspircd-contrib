@@ -64,7 +64,7 @@ class CommandGeolocate
 
 			user->WriteNotice(InspIRCd::Format("*** GEOLOCATE: %s is located in %s (%s).", sa.addr().c_str(),
 				location->GetName().c_str(), location->GetCode().c_str()));
-			delete location;
+			location->refcount_dec();
 		}
 		return CMD_SUCCESS;
 	}
