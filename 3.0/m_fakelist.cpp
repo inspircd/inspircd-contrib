@@ -69,11 +69,11 @@ class ModuleFakeList : public Module
 		WaitTime = tag->getDuration("waittime", 60, 1);
 		allowlist.swap(newallows);
 
-		reason = tag->getString("reason", "User hit a spam trap");
+		reason = tag->getString("reason", "User hit a spam trap", 1);
 		targetChannel = tag->getString("target", "#spamtrap");
 		topic = tag->getString("topic", "SPAM TRAP: DO NOT JOIN, YOU WILL BE DISCONNECTED! (try again later for a real reply)");
-		minUsers = tag->getInt("minusers", 20);
-		maxUsers = tag->getInt("maxusers", 50);
+		minUsers = tag->getInt("minusers", 20, 1);
+		maxUsers = tag->getInt("maxusers", 50, minUsers);
 		killOnJoin = tag->getBool("killonjoin", true);
 	}
 
