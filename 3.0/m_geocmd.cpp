@@ -84,7 +84,7 @@ class ModuleGeoCommand
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses", VF_VENDOR);
+		return Version("Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses");
 	}
 };
 
