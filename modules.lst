@@ -369,6 +369,9 @@ module m_conn_vhost 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_custompenalty 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_custompenalty.cpp
  depends core 3
  description Allows the customisation of penalty levels.
+module m_eventexec 3.0.524 https://raw.githubusercontent.com/inspircd/inspircd-contrib/43f685b821f6e0eb44038e39ced9dd5b68c569d7/3.0/m_eventexec.cpp
+ description Executes commands when a specified event occurs.
+ depends core 3
 module m_extbanbanlist 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_extbanbanlist.cpp
  depends core 3
  description Provides extban 'b' - Ban list from another channel
@@ -378,10 +381,13 @@ module m_extbanredirect 3.0.518 https://raw.githubusercontent.com/inspircd/inspi
 module m_extbanregex 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_extbanregex.cpp
  depends core 3
  description Provides extban 'x' - Regex matching to n!u@h\sr
+module m_fakelist 3.0.522 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c521cac7ad3d102ec7e8068ac389b2ebdd55a986/3.0/m_fakelist.cpp
+ depends core 3
+ description Turns /list into a honeypot for newly connected users
 module m_forceident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_forceident.cpp
  depends core 3
  description Allows forcing idents on users based on their connect class.
-module m_geocmd 3.0.520 https://raw.githubusercontent.com/inspircd/inspircd-contrib/deec4b182f35854c5dd6805271a48dcce7750fb2/3.0/m_geocmd.cpp
+module m_geocmd 3.0.523 https://raw.githubusercontent.com/inspircd/inspircd-contrib/39c833d6f747d520cff147c913f143c5ab8492a7/3.0/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 3
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
