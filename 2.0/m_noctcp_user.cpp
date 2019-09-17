@@ -50,25 +50,46 @@ public:
 		return Version("Provides user mode +T to block CTCPs");
 	}
 
-	virtual ModResult OnUserPreMessage(User* user,void* dest,int target_type, std::string &text, char status, CUList &exempt_list)
+	virtual ModResult OnUserPreMessage(User* user, void* dest, int target_type, std::string &text, char status, CUList &exempt_list)
 	{
-		if ((target_type == TYPE_USER) && (IS_LOCAL(user)))
+		if (!IS_LOCAL(user))
+			return MOD_RES_PASSTHRU;
+
+		if ((text.empty()) || (text[0] != '\001') || (!strncmp(text.c_str(), "\1ACTION ", 8)) || (text == "\1ACTION\1") || (text == "\1ACTION"))
+			return MOD_RES_PASSTHRU;
+
+		switch (target_type)
 		{
-			User* target = static_cast<User*>(dest);
-			if (!target->IsModeSet('T'))
-				return MOD_RES_PASSTHRU;
-
-			if (operoverride && IS_OPER(user))
-				return MOD_RES_PASSTHRU;
-
-			if ((text.length()) && (text[0] == '\1'))
+			case TYPE_CHANNEL:
 			{
-				if (strncmp(text.c_str(),"\1ACTION ", 8))
+				if (operoverride && IS_OPER(user))
+					return MOD_RES_PASSTHRU;
+
+				Channel* chan = (Channel*)dest;
+				const UserMembList* members = chan->GetUsers();
+				for (UserMembCIter member = members->begin(); member != members->end(); ++member)
 				{
-					user->WriteNumeric(ERR_NOCTCPALLOWED, "%s %s :User does not accept CTCPs",user->nick.c_str(), target->nick.c_str());
+					User* target = member->first;
+					if (target->IsModeSet(ncu.GetModeChar()))
+						exempt_list.insert(target);
+				}
+				break;
+			}
+			case TYPE_USER:
+			{
+				if (operoverride && IS_OPER(user))
+					return MOD_RES_PASSTHRU;
+
+				User* target = static_cast<User*>(dest);
+				if (target->IsModeSet(ncu.GetModeChar()))
+				{
+					user->WriteNumeric(ERR_NOCTCPALLOWED, "%s %s :User does not accept CTCPs (+%c is set)", user->nick.c_str(), target->nick.c_str(), ncu.GetModeChar());
 					return MOD_RES_DENY;
 				}
+				break;
 			}
+			case TYPE_SERVER:
+				break;
 		}
 		return MOD_RES_PASSTHRU;
 	}
