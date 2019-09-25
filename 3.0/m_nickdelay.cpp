@@ -29,7 +29,7 @@
 class ModuleNickDelay : public Module
 {
 	LocalIntExt lastchanged;
-	int delay;
+	unsigned int delay;
 	bool hint;
 
  public:
@@ -57,8 +57,8 @@ class ModuleNickDelay : public Module
 			if (hint)
 			{
 				user->WriteNumeric(ERR_CANTCHANGENICK, user->nick,
-					InspIRCd::Format("You cannot change your nickname (try again in %d second%s)",
-					(int)wait, (wait == 1) ? "" : "s"));
+					InspIRCd::Format("You cannot change your nickname (try again in %s)",
+					InspIRCd::DurationString(wait).c_str()));
 			}
 			else
 			{
@@ -75,7 +75,7 @@ class ModuleNickDelay : public Module
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("nickdelay");
-		delay = tag->getInt("delay", 10, 1);
+		delay = tag->getUInt("delay", 10, 1);
 		hint = tag->getBool("hint", true);
 	}
 
