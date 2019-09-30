@@ -333,7 +333,7 @@ private:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides support for zombifying users who have split because of a network issue", VF_COMMON | VF_VENDOR);
+		return Version("Provides support for zombifying users who have split because of a network issue", VF_OPTCOMMON);
 	}
 };
 
