@@ -135,11 +135,6 @@ class ModuleEventExec
 	{
 	}
 
-	~ModuleEventExec()
-	{
-		ExecuteEvents(ET_SHUTDOWN, TemplateMap());
-	}
-
 	void ReadConfig(ConfigStatus& status)
 	{
 		EventMap newevents;
@@ -189,17 +184,27 @@ class ModuleEventExec
 		}
 	}
 
-	virtual void OnServerLink(const Server* server)
+	void OnShutdown(const std::string& reason) CXX11_OVERRIDE
 	{
 		TemplateMap map;
-		map["server"] = server->GetName();
+		map["reason"] = reason;
+		ExecuteEvents(ET_SHUTDOWN, map);
+	}
+
+	void OnServerLink(const Server* server) CXX11_OVERRIDE
+	{
+		TemplateMap map;
+		map["id"] = server->GetId();
+		map["name"] = server->GetName();
 		ExecuteEvents(ET_SERVER_LINK, map);
 	}
 
-	virtual void OnServerSplit(const Server* server)
+	void OnServerSplit(const Server* server, bool error) CXX11_OVERRIDE
 	{
 		TemplateMap map;
-		map["server"] = server->GetName();
+		map["error"] = error ? "yes" : "no";
+		map["id"] = server->GetId();
+		map["name"] = server->GetName();
 		ExecuteEvents(ET_SERVER_UNLINK, map);
 	}
 
