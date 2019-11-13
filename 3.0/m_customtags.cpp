@@ -37,7 +37,7 @@ class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 
 	void FromNetwork(Extensible* container, const std::string& value) CXX11_OVERRIDE
 	{
-		LocalUser* user = IS_LOCAL(static_cast<User*>(container));
+		User* user = static_cast<User*>(container);
 		if (!user)
 			return;
 
@@ -141,7 +141,7 @@ class ModuleCustomTags : public Module
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows services to add custom tags to messages sent by clients", VF_VENDOR);
+		return Version("Allows services to add custom tags to messages sent by clients");
 	}
 };
 
