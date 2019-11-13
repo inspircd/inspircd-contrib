@@ -369,7 +369,7 @@ module m_conn_vhost 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_custompenalty 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_custompenalty.cpp
  depends core 3
  description Allows the customisation of penalty levels.
-module m_customtags 3.0.531 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d6fead36de6a56cb45eace8ab0a06d989673381c/3.0/m_customtags.cpp
+module m_customtags 3.0.534 https://raw.githubusercontent.com/inspircd/inspircd-contrib/448c214fa4dc749ee761773cecc40cd26c5ae3d9/3.0/m_customtags.cpp
  depends core 3
  description Allows services to add custom tags to messages sent by clients.
 module m_eventexec 3.0.530 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ec13c9343b8499765448df275a5a80f10b9bf75f/3.0/m_eventexec.cpp
@@ -438,6 +438,9 @@ module m_noidletyping 3.0.505 https://raw.githubusercontent.com/inspircd/inspirc
 module m_noprivatemode 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_noprivatemode.cpp
  description Sets channel mode +s (secret) when users try to set channel mode +p (private).
  depends core 3
+module m_nouidnick 3.0.533 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ba483614627df5bd2a6d5dbfbfb693c7127d5fee/3.0/m_nouidnick.cpp
+ depends core 3
+ description Disallows changing nick to UID using /NICK
 module m_opmoderated 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_opmoderated.cpp
  depends core 3
  description Implements channel mode +U and extban 'u' - moderator mute
