@@ -28,12 +28,13 @@
  * Syntax is argument and value style "-arg=val" and is the same for each.
  * All arguments are optional:
  * -type=<xline type or *>
- * -mask=<mask> CIDR supported>
+ * -mask=<mask> CIDR supported
  * -reason=<reason> Spaces allowed
- * -source=<source> Nick, server, or "<Config>" ("setby" can be used instead of "source")
+ * -source=<source> Nick or server ("setby" can be used instead of "source")
  * -set=<time string> (time ago) Prefix with '-' for less than
  * -duration=<time string> (actual set duration) Exact match, prefix '+' for longer than, or '-' for shorter than
  * -expires=<time string> (time ahead) Prefix with '+' for more than
+ * -config=<yes|no> Only match or don't match config lines
  *
  * XCOPY copies a specified X-line (by type and mask) to a
  * new X-line of same type with a new mask.
@@ -55,24 +56,24 @@
 Copies the specified X-line (if found) to a new X-line. The original reason and expiry time
 are copied unless overridden with '-duration=' or '-reason='">
 
-<helpop key="xcount" value="/XCOUNT -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
+<helpop key="xcount" value="/XCOUNT -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
 
 Returns a count of matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
-is a nick, server, or <Config>. 'Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
-time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
+is a nick or server, config (yes or no) will either match only config lines or none. 'Prefix your value for these 3 arguments with a '!' to negate
+the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
 
-<helpop key="xremove" value="/XREMOVE -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
+<helpop key="xremove" value="/XREMOVE -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
 
 Removes matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
-is a nick, server, or <Config>. 'Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
-time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
+is a nick or server, config (yes or no) will either match only config lines or none. 'Prefix your value for these 3 arguments with a '!' to negate
+the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
 Use /XSEARCH to test before removing.">
 
-<helpop key="xsearch" value="/XSEARCH -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t>
+<helpop key="xsearch" value="/XSEARCH -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
 
 Lists matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
-is a nick, server, or <Config>. Prefix your value for these 3 arguments with a '!' to negate the match. 't' is a
-time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
+is a nick or server, config (yes or no) will either match only config lines or none. Prefix your value for these 3 arguments with a '!' to negate
+the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
 
  */
 
@@ -80,28 +81,37 @@ time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adj
 #include "inspircd.h"
 #include "xline.h"
 
-struct Criteria
-{
-	std::string type;
-	std::string mask;
-	std::string reason;
-	std::string source;
-	std::string set;
-	std::string duration;
-	std::string expires;
-
-	Criteria() { }
-	Criteria(const std::string& t, const std::string& m, const std::string& r, const std::string& s)
-		: type(t)
-		, mask(m)
-		, reason(r)
-		, source(s)
-	{
-	}
-};
-
 namespace
 {
+	enum MatchType
+	{
+		MATCH_ONLY,
+		MATCH_NONE,
+		MATCH_ANY
+	};
+
+	struct Criteria
+	{
+		MatchType config;
+		std::string type;
+		std::string mask;
+		std::string reason;
+		std::string source;
+		std::string set;
+		std::string duration;
+		std::string expires;
+
+		Criteria() { }
+		Criteria(const std::string& t, const std::string& m, const std::string& r, const std::string& s)
+			: type(t)
+			, mask(m)
+			, reason(r)
+			, source(s)
+		{
+			config = MATCH_ANY;
+		}
+	};
+
 	bool HasCommandPermission(LocalUser* user, std::string type)
 	{
 		if (type.length() <= 2)
@@ -118,6 +128,7 @@ namespace
 		// Track arg reason to include space separated params
 		bool argreason = false;
 
+		const std::string mconfig("-config=");
 		const std::string mtype("-type=");
 		const std::string mmask("-mask=");
 		const std::string mreason("-reason=");
@@ -131,7 +142,16 @@ namespace
 		{
 			const std::string param = *p;
 
-			if (param.find(mtype) != std::string::npos)
+			if (param.find(mconfig) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mconfig.length()));
+				if (!val.empty() && (val == "yes" || val == "true"))
+					args.config = MATCH_ONLY;
+				else if (!val.empty() && (val == "no" || val == "false"))
+					args.config = MATCH_NONE;
+			}
+			else if (param.find(mtype) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(mtype.length()));
@@ -206,6 +226,8 @@ namespace
 			criteria.append("Reason: " + args.reason + sep);
 		if (args.source != "*")
 			criteria.append("Source: " + args.source + sep);
+		if (args.config != MATCH_ANY)
+			criteria.append("From Config: " + std::string(args.config == MATCH_ONLY ? "yes" : "no") + sep);
 		if (!args.set.empty())
 			criteria.append("Set: " + args.set + sep);
 		if (!args.duration.empty())
@@ -252,6 +274,15 @@ class CommandXBase : public SplitCommand
 			safei++;
 
 			XLine* xline = i->second;
+
+			// Config X-line matching
+			// For legacy purposes, check for a source of '<Config>' as well.
+			if ((args.config == MATCH_ONLY && (!xline->from_config && xline->source != "<Config>"))
+			   || (args.config == MATCH_NONE && (xline->from_config || xline->source == "<Config>")))
+			{
+				i = safei;
+				continue;
+			}
 
 			// CIDR and glob mask matching, with negation
 			negate = args.mask[0] == '!';
@@ -444,7 +475,7 @@ class CommandXBase : public SplitCommand
  public:
 	CommandXBase(Module* Creator, const std::string& cmdname) : SplitCommand(Creator, cmdname, 1)
 	{
-		syntax = "-type=<type|*> -mask=[!]<> -reason=[!]<> -source=[!]<> -set=[-]<time> -duration=[-+]<time> -expires=[+]<time>";
+		syntax = "-type=<type|*> -mask=[!]<> -reason=[!]<> -source=[!]<> -set=[-]<time> -duration=[-+]<time> -expires=[+]<time> -config=<yes|no>";
 		flags_needed = 'o';
 	}
 
