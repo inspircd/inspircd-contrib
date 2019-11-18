@@ -100,9 +100,13 @@ void RemoveAll(const std::string& engine, ChanModeReference& ban, ChanModeRefere
 		PrefixMode* hop = ServerInstance->Modes->FindPrefixMode('h');
 		char pfxchar = (hop && hop->name == "halfop") ? hop->GetPrefix() : '@';
 
+#if defined INSPIRCD_VERSION_BEFORE && INSPIRCD_VERSION_BEFORE(3, 5)
 		ClientProtocol::Messages::Privmsg notice(ServerInstance->FakeClient, chan, msg, MSG_NOTICE);
 		chan->Write(ServerInstance->GetRFCEvents().privmsg, notice, pfxchar);
-		ServerInstance->PI->SendChannelNotice(chan, pfxchar, msg);
+		ServerInstance->PI->SendMessage(chan, pfxchar, msg, MSG_NOTICE);
+#else
+		chan->WriteNotice(msg, pfxchar);
+#endif
 	}
 }
 } // namespace
