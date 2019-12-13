@@ -24,8 +24,10 @@
 
 #include "inspircd.h"
 #include "modules/cap.h"
+#include "modules/who.h"
 
-typedef insp::flat_map<std::string, std::string> CustomTagMap;
+typedef insp::flat_map<std::string, std::string, irc::insensitive_swo> CustomTagMap;
+typedef insp::flat_map<std::string, size_t, irc::insensitive_swo> SpecialMessageMap;
 
 class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 {
@@ -92,21 +94,50 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 	Cap::Reference ctctagcap;
 	CustomTagsExtItem ext;
 
+	User* UserFromMsg(ClientProtocol::Message& msg)
+	{
+		SpecialMessageMap::const_iterator iter = specialmsgs.find(msg.GetCommand());
+		if (iter == specialmsgs.end())
+			return NULL; // Not a special message.
+
+		size_t nick_index = iter->second;
+		if (irc::equals(msg.GetCommand(), "354"))
+		{
+			// WHOX gets special treatment as the nick field isn't in a static position.
+			if (whox_index == -1)
+				return NULL; // No nick field.
+
+			nick_index = whox_index + 1;
+		}
+
+		if (msg.GetParams().size() <= nick_index)
+			return NULL; // Not enough params.
+
+		return ServerInstance->FindNickOnly(msg.GetParams()[nick_index]);
+	}
+
  public:
+	SpecialMessageMap specialmsgs;
 	std::string vendor;
+	int whox_index;
 
 	CustomTags(Module* mod)
 		: ClientProtocol::MessageTagProvider(mod)
 		, ctctagcap(mod, "message-tags")
 		, ext(mod)
+		, whox_index(-1)
 	{
 	}
 
 	void OnPopulateTags(ClientProtocol::Message& msg) CXX11_OVERRIDE
 	{
-		User* const user = msg.GetSourceUser();
-		if (!user)
-			return;
+		User* user = msg.GetSourceUser();
+		if (!user || IS_SERVER(user))
+		{
+			user = UserFromMsg(msg);
+			if (!user)
+				return; // No such user.
+		}
 
 		CustomTagMap* tags = ext.get(user);
 		if (!tags)
@@ -122,21 +153,45 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 	}
 };
 
-class ModuleCustomTags : public Module
+class ModuleCustomTags
+	: public Module
+	, public Who::EventListener
 {
  private:
-	CustomTags tags;
+	CustomTags ctags;
 
  public:
 	ModuleCustomTags()
-		: tags(this)
+		: Who::EventListener(this)
+		, ctags(this)
 	{
+	}
+
+	ModResult OnWhoLine(const Who::Request& request, LocalUser* source, User* user, Membership* memb, Numeric::Numeric& numeric) CXX11_OVERRIDE
+	{
+		size_t nick_index;
+		ctags.whox_index = request.GetFieldIndex('n', nick_index) ? nick_index : -1;
+		return MOD_RES_PASSTHRU;
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
+		SpecialMessageMap specialmsgs;
+		ConfigTagList tags = ServerInstance->Config->ConfTags("specialmsg");
+		for (ConfigIter i = tags.first; i != tags.second; ++i)
+		{
+			ConfigTag* tag = i->second;
+
+			const std::string command = tag->getString("command");
+			if (command.empty())
+				throw ModuleException("<specialmsg:command> must be a S2C command name!");
+
+			specialmsgs[command] = tag->getUInt("index", 0, 0, 20);
+		}
+		std::swap(specialmsgs, ctags.specialmsgs);
+
 		ConfigTag* tag = ServerInstance->Config->ConfValue("customtags");
-		tags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1);
+		ctags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1);
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
