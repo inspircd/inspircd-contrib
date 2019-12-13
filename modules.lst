@@ -369,7 +369,7 @@ module m_conn_vhost 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_custompenalty 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_custompenalty.cpp
  depends core 3
  description Allows the customisation of penalty levels.
-module m_customtags 3.0.534 https://raw.githubusercontent.com/inspircd/inspircd-contrib/448c214fa4dc749ee761773cecc40cd26c5ae3d9/3.0/m_customtags.cpp
+module m_customtags 3.0.538 https://raw.githubusercontent.com/inspircd/inspircd-contrib/63b21da1f17df0e2cd01c6aa3c0e600f887b186f/3.0/m_customtags.cpp
  depends core 3
  description Allows services to add custom tags to messages sent by clients.
 module m_eventexec 3.0.530 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ec13c9343b8499765448df275a5a80f10b9bf75f/3.0/m_eventexec.cpp
@@ -381,7 +381,7 @@ module m_extbanbanlist 3.0.496 https://raw.githubusercontent.com/inspircd/inspir
 module m_extbanredirect 3.0.518 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b49a95f57e6991837eaf4fdc0344d701270f3d0d/3.0/m_extbanredirect.cpp
  depends core 3
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
-module m_extbanregex 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_extbanregex.cpp
+module m_extbanregex 3.0.537 https://raw.githubusercontent.com/inspircd/inspircd-contrib/878d7a2111144e6c88609454c7913c83f7ae22de/3.0/m_extbanregex.cpp
  depends core 3
  description Provides extban 'x' - Regex matching to n!u@h\sr
 module m_fakelist 3.0.522 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c521cac7ad3d102ec7e8068ac389b2ebdd55a986/3.0/m_fakelist.cpp
@@ -480,7 +480,7 @@ module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/insp
 module m_totp 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_xlinetools 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_xlinetools.cpp
+module m_xlinetools 3.0.536 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cb770ae43e4ea8992506621c8c35e0edd74f3003/3.0/m_xlinetools.cpp
  depends core 3
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
 module m_zombie 3.0.529 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6e51dad9082e691904b44a4b257e8a8f6e294445/3.0/m_zombie.cpp
