@@ -143,7 +143,7 @@ module m_fullversion 2.0.196 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geoipban 2.0.426 https://raw.githubusercontent.com/inspircd/inspircd-contrib/33d64b6d469c024d3ff3220db7541d358f978e7c/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
  depends core 2.0
-module m_groups 2.0.452 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6d44e76015482e84259e2ee17df27eeb175bb501/2.0/m_groups.cpp
+module m_groups 2.0.540 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2ae0448ef4eba0b1f8aa1b0d88841cab8e68d601/2.0/m_groups.cpp
  depends core 2.0
  description Allows users to be managed using services-assigned groups.
 module m_hash_gnutls 2.0.295 https://raw.githubusercontent.com/inspircd/inspircd-contrib/287545046fe070e835921e55877395f37b9a86e2/2.0/m_hash_gnutls.cpp
@@ -396,7 +396,7 @@ module m_geocmd 3.0.523 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
-module m_groups 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_groups.cpp
+module m_groups 3.0.541 https://raw.githubusercontent.com/inspircd/inspircd-contrib/14a084078717ef5334bff2520599f21a8a26b17c/3.0/m_groups.cpp
  depends core 3
  description Allows users to be managed using services-assigned groups.
 module m_hideidle 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_hideidle.cpp
