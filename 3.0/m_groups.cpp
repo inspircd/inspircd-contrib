@@ -32,7 +32,7 @@ enum
 };
 
 // Represents a list of groups that a user is a member of.
-typedef insp::flat_set<std::string> GroupList;
+typedef insp::flat_set<std::string, irc::insensitive_swo> GroupList;
 
 class GroupExt : public SimpleExtItem<GroupList>
 {
@@ -75,13 +75,78 @@ class ModuleGroups
 	, public Whois::EventListener
 {
  private:
+	bool active;
 	GroupExt ext;
+	std::string groupchar;
+
+	size_t ExecuteCommand(LocalUser* source, const char* cmd, CommandBase::Params& parameters,
+		const std::string& group, size_t nickindex)
+	{
+		size_t targets = 0;
+		std::string command(cmd);
+		const user_hash& users = ServerInstance->Users->GetUsers();
+		for (user_hash::const_iterator iter = users.begin(); iter != users.end(); ++iter)
+		{
+			User* user = iter->second;
+			if (user->registered != REG_ALL)
+				continue;
+	
+			GroupList* groups = ext.get(user);
+			if (!groups || groups->count(group))
+				continue;
+
+			parameters[nickindex] = user->nick;
+			ModResult modres;
+			FIRST_MOD_RESULT(OnPreCommand, modres, (command, parameters, source, true));
+			if (modres != MOD_RES_DENY)
+			{
+				ServerInstance->Parser.CallHandler(command, parameters, source);
+				targets++;
+			}
+		}
+		return targets;
+	}
+
+	bool IsGroup(const std::string& param, std::string& group)
+	{
+		if (param.length() <= groupchar.length() || param.compare(0, groupchar.length(), groupchar) != 0)
+			return false;
+
+		group.assign(param, groupchar.length() - 1, std::string::npos);
+		return true;
+	}
+
+	ModResult HandleInvite(LocalUser* source, CommandBase::Params& parameters)
+	{
+		// Check we have enough parameters and a valid group.
+		std::string group;
+		if (parameters.size() < 2 || !IsGroup(parameters[0], group))
+			return MOD_RES_PASSTHRU;
+
+		active = true;
+		size_t penalty = ExecuteCommand(source, "INVITE", parameters, group, 0);
+		source->CommandFloodPenalty += std::min(penalty, 5UL);
+		active = false;
+		return MOD_RES_DENY;
+	}
 
  public:
 	ModuleGroups()
 		: Whois::EventListener(this)
+		, active(false)
 		, ext(this)
 	{
+	}
+
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
+	{
+		ConfigTag* tag = ServerInstance->Config->ConfValue("groups");
+		groupchar = tag->getString("prefix", "^", 1);
+	}
+
+	void On005Numeric(std::map<std::string, std::string>& tokens) CXX11_OVERRIDE
+	{
+		tokens["GROUPCHAR"] = groupchar;
 	}
 
 	ModResult OnCheckBan(User* user, Channel* channel, const std::string& mask) CXX11_OVERRIDE
@@ -103,6 +168,17 @@ class ModuleGroups
 		return MOD_RES_PASSTHRU;
 	}
 
+	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
+	{
+		if (user->registered != REG_ALL || !validated || active)
+			return MOD_RES_PASSTHRU;
+
+		if (command == "INVITE")
+			return HandleInvite(user, parameters);
+
+		return MOD_RES_PASSTHRU;
+	}
+
 	void OnWhois(Whois::Context& whois) CXX11_OVERRIDE
 	{
 		GroupList* groups = ext.get(whois.GetTarget());
@@ -115,7 +191,7 @@ class ModuleGroups
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows users to be managed using services-assigned groups");
+		return Version("Allows users to be managed using services-assigned groups", VF_OPTCOMMON);
 	}
 };
 
