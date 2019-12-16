@@ -141,7 +141,7 @@ class ModuleGroups : public Module
 
 	Version GetVersion()
 	{
-		return Version("Allows users to be managed using services-assigned groups", VF_COMMON);
+		return Version("Allows users to be managed using services-assigned groups", VF_OPTCOMMON);
 	}
 };
 

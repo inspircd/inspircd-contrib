@@ -34,41 +34,21 @@ enum
 // Represents a list of groups that a user is a member of.
 typedef insp::flat_set<std::string> GroupList;
 
-class GroupExt : public ExtensionItem
+class GroupExt : public SimpleExtItem<GroupList>
 {
  public:
 	GroupExt(Module* Creator)
-		: ExtensionItem("groups", ExtensionItem::EXT_USER, Creator)
+		: SimpleExtItem<GroupList>("groups", ExtensionItem::EXT_USER, Creator)
 	{
 	}
 
-	void free(Extensible* container, void* item) CXX11_OVERRIDE
-	{
-		delete static_cast<GroupList*>(item);
-	}
-
-	GroupList* get(const Extensible* container) const
-	{
-		return static_cast<GroupList*>(get_raw(container));
-	}
-
-	std::string serialize(SerializeFormat format, const Extensible* container, void* item) const CXX11_OVERRIDE
+	std::string ToNetwork(const Extensible* container, void* item) const CXX11_OVERRIDE
 	{
 		GroupList* grouplist = static_cast<GroupList*>(item);
-		if (!grouplist)
-			return "";
-
-		std::string buffer;
-		for (GroupList::const_iterator iter = grouplist->begin(); iter != grouplist->end(); ++iter)
-		{
-			if (!buffer.empty())
-				buffer.push_back(' ');
-			buffer.append(*iter);
-		}
-		return buffer;
+		return grouplist ? stdalgo::string::join(*grouplist) : "";
 	}
 
-	void unserialize(SerializeFormat format, Extensible* container, const std::string& value) CXX11_OVERRIDE
+	void FromNetwork(Extensible* container, const std::string& value) CXX11_OVERRIDE
 	{
 		// Create a new group list from the input.
 		GroupList* newgrouplist = new GroupList();
@@ -79,15 +59,13 @@ class GroupExt : public ExtensionItem
 		if (newgrouplist->empty())
 		{
 			// If the new group list is empty then delete both the new and old group lists.
-			void* oldgrouplist = unset_raw(container);
-			free(container, oldgrouplist);
-			free(container, newgrouplist);
+			unset(container);
+			delete newgrouplist;
 		}
 		else
 		{
 			// Otherwise install the new group list.
-			void* oldgrouplist = set_raw(container, newgrouplist);
-			free(container, oldgrouplist);
+			set(container, newgrouplist);
 		}
 	}
 };
@@ -137,7 +115,7 @@ class ModuleGroups
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows users to be managed using services-assigned groups", VF_COMMON);
+		return Version("Allows users to be managed using services-assigned groups");
 	}
 };
 
