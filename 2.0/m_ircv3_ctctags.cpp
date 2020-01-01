@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2019 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2019 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,7 +17,7 @@
  */
 
 
-/* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthor: Sadie Powell */
 /* $ModDesc: Dummy module to allow usage of the ircv3_ctctags module on 3.0 servers. */
 /* $ModDepends: core 2.0 */
 

@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2014 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2014 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,7 +17,7 @@
  */
 
 
-/* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthor: Sadie Powell */
 /* $ModDesc: Adds stats character 'X' which shows unlinked servers. */
 /* $ModDepends: core 2.0 */
 

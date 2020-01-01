@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2014 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2014 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,8 +17,8 @@
  */
 
 
-/* $ModAuthor: Peter "SaberUK" Powell */
-/* $ModAuthorMail: petpow@saberuk.com */
+/* $ModAuthor: Sadie Powell */
+/* $ModAuthorMail: sadie@witchery.services */
 /* $ModDesc: Allows clients to be automatically dropped if they execute certain commands before registration. */
 /* $ModDepends: core 2.0 */
 /* $ModConfig: <autodrop commands="CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE"> */

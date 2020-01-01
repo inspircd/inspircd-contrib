@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013-2015 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2013-2015 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,8 +17,8 @@
  */
 
 
-/* $ModAuthor: Peter "SaberUK" Powell */
-/* $ModAuthorMail: petpow@saberuk.com */
+/* $ModAuthor: Sadie Powell */
+/* $ModAuthorMail: sadie@witchery.services */
 /* $ModDesc: Replays messages sent to the server back to the sender. */
 /* $ModDepends: core 2.0 */
 
@@ -26,7 +26,7 @@
  * Developer documentation for this module can be found at:
  *
  *  https://github.com/ircv3/ircv3-specifications/blob/master/extensions/echo-message-3.2.md
- *  https://github.com/SaberUK/irc-docs/blob/master/specifications/replay-message.md
+ *  https://github.com/SadieCat/irc-docs/blob/master/specifications/replay-message.md
  *
  */
 

@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013-2015 Peter Powell <petpow@saberuk.com>
+ *   Copyright (C) 2013-2015 Sadie Powell <sadie@witchery.services>
  *   Copyright (C) 2012 ChrisTX <chris@rev-crew.info>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
@@ -32,7 +32,7 @@
 
 #include <re2/re2.h>
 
-/* $ModAuthor: Peter "SaberUK" Powell */
+/* $ModAuthor: Sadie Powell */
 /* $ModDesc: Regex Provider Module for RE2. */
 /* $ModDepends: core 2.0 */
 /* $LinkerFlags: -lre2 */
