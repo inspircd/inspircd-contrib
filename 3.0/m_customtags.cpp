@@ -24,6 +24,8 @@
 
 #include "inspircd.h"
 #include "modules/cap.h"
+#include "modules/ctctags.h"
+#include "modules/ircv3.h"
 #include "modules/who.h"
 
 typedef insp::flat_map<std::string, std::string, irc::insensitive_swo> CustomTagMap;
@@ -31,9 +33,17 @@ typedef insp::flat_map<std::string, size_t, irc::insensitive_swo> SpecialMessage
 
 class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 {
+ private:
+	dynamic_reference_nocheck<Cap::Capability> ctctagref;
+	ClientProtocol::EventProvider tagmsgprov;
+
  public:
+	bool broadcastchanges;
+
 	CustomTagsExtItem(Module* Creator)
 		: SimpleExtItem<CustomTagMap>("custom-tags", ExtensionItem::EXT_USER, Creator)
+		, ctctagref(Creator, "cap/message-tags")
+		, tagmsgprov(Creator, "TAGMSG")
 	{
 	}
 
@@ -63,6 +73,13 @@ class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 		if (!list->empty())
 		{
 			set(user, list);
+			if (!broadcastchanges || !ctctagref)
+				return;
+
+			ClientProtocol::TagMap tags;
+			CTCTags::TagMessage tagmsg(user, "*", tags);
+			ClientProtocol::Event tagev(tagmsgprov, tagmsg);
+			IRCv3::WriteNeighborsWithCap(user, tagev, **ctctagref, true);
 		}
 		else
 		{
@@ -92,7 +109,6 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 {
  private:
 	Cap::Reference ctctagcap;
-	CustomTagsExtItem ext;
 
 	User* UserFromMsg(ClientProtocol::Message& msg)
 	{
@@ -117,6 +133,7 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 	}
 
  public:
+	CustomTagsExtItem ext;
 	SpecialMessageMap specialmsgs;
 	std::string vendor;
 	int whox_index;
@@ -191,6 +208,7 @@ class ModuleCustomTags
 		std::swap(specialmsgs, ctags.specialmsgs);
 
 		ConfigTag* tag = ServerInstance->Config->ConfValue("customtags");
+		ctags.ext.broadcastchanges = tag->getBool("broadcastchanges");
 		ctags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1);
 	}
 
