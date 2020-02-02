@@ -25,6 +25,8 @@
 
 #include "inspircd.h"
 
+static volatile sig_atomic_t signaled;
+
 class RotateLogTimer : public Timer
 {
  public:
@@ -44,16 +46,23 @@ class RotateLogTimer : public Timer
 class ModuleRotateLog : public Module
 {
  private:
-	 RotateLogTimer* timer;
+	RotateLogTimer* timer;
+
+	static void SignalHandler(int)
+	{
+		signaled = 1;
+	}
 
  public:
 	ModuleRotateLog()
 	{
 		timer = new RotateLogTimer();
+		signal(SIGUSR2, SignalHandler);
 	}
 
 	~ModuleRotateLog()
 	{
+		signal(SIGUSR2, SIG_IGN);
 		ServerInstance->Timers.DelTimer(timer);
 	}
 
@@ -66,6 +75,16 @@ class ModuleRotateLog : public Module
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("rotatelog");
 		timer->SetInterval(tag->getDuration("period", 3600, 60));
+	}
+
+	void OnBackgroundTimer(time_t)
+	{
+		if (!signaled)
+			return;
+
+		timer->Tick(ServerInstance->Time());
+		timer->SetInterval(timer->GetInterval());
+		signaled = 0;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
