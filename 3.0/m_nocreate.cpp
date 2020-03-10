@@ -284,7 +284,11 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 		if (stats.GetSymbol() != 'N')
 			return MOD_RES_PASSTHRU;
 
+#if defined INSPIRCD_VERSION_BEFORE && INSPIRCD_VERSION_BEFORE(3, 6)
 		ServerInstance->XLines->InvokeStats("NOCREATE", 210, stats);
+#else
+		ServerInstance->XLines->InvokeStats("NOCREATE", stats);
+#endif
 		return MOD_RES_DENY;
 	}
 
