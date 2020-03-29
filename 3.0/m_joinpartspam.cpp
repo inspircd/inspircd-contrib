@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2016-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2016-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -28,11 +28,12 @@
  * TIP: You can remove a block on a user with a /INVITE
  *
  * Helpop Lines for the CHMODES section:
- * Find: '<helpop key="chmodes" value="Channel Modes'
+ * Find: '<helpop key="chmodes" title="Channel Modes" value="'
  * Place just above the 'z     Blocks non-SSL...' line:
  x <cycles>:<sec>:<block>[:#channel] Blocks a user after the set
                     number of Join and Part/Quit cycles in the set
-                    seconds for the given block duration (seconds).
+                    seconds for the given block duration (seconds)
+                    (requires the joinpartspam contrib module).
                     An optional redirect channel can be set.
  */
 

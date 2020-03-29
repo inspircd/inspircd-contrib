@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -22,10 +22,10 @@
 /// $ModDesc: Provides extban 'b' - Ban list from another channel
 
 /* Helpop Lines for the EXTBANS section
- * Find: '<helpop key="extbans" value="Extended Bans'
+ * Find: '<helpop key="extbans" title="Extended Bans" value="'
  * Place just before the 'j:<channel>' line:
- b:<channel>   Matches users banned in the given channel (requires
-               the extbanbanlist extras-module).
+ b:<channel>   Matches users banned in the given channel
+               requires the extbanbanlist contrib module).
  */
 
 

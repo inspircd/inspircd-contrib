@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -30,10 +30,10 @@
  */
 
 /* Helpop Lines for the EXTBANS section
- * Find: '<helpop key="extbans" value="Extended Bans'
+ * Find: '<helpop key="extbans" title="Extended Bans" value="'
  * Place after the 's:<server>' line:
- x:<pattern>   Matches users to a regex pattern (requires a
-               regex module and extbanregex extras-module).
+ x:<pattern>   Matches users to a regex pattern (requires a regex
+               module and the extbanregex contrib module).
  */
 
 

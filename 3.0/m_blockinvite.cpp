@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -28,10 +28,10 @@
  */
 
 /* Helpop Lines for the UMODES section
- * Find: '<helpop key="umodes" value="User Modes'
+ * Find: '<helpop key="umodes" title="User Modes" value="'
  * Place just before the 'W    Receives notif...' line
  V            Blocks all INVITEs from other users (requires
-              the blockinvite extras-module).
+              the blockinvite contrib module).
  */
 
 

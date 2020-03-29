@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -46,34 +46,34 @@
  */
 
 /* Helpop Lines for the COPER section
- * Find: '<helpop key="coper" value="Oper Commands
+ * Find: '<helpop key="coper" title="Oper Commands" value="'
  * Add 'XCOPY XCOUNT XREMOVE XSEARCH' before 'ZLINE'
  * and space accordingly to match.
  * Find: '<helpop key="kline" ...'
  * Place just above that line:
-<helpop key="xcopy" value="/XCOPY <X-line type> <old mask> <new mask> [-duration=<> -reason=<>]
-
+<helpop key="xcopy" title="/XCOPY <X-line type> <old mask> <new mask> [-duration=<> -reason=<>]" value="
 Copies the specified X-line (if found) to a new X-line. The original reason and expiry time
-are copied unless overridden with '-duration=' or '-reason='">
+are copied unless overridden with '-duration=' or '-reason='
+">
 
-<helpop key="xcount" value="/XCOUNT -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
-
+<helpop key="xcount" title="/XCOUNT -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>" value="
 Returns a count of matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
 is a nick or server, config (yes or no) will either match only config lines or none. 'Prefix your value for these 3 arguments with a '!' to negate
-the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
+the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
+">
 
-<helpop key="xremove" value="/XREMOVE -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
-
+<helpop key="xremove" title="/XREMOVE -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>" value="
 Removes matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
 is a nick or server, config (yes or no) will either match only config lines or none. 'Prefix your value for these 3 arguments with a '!' to negate
 the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
-Use /XSEARCH to test before removing.">
+Use /XSEARCH to test before removing.
+">
 
-<helpop key="xsearch" value="/XSEARCH -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>
-
+<helpop key="xsearch" title="/XSEARCH -type=<X-line type|*> -mask=[!]<m> -reason=[!]<r> -source=[!]<s> -set=[-]<t> -duration=[-+]<t> -expires=[+]<t> -config=<yes|no>" value="
 Lists matching X-lines of the specified type (or all types). Mask(m) supports CIDR, reason(r) can include spaces, source(s)
 is a nick or server, config (yes or no) will either match only config lines or none. Prefix your value for these 3 arguments with a '!' to negate
-the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.">
+the match. 't' is a time-string (seconds or 1y2w3d4h5m6s) and can be prefixed with '+' or '-' to adjust matching. All arguments are optional.
+">
 
  */
 

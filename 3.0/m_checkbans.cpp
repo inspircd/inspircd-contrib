@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2017-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2017-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -22,23 +22,23 @@
 /// $ModDesc: Adds commands /checkbans, /testban, and /whyban
 
 /* Helpop Lines for the CUSER section
- * Find: '<helpop key="cuser" value="User Commands
+ * Find: '<helpop key="cuser" title="User Commands" value="'
  * Place 'CHECKBANS', 'TESTBAN', and 'WHYBAN' in the
  * command list accordingly. Re-space as needed.
  * Find: '<helpop key="sslinfo" ...'
  * Place just above that line:
-<helpop key="testban" value="/TESTBAN <channel> <mask>
+<helpop key="testban" title="/TESTBAN <channel> <mask>" value="
+Test a channel ban mask against the users currently in the channel.
+">
 
-Test a channel ban mask against the users currently in the channel.">
-
-<helpop key="whyban" value="/WHYBAN <channel> [user]
-
+<helpop key="whyban" title="/WHYBAN <channel> [user]" value="
 Get a list of bans and exceptions that match you (or the given user)
-on the specified channel.">
+on the specified channel.
+">
 
-<helpop key="checkbans" value="/CHECKBANS <channel>
-
-Get a list of bans and exceptions that match current users on the channel.">
+<helpop key="checkbans" title="/CHECKBANS <channel>" value="
+Get a list of bans and exceptions that match current users on the channel.
+">
 
  */
 

@@ -32,17 +32,17 @@
  * noisy:    sends an SNOTICE when a blocked user tries to create a channel. Default: yes
  *
  * Helpop Lines for the COPER section:
- * Find: '<helpop key="coper" value="Oper Commands
+ * Find: '<helpop key="coper" title="Oper Commands" value="'
  * Place 'NOCREATE' in the appropriate ordered spot.
  * Find: '<helpop key="wallops" ...'
  * Place just above that line:
-<helpop key="nocreate" value="/NOCREATE <[U:]nick!user@hostmask> [<duration> :<reason>]
-
+<helpop key="nocreate" title="/NOCREATE <[U:]nick!user@hostmask> [<duration> :<reason>]" value="
 Sets or removes a no channel creation ban on a user. You must
 specify all three parameters to add a ban and just the mask to
 remove a ban. Mask can be a valid online nickname and will use
 '*!*@<IP>' as a mask. Prefixing the start of a full mask with
-'U:' will only match users not identified to a services account.">
+'U:' will only match users not identified to a services account.
+">
 
  */
 
