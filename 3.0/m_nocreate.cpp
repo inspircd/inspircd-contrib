@@ -36,43 +36,59 @@
  * Place 'NOCREATE' in the appropriate ordered spot.
  * Find: '<helpop key="wallops" ...'
  * Place just above that line:
-<helpop key="nocreate" value="/NOCREATE <nick!user@hostmask> [<duration> :<reason>]
+<helpop key="nocreate" value="/NOCREATE <[U:]nick!user@hostmask> [<duration> :<reason>]
 
 Sets or removes a no channel creation ban on a user. You must
-specify all three parameters to add a ban, and just the mask to
-remove a ban. Mask can be a valid, online nickname and will use
-'*!*@<IP>' as a mask.">
+specify all three parameters to add a ban and just the mask to
+remove a ban. Mask can be a valid online nickname and will use
+'*!*@<IP>' as a mask. Prefixing the start of a full mask with
+'U:' will only match users not identified to a services account.">
 
  */
 
 
 #include "inspircd.h"
 #include "xline.h"
+#include "modules/account.h"
 #include "modules/stats.h"
 
 // Store the NoCreate mask as an XLine
 class NoCreate : public XLine
 {
+	bool unreg;
 	std::string mask;
 
  public:
 
 	NoCreate(time_t s_time, unsigned long d, const std::string& src, const std::string& re, const std::string& ma)
 		: XLine(s_time, d, src, re, "NOCREATE")
+		, unreg(false)
 		, mask(ma)
 	{
+		if ((mask.length() > 2) && (mask[0] == 'U') && (mask[1] == ':'))
+			unreg = true;
 	}
 
 	bool Matches(User* u) CXX11_OVERRIDE
 	{
-		return (InspIRCd::Match(u->GetFullHost(), this->mask) ||
-			InspIRCd::Match(u->GetFullRealHost(), this->mask) ||
-			InspIRCd::MatchCIDR(u->nick+"!"+u->ident+"@"+u->GetIPString(), this->mask));
+		const std::string match_mask = unreg ? mask.substr(2) : mask;
+		if (unreg)
+		{
+			const AccountExtItem* accountext = GetAccountExtItem();
+			const std::string* account = accountext ? accountext->get(u) : NULL;
+			if (account)
+				return false;
+		}
+
+		return (InspIRCd::Match(u->GetFullHost(), match_mask) ||
+			InspIRCd::Match(u->GetFullRealHost(), match_mask) ||
+			InspIRCd::MatchCIDR(u->nick+"!"+u->ident+"@"+u->GetIPString(), match_mask));
 	}
 
 	bool Matches(const std::string& s) CXX11_OVERRIDE
 	{
-		return (InspIRCd::MatchCIDR(s, this->mask));
+		// This isn't used internally and shouldn't be used elsewhere.
+		return false;
 	}
 
 	void DisplayExpiry() CXX11_OVERRIDE
@@ -158,7 +174,7 @@ class CommandNoCreate : public Command
 	CommandNoCreate(Module* Creator) : Command(Creator, "NOCREATE", 1, 3)
 	{
 		flags_needed = 'o';
-		this->syntax = "<nick!user@hostmask> [<duration> :<reason>]";
+		this->syntax = "<[U:]nick!user@hostmask> [<duration> :<reason>]";
 	}
 
 	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
