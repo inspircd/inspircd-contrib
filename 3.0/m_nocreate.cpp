@@ -24,7 +24,7 @@
 
 /* Credit due to the authors and maintainers of 'm_cban', as most of this code is directly borrowed to work in the same manner
  * See <https://github.com/inspircd/inspircd/blob/insp3/src/modules/m_cban.cpp>
- * As well as the base XLine and G/Z-Line commands code.
+ * As well as the base X-line and G/Z-line commands code.
  *
  * Configuration and defaults:
  * telluser: tell the user they are blocked from creating a channel instead of a generic error. Default: no
@@ -59,33 +59,32 @@ class NoCreate : public XLine
 	std::string mask;
 
  public:
-
-	NoCreate(time_t s_time, unsigned long d, const std::string& src, const std::string& re, const std::string& ma)
-		: XLine(s_time, d, src, re, "NOCREATE")
+	NoCreate(time_t _set_time, unsigned long _duration, const std::string& _source, const std::string& _reason, const std::string& _mask)
+		: XLine(_set_time, _duration, _source, _reason, "NOCREATE")
 		, unreg(false)
-		, mask(ma)
+		, mask(_mask)
 	{
 		if ((mask.length() > 2) && (mask[0] == 'U') && (mask[1] == ':'))
 			unreg = true;
 	}
 
-	bool Matches(User* u) CXX11_OVERRIDE
+	bool Matches(User* user) CXX11_OVERRIDE
 	{
 		const std::string match_mask = unreg ? mask.substr(2) : mask;
 		if (unreg)
 		{
 			const AccountExtItem* accountext = GetAccountExtItem();
-			const std::string* account = accountext ? accountext->get(u) : NULL;
+			const std::string* account = accountext ? accountext->get(user) : NULL;
 			if (account)
 				return false;
 		}
 
-		return (InspIRCd::Match(u->GetFullHost(), match_mask) ||
-			InspIRCd::Match(u->GetFullRealHost(), match_mask) ||
-			InspIRCd::MatchCIDR(u->nick+"!"+u->ident+"@"+u->GetIPString(), match_mask));
+		return (InspIRCd::Match(user->GetFullHost(), match_mask) ||
+			InspIRCd::Match(user->GetFullRealHost(), match_mask) ||
+			InspIRCd::MatchCIDR(user->nick+"!"+user->ident+"@"+user->GetIPString(), match_mask));
 	}
 
-	bool Matches(const std::string& s) CXX11_OVERRIDE
+	bool Matches(const std::string&) CXX11_OVERRIDE
 	{
 		// This isn't used internally and shouldn't be used elsewhere.
 		return false;
@@ -94,13 +93,13 @@ class NoCreate : public XLine
 	void DisplayExpiry() CXX11_OVERRIDE
 	{
 		ServerInstance->SNO->WriteToSnoMask('x', "Removing expired NoCreate %s (set by %s %s ago): %s",
-			this->mask.c_str(), this->source.c_str(),
-			InspIRCd::DurationString(ServerInstance->Time() - this->set_time).c_str(), this->reason.c_str());
+			mask.c_str(), source.c_str(),
+			InspIRCd::DurationString(ServerInstance->Time() - set_time).c_str(), reason.c_str());
 	}
 
 	std::string& Displayable() CXX11_OVERRIDE
 	{
-		return this->mask;
+		return mask;
 	}
 };
 
@@ -115,7 +114,7 @@ class NoCreateFactory : public XLineFactory
 		return new NoCreate(set_time, duration, source, reason, xline_specific_mask);
 	}
 
-	bool AutoApplyToUserList(XLine* x) CXX11_OVERRIDE
+	bool AutoApplyToUserList(XLine*) CXX11_OVERRIDE
 	{
 		return false;
 	}
@@ -128,12 +127,15 @@ class CommandNoCreate : public Command
 	// Specialized Insane ban check, checks that both nick and userhost match.
 	// To use the existing InspIRCd functions would mean running through the
 	// user list twice, as nick and host insane checks are separate functions.
-	bool MaskIsInsane(const std::string& mask, User* user)
+	bool MaskIsInsane(User* user, const std::string& mask)
 	{
-		unsigned int matches = 0;
+		ConfigTag* insane = ServerInstance->Config->ConfValue("insane");
+		if (insane->getBool("nocreate"))
+			return false;
 
-		float itrigger = ServerInstance->Config->ConfValue("insane")->getFloat("trigger", 95.5);
+		float itrigger = insane->getFloat("trigger", 95.5, 0.0, 100.0);
 
+		long matches = 0;
 		std::string nick;
 		std::string userhost;
 
@@ -149,8 +151,8 @@ class CommandNoCreate : public Command
 		for (user_hash::const_iterator u = users.begin(); u != users.end(); ++u)
 		{
 			if (InspIRCd::Match(u->second->nick, nick) &&
-				(InspIRCd::Match(u->second->MakeHost(), userhost, ascii_case_insensitive_map) ||
-				InspIRCd::MatchCIDR(u->second->MakeHostIP(), userhost, ascii_case_insensitive_map)))
+			   (InspIRCd::Match(u->second->MakeHost(), userhost, ascii_case_insensitive_map) ||
+			   InspIRCd::MatchCIDR(u->second->MakeHostIP(), userhost, ascii_case_insensitive_map)))
 			{
 				matches++;
 			}
@@ -174,7 +176,7 @@ class CommandNoCreate : public Command
 	CommandNoCreate(Module* Creator) : Command(Creator, "NOCREATE", 1, 3)
 	{
 		flags_needed = 'o';
-		this->syntax = "<[U:]nick!user@hostmask> [<duration> :<reason>]";
+		syntax = "<[U:]nick!user@hostmask> [<duration> :<reason>]";
 	}
 
 	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
@@ -200,7 +202,7 @@ class CommandNoCreate : public Command
 		// Adding
 		if (parameters.size() >= 3)
 		{
-			if (this->MaskIsInsane(target, user))
+			if (this->MaskIsInsane(user, target))
 			{
 				user->WriteNotice(InspIRCd::Format("*** NoCreate mask %s flagged as insane", target.c_str()));
 				return CMD_FAILURE;
@@ -254,7 +256,7 @@ class CommandNoCreate : public Command
 		return CMD_SUCCESS;
 	}
 
-	RouteDescriptor GetRouting(User* user, const Params& parameters) CXX11_OVERRIDE
+	RouteDescriptor GetRouting(User* user, const Params&) CXX11_OVERRIDE
 	{
 		if (IS_LOCAL(user))
 			return ROUTE_LOCALONLY; // spanningtree will send ADDLINE
@@ -267,7 +269,7 @@ class CommandNoCreate : public Command
 class ModuleNoCreate : public Module, public Stats::EventListener
 {
 	CommandNoCreate cmd;
-	NoCreateFactory f;
+	NoCreateFactory factory;
 	bool telluser;
 	bool noisy;
 	std::string default_reason;
@@ -281,13 +283,13 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 
 	void init() CXX11_OVERRIDE
 	{
-		ServerInstance->XLines->RegisterFactory(&f);
+		ServerInstance->XLines->RegisterFactory(&factory);
 	}
 
 	~ModuleNoCreate()
 	{
 		ServerInstance->XLines->DelAll("NOCREATE");
-		ServerInstance->XLines->UnregisterFactory(&f);
+		ServerInstance->XLines->UnregisterFactory(&factory);
 	}
 
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
@@ -311,7 +313,7 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 		return MOD_RES_DENY;
 	}
 
-	ModResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname, std::string& privs, const std::string& keygiven) CXX11_OVERRIDE
+	ModResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname, std::string&, const std::string&) CXX11_OVERRIDE
 	{
 		// Do nothing if the channel already exists or if the user is either an oper or exempt
 		if (chan)
@@ -320,28 +322,25 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 			return MOD_RES_PASSTHRU;
 
 		XLine* nc = ServerInstance->XLines->MatchesLine("NOCREATE", user);
+		if (!nc)
+			return MOD_RES_PASSTHRU;
 
-		if (nc)
-		{
-			// User is blocked from creating channels
-			if (telluser)
-				user->WriteNumeric(ERR_BANNEDFROMCHAN, cname, default_reason.empty() ? nc->reason.c_str() : default_reason.c_str());
-			else
-				user->WriteNumeric(Numerics::NoSuchChannel(cname));
+		// User is blocked from creating channels
+		if (telluser)
+			user->WriteNumeric(ERR_BANNEDFROMCHAN, cname, default_reason.empty() ? nc->reason.c_str() : default_reason.c_str());
+		else
+			user->WriteNumeric(Numerics::NoSuchChannel(cname));
 
-			if (noisy)
-				ServerInstance->SNO->WriteGlobalSno('a', "%s tried to create channel %s but is blocked from doing so (%s)",
-					user->nick.c_str(), cname.c_str(), nc->reason.c_str());
+		if (noisy)
+			ServerInstance->SNO->WriteGlobalSno('a', "%s tried to create channel %s but is blocked from doing so (%s)",
+				user->nick.c_str(), cname.c_str(), nc->reason.c_str());
 
-			return MOD_RES_DENY;
-		}
-
-		return MOD_RES_PASSTHRU;
+		return MOD_RES_DENY;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Gives /nocreate, an XLine to block a user from creating new channels");
+		return Version("Gives /nocreate, an X-line to block users from creating new channels");
 	}
 };
 
