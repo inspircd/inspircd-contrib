@@ -271,6 +271,8 @@ private:
 	bool dirtysplit;
 
  public:
+	using ServerProtocol::LinkEventListener::OnServerSplit;
+
 	ModuleZombie()
 		: ServerProtocol::LinkEventListener(this)
 		, joinhook(this, servers)
