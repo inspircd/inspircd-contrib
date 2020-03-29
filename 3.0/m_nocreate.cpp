@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2016-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2016-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -18,7 +18,7 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModConfig: <nocreate telluser="no" noisy="yes">
+/// $ModConfig: <nocreate telluser="no" reason="You are not allowed to create channels" noisy="yes">
 /// $ModDepends: core 3
 /// $ModDesc: Adds oper command '/nocreate' to block a user from creating new channels
 
@@ -28,6 +28,7 @@
  *
  * Configuration and defaults:
  * telluser: tell the user they are blocked from creating a channel instead of a generic error. Default: no
+ * reason:   a default reason to use with 'telluser' instead of the individual reason. Default: blank, use the individual reason.
  * noisy:    sends an SNOTICE when a blocked user tries to create a channel. Default: yes
  *
  * Helpop Lines for the COPER section:
@@ -253,6 +254,7 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 	NoCreateFactory f;
 	bool telluser;
 	bool noisy;
+	std::string default_reason;
 
  public:
 	ModuleNoCreate()
@@ -277,6 +279,7 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 		ConfigTag* tag = ServerInstance->Config->ConfValue("nocreate");
 		telluser = tag->getBool("telluser");
 		noisy = tag->getBool("noisy", true);
+		default_reason = tag->getString("reason");
 	}
 
 	ModResult OnStats(Stats::Context& stats) CXX11_OVERRIDE
@@ -306,7 +309,7 @@ class ModuleNoCreate : public Module, public Stats::EventListener
 		{
 			// User is blocked from creating channels
 			if (telluser)
-				user->WriteNumeric(ERR_BANNEDFROMCHAN, cname, "You are not allowed to create channels");
+				user->WriteNumeric(ERR_BANNEDFROMCHAN, cname, default_reason.empty() ? nc->reason.c_str() : default_reason.c_str());
 			else
 				user->WriteNumeric(Numerics::NoSuchChannel(cname));
 
