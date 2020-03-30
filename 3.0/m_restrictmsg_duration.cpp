@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -59,13 +59,13 @@ class ModuleRestrictMsgDuration : public Module
 		ConfigTag* tag = ServerInstance->Config->ConfValue("restrictmsg_duration");
 
 		const std::string target = tag->getString("target", "both");
-		if (target != "user" && target != "chan" && target != "both")
+		if (!stdalgo::string::equalsci(target, "user") && !stdalgo::string::equalsci(target, "chan") && !stdalgo::string::equalsci(target, "both"))
 		{
 			throw ModuleException("Invalid \"target\" of '" + target + "' in <restrictmsg_duration>. Default of both will be used.");
 		}
 
-		blockuser = (target != "chan");
-		blockchan = (target != "user");
+		blockuser = (!stdalgo::string::equalsci(target, "chan"));
+		blockchan = (!stdalgo::string::equalsci(target, "user"));
 		exemptoper = tag->getBool("exemptoper", true);
 		exemptuline = tag->getBool("exemptuline", true);
 		exemptregistered = tag->getBool("exemptregistered", true);

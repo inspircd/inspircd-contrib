@@ -142,52 +142,52 @@ namespace
 		{
 			const std::string param = *p;
 
-			if (param.find(mconfig) != std::string::npos)
+			if (irc::find(param, mconfig) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(mconfig.length()));
-				if (!val.empty() && (val == "yes" || val == "true"))
+				if (!val.empty() && (irc::equals(val, "yes") || irc::equals(val, "true")))
 					args.config = MATCH_ONLY;
-				else if (!val.empty() && (val == "no" || val == "false"))
+				else if (!val.empty() && (irc::equals(val, "no") || irc::equals(val, "false")))
 					args.config = MATCH_NONE;
 			}
-			else if (param.find(mtype) != std::string::npos)
+			else if (irc::find(param, mtype) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(mtype.length()));
 				args.type = (!val.empty() ? val : "*");
 			}
-			else if (param.find(mmask) != std::string::npos)
+			else if (irc::find(param, mmask) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(mmask.length()));
 				args.mask = (!val.empty() ? val : "*");
 			}
-			else if (param.find(mreason) != std::string::npos)
+			else if (irc::find(param, mreason) != std::string::npos)
 			{
 				argreason = true;
 				const std::string val(param.substr(mreason.length()));
 				args.reason = (!val.empty() ? val : "*");
 			}
-			else if (param.find(msource) != std::string::npos)
+			else if (irc::find(param, msource) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(msource.length()));
 				args.source = (!val.empty() ? val : "*");
 			}
-			else if (param.find(msetby) != std::string::npos)
+			else if (irc::find(param, msetby) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val(param.substr(msetby.length()));
 				args.source = (!val.empty() ? val : "*");
 			}
-			else if (param.find(mset) != std::string::npos)
+			else if (irc::find(param, mset) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val = param.substr(mset.length());
 				args.set = (ServerInstance->Duration(val) ? val : "");
 			}
-			else if (param.find(mduration) != std::string::npos)
+			else if (irc::find(param, mduration) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val = param.substr(mduration.length());
@@ -197,7 +197,7 @@ namespace
 				else
 					args.duration = (ServerInstance->Duration(val) ? val : "");
 			}
-			else if (param.find(mexpires) != std::string::npos)
+			else if (irc::find(param, mexpires) != std::string::npos)
 			{
 				argreason = false;
 				const std::string val = param.substr(mexpires.length());
@@ -551,7 +551,7 @@ class CommandXCopy : public SplitCommand
 		XLine* oldxline = NULL;
 		for (LookupIter i = xlines->begin(); i != xlines->end(); ++i)
 		{
-			if (i->second->Displayable() == oldmask)
+			if (irc::equals(i->second->Displayable(), oldmask))
 			{
 				oldxline = i->second;
 				break;

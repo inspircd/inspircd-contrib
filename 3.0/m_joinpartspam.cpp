@@ -226,7 +226,7 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 			return false;
 		}
 
-		if (chan->name == strredirect)
+		if (irc::equals(chan->name, strredirect))
 		{
 			source->WriteNumeric(Numerics::InvalidModeParameter(chan, this, strredirect,
 				"Invalid join/part spam mode parameter, cannot redirect to myself."));

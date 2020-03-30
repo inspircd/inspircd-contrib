@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2017-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2017-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -67,29 +67,26 @@ class ModuleVhostOnConnect : public Module
 		ConfigTag* tag = user->MyClass->config;
 		std::string vhost = tag->getString("vhost");
 		std::string replace;
+		size_t pos;
 
 		if (vhost.empty())
 			return;
 
-		replace = "$ident";
-		if (vhost.find(replace) != std::string::npos)
-		{
-			std::string ident = user->ident;
-			if (ident[0] == '~')
-				ident.erase(0, 1);
+		std::string ident = user->ident;
+		if (ident[0] == '~')
+			ident.erase(0, 1);
 
-			stdalgo::string::replace_all(vhost, replace, ident);
-		}
+		replace = "$ident";
+		while ((pos = irc::find(vhost, replace)) != std::string::npos)
+			vhost.replace(pos, replace.length(), ident);
+
+		std::string account = GetAccount(user);
+		if (account.empty())
+			account = "unidentified";
 
 		replace = "$account";
-		if (vhost.find(replace) != std::string::npos)
-		{
-			std::string account = GetAccount(user);
-			if (account.empty())
-				account = "unidentified";
-
-			stdalgo::string::replace_all(vhost, replace, account);
-		}
+		while ((pos = irc::find(vhost, replace)) != std::string::npos)
+			vhost.replace(pos, replace.length(), account);
 
 		if (vhost.length() > ServerInstance->Config->Limits.MaxHost)
 		{

@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -53,7 +53,7 @@ class ModuleConnAccounts : public Module
 		irc::spacesepstream ss(accounts);
 		for (std::string token; ss.GetToken(token); )
 		{
-			if (*account == token)
+			if (irc::equals(*account, token))
 				return MOD_RES_PASSTHRU;
 		}
 

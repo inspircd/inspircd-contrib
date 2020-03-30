@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018-2019 Matt Schatz <genius3000@g3k.solutions>
+ *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -227,7 +227,7 @@ class ModuleConnRequire : public Module
 		dualreason = tag->getString("reason", "Fix your client!");
 
 		// No need to send VERSION here, it's already taken care of
-		if (ctcpstring == "VERSION")
+		if (stdalgo::string::equalsci(ctcpstring, "VERSION"))
 		{
 			throw ModuleException("Cannot use \"VERSION\" in secondary CTCP (\"ctcpstring\")");
 			ctcpstring.clear();
@@ -401,7 +401,7 @@ class ModuleConnRequire : public Module
 
 		UserData* ud = userdata.get(user);
 
-		if (ud && !parameters.empty() && InspIRCd::Match(parameters[0], "LS"))
+		if (ud && !parameters.empty() && irc::equals(parameters[0], "LS"))
 			ud->sentcap = true;
 	}
 
