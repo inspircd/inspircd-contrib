@@ -233,6 +233,14 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 			return false;
 		}
 
+		// Channel is at least valid now.
+		redirect = strredirect;
+
+		// If a server is setting the mode, skip the exists/access checks.
+		// This lets m_permchannels and a syncing server set the mode.
+		if (IS_SERVER(source))
+			return true;
+
 		Channel* c = ServerInstance->FindChan(strredirect);
 		if (!c)
 		{
@@ -248,7 +256,6 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 			return false;
 		}
 
-		redirect = strredirect;
 		return true;
 	}
 
