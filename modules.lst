@@ -342,7 +342,7 @@ module m_checkbans 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_close 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_close.cpp
  depends core 3
  description Provides the ability to close unregistered connections.
-module m_conn_accounts 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_accounts.cpp
+module m_conn_accounts 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_conn_accounts.cpp
  depends core 3
  description Limit SASL connect classes by account(s).
 module m_conn_banner 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_banner.cpp
@@ -357,13 +357,13 @@ module m_conn_join_ident 3.0.512 https://raw.githubusercontent.com/inspircd/insp
 module m_conn_matchident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_matchident.cpp
  depends core 3
  description Allows a connect class to match by ident.
-module m_conn_require 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_require.cpp
+module m_conn_require 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_conn_require.cpp
  depends core 3
  description Allow or block connections based on multiple criteria
 module m_conn_strictsasl 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_strictsasl.cpp
  depends core 3
  description Disconnect users that fail a SASL auth.
-module m_conn_vhost 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_vhost.cpp
+module m_conn_vhost 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_conn_vhost.cpp
  depends core 3
  description Sets a connect block configured vhost on users when they connect
 module m_custompenalty 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_custompenalty.cpp
@@ -414,7 +414,7 @@ module m_join0 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contr
 module m_joinpartsno 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_joinpartsno.cpp
  description Sends server notices when a user joins/parts a channel.
  depends core 3
-module m_joinpartspam 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_joinpartspam.cpp
+module m_joinpartspam 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_joinpartspam.cpp
  depends core 3
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
 module m_jumpserver 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_jumpserver.cpp
@@ -456,7 +456,7 @@ module m_randomnotice 3.0.496 https://raw.githubusercontent.com/inspircd/inspirc
 module m_require_auth 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_require_auth.cpp
  description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 3
-module m_restrictmsg_duration 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_restrictmsg_duration.cpp
+module m_restrictmsg_duration 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_restrictmsg_duration.cpp
  depends core 3
  description Restrict messages until a user has been connected for a specified duration.
 module m_rotatelog 3.0.549 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a1c8ae3b8dd29798bfaf716790f86eca36936a53/3.0/m_rotatelog.cpp
@@ -483,9 +483,9 @@ module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/insp
 module m_totp 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_xlinetools 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_xlinetools.cpp
+module m_xlinetools 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_xlinetools.cpp
  depends core 3
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module m_zombie 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_zombie.cpp
+module m_zombie 3.0.556 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6f4d6c91c00182606b6809772f731245395d480a/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
