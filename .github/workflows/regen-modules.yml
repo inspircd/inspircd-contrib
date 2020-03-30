@@ -1,0 +1,20 @@
+name: Update the module list
+on:
+  - push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Regenerate the module list
+        run: ./regen-modules
+      - name: Commit the updated module list
+        run: |
+          git config --global user.name "InspIRCd Robot"
+          git config --global user.email "noreply@inspircd.org"
+          git add modules.lst
+          git commit --message "Regenerate the module list." || true
+      - name: Push the updated module list
+        run: git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.ref }}
