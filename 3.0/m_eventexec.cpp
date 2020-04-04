@@ -130,6 +130,8 @@ class ModuleEventExec
 	}
 
  public:
+	using ServerProtocol::LinkEventListener::OnServerSplit;
+
 	ModuleEventExec()
 		: ServerProtocol::LinkEventListener(this)
 	{

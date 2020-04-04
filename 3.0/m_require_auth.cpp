@@ -262,12 +262,20 @@ class ModuleRequireAuth : public Module, public Stats::EventListener
 		/*stats A does global lines, stats a local lines.*/
 		if (stats.GetSymbol() == 'A')
 		{
+#if defined INSPIRCD_VERSION_BEFORE && INSPIRCD_VERSION_BEFORE(3, 6)
 			ServerInstance->XLines->InvokeStats("GA", 210, stats);
+#else
+			ServerInstance->XLines->InvokeStats("GA", stats);
+#endif
 			return MOD_RES_DENY;
 		}
 		else if (stats.GetSymbol() == 'a')
 		{
+#if defined INSPIRCD_VERSION_BEFORE && INSPIRCD_VERSION_BEFORE(3, 6)
 			ServerInstance->XLines->InvokeStats("A", 210, stats);
+#else
+			ServerInstance->XLines->InvokeStats("A", stats);
+#endif
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;

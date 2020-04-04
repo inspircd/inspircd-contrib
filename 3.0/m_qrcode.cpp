@@ -267,7 +267,7 @@ class ModuleQRCode : public Module
 		if (name.find_first_not_of("0123456789") == std::string::npos)
 		{
 			const unsigned long value = ConvToNum<unsigned long>(name);
-			if (value >= 0 && value <= 99)
+			if (value <= 99)
 				return ConvToStr(value);
 		}
 
