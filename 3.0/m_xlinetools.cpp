@@ -184,24 +184,29 @@ namespace
 			else if (irc::find(param, mset) != std::string::npos)
 			{
 				argreason = false;
-				const std::string val = param.substr(mset.length());
-				args.set = (ServerInstance->Duration(val) ? val : "");
+				const std::string val(param.substr(mset.length()));
+				args.set = ServerInstance->IsValidDuration(val[0] == '-' ? val.substr(1) : val) ? val : "";
 			}
 			else if (irc::find(param, mduration) != std::string::npos)
 			{
 				argreason = false;
-				const std::string val = param.substr(mduration.length());
+				const std::string val(param.substr(mduration.length()));
 				// 0 is a special case here, to match no expires
 				if (val == "0")
+				{
 					args.duration = val;
+				}
 				else
-					args.duration = (ServerInstance->Duration(val) ? val : "");
+				{
+					bool prefixed = val[0] == '-' || val[0] == '+';
+					args.duration = ServerInstance->IsValidDuration(prefixed ? val.substr(1) : val) ? val : "";
+				}
 			}
 			else if (irc::find(param, mexpires) != std::string::npos)
 			{
 				argreason = false;
-				const std::string val = param.substr(mexpires.length());
-				args.expires = (ServerInstance->Duration(val) ? val : "");
+				const std::string val(param.substr(mexpires.length()));
+				args.expires = ServerInstance->IsValidDuration(val[0] == '+' ? val.substr(1) : val) ? val : "";
 			}
 			else
 			{
@@ -314,10 +319,11 @@ class CommandXBase : public SplitCommand
 			// Set (time ago): Prefix '-' means less than; no prefix means more than; both match exact (to the second)
 			if (!args.set.empty())
 			{
-				long set = ServerInstance->Time() - ServerInstance->Duration(args.set);
+				bool prefixed = args.set[0] == '-';
+				long set = ServerInstance->Time() - ServerInstance->Duration(prefixed ? args.set.substr(1) : args.set);
 
-				if ((args.set[0] == '-' && xline->set_time < set) ||
-				    (args.set[0] != '-' && xline->set_time > set))
+				if ((prefixed && xline->set_time < set) ||
+				    (!prefixed && xline->set_time > set))
 				{
 					i = safei;
 					continue;
@@ -327,12 +333,13 @@ class CommandXBase : public SplitCommand
 			// Duration: Prefix '+' means longer than; '-' means shorter than; no prefix means exact; '0' matches no expiry
 			if (!args.duration.empty())
 			{
-				unsigned long duration = ServerInstance->Duration(args.duration);
+				bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
+				unsigned long duration = ServerInstance->Duration(prefixed ? args.duration.substr(1) : args.duration);
 
 				if ((xline->duration == 0 && args.duration != "0") ||
 				    (args.duration[0] == '+' && xline->duration <= duration) ||
 				    (args.duration[0] == '-' && xline->duration >= duration) ||
-				    (args.duration.find_first_not_of("+-") == 0 && xline->duration != duration))
+				    (!prefixed && xline->duration != duration))
 				{
 					i = safei;
 					continue;
@@ -342,11 +349,12 @@ class CommandXBase : public SplitCommand
 			// Expires (time ahead): Prefix '+' means more than; no prefix means less than; both match exact (to the second)
 			if (!args.expires.empty())
 			{
-				unsigned long expires = ServerInstance->Time() + ServerInstance->Duration(args.expires);
+				bool prefixed = args.expires[0] == '+';
+				unsigned long expires = ServerInstance->Time() + ServerInstance->Duration(prefixed ? args.expires.substr(1) : args.expires);
 
 				if ((xline->duration == 0) ||
-				    (args.expires[0] == '+' && xline->set_time + xline->duration < expires) ||
-				    (args.expires[0] != '+' && xline->set_time + xline->duration > expires))
+				    (prefixed && xline->set_time + xline->duration < expires) ||
+				    (!prefixed && xline->set_time + xline->duration > expires))
 				{
 					i = safei;
 					continue;
