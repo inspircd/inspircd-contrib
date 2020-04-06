@@ -36,14 +36,11 @@ enum
 
 class BanWatcher : public ModeWatcher
 {
-	ChanModeReference& banmode;
-
  public:
 	char extbanchar;
 
-	BanWatcher(Module* parent, ChanModeReference& moderef)
+	BanWatcher(Module* parent)
 		: ModeWatcher(parent, "ban", MODETYPE_CHANNEL)
-		, banmode(moderef)
 	{
 	}
 
@@ -100,7 +97,6 @@ class BanWatcher : public ModeWatcher
 
 class ModuleExtBanRedirect : public Module
 {
-	ChanModeReference banmode;
 	ChanModeReference limitmode;
 	ChanModeReference limitredirect;
 	BanWatcher banwatcher;
@@ -108,10 +104,9 @@ class ModuleExtBanRedirect : public Module
 
  public:
 	ModuleExtBanRedirect()
-		: banmode(this, "ban")
-		, limitmode(this, "limit")
+		: limitmode(this, "limit")
 		, limitredirect(this, "redirect")
-		, banwatcher(this, banmode)
+		, banwatcher(this)
 		, active(false)
 	{
 	}
