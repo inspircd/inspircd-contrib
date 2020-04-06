@@ -1,0 +1,67 @@
+name: macOS CI
+on:
+  push:
+    paths:
+      - '3.0/*'
+  pull_request:
+    paths:
+      - '3.0/*'
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      CXXFLAGS: -std=${{ matrix.standard }} -Wno-error=deprecated-declarations
+      INSPIRCD_DEBUG: 3
+      INSPIRCD_VERBOSE: 1
+    steps:
+      - name: Install dependencies
+        run: |
+          brew update
+          brew upgrade
+          brew install pkg-config
+      - name: Checkout InspIRCd@insp3
+        uses: actions/checkout@v2
+        with:
+          repository: 'inspircd/inspircd'
+          ref: 'insp3'
+          path: 'inspircd'
+      - name: Checkout self
+        uses: actions/checkout@v2
+        with:
+          path: 'contrib'
+      - name: (Pull Request) Set the build target to only the changed modules
+        if: github.event_name == 'pull_request'
+        run: |
+          cd contrib
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          echo ::set-env name=INSPIRCD_TARGET::$( \
+          git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} | \
+          for f in `cat`; do if [[ "$f" = "3.0/"*".cpp" ]]; \
+          then echo "$(basename $f .cpp) "; fi; done)
+      - name: (Push/PR Fallback) Set the build target to all of the modules
+        if: github.event_name == 'push' || env.INSPIRCD_TARGET == ''
+        run: echo ::set-env name=INSPIRCD_TARGET::$(for f in contrib/3.0/*; do echo "$(basename $f .cpp) "; done)
+      - name: Symlink the modules
+        run: |
+          cd inspircd/src/modules
+          ln -s ../../../contrib/3.0/* .
+      - name: Check for additional dependencies
+        run: |
+          cd inspircd
+          echo ::set-env name=PACKAGES::$( \
+          for f in ../contrib/3.0/*; do if [[ "$INSPIRCD_TARGET" = *"$(basename $f .cpp)"* ]]; \
+          then ./tools/directive $f PackageInfo; fi; done)
+      - name: Install additional dependencies
+        if: env.PACKAGES != ''
+        run: brew install ${{ env.PACKAGES }}
+      - name: Build the modules
+        run: |
+          cd inspircd
+          ./configure --development --disable-auto-extras
+          make --jobs $(($(sysctl -n hw.activecpu) + 1))
+    strategy:
+      fail-fast: false
+      matrix:
+        standard:
+          - gnu++98
+          - c++14
