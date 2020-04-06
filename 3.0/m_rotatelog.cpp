@@ -77,7 +77,7 @@ class ModuleRotateLog : public Module
 		timer->SetInterval(tag->getDuration("period", 3600, 60));
 	}
 
-	void OnBackgroundTimer(time_t)
+	void OnBackgroundTimer(time_t) CXX11_OVERRIDE
 	{
 		if (!signaled)
 			return;

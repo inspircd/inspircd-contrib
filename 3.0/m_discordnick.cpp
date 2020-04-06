@@ -63,14 +63,14 @@ class ModuleDiscordNick : public Module
 		ServerInstance->IsNick = origisnick;
 	}
 
-	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated)
+	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
 	{
 		if (validated && command == "NICK" && parameters[0] != "0")
 			parameters[0].append(InspIRCd::Format("#%04ld", ext.get(user)));
 		return MOD_RES_PASSTHRU;
 	}
 
-	void OnUserPostInit(LocalUser* user)
+	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
 	{
 		ext.set(user, ServerInstance->GenRandomInt(9999));
 	}

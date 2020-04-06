@@ -137,7 +137,7 @@ class ModuleEventExec
 	{
 	}
 
-	void ReadConfig(ConfigStatus& status)
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		EventMap newevents;
 		ConfigTagList tags = ServerInstance->Config->ConfTags("eventexec");

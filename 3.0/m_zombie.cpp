@@ -288,7 +288,7 @@ private:
 		dirtysplit = tag->getBool("dirtysplit", true);
 	}
 
-	void OnBackgroundTimer(time_t)
+	void OnBackgroundTimer(time_t) CXX11_OVERRIDE
 	{
 		// Clean up any dead timers.
 		for (ZombieServerMap::iterator siter = servers.begin(); siter != servers.end(); )
