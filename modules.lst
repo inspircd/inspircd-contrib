@@ -372,16 +372,16 @@ module m_custompenalty 3.0.543 https://raw.githubusercontent.com/inspircd/inspir
 module m_customtags 3.0.545 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e23bc33536fe34c5e89c8c15082299be0499d6f9/3.0/m_customtags.cpp
  depends core 3
  description Allows services to add custom tags to messages sent by clients.
-module m_discordnick 3.0.547 https://raw.githubusercontent.com/inspircd/inspircd-contrib/db954d02a36666d2a4162360e9e7244197d08d1f/3.0/m_discordnick.cpp
+module m_discordnick 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_discordnick.cpp
  depends core 3
  description Adds support for Discord-style #1234 nick tags.
-module m_eventexec 3.0.563 https://raw.githubusercontent.com/inspircd/inspircd-contrib/faddc5d9c5e418447cfd7e52f13dacaf4be1f9d6/3.0/m_eventexec.cpp
+module m_eventexec 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_eventexec.cpp
  description Executes commands when a specified event occurs.
  depends core 3
 module m_extbanbanlist 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_extbanbanlist.cpp
  depends core 3
  description Provides extban 'b' - Ban list from another channel
-module m_extbanredirect 3.0.518 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b49a95f57e6991837eaf4fdc0344d701270f3d0d/3.0/m_extbanredirect.cpp
+module m_extbanredirect 3.0.566 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0f664e990c4242ee5b47b4f7839fde829cb72bde/3.0/m_extbanredirect.cpp
  depends core 3
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
 module m_extbanregex 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_extbanregex.cpp
@@ -459,7 +459,7 @@ module m_require_auth 3.0.563 https://raw.githubusercontent.com/inspircd/inspirc
 module m_restrictmsg_duration 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_restrictmsg_duration.cpp
  depends core 3
  description Restrict messages until a user has been connected for a specified duration.
-module m_rotatelog 3.0.549 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a1c8ae3b8dd29798bfaf716790f86eca36936a53/3.0/m_rotatelog.cpp
+module m_rotatelog 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_rotatelog.cpp
  depends core 3
  description Rotates the log files after a defined period.
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
@@ -486,6 +486,6 @@ module m_totp 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_xlinetools 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_xlinetools.cpp
  depends core 3
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module m_zombie 3.0.556 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6f4d6c91c00182606b6809772f731245395d480a/3.0/m_zombie.cpp
+module m_zombie 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
