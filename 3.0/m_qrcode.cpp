@@ -19,6 +19,12 @@
 /// $CompilerFlags: find_compiler_flags("libqrencode")
 /// $LinkerFlags: find_linker_flags("libqrencode")
 
+/// $PackageInfo: require_system("arch") qrencode pkgconf
+/// $PackageInfo: require_system("centos") qrencode-devel pkgconfig
+/// $PackageInfo: require_system("darwin") qrencode pkg-config
+/// $PackageInfo: require_system("debian") libqrencode3 libqrencode-dev pkg-config
+/// $PackageInfo: require_system("ubuntu") libqrencode3 libqrencode-dev pkg-config
+
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDesc: Provides support for QR code generation via the /QRCODE command.
@@ -29,7 +35,26 @@
 #include "inspircd.h"
 #include "modules/ssl.h"
 
+#ifdef __GNUC__
+# pragma GCC diagnostic push
+#endif
+
+// Fix warnings about the use of commas at end of enumerator lists on C++03.
+#if defined __clang__
+# pragma clang diagnostic ignored "-Wc++11-extensions"
+#elif defined __GNUC__
+# if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8))
+#  pragma GCC diagnostic ignored "-Wpedantic"
+# else
+#  pragma GCC diagnostic ignored "-pedantic"
+# endif
+#endif
+
 #include <qrencode.h>
+
+#ifdef __GNUC__
+# pragma GCC diagnostic pop
+#endif
 
 class QRCode
 {
