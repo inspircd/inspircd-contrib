@@ -447,7 +447,7 @@ module m_nouidnick 3.0.533 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_opmoderated 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_opmoderated.cpp
  depends core 3
  description Implements channel mode +U and extban 'u' - moderator mute
-module m_qrcode 3.0.563 https://raw.githubusercontent.com/inspircd/inspircd-contrib/faddc5d9c5e418447cfd7e52f13dacaf4be1f9d6/3.0/m_qrcode.cpp
+module m_qrcode 3.0.570 https://raw.githubusercontent.com/inspircd/inspircd-contrib/68f1ed32f4c059930061ea29c87d13bdd10ad030/3.0/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 3
 module m_randomnotice 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_randomnotice.cpp
