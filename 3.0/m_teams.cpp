@@ -19,7 +19,7 @@
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDepends: core 3
-/// $ModDesc: Allows users to be managed using services-assigned groups.
+/// $ModDesc: Allows users to be managed using services-assigned teams.
 
 
 #include "inspircd.h"
@@ -28,59 +28,59 @@
 enum
 {
 	// InspIRCd specific.
-	RPL_WHOISGROUPS = 695
+	RPL_WHOISTEAMS = 695
 };
 
-// Represents a list of groups that a user is a member of.
-typedef insp::flat_set<std::string, irc::insensitive_swo> GroupList;
+// Represents a list of teams that a user is a member of.
+typedef insp::flat_set<std::string, irc::insensitive_swo> TeamList;
 
-class GroupExt : public SimpleExtItem<GroupList>
+class TeamExt : public SimpleExtItem<TeamList>
 {
  public:
-	GroupExt(Module* Creator)
-		: SimpleExtItem<GroupList>("groups", ExtensionItem::EXT_USER, Creator)
+	TeamExt(Module* Creator)
+		: SimpleExtItem<TeamList>("teams", ExtensionItem::EXT_USER, Creator)
 	{
 	}
 
 	std::string ToNetwork(const Extensible* container, void* item) const CXX11_OVERRIDE
 	{
-		GroupList* grouplist = static_cast<GroupList*>(item);
-		return grouplist ? stdalgo::string::join(*grouplist) : "";
+		TeamList* teamlist = static_cast<TeamList*>(item);
+		return teamlist ? stdalgo::string::join(*teamlist) : "";
 	}
 
 	void FromNetwork(Extensible* container, const std::string& value) CXX11_OVERRIDE
 	{
-		// Create a new group list from the input.
-		GroupList* newgrouplist = new GroupList();
-		irc::spacesepstream groupstream(value);
-		for (std::string groupname; groupstream.GetToken(groupname); )
-			newgrouplist->insert(groupname);
+		// Create a new team list from the input.
+		TeamList* newteamlist = new TeamList();
+		irc::spacesepstream teamstream(value);
+		for (std::string teamname; teamstream.GetToken(teamname); )
+			newteamlist->insert(teamname);
 
-		if (newgrouplist->empty())
+		if (newteamlist->empty())
 		{
-			// If the new group list is empty then delete both the new and old group lists.
+			// If the new team list is empty then delete both the new and old team lists.
 			unset(container);
-			delete newgrouplist;
+			delete newteamlist;
 		}
 		else
 		{
-			// Otherwise install the new group list.
-			set(container, newgrouplist);
+			// Otherwise install the new team list.
+			set(container, newteamlist);
 		}
 	}
 };
 
-class ModuleGroups
+class ModuleTeams
 	: public Module
 	, public Whois::EventListener
 {
  private:
 	bool active;
-	GroupExt ext;
-	std::string groupchar;
+	TeamExt ext;
+	std::string teamchar;
 
 	size_t ExecuteCommand(LocalUser* source, const char* cmd, CommandBase::Params& parameters,
-		const std::string& group, size_t nickindex)
+		const std::string& team, size_t nickindex)
 	{
 		size_t targets = 0;
 		std::string command(cmd);
@@ -91,8 +91,8 @@ class ModuleGroups
 			if (user->registered != REG_ALL)
 				continue;
 	
-			GroupList* groups = ext.get(user);
-			if (!groups || groups->count(group))
+			TeamList* teams = ext.get(user);
+			if (!teams || teams->count(team))
 				continue;
 
 			parameters[nickindex] = user->nick;
@@ -107,31 +107,31 @@ class ModuleGroups
 		return targets;
 	}
 
-	bool IsGroup(const std::string& param, std::string& group)
+	bool IsTeam(const std::string& param, std::string& team)
 	{
-		if (param.length() <= groupchar.length() || param.compare(0, groupchar.length(), groupchar) != 0)
+		if (param.length() <= teamchar.length() || param.compare(0, teamchar.length(), teamchar) != 0)
 			return false;
 
-		group.assign(param, groupchar.length() - 1, std::string::npos);
+		team.assign(param, teamchar.length() - 1, std::string::npos);
 		return true;
 	}
 
 	ModResult HandleInvite(LocalUser* source, CommandBase::Params& parameters)
 	{
-		// Check we have enough parameters and a valid group.
-		std::string group;
-		if (parameters.size() < 2 || !IsGroup(parameters[0], group))
+		// Check we have enough parameters and a valid team.
+		std::string team;
+		if (parameters.size() < 2 || !IsTeam(parameters[0], team))
 			return MOD_RES_PASSTHRU;
 
 		active = true;
-		size_t penalty = ExecuteCommand(source, "INVITE", parameters, group, 0);
+		size_t penalty = ExecuteCommand(source, "INVITE", parameters, team, 0);
 		source->CommandFloodPenalty += std::min(penalty, 5UL);
 		active = false;
 		return MOD_RES_DENY;
 	}
 
  public:
-	ModuleGroups()
+	ModuleTeams()
 		: Whois::EventListener(this)
 		, active(false)
 		, ext(this)
@@ -140,26 +140,26 @@ class ModuleGroups
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
-		ConfigTag* tag = ServerInstance->Config->ConfValue("groups");
-		groupchar = tag->getString("prefix", "^", 1);
+		ConfigTag* tag = ServerInstance->Config->ConfValue("teams");
+		teamchar = tag->getString("prefix", "^", 1);
 	}
 
 	void On005Numeric(std::map<std::string, std::string>& tokens) CXX11_OVERRIDE
 	{
-		tokens["GROUPCHAR"] = groupchar;
+		tokens["TEAMCHAR"] = teamchar;
 	}
 
 	ModResult OnCheckBan(User* user, Channel* channel, const std::string& mask) CXX11_OVERRIDE
 	{
-		if (mask.length() <= 2 || mask[0] != 'g' || mask[1] != ':')
+		if (mask.length() <= 2 || mask[0] != 't' || mask[1] != ':')
 			return MOD_RES_PASSTHRU;
 
-		GroupList* groups = ext.get(user);
-		if (!groups)
+		TeamList* teams = ext.get(user);
+		if (!teams)
 			return MOD_RES_PASSTHRU;
 
 		const std::string submask = mask.substr(2);
-		for (GroupList::const_iterator iter = groups->begin(); iter != groups->end(); ++iter)
+		for (TeamList::const_iterator iter = teams->begin(); iter != teams->end(); ++iter)
 		{
 			if (InspIRCd::Match(*iter, submask))
 				return MOD_RES_DENY;
@@ -181,18 +181,18 @@ class ModuleGroups
 
 	void OnWhois(Whois::Context& whois) CXX11_OVERRIDE
 	{
-		GroupList* groups = ext.get(whois.GetTarget());
-		if (groups)
+		TeamList* teams = ext.get(whois.GetTarget());
+		if (teams)
 		{
-			const std::string groupstr = stdalgo::string::join(*groups);
-			whois.SendLine(RPL_WHOISGROUPS, groupstr, "is a member of these groups");
+			const std::string teamstr = stdalgo::string::join(*teams);
+			whois.SendLine(RPL_WHOISTEAMS, teamstr, "is a member of these teams");
 		}
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows users to be managed using services-assigned groups", VF_OPTCOMMON);
+		return Version("Allows users to be managed using services-assigned teams", VF_OPTCOMMON);
 	}
 };
 
-MODULE_INIT(ModuleGroups)
+MODULE_INIT(ModuleTeams)
