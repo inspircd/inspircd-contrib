@@ -290,8 +290,10 @@ class CommandXBase : public SplitCommand
 			}
 
 			// CIDR and glob mask matching, with negation
+			// MatchCIDR takes the first argument as a non-CIDR address, so run it both ways.
 			negate = args.mask[0] == '!';
-			match = InspIRCd::MatchCIDR(xline->Displayable(), (negate ? args.mask.substr(1) : args.mask));
+			match = InspIRCd::MatchCIDR(xline->Displayable(), (negate ? args.mask.substr(1) : args.mask)) ||
+				InspIRCd::MatchCIDR((negate ? args.mask.substr(1) : args.mask), xline->Displayable());
 			if ((negate && match) || (!negate && !match))
 			{
 				i = safei;
