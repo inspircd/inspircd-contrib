@@ -56,7 +56,6 @@ class CommandSamove : public Command
 		const std::string& nickname = parameters[0];
 		const std::string& from_channel = parameters[1];
 		const std::string& to_channel = parameters[2];
-		std::string msg = std::string();
 
 		User* dest = ServerInstance->FindNick(nickname);
 		if ((dest) && (dest->registered == REG_ALL))
@@ -82,13 +81,13 @@ class CommandSamove : public Command
 			Channel* from_chan = ServerInstance->FindChan(from_channel);
 			if (!(from_chan))
 			{
-				user->WriteRemoteNotice("*** invalid 'from channel '" + from_channel);
+				user->WriteRemoteNotice("*** invalid 'from channel' " + from_channel);
 				return CMD_FAILURE;
 			}
 			Channel* to_chan = ServerInstance->FindChan(to_channel);
 			if (!(to_chan))
 			{
-				user->WriteRemoteNotice("*** invalid 'to channel '" + to_channel);
+				user->WriteRemoteNotice("*** invalid 'to channel' " + to_channel);
 				return CMD_FAILURE;
 			}
 
@@ -109,6 +108,7 @@ class CommandSamove : public Command
 
 				if ((from_chan) && (from_chan->HasUser(dest))) 
 				{
+					std::string msg; //PartUser doesn't accept a const reference atm
 					from_chan->PartUser(dest, msg);
 				}
 
@@ -157,7 +157,7 @@ class ModuleSamove : public Module
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Adds the /SAMOVE command which allows server operators to force move users from one channel to another.");
+		return Version("Adds the /SAMOVE command which allows server operators to force move users from one channel to another.", VF_OPTCOMMON);
 	}
 };
 
