@@ -483,7 +483,7 @@ module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/insp
 module m_totp 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_xlinetools 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_xlinetools.cpp
+module m_xlinetools 3.0.575 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bbbe67eb4148d919c3bd8d8fdeb978f6f9633003/3.0/m_xlinetools.cpp
  depends core 3
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
 module m_zombie 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_zombie.cpp
