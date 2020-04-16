@@ -321,6 +321,9 @@ module m_xmlsocket 2.0.386 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antirandom 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
+module m_autoaway 3.0.580 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6a0e23b52f692022cf8b352ef329511ec8d89a53/3.0/m_autoaway.cpp
+ depends core 3
+ description Automatically marks idle users as away.
 module m_autodrop 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_autodrop.cpp
  depends core 3
  description Allows clients to be automatically dropped if they execute certain commands before registration.
@@ -399,9 +402,6 @@ module m_geocmd 3.0.560 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
-module m_groups 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_groups.cpp
- depends core 3
- description Allows users to be managed using services-assigned groups.
 module m_hideidle 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_hideidle.cpp
  depends core 3
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
@@ -480,6 +480,9 @@ module m_stats_unlinked 3.0.543 https://raw.githubusercontent.com/inspircd/inspi
 module m_svsoper 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_svsoper.cpp
  depends core 3
  description Allows services to forcibly oper a user.
+module m_teams 3.0.579 https://raw.githubusercontent.com/inspircd/inspircd-contrib/af35e03ad12c5a3c50c41e344e401385f3c5b169/3.0/m_teams.cpp
+ depends core 3
+ description Allows users to be managed using services-assigned teams.
 module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_timedstaticquit.cpp
  depends core 3
  description Replaces the quit message of a quitting user if they have been connected for less than a configurable time
