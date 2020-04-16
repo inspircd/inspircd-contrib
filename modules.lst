@@ -321,7 +321,7 @@ module m_xmlsocket 2.0.386 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antirandom 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
-module m_autoaway 3.0.580 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6a0e23b52f692022cf8b352ef329511ec8d89a53/3.0/m_autoaway.cpp
+module m_autoaway 3.0.582 https://raw.githubusercontent.com/inspircd/inspircd-contrib/508950f2a97774873fd765464c5dc2ca96bf7792/3.0/m_autoaway.cpp
  depends core 3
  description Automatically marks idle users as away.
 module m_autodrop 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_autodrop.cpp
