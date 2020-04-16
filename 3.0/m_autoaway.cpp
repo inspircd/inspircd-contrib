@@ -36,6 +36,7 @@ enum
 class ModuleAutoAway
 	: public Module
 	, public Timer
+	, Away::EventListener
 {
  private:
 	LocalIntExt autoaway;
@@ -47,6 +48,7 @@ class ModuleAutoAway
  public:
 	ModuleAutoAway()
 		: Timer(0, true)
+		, Away::EventListener(this)
 		, autoaway("autoaway", ExtensionItem::EXT_CHANNEL, this)
 		, awayevprov(this)
 		, setting(false)
