@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013-2016 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2013-2020 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -51,7 +51,7 @@ class ModuleCustomPenalty : public Module
 	}
 
  public:
-	void init() CXX11_OVERRIDE
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		SetPenalties();
 	}
