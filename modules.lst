@@ -143,9 +143,6 @@ module m_fullversion 2.0.196 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geoipban 2.0.426 https://raw.githubusercontent.com/inspircd/inspircd-contrib/33d64b6d469c024d3ff3220db7541d358f978e7c/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
  depends core 2.0
-module m_groups 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_groups.cpp
- depends core 2.0
- description Allows users to be managed using services-assigned groups.
 module m_hash_gnutls 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
@@ -297,6 +294,9 @@ module m_stun 2.0.468 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_svsoper 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_svsoper.cpp
  description Allows services to forcibly oper a user.
  depends core 2.0
+module m_teams 2.0.588 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4cf9f3752421e335800d4ed0076d4cae71bc99ad/2.0/m_teams.cpp
+ depends core 2.0
+ description Allows users to be managed using services-assigned teams.
 module m_tgchange 2.0.463 https://raw.githubusercontent.com/inspircd/inspircd-contrib/27ac0016f14d22471b41cd8749f488d82d30b8f9/2.0/m_tgchange.cpp
  description Implements "target change" detection to help prevent spam bots
  depends core 2.0
