@@ -19,7 +19,7 @@
 /* $ModAuthor: Sadie Powell */
 /* $ModAuthorMail: sadie@witchery.services */
 /* $ModDepends: core 2.0 */
-/* $ModDesc: Allows users to be managed using services-assigned groups. */
+/* $ModDesc: Allows users to be managed using services-assigned teams. */
 
 
 #include "inspircd.h"
@@ -27,38 +27,38 @@
 enum
 {
 	// InspIRCd specific.
-	RPL_WHOISGROUPS = 695
+	RPL_WHOISTEAMS = 695
 };
 
-// Represents a list of groups that a user is a member of.
-typedef std::vector<std::string> GroupList;
+// Represents a list of teams that a user is a member of.
+typedef std::vector<std::string> TeamList;
 
-class GroupExt : public ExtensionItem
+class TeamExt : public ExtensionItem
 {
  public:
-	GroupExt(Module* Creator)
-		: ExtensionItem("groups", Creator)
+	TeamExt(Module* Creator)
+		: ExtensionItem("teams", Creator)
 	{
 	}
 
 	void free(void* item)
 	{
-		delete static_cast<GroupList*>(item);
+		delete static_cast<TeamList*>(item);
 	}
 
-	GroupList* get(const Extensible* container) const
+	TeamList* get(const Extensible* container) const
 	{
-		return static_cast<GroupList*>(get_raw(container));
+		return static_cast<TeamList*>(get_raw(container));
 	}
 
 	std::string serialize(SerializeFormat format, const Extensible* container, void* item) const
 	{
-		GroupList* grouplist = static_cast<GroupList*>(item);
-		if (!grouplist)
+		TeamList* teamlist = static_cast<TeamList*>(item);
+		if (!teamlist)
 			return "";
 
 		std::string buffer;
-		for (GroupList::const_iterator iter = grouplist->begin(); iter != grouplist->end(); ++iter)
+		for (TeamList::const_iterator iter = teamlist->begin(); iter != teamlist->end(); ++iter)
 		{
 			if (!buffer.empty())
 				buffer.push_back(' ');
@@ -69,35 +69,35 @@ class GroupExt : public ExtensionItem
 
 	void unserialize(SerializeFormat format, Extensible* container, const std::string& value)
 	{
-		// Create a new group list from the input.
-		GroupList* newgrouplist = new GroupList();
-		irc::spacesepstream groupstream(value);
-		for (std::string groupname; groupstream.GetToken(groupname); )
-			newgrouplist->push_back(groupname);
+		// Create a new team list from the input.
+		TeamList* newteamlist = new TeamList();
+		irc::spacesepstream teamstream(value);
+		for (std::string teamname; teamstream.GetToken(teamname); )
+			newteamlist->push_back(teamname);
 
-		if (newgrouplist->empty())
+		if (newteamlist->empty())
 		{
-			// If the new group list is empty then delete both the new and old group lists.
-			void* oldgrouplist = unset_raw(container);
-			free(oldgrouplist);
-			free(newgrouplist);
+			// If the new team list is empty then delete both the new and old team lists.
+			void* oldteamlist = unset_raw(container);
+			free(oldteamlist);
+			free(newteamlist);
 		}
 		else
 		{
-			// Otherwise install the new group list.
-			void* oldgrouplist = set_raw(container, newgrouplist);
-			free(oldgrouplist);
+			// Otherwise install the new team list.
+			void* oldteamlist = set_raw(container, newteamlist);
+			free(oldteamlist);
 		}
 	}
 };
 
-class ModuleGroups : public Module
+class ModuleTeams : public Module
 {
  private:
-	GroupExt ext;
+	TeamExt ext;
 
  public:
-	ModuleGroups()
+	ModuleTeams()
 		: ext(this)
 	{
 	}
@@ -111,15 +111,15 @@ class ModuleGroups : public Module
 
 	ModResult OnCheckBan(User* user, Channel* channel, const std::string& mask)
 	{
-		if (mask.length() <= 2 || mask[0] != 'g' || mask[1] != ':')
+		if (mask.length() <= 2 || mask[0] != 't' || mask[1] != ':')
 			return MOD_RES_PASSTHRU;
 
-		GroupList* groups = ext.get(user);
-		if (!groups)
+		TeamList* teams = ext.get(user);
+		if (!teams)
 			return MOD_RES_PASSTHRU;
 
 		const std::string submask = mask.substr(2);
-		for (GroupList::const_iterator iter = groups->begin(); iter != groups->end(); ++iter)
+		for (TeamList::const_iterator iter = teams->begin(); iter != teams->end(); ++iter)
 		{
 			if (InspIRCd::Match(*iter, submask))
 				return MOD_RES_DENY;
@@ -130,19 +130,19 @@ class ModuleGroups : public Module
 
 	void OnWhois(User* source, User* dest)
 	{
-		GroupList* groups = ext.get(dest);
-		if (groups)
+		TeamList* teams = ext.get(dest);
+		if (teams)
 		{
-			const std::string groupstr = irc::stringjoiner(" ", *groups, 0, groups->size() - 1).GetJoined();
-			ServerInstance->SendWhoisLine(source, dest, RPL_WHOISGROUPS, "%s %s %s :is a member of these groups",
-				source->nick.c_str(), dest->nick.c_str(), groupstr.c_str());
+			const std::string teamstr = irc::stringjoiner(" ", *teams, 0, teams->size() - 1).GetJoined();
+			ServerInstance->SendWhoisLine(source, dest, RPL_WHOISTEAMS, "%s %s %s :is a member of these teams",
+				source->nick.c_str(), dest->nick.c_str(), teamstr.c_str());
 		}
 	}
 
 	Version GetVersion()
 	{
-		return Version("Allows users to be managed using services-assigned groups", VF_OPTCOMMON);
+		return Version("Allows users to be managed using services-assigned teams", VF_OPTCOMMON);
 	}
 };
 
-MODULE_INIT(ModuleGroups)
+MODULE_INIT(ModuleTeams)
