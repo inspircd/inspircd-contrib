@@ -27,6 +27,12 @@
 /// $CompilerFlags: find_compiler_flags("gnutls")
 /// $LinkerFlags: find_linker_flags("gnutls" "-lgnutls")
 
+/// $PackageInfo: require_system("arch") gnutls pkgconf
+/// $PackageInfo: require_system("centos") gnutls-devel pkgconfig
+/// $PackageInfo: require_system("darwin") gnutls pkg-config
+/// $PackageInfo: require_system("debian") gnutls-bin libgnutls28-dev pkg-config
+/// $PackageInfo: require_system("ubuntu") gnutls-bin libgnutls-dev pkg-config
+
 
 #include "inspircd.h"
 #include "modules/hash.h"
