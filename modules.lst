@@ -357,9 +357,9 @@ module m_conn_join_geoip 3.0.512 https://raw.githubusercontent.com/inspircd/insp
 module m_conn_join_ident 3.0.512 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bc02b957bcd9a738592695a0e58a9dec7cd4e5c6/3.0/m_conn_join_ident.cpp
  depends core 3
  description Autojoin users to a channel based on their ident.
-module m_conn_matchident 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_conn_matchident.cpp
+module m_conn_matchident 3.0.590 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4693a05316ea58a9b2749862e72cda615edb8505/3.0/m_conn_matchident.cpp
  depends core 3
- description Allows a connect class to match by ident.
+ description Allows a connect class to match by ident(s).
 module m_conn_require 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_conn_require.cpp
  depends core 3
  description Allow or block connections based on multiple criteria
