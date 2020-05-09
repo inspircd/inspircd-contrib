@@ -18,9 +18,9 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModConfig: <connect matchident="myIdent">
+/// $ModConfig: <connect matchident="myIdent thatIdent ~thisIdent">
 /// $ModDepends: core 3
-/// $ModDesc: Allows a connect class to match by ident.
+/// $ModDesc: Allows a connect class to match by ident(s).
 
 
 #include "inspircd.h"
@@ -30,7 +30,7 @@ class ModuleConnMatchIdent : public Module
  public:
 	void Prioritize() CXX11_OVERRIDE
 	{
-		/* Go after requireident, you better be using that with matching to ident */
+		// Go after requireident, which is recommended but not required.
 		Module* requireident = ServerInstance->Modules->Find("m_ident.so");
 		ServerInstance->Modules->SetPriority(this, I_OnSetConnectClass, PRIORITY_AFTER, requireident);
 	}
@@ -38,16 +38,22 @@ class ModuleConnMatchIdent : public Module
 	ModResult OnSetConnectClass(LocalUser* user, ConnectClass* connclass) CXX11_OVERRIDE
 	{
 		const std::string matchident = connclass->config->getString("matchident");
+		if (matchident.empty())
+			return MOD_RES_PASSTHRU;
 
-		if (!matchident.empty() && !InspIRCd::Match(user->ident, matchident))
-			return MOD_RES_DENY;
+		irc::spacesepstream ss(matchident);
+		for (std::string token; ss.GetToken(token); )
+		{
+			if (InspIRCd::Match(user->ident, token))
+				return MOD_RES_PASSTHRU;
+		}
 
-		return MOD_RES_PASSTHRU;
+		return MOD_RES_DENY;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows a connect class to match by ident.");
+		return Version("Allows a connect class to match by ident(s).");
 	}
 };
 
