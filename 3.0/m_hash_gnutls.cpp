@@ -75,7 +75,7 @@ class ModuleHashGnuTLS : public Module
 
  public:
 	ModuleHashGnuTLS()
-		: md5(this, "hash", 16, 64, GNUTLS_DIG_MD5)
+		: md5(this, "hash/md5", 16, 64, GNUTLS_DIG_MD5)
 		, sha1(this, "hash/sha1", 20, 64, GNUTLS_DIG_SHA1)
 		, sha256(this, "hash/sha256", 32, 64, GNUTLS_DIG_SHA256)
 		, sha512(this, "hash/sha512", 64, 128, GNUTLS_DIG_SHA512)
