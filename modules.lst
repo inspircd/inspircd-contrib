@@ -387,7 +387,7 @@ module m_extbanbanlist 3.0.554 https://raw.githubusercontent.com/inspircd/inspir
 module m_extbanredirect 3.0.566 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0f664e990c4242ee5b47b4f7839fde829cb72bde/3.0/m_extbanredirect.cpp
  depends core 3
  description Provide extended ban <extbanchar>:<chan>:<mask> to redirect users to another channel
-module m_extbanregex 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_extbanregex.cpp
+module m_extbanregex 3.0.598 https://raw.githubusercontent.com/inspircd/inspircd-contrib/901f366637f96bd5d8c37f2a788c278a5e1d3675/3.0/m_extbanregex.cpp
  depends core 3
  description Provides extban 'x' - Regex matching to n!u@h\sr
 module m_fakelist 3.0.522 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c521cac7ad3d102ec7e8068ac389b2ebdd55a986/3.0/m_fakelist.cpp
@@ -413,7 +413,7 @@ module m_hideidle 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_identmeta 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_identmeta.cpp
  depends core 3
  description Stores the ident given in USER as metadata.
-module m_join0 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_join0.cpp
+module m_join0 3.0.599 https://raw.githubusercontent.com/inspircd/inspircd-contrib/692186299f2b946253c5d4fae71a55d35928737f/3.0/m_join0.cpp
  description Implement JOIN 0 (joining 0 makes a user part all channels), RFC2812
  depends core 3
 module m_joinpartsno 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_joinpartsno.cpp
