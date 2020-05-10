@@ -142,7 +142,7 @@ class WatchedMode : public ModeWatcher
 		}
 
 		// Ensure mask is at least "!@", beyond that is up to the user
-		const std::string mask = param.substr(param.find("x:" + 2));
+		const std::string mask = param.substr(param.find("x:") + 2);
 		std::string::size_type plink = mask.find('!');
 		if (plink == std::string::npos || mask.find('@', plink) == std::string::npos)
 		{
