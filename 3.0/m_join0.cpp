@@ -31,10 +31,13 @@ class ModuleJoinZero : public Module
 	{
 		if (validated && command == "JOIN" && (parameters.size() == 1) && parameters[0] == "0")
 		{
-			User::ChanList cl(user->chans);
-			for(User::ChanList::iterator ci=cl.begin();ci != cl.end(); ++ci) {
+			for (User::ChanList::iterator i = user->chans.begin(); i != user->chans.end(); )
+			{
+				Channel* chan = (*i)->chan;
+				++i;
+
 				std::string reason("Left all channels");
-				(*ci)->chan->PartUser(user, reason);
+				chan->PartUser(user, reason);
 			}
 			return MOD_RES_DENY;
 		}
