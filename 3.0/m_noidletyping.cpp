@@ -70,8 +70,9 @@ class ModuleNoIdleTyping
 
 	ModResult OnUserPreTagMessage(User* user, const MessageTarget& target, CTCTags::TagMessageDetails& details) CXX11_OVERRIDE
 	{
-		ClientProtocol::TagMap::const_iterator iter = details.tags_out.find("+draft/typing");
-		if (iter == details.tags_out.end())
+		ClientProtocol::TagMap::const_iterator iter = details.tags_out.find("+typing");
+		ClientProtocol::TagMap::const_iterator draftiter = details.tags_out.find("+draft/typing");
+		if (iter == details.tags_out.end() && draftiter == details.tags_out.end())
 			return MOD_RES_PASSTHRU;
 
 		switch (target.type)
