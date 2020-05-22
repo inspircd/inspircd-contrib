@@ -37,6 +37,17 @@
 #include "inspircd.h"
 #include "modules/hash.h"
 
+// Fix warnings about the use of commas at end of enumerator lists on C++03.
+#if defined __clang__
+# pragma clang diagnostic ignored "-Wc++11-extensions"
+#elif defined __GNUC__
+# if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 8))
+#  pragma GCC diagnostic ignored "-Wpedantic"
+# else
+#  pragma GCC diagnostic ignored "-pedantic"
+# endif
+#endif
+
 #include <gnutls/gnutls.h>
 #include <gnutls/crypto.h>
 
