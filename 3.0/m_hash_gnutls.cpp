@@ -69,9 +69,10 @@ class GnuTLSHash : public HashProvider
 
 	std::string GenerateRaw(const std::string& data) CXX11_OVERRIDE
 	{
-		char digest[this->out_size];
-		gnutls_hash_fast(algo, data.data(), data.length(), (unsigned char*)digest);
-		return std::string(digest, this->out_size);
+		std::vector<char> digest;
+		digest.reserve(this->out_size);
+		gnutls_hash_fast(algo, data.data(), data.length(), &digest[0]);
+		return std::string(&digest[0], this->out_size);
 	}
 };
 
