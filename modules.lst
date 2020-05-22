@@ -345,6 +345,9 @@ module m_checkbans 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_close 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_close.cpp
  depends core 3
  description Provides the ability to close unregistered connections.
+module m_complete 3.0.602 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3eaf938f32660715c47b8ff183f3af344a8b3ab2/3.0/m_complete.cpp
+ depends core 3
+ description Allows clients to automatically complete commands.
 module m_conn_accounts 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_conn_accounts.cpp
  depends core 3
  description Limit SASL connect classes by account(s).
@@ -402,7 +405,7 @@ module m_geocmd 3.0.560 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
-module m_hash_gnutls 3.0.596 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9760306a2668015f0fb53d8c37b1dd1014a2c6c8/3.0/m_hash_gnutls.cpp
+module m_hash_gnutls 3.0.604 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fa4487e9bf23b75c70fbd5bc0b499f6b957fdb0a/3.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 2.0
  conflicts m_md5.so
@@ -440,7 +443,7 @@ module m_nickdelay 3.0.527 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_nocreate 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_nocreate.cpp
  depends core 3
  description Adds oper command '/nocreate' to block a user from creating new channels
-module m_noidletyping 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_noidletyping.cpp
+module m_noidletyping 3.0.601 https://raw.githubusercontent.com/inspircd/inspircd-contrib/947236deefbbbb7b65365ceecef0b50304546f41/3.0/m_noidletyping.cpp
  depends core 3
  description Prevents typing notifications from being sent to idle users.
 module m_noprivatemode 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_noprivatemode.cpp
