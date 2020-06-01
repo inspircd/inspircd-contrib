@@ -476,7 +476,7 @@ module m_samove 3.0.577 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
  depends core 3
  description Slowly disconnects idle users for maintenance
-module m_slowmode 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_slowmode.cpp
+module m_slowmode 3.0.606 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0d04920ca15b694051ac9b66c8adccdb43895017/3.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 3
 module m_solvemsg 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_solvemsg.cpp
