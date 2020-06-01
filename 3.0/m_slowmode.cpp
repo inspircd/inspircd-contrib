@@ -169,6 +169,7 @@ class ModuleMsgFlood : public Module
 
 		Channel* dest = target.Get<Channel>();
 		if (!dest->IsModeSet(mf))
+			return MOD_RES_PASSTHRU;
 
 		if (CheckExemption::Call(exemptionprov, user, dest, "slowmode") == MOD_RES_ALLOW)
 			return MOD_RES_PASSTHRU;
