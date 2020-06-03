@@ -71,6 +71,9 @@ module m_ciphersuitejoin 2.0.245 https://raw.githubusercontent.com/inspircd/insp
 module m_classban 2.0.361 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3db8bf7af3fc55d4f8d43534f59e05a62a43963d/2.0/m_classban.cpp
  description Provides extban 'n' - Connect class ban
  depends core 2.0
+module m_clientcheck 2.0.608 https://raw.githubusercontent.com/inspircd/inspircd-contrib/af5d49b10bcbf961c75eb9f97beda328715c0af8/2.0/m_clientcheck.cpp
+ description Allows detection of clients by version string.
+ depends core 2.0
 module m_cloaking_extended 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_cloaking_extended.cpp
  description Provides masking of user hostnames (backport from v3).
  depends core 2.0
