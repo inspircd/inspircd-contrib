@@ -127,7 +127,7 @@ class ModuleClientCheck : public Module
 
 	Version GetVersion()
 	{
-		return Version("Allows detection of clients by version string.", VF_COMMON);
+		return Version("Allows detection of clients by version string.");
 	}
 };
 
