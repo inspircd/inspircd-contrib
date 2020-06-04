@@ -345,9 +345,9 @@ module m_blockinvite 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd
 module m_checkbans 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_checkbans.cpp
  depends core 3
  description Adds commands /checkbans, /testban, and /whyban
-module m_clientcheck 3.0.612 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e0876c187481fc23f2dc4ea48df7828d1fc16ef1/3.0/m_clientcheck.cpp
+module m_clientcheck 3.0.614 https://raw.githubusercontent.com/inspircd/inspircd-contrib/52c5ab5ae46a6bb8fd2a4d4adc7f22c1b022d83e/3.0/m_clientcheck.cpp
  description Allows detection of clients by version string
- depends core 2.0
+ depends core 3
 module m_close 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_close.cpp
  depends core 3
  description Provides the ability to close unregistered connections.
