@@ -20,7 +20,7 @@
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDesc: Allows detection of clients by version string
-/// $ModDepends: core 2.0
+/// $ModDepends: core 3
 
 #include "inspircd.h"
 #include "modules/regex.h"
@@ -90,6 +90,10 @@ class ModuleClientCheck : public Module
 			return MOD_RES_PASSTHRU;
 
 		if (parameters[0] != ServerInstance->Config->ServerName)
+			return MOD_RES_PASSTHRU;
+
+		const std::string prefix = parameters[1].substr(0, 9);
+		if (!irc::equals(prefix, "\1VERSION "))
 			return MOD_RES_PASSTHRU;
 
 		size_t msgsize = parameters[1].size();
