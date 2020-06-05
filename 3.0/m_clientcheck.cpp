@@ -19,17 +19,34 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModDesc: Allows detection of clients by version string
+/// $ModDesc: Allows detection of clients by version string.
 /// $ModDepends: core 3
 
 #include "inspircd.h"
 #include "modules/regex.h"
 
+enum ClientAction
+{
+	// Kill clients that match the check.
+	CA_KILL,
+
+	// Send a NOTICE to clients that match the check.
+	CA_NOTICE,
+
+	// Send a PRIVMSG to clients that match the check.
+	CA_PRIVMSG
+};
+
 struct ClientInfo
 {
-	bool kill;
-	Regex* match;
+	// The action to take against a client that matches this action.
+	ClientAction action;
+
+	// The message to give when performing the action.
 	std::string message;
+
+	// A regular expression which matches a client version string.
+	Regex* pattern;
 };
 
 class ModuleClientCheck : public Module
@@ -51,27 +68,45 @@ class ModuleClientCheck : public Module
 		const std::string engine = ServerInstance->Config->ConfValue("clientcheck")->getString("engine");
 		dynamic_reference_nocheck<RegexFactory> newrf(this, engine.empty() ? "regex": "regex/" + engine);
 		if (!newrf)
-		{
-			ServerInstance->Logs->Log(MODNAME, LOG_DEFAULT, "Error: Regex engine '%s' is not available; skipping config load...", engine.c_str());
-			return;
-		}
+			throw ModuleException("<clientcheck:engine> (" + engine + ") is not a recognised regex engine.");
 
 		std::vector<ClientInfo> newclients;
-		ConfigTagList tags = ServerInstance->Config->ConfTags("client");
+		ConfigTagList tags = ServerInstance->Config->ConfTags("clientmatch");
 		for (ConfigIter i = tags.first; i != tags.second; ++i)
 		{
 			ConfigTag* tag = i->second;
+
 			ClientInfo ci;
-			ci.kill = tag->getBool("kill");
-			ci.match = rf->Create(tag->getString("match"));
 			ci.message = tag->getString("message");
+
+			const std::string actionstr = tag->getString("action", "privmsg", 1);
+			if (irc::equals(actionstr, "kill"))
+				ci.action = CA_KILL;
+			else if (irc::equals(actionstr, "notice"))
+				ci.action = CA_NOTICE;
+			else if (irc::equals(actionstr, "privmsg"))
+				ci.action = CA_PRIVMSG;
+			else
+				throw ModuleException("<clientmatch:action>; must be set to one of 'gline', 'kill', 'notice', or 'privmsg'.");
+
+			try
+			{
+				ci.pattern = newrf->Create(tag->getString("pattern"));
+			}
+			catch (const RegexException& err)
+			{
+				throw ModuleException("<clientmatch:pattern> is not a well formed regular expression: " + err.GetReason());
+			}
+
+			ServerInstance->Logs->Log(MODNAME, LOG_DEFAULT, "Client check: %s -> %s (%s)",
+				ci.pattern->GetRegexString().c_str(),
+				actionstr.c_str(), ci.message.c_str());
 			newclients.push_back(ci);
 		}
 
 		rf.SetProvider(newrf.GetProvider());
 		std::swap(clients, newclients);
-
-}
+	}
 
 	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE
 	{
@@ -92,6 +127,9 @@ class ModuleClientCheck : public Module
 		if (parameters[0] != ServerInstance->Config->ServerName)
 			return MOD_RES_PASSTHRU;
 
+		if (parameters[1].length() < 10 || parameters[1][0] != '\x1')
+			return MOD_RES_PASSTHRU;
+
 		const std::string prefix = parameters[1].substr(0, 9);
 		if (!irc::equals(prefix, "\1VERSION "))
 			return MOD_RES_PASSTHRU;
@@ -100,22 +138,36 @@ class ModuleClientCheck : public Module
 		size_t lastpos = msgsize - (parameters[1][msgsize - 1] == '\x1' ? 9 : 10);
 
 		const std::string version = parameters[1].substr(9, lastpos);
-		for (std::vector<ClientInfo>::const_iterator iter = clients.begin(); iter != clients.end(); ++iter)
-		{
-			const ClientInfo& ci = *iter;
-			if (ci.match->Matches(version))
+			for (std::vector<ClientInfo>::const_iterator iter = clients.begin(); iter != clients.end(); ++iter)
 			{
-				if (ci.kill)
-					ServerInstance->Users->QuitUser(user, ci.message);
-				else
+				const ClientInfo& ci = *iter;
+				if (!ci.pattern->Matches(version))
+					continue;
+
+				switch (ci.action)
 				{
-					ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy,
+					case CA_KILL:
+					{
+						ServerInstance->Users->QuitUser(user, ci.message);
+						break;
+					}
+					case CA_NOTICE:
+					{
+						ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy,
+							ServerInstance->FakeClient, user, ci.message, MSG_NOTICE);
+						user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
+						break;
+					}
+					case CA_PRIVMSG:
+					{
+						ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy,
 							ServerInstance->FakeClient, user, ci.message, MSG_PRIVMSG);
-					user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
+						user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
+						break;
+					}
 				}
 				break;
 			}
-		}
 
 		ext.unset(user);
 		return MOD_RES_DENY;
