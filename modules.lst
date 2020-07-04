@@ -494,6 +494,9 @@ module m_stats_unlinked 3.0.543 https://raw.githubusercontent.com/inspircd/inspi
 module m_svsoper 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_svsoper.cpp
  depends core 3
  description Allows services to forcibly oper a user.
+module m_tag_iphost 3.0.618 https://raw.githubusercontent.com/inspircd/inspircd-contrib/29c5884f8b1dfaf58ced4c1efd2974ddf27066a7/3.0/m_tag_iphost.cpp
+ depends core 3
+ description Provides message tags for showing the IP address and real host to a privileged user.
 module m_teams 3.0.579 https://raw.githubusercontent.com/inspircd/inspircd-contrib/af35e03ad12c5a3c50c41e344e401385f3c5b169/3.0/m_teams.cpp
  depends core 3
  description Allows users to be managed using services-assigned teams.
