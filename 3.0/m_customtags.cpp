@@ -136,6 +136,7 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 	CustomTagsExtItem ext;
 	SpecialMessageMap specialmsgs;
 	std::string vendor;
+	bool broadcastvendor;
 	int whox_index;
 
 	CustomTags(Module* mod)
@@ -160,8 +161,19 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 		if (!tags)
 			return;
 
+		std::string tagkey;
 		for (CustomTagMap::const_iterator iter = tags->begin(); iter != tags->end(); ++iter)
-			msg.AddTag(vendor + "/" + iter->first, this, iter->second);
+		{
+			if (broadcastvendor)
+			{
+				tagkey = vendor + "/" + iter->first;
+			}
+			else
+			{
+				tagkey = iter->first;
+			}
+			msg.AddTag(tagkey, this, iter->second);
+		}
 	}
 
 	bool ShouldSendTag(LocalUser* user, const ClientProtocol::MessageTagData& tagdata) CXX11_OVERRIDE
@@ -209,6 +221,7 @@ class ModuleCustomTags
 
 		ConfigTag* tag = ServerInstance->Config->ConfValue("customtags");
 		ctags.ext.broadcastchanges = tag->getBool("broadcastchanges");
+		ctags.broadcastvendor = tag->getBool("broadcastvendor", true);
 		ctags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1);
 	}
 
