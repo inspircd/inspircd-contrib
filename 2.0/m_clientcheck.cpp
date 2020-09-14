@@ -55,6 +55,7 @@ class ModuleClientCheck : public Module
 	LocalIntExt ext;
 	std::vector<ClientInfo> clients;
 	dynamic_reference<RegexFactory> rf;
+	std::string forward;
 	std::string origin;
 
  public:
@@ -79,6 +80,10 @@ class ModuleClientCheck : public Module
 		dynamic_reference<RegexFactory> newrf(this, engine.empty() ? "regex": "regex/" + engine);
 		if (!newrf)
 			throw ModuleException("<clientcheck:engine> (" + engine + ") is not a recognised regex engine.");
+
+		const std::string newforward = clientcheck->getString("forward");
+		if (!newforward.empty() && !ServerInstance->IsNick(newforward.c_str(), ServerInstance->Config->Limits.NickMax))
+			throw ModuleException("<clientcheck:forward> (" + newforward + ") is not a valid nick.");
 
 		const std::string neworigin = clientcheck->getString("origin", ServerInstance->Config->ServerName);
 		if (neworigin.empty() || neworigin.find(' ') != std::string::npos)
@@ -120,9 +125,9 @@ class ModuleClientCheck : public Module
 
 		rf.SetProvider(newrf.GetProvider());
 		std::swap(clients, newclients);
+		forward = newforward;
 		origin = neworigin;
-
-}
+	}
 
 	void OnUserConnect(LocalUser* user)
 	{
@@ -152,26 +157,36 @@ class ModuleClientCheck : public Module
 		size_t lastpos = msgsize - (parameters[1][msgsize - 1] == '\x1' ? 9 : 10);
 
 		const std::string version = parameters[1].substr(9, lastpos);
-			for (std::vector<ClientInfo>::const_iterator iter = clients.begin(); iter != clients.end(); ++iter)
-			{
-				const ClientInfo& ci = *iter;
-				if (!ci.pattern->Matches(version))
-					continue;
+		for (std::vector<ClientInfo>::const_iterator iter = clients.begin(); iter != clients.end(); ++iter)
+		{
+			const ClientInfo& ci = *iter;
+			if (!ci.pattern->Matches(version))
+				continue;
 
-				switch (ci.action)
-				{
-					case CA_KILL:
-						ServerInstance->Users->QuitUser(user, ci.message);
-						break;
-					case CA_NOTICE:
-						user->Write(":%s NOTICE %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
-						break;
-					case CA_PRIVMSG:
-						user->Write(":%s PRIVMSG %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
-						break;
-				}
-				break;
+			switch (ci.action)
+			{
+				case CA_KILL:
+					ServerInstance->Users->QuitUser(user, ci.message);
+					break;
+				case CA_NOTICE:
+					user->Write(":%s NOTICE %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
+					break;
+				case CA_PRIVMSG:
+					user->Write(":%s PRIVMSG %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
+					break;
 			}
+			break;
+		}
+
+		if (!forward.empty())
+		{
+			User* forwarduser = ServerInstance->FindNickOnly(forward);
+			if (forwarduser && (IS_OPER(forwarduser) || ServerInstance->ULine(forwarduser->server)))
+			{
+				forwarduser->SendText(":%s NOTICE %s :\1VERSION %s\1", user->GetFullHost().c_str(),
+					forwarduser->nick.c_str(), version.c_str());
+			}
+		}
 
 		ext.set(user, 0);
 		return MOD_RES_DENY;
