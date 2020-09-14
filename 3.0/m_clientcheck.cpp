@@ -56,6 +56,7 @@ class ModuleClientCheck : public Module
 	std::vector<ClientInfo> clients;
 	dynamic_reference_nocheck<RegexFactory> rf;
 	std::string origin;
+	std::string originnick;
 
  public:
 	ModuleClientCheck()
@@ -114,6 +115,7 @@ class ModuleClientCheck : public Module
 		rf.SetProvider(newrf.GetProvider());
 		std::swap(clients, newclients);
 		origin = neworigin;
+		originnick = neworigin.substr(0, origin.find('!'));
 	}
 
 	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE
@@ -132,7 +134,7 @@ class ModuleClientCheck : public Module
 		if (command != "NOTICE" || parameters.size() < 2)
 			return MOD_RES_PASSTHRU;
 
-		if (parameters[0] != ServerInstance->Config->ServerName)
+		if (parameters[0] != originnick)
 			return MOD_RES_PASSTHRU;
 
 		if (parameters[1].length() < 10 || parameters[1][0] != '\x1')
