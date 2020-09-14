@@ -55,6 +55,7 @@ class ModuleClientCheck : public Module
 	LocalIntExt ext;
 	std::vector<ClientInfo> clients;
 	dynamic_reference_nocheck<RegexFactory> rf;
+	std::string origin;
 
  public:
 	ModuleClientCheck()
@@ -65,10 +66,16 @@ class ModuleClientCheck : public Module
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
-		const std::string engine = ServerInstance->Config->ConfValue("clientcheck")->getString("engine");
+		ConfigTag* clientcheck = ServerInstance->Config->ConfValue("clientcheck");
+
+		const std::string engine = clientcheck->getString("engine");
 		dynamic_reference_nocheck<RegexFactory> newrf(this, engine.empty() ? "regex": "regex/" + engine);
 		if (!newrf)
 			throw ModuleException("<clientcheck:engine> (" + engine + ") is not a recognised regex engine.");
+
+		const std::string neworigin = clientcheck->getString("origin", ServerInstance->Config->ServerName);
+		if (neworigin.empty() || neworigin.find(' ') != std::string::npos)
+			throw ModuleException("<clientcheck:origin> (" + neworigin + ") is not a valid nick!user@host mask.");
 
 		std::vector<ClientInfo> newclients;
 		ConfigTagList tags = ServerInstance->Config->ConfTags("clientmatch");
@@ -106,13 +113,14 @@ class ModuleClientCheck : public Module
 
 		rf.SetProvider(newrf.GetProvider());
 		std::swap(clients, newclients);
+		origin = neworigin;
 	}
 
 	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE
 	{
 		ext.set(user, 1);
 
-		ClientProtocol::Messages::Privmsg msg(ServerInstance->FakeClient, user, "\x1VERSION\x1", MSG_PRIVMSG);
+		ClientProtocol::Messages::Privmsg msg(origin, user, "\x1VERSION\x1", MSG_PRIVMSG);
 		user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
 	}
 
@@ -154,14 +162,14 @@ class ModuleClientCheck : public Module
 					case CA_NOTICE:
 					{
 						ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy,
-							ServerInstance->FakeClient, user, ci.message, MSG_NOTICE);
+							origin, user, ci.message, MSG_NOTICE);
 						user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
 						break;
 					}
 					case CA_PRIVMSG:
 					{
 						ClientProtocol::Messages::Privmsg msg(ClientProtocol::Messages::Privmsg::nocopy,
-							ServerInstance->FakeClient, user, ci.message, MSG_PRIVMSG);
+							origin, user, ci.message, MSG_PRIVMSG);
 						user->Send(ServerInstance->GetRFCEvents().privmsg, msg);
 						break;
 					}

@@ -55,6 +55,7 @@ class ModuleClientCheck : public Module
 	LocalIntExt ext;
 	std::vector<ClientInfo> clients;
 	dynamic_reference<RegexFactory> rf;
+	std::string origin;
 
  public:
 	ModuleClientCheck()
@@ -72,10 +73,16 @@ class ModuleClientCheck : public Module
 
 	void OnRehash(User* user)
 	{
-		const std::string engine = ServerInstance->Config->ConfValue("clientcheck")->getString("engine");
+		ConfigTag* clientcheck = ServerInstance->Config->ConfValue("clientcheck");
+
+		const std::string engine = clientcheck->getString("engine");
 		dynamic_reference<RegexFactory> newrf(this, engine.empty() ? "regex": "regex/" + engine);
 		if (!newrf)
 			throw ModuleException("<clientcheck:engine> (" + engine + ") is not a recognised regex engine.");
+
+		const std::string neworigin = clientcheck->getString("origin", ServerInstance->Config->ServerName);
+		if (neworigin.empty() || neworigin.find(' ') != std::string::npos)
+			throw ModuleException("<clientcheck:origin> (" + neworigin + ") is not a valid nick!user@host mask.");
 
 		std::vector<ClientInfo> newclients;
 		ConfigTagList tags = ServerInstance->Config->ConfTags("clientmatch");
@@ -113,13 +120,14 @@ class ModuleClientCheck : public Module
 
 		rf.SetProvider(newrf.GetProvider());
 		std::swap(clients, newclients);
+		origin = neworigin;
 
 }
 
 	void OnUserConnect(LocalUser* user)
 	{
 		ext.set(user, 1);
-		user->WriteServ("PRIVMSG %s :\x1VERSION\x1", user->nick.c_str());
+		user->Write(":%s PRIVMSG %s :\x1VERSION\x1", origin.c_str(), user->nick.c_str());
 	}
 
 	ModResult OnPreCommand(std::string& command, std::vector<std::string>& parameters, LocalUser* user, bool validated, const std::string& original_line)
@@ -156,10 +164,10 @@ class ModuleClientCheck : public Module
 						ServerInstance->Users->QuitUser(user, ci.message);
 						break;
 					case CA_NOTICE:
-						user->WriteServ("NOTICE %s :%s", user->nick.c_str(), ci.message.c_str());
+						user->Write(":%s NOTICE %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
 						break;
 					case CA_PRIVMSG:
-						user->WriteServ("PRIVMSG %s :%s", user->nick.c_str(), ci.message.c_str());
+						user->Write(":%s PRIVMSG %s :%s", origin.c_str(), user->nick.c_str(), ci.message.c_str());
 						break;
 				}
 				break;
