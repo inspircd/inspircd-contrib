@@ -500,6 +500,9 @@ module m_tag_iphost 3.0.618 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_teams 3.0.579 https://raw.githubusercontent.com/inspircd/inspircd-contrib/af35e03ad12c5a3c50c41e344e401385f3c5b169/3.0/m_teams.cpp
  depends core 3
  description Allows users to be managed using services-assigned teams.
+module m_telegraf 3.0.620 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d18a4824bad9df91bae8618c4e75e84eef766021/3.0/m_telegraf.cpp
+ description Provides IRCd metrics to a locally running Telegraf instance.
+ depends core 3
 module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_timedstaticquit.cpp
  depends core 3
  description Replaces the quit message of a quitting user if they have been connected for less than a configurable time
