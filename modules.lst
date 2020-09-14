@@ -71,7 +71,7 @@ module m_ciphersuitejoin 2.0.245 https://raw.githubusercontent.com/inspircd/insp
 module m_classban 2.0.361 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3db8bf7af3fc55d4f8d43534f59e05a62a43963d/2.0/m_classban.cpp
  description Provides extban 'n' - Connect class ban
  depends core 2.0
-module m_clientcheck 2.0.616 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9309b69d3d61dad5b68672e0fc78e4dcc86bfbf9/2.0/m_clientcheck.cpp
+module m_clientcheck 2.0.622 https://raw.githubusercontent.com/inspircd/inspircd-contrib/405a534959ebf7122cd26be4e0a55ef97e0f167f/2.0/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 2.0
 module m_cloaking_extended 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_cloaking_extended.cpp
@@ -345,7 +345,7 @@ module m_blockinvite 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd
 module m_checkbans 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_checkbans.cpp
  depends core 3
  description Adds commands /checkbans, /testban, and /whyban
-module m_clientcheck 3.0.616 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9309b69d3d61dad5b68672e0fc78e4dcc86bfbf9/3.0/m_clientcheck.cpp
+module m_clientcheck 3.0.622 https://raw.githubusercontent.com/inspircd/inspircd-contrib/405a534959ebf7122cd26be4e0a55ef97e0f167f/3.0/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 3
 module m_close 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_close.cpp
