@@ -143,7 +143,7 @@ module m_forceident 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_fullversion 2.0.196 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7db943bd59cd47a9fc24e7ac86bdf6c00ad46fe2/2.0/m_fullversion.cpp
  description Displays the full version of a server to an oper
  depends core 2.0
-module m_geoipban 2.0.426 https://raw.githubusercontent.com/inspircd/inspircd-contrib/33d64b6d469c024d3ff3220db7541d358f978e7c/2.0/m_geoipban.cpp
+module m_geoipban 2.0.627 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e515031bb25cab6cff8d60630588dcb2072c5810/2.0/m_geoipban.cpp
  description Implements extban +b G: - GeoIP Country Code bans and add county name and country code in whois
  depends core 2.0
 module m_hash_gnutls 2.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/2.0/m_hash_gnutls.cpp
