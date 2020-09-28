@@ -129,7 +129,7 @@ class ModuleGeoIPBan : public Module
 		if (!d)
 			d = "UNKNOWN";
 
-		ServerInstance->SendWhoisLine(src, dst, RPL_WHOISCOUNTRY, src->nick+" "+dst->nick+" :is connected from "+d +" ("+*cc+")");
+		ServerInstance->SendWhoisLine(src, dst, RPL_WHOISCOUNTRY, src->nick + " " + dst->nick + " " + *cc + " :is connected from " + d);
 	}
 };
 
