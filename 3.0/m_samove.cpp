@@ -155,7 +155,7 @@ class ModuleSamove : public Module
 	{
 	}
 
-	void init() CXX_OVERRIDE
+	void init() CXX11_OVERRIDE
 	{
 		ServerInstance->SNO->EnableSnomask('m', "SAMOVE");
 	}
