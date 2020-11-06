@@ -16,8 +16,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          brew update
-          brew upgrade
+          brew update || true
           brew install pkg-config
       - name: Checkout InspIRCd@insp3
         uses: actions/checkout@v2
