@@ -124,7 +124,7 @@ class CommandSamove : public Command
 				}
 
 
-				ServerInstance->SNO->WriteGlobalSno('a', user->nick+" used SAMOVE to move "+dest->nick+" from "+from_channel+" to "+to_channel);
+				ServerInstance->SNO->WriteGlobalSno('m', user->nick+" used SAMOVE to move "+dest->nick+" from "+from_channel+" to "+to_channel);
 				return CMD_SUCCESS;
 
 			}
@@ -153,6 +153,11 @@ class ModuleSamove : public Module
 	ModuleSamove()
 		: cmd(this)
 	{
+	}
+
+	void init() CXX11_OVERRIDE
+	{
+		ServerInstance->SNO->EnableSnomask('m', "SAMOVE");
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
