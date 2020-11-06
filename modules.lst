@@ -476,7 +476,7 @@ module m_restrictmsg_duration 3.0.558 https://raw.githubusercontent.com/inspircd
 module m_rotatelog 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_rotatelog.cpp
  depends core 3
  description Rotates the log files after a defined period.
-module m_samove 3.0.577 https://raw.githubusercontent.com/inspircd/inspircd-contrib/de97e2fae809e8ab892f01116fcebb6e4aad939e/3.0/m_samove.cpp
+module m_samove 3.0.630 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1475b75003338e26bc3a47603128e6d12a4d31ab/3.0/m_samove.cpp
  depends core 3
  description Adds /SAMOVE command to move a user from one channel to another (basically combining SAPART+SAJOIN)
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
