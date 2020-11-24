@@ -34,13 +34,13 @@ jobs:
         run: |
           cd contrib
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-          echo ::set-env name=INSPIRCD_TARGET::$( \
+          echo INSPIRCD_TARGET=$( \
           git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} | \
           for f in `cat`; do if [[ "$f" = "3.0/"*".cpp" ]]; \
-          then echo "$(basename $f .cpp) "; fi; done)
+          then echo "$(basename $f .cpp) "; fi; done) >> $GITHUB_ENV
       - name: (Push/PR Fallback) Set the build target to all of the modules
         if: github.event_name == 'push' || env.INSPIRCD_TARGET == ''
-        run: echo ::set-env name=INSPIRCD_TARGET::$(for f in contrib/3.0/*; do echo "$(basename $f .cpp) "; done)
+        run: echo INSPIRCD_TARGET=$(for f in contrib/3.0/*; do echo "$(basename $f .cpp) "; done) >> $GITHUB_ENV
       - name: Symlink the modules
         run: |
           cd inspircd/src/modules
@@ -48,9 +48,9 @@ jobs:
       - name: Check for additional dependencies
         run: |
           cd inspircd
-          echo ::set-env name=PACKAGES::$( \
+          echo PACKAGES=$( \
           for f in ../contrib/3.0/*; do if [[ "$INSPIRCD_TARGET" = *"$(basename $f .cpp)"* ]]; \
-          then ./tools/directive $f PackageInfo; fi; done)
+          then ./tools/directive $f PackageInfo; fi; done) >> $GITHUB_ENV
       - name: Install additional dependencies
         if: env.PACKAGES != ''
         run: sudo apt-get install --assume-yes --no-install-recommends ${{ env.PACKAGES }}
