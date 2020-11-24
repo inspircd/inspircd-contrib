@@ -503,6 +503,9 @@ module m_teams 3.0.579 https://raw.githubusercontent.com/inspircd/inspircd-contr
 module m_telegraf 3.0.620 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d18a4824bad9df91bae8618c4e75e84eef766021/3.0/m_telegraf.cpp
  description Provides IRCd metrics to a locally running Telegraf instance.
  depends core 3
+module m_tgchange 3.0.633 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9ac90d3cb6c28d02c91db0438e2a9af24099ecca/3.0/m_tgchange.cpp
+ description Implements "target change" detection to help prevent spam bots
+ depends core 3
 module m_timedstaticquit 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_timedstaticquit.cpp
  depends core 3
  description Replaces the quit message of a quitting user if they have been connected for less than a configurable time
