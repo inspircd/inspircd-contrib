@@ -672,9 +672,11 @@ public:
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("roleplay");
-		need_mode = tag->getBool("needchanmode", true);
 		need_op = tag->getBool("needop", false);
 		npc_host = tag->getString("npchost", "fakeuser.invalid");
+
+		// The mode can only be enabled at load-time, so check this instead
+		need_mode = (roleplaymode.GetId() != ModeParser::MODEID_MAX);
 
 		// Warn about possibly insecure configuration
 		if(!(need_mode || need_op))
