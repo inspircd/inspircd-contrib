@@ -83,6 +83,27 @@ Depending on the server configuration, you may need +o or above in the
 channel, or +U may need to be set.
 ">
 
+<helpop key="scene" title="/SCENE <channel> :<message>" value="
+Send a message to the channel as if it came from the =Scene= user.
+
+Note that your nick will be sent with the hostmask of the =Scene=
+user.
+
+Depending on the server configuration, you may need +o or above in the
+channel, or +U may need to be set.
+">
+
+<helpop key="scenea" title="/SCENEA <channel> :<message>" value="
+Send a message to the channel as if it came from the =Scene= user,
+but send it as a CTCP action (as if =Narrator= used /me).
+
+Note that your nick will be sent with the hostmask of the =Scene=
+user.
+
+Depending on the server configuration, you may need +o or above in the
+channel, or +U may need to be set.
+">
+
 <helpop key="npc" title="/NPC <channel> <user> :<message>" value="
 Send a message to the channel as if it came from the given user.
 
