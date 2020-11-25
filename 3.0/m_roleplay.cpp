@@ -699,7 +699,7 @@ public:
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("roleplay");
 		need_op = tag->getBool("needop", false);
-		npc_host = tag->getString("npchost", "fakeuser.invalid");
+		npc_host = tag->getString("npchost", "fakeuser.invalid", InspIRCd::IsHost);
 
 		// The mode can only be enabled at load-time, so check this instead
 		need_mode = (roleplaymode.GetId() != ModeParser::MODEID_MAX);
