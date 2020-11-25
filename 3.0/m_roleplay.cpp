@@ -384,6 +384,7 @@ public:
 		, roleplaymode(mode)
 		, roleplaytag(tag)
 	{
+		allow_empty_last_param = false;
 	}
 
 	/* Actually send out the message (or an error)
