@@ -425,13 +425,13 @@ public:
 class CommandScene : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		// Similar to the old Charybdis module
 		return "=Scene=";
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return parameters[1];
 	}
@@ -447,12 +447,12 @@ public:
 class CommandSceneA : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		return "=Scene=";
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return MakeAction(parameters[1]);
 	}
@@ -468,13 +468,13 @@ public:
 class CommandAmbiance : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		// Compatibility with the old m_rpg module
 		return ">Ambiance<";
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return parameters[1];
 	}
@@ -490,12 +490,12 @@ public:
 class CommandNarrator : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		return "=Narrator=";
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return parameters[1];
 	}
@@ -512,12 +512,12 @@ class CommandNarratorA : public CommandBaseRoleplay
 {
 protected:
 	// Compatibility with the old m_rpg module
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		return "=Narrator=";
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return MakeAction(parameters[1]);
 	}
@@ -533,12 +533,12 @@ public:
 class CommandFSay : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		return (ServerInstance->IsNick(parameters[1]) ? parameters[1] : "");
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return parameters[2];
 	}
@@ -566,12 +566,12 @@ public:
 class CommandFAction : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		return (ServerInstance->IsNick(parameters[1]) ? parameters[1] : "");
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return MakeAction(parameters[2]);
 	}
@@ -599,7 +599,7 @@ public:
 class CommandNPC : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!ServerInstance->IsNick(parameters[1]))
 			return "";
@@ -607,7 +607,7 @@ protected:
 		return MakeUnderline(parameters[1]);
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return parameters[2];
 	}
@@ -623,7 +623,7 @@ public:
 class CommandNPCA : public CommandBaseRoleplay
 {
 protected:
-	std::string GetSource(const Params& parameters)
+	std::string GetSource(const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!ServerInstance->IsNick(parameters[1]))
 			return "";
@@ -631,7 +631,7 @@ protected:
 		return MakeUnderline(parameters[1]);
 	}
 
-	std::string GetMessage(const Params& parameters)
+	std::string GetMessage(const Params& parameters) CXX11_OVERRIDE
 	{
 		return MakeAction(parameters[2]);
 	}
