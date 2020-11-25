@@ -473,6 +473,9 @@ module m_require_auth 3.0.563 https://raw.githubusercontent.com/inspircd/inspirc
 module m_restrictmsg_duration 3.0.558 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfe41a8ba9d37a6f8703a5e5e203fd0a42530836/3.0/m_restrictmsg_duration.cpp
  depends core 3
  description Restrict messages until a user has been connected for a specified duration.
+module m_roleplay 3.0.635 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5059595d8ed8caea16eb031cd2b65b2294f9d982/3.0/m_roleplay.cpp
+ description Provides commands for use in roleplay (tabletop RPG's, etc.)
+ depends core 3
 module m_rotatelog 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_rotatelog.cpp
  depends core 3
  description Rotates the log files after a defined period.
