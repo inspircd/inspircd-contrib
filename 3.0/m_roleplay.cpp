@@ -711,7 +711,7 @@ public:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides commands for use in roleplay (tabletop RPG's, etc.)", VF_COMMON);
+		return Version("Provides commands for use in roleplay (tabletop RPGs, etc.)", VF_COMMON);
 	}
 };
 
