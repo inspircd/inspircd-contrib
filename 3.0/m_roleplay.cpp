@@ -165,6 +165,14 @@ enum RoleplayNumerics : uint16_t
 	ERR_ROLEPLAY = 573
 };
 
+namespace
+{
+	// These are used everywhere.
+	bool need_op;
+	bool need_mode;
+	std::string npc_host;
+}
+
 /* Sigh. I had to copy this from the PRIVMSG module because it's not exported.
  * This isn't great to say the least, but I gutted everything that wasn't
  * needed.
@@ -349,21 +357,10 @@ protected:
 	}
 
 public:
-	bool need_mode;
-	bool need_op;
-	std::string npc_host;
-
 	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode)
 		: Command(Creator, cmd, params, params)
 		, roleplaymode(mode)
 	{
-	}
-
-	inline void SetConfig(bool need_mode_, bool need_op_, const std::string& npc_host_)
-	{
-		need_mode = need_mode_;
-		need_op = need_op_;
-		npc_host = npc_host_;
 	}
 
 	/* Actually send out the message (or an error)
@@ -675,24 +672,13 @@ public:
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("roleplay");
-		bool need_mode = tag->getBool("needchanmode", true);
-		bool need_op = tag->getBool("needop", false);
-		std::string npc_host = tag->getString("npchost", "fakeuser.invalid");
+		need_mode = tag->getBool("needchanmode", true);
+		need_op = tag->getBool("needop", false);
+		npc_host = tag->getString("npchost", "fakeuser.invalid");
 
 		// Warn about possibly insecure configuration
 		if(!(need_mode || need_op))
 			ServerInstance->SNO->WriteToSnoMask('a', "WARNING: Roleplay configuration has needchanmode and needop both disabled, this could allow for apparent spoofing!");
-
-		// Yuck.
-		cscene.SetConfig(need_mode, need_op, npc_host);
-		cscenea.SetConfig(need_mode, need_op, npc_host);
-		cambiance.SetConfig(need_mode, need_op, npc_host);
-		cnarrator.SetConfig(need_mode, need_op, npc_host);
-		cnarratora.SetConfig(need_mode, need_op, npc_host);
-		cfsay.SetConfig(need_mode, need_op, npc_host);
-		cfaction.SetConfig(need_mode, need_op, npc_host);
-		cnpc.SetConfig(need_mode, need_op, npc_host);
-		cnpca.SetConfig(need_mode, need_op, npc_host);
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
