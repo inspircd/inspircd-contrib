@@ -159,7 +159,7 @@ This command requires the channels/roleplay permission.
 
 #include "inspircd.h"
 
-enum RoleplayNumerics : uint16_t
+enum RoleplayNumerics
 {
 	// This seems to be what Charybdis uses, although I don't know its origin.
 	ERR_ROLEPLAY = 573
