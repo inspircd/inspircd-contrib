@@ -367,13 +367,13 @@ protected:
 	virtual std::string GetMessage(const Params&) = 0;
 
 	// Transform str into a CTCP action
-	inline std::string MakeAction(const std::string& str)
+	std::string MakeAction(const std::string& str)
 	{
 		return InspIRCd::Format("\1ACTION %s\1", str.c_str());
 	}
 
 	// Transform str into an underlined string
-	inline std::string MakeUnderline(const std::string& str)
+	std::string MakeUnderline(const std::string& str)
 	{
 		return InspIRCd::Format("\x1F%s\x1F", str.c_str());
 	}
