@@ -303,7 +303,7 @@ class CommandBaseRoleplay : public Command
 		return true;
 	}
 
-	inline void SendMessage(User* user, Channel* c, const std::string& source, MessageTarget& msgtarget, MessageDetails& msgdetails)
+	void SendMessage(User* user, Channel* c, const std::string& source, MessageTarget& msgtarget, MessageDetails& msgdetails)
 	{
 		// Inform modules that a message is about to be sent.
 		FOREACH_MOD(OnUserMessage, (user, msgtarget, msgdetails));
@@ -316,7 +316,7 @@ class CommandBaseRoleplay : public Command
 		FOREACH_MOD(OnUserPostMessage, (user, msgtarget, msgdetails));
 	}
 
-	inline std::string MakeFakeHostmask(User* user, const std::string& source)
+	std::string MakeFakeHostmask(User* user, const std::string& source)
 	{
 		/* Include the user's nickname as the ident as to differentiate
 		 * various NPC's.
