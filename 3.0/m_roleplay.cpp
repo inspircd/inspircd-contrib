@@ -35,6 +35,7 @@
  *   possible to implement. An alias should be added to your clients instead.
  * - Opers can override restrictions with the channels/roleplay-override
  *   privilege.
+ * - Tags outgoing messages with the inspircd.org/roleplay-msg tag.
  * - Allows some configuration now; see below.
  *	
  * -- Elizafox, 25 November 2020
@@ -158,6 +159,7 @@ This command requires the channels/roleplay permission.
  */
 
 #include "inspircd.h"
+#include "modules/ctctags.h"
 
 enum RoleplayNumerics
 {
@@ -222,6 +224,24 @@ public:
 	}
 };
 
+class RoleplayTag : public ClientProtocol::MessageTagProvider
+{
+private:
+	CTCTags::CapReference ctctagcap;
+
+public:
+	RoleplayTag(Module* mod)
+		: ClientProtocol::MessageTagProvider(mod)
+		, ctctagcap(mod)
+	{
+	}
+
+	bool ShouldSendTag(LocalUser* user, const ClientProtocol::MessageTagData& tagdata) CXX11_OVERRIDE
+	{
+		return ctctagcap.get(user);
+	}
+};
+
 // This is here to make the channel mode optional and configurable.
 class RoleplayMode : public SimpleChannelModeHandler
 {
@@ -242,6 +262,7 @@ public:
 class CommandBaseRoleplay : public Command
 {
 	SimpleChannelModeHandler& roleplaymode;
+	RoleplayTag& roleplaytag;
 
 	bool CheckMessage(User* user, MessageTarget& msgtarget, MessageDetailsImpl& msgdetails)
 	{
@@ -317,6 +338,7 @@ class CommandBaseRoleplay : public Command
 		FOREACH_MOD(OnUserMessage, (user, msgtarget, msgdetails));
 
 		ClientProtocol::Messages::Privmsg privmsg(source, c, msgdetails.text, MSG_PRIVMSG);
+		privmsg.AddTag("inspircd.org/roleplay-msg", &roleplaytag, user->nick);
 		c->Write(ServerInstance->GetRFCEvents().privmsg, privmsg);
 		ServerInstance->PI->SendMessage(c, 0, msgdetails.text, MSG_PRIVMSG);
 
@@ -357,9 +379,10 @@ protected:
 	}
 
 public:
-	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode)
+	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode, RoleplayTag& tag)
 		: Command(Creator, cmd, params, params)
 		, roleplaymode(mode)
+		, roleplaytag(tag)
 	{
 	}
 
@@ -434,8 +457,8 @@ protected:
 	}
 
 public:
-	CommandScene(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "SCENE", 2, mode)
+	CommandScene(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "SCENE", 2, mode, tag)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -455,8 +478,8 @@ protected:
 	}
 
 public:
-	CommandSceneA(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "SCENEA", 2, mode)
+	CommandSceneA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "SCENEA", 2, mode, tag)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -477,8 +500,8 @@ protected:
 	}
 
 public:
-	CommandAmbiance(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "AMBIANCE", 2, mode)
+	CommandAmbiance(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "AMBIANCE", 2, mode, tag)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -498,8 +521,8 @@ protected:
 	}
 
 public:
-	CommandNarrator(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "NARRATOR", 2, mode)
+	CommandNarrator(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "NARRATOR", 2, mode, tag)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -520,8 +543,8 @@ protected:
 	}
 
 public:
-	CommandNarratorA(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "NARRATORA", 2, mode)
+	CommandNarratorA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "NARRATORA", 2, mode, tag)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -541,8 +564,8 @@ protected:
 	}
 
 public:
-	CommandFSay(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "FSAY", 3, mode)
+	CommandFSay(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "FSAY", 3, mode, tag)
 	{
 		syntax = "<channel> <nickname> :<message>";
 		flags_needed = 'o';
@@ -574,8 +597,8 @@ protected:
 	}
 
 public:
-	CommandFAction(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "FACTION", 3, mode)
+	CommandFAction(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "FACTION", 3, mode, tag)
 	{
 		syntax = "<channel> <nickname> :<message>";
 		flags_needed = 'o';
@@ -610,8 +633,8 @@ protected:
 	}
 
 public:
-	CommandNPC(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "NPC", 3, mode)
+	CommandNPC(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "NPC", 3, mode, tag)
 	{
 		syntax = "<channel> <nickname> :<message>";
 	}
@@ -634,8 +657,8 @@ protected:
 	}
 
 public:
-	CommandNPCA(Module* Creator, RoleplayMode& mode)
-		: CommandBaseRoleplay(Creator, "NPCA", 3, mode)
+	CommandNPCA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
+		: CommandBaseRoleplay(Creator, "NPCA", 3, mode, tag)
 	{
 		syntax = "<channel> <nickname> :<message>";
 	}
@@ -644,6 +667,8 @@ public:
 class ModuleRoleplay : public Module
 {
 	RoleplayMode roleplaymode;
+	RoleplayTag roleplaytag;
+
 	CommandScene cscene;
 	CommandSceneA cscenea;
 	CommandAmbiance cambiance;
@@ -657,15 +682,16 @@ class ModuleRoleplay : public Module
 public:
 	ModuleRoleplay()
 		: roleplaymode(this)
-		, cscene(this, roleplaymode)
-		, cscenea(this, roleplaymode)
-		, cambiance(this, roleplaymode)
-		, cnarrator(this, roleplaymode)
-		, cnarratora(this, roleplaymode)
-		, cfsay(this, roleplaymode)
-		, cfaction(this, roleplaymode)
-		, cnpc(this, roleplaymode)
-		, cnpca(this, roleplaymode)
+		, roleplaytag(this)
+		, cscene(this, roleplaymode, roleplaytag)
+		, cscenea(this, roleplaymode, roleplaytag)
+		, cambiance(this, roleplaymode, roleplaytag)
+		, cnarrator(this, roleplaymode, roleplaytag)
+		, cnarratora(this, roleplaymode, roleplaytag)
+		, cfsay(this, roleplaymode, roleplaytag)
+		, cfaction(this, roleplaymode, roleplaytag)
+		, cnpc(this, roleplaymode, roleplaytag)
+		, cnpca(this, roleplaymode, roleplaytag)
 	{
 	}
 
