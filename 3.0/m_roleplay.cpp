@@ -16,9 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This module is a rewrite of the previous m_rpg.cpp for InspIRCd 2.
- * It now behaves more like the Charybdis module. It includes SCENE, SCENEA,
- * NARRATOR, NARRATORA, AMBIANCE, FSAY, FACTION, NPC, and NPCA.
+/* This module is a complete ground-up rewrite of the previous m_rpg.cpp for
+ * InspIRCd 2, written by CyberBotX. It includes SCENE, SCENEA, NARRATOR,
+ * NARRATORA, AMBIANCE, FSAY, FACTION, NPC, and NPCA.
+ *
+ * According to the old module, most of these commands came from MagicStar and
+ * were created by Falerin. NARRATOR and NARRATORA were created by CyberBotX.
+ * I'm unsure of the provenance of SCENE, FSAY, or FACTION, but they were in
+ * Charybdis; however, due to an oversight, FSAY and FACTION do not require
+ * IRC operator privileges despite the comments saying otherwise (*ouch*).
+ * SCENEA was my idea, I implemented it in Charybdis many, many moons ago.
  *
  * Differences between this module and the old one:
  * - NARRATOR and NARRATORA now use the pseudonick =Narrator=, and the module
