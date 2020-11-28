@@ -34,8 +34,15 @@
  * - crypt-sha256 ($5$) (if your system supports it)
  * - crypt-sha512 ($6$) (if your system supports it)
  *
+ * When available, you can adjust the rounds of crypt-sha256 and crypt-sha512
+ * in the config. For example:
+ *
+ * <crypt rounds="100000">        # 100,000 rounds for both SHA algorithms
+ * <cryptsha256 rounds="200000">  # 200,000 rounds for SHA256, overriding crypt
+ * <cryptsha512 rounds="200000">  # 200,000 rounds for SHA512, overriding crypt
+ * *
  * It is strongly advised you avoid insecure password formats such as the old
- * DES one and MD5.
+ * DES scheme and MD5. If you have such passwords, you should change them.
  *
  * Do NOT use /MKPASSWD with crypt-generic! It will use the old DES scheme, and
  * you definitely don't want this.
@@ -52,6 +59,7 @@
 /// $ModAuthorMail: elizabeth@interlinked.me
 /// $ModDesc: Implements hash functions using crypt(3)
 /// $ModDepends: core 3
+/// $ModConfig: <crypt rounds="50000"> <cryptsha256 rounds="50000"> <cryptsha512 rounds="50000">
 /// $LinkerFlags: require_system("linux") -lcrypt
 /// $LinkerFlags: require_system("netbsd") -lcrypt
 /// $LinkerFlags: require_system("freebsd") -lcrypt
