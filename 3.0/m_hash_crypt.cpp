@@ -23,12 +23,24 @@
  * See https://en.wikipedia.org/wiki/Crypt_(C) for information on what your
  * system supports.
  *
- * This module does not (yet) work on Windows. It's also kind of useless on
- * MacOS as it doesn't really support any modern or secure formats.
+ * This module does not (yet) work on Windows as it does not provide crypt(3).
+ * It also refuses to build on MacOS as crypt(3) is incredibly insecure on this
+ * platform.
  *
- * DES is supported for compatibility (but really should not be used). $2a$ is
- * not implemented; use the bcrypt module for that. Likewise, $3$ is not
- * implemented either as it is a very rarely used format and is easily broken.
+ * The following algorithms are implemented:
+ * - crypt-generic (passthru to system crypt(3)): this is only intended for
+ *   checking passwords that might be in an unimplemented algorithm, such as
+ *   MD5; do NOT use /MKPASSWD with this.
+ * - crypt-sha256 ($5$) (if your system supports it)
+ * - crypt-sha512 ($6$) (if your system supports it)
+ *
+ * It is strongly advised you avoid insecure password formats such as the old
+ * DES one and MD5.
+ *
+ * Do NOT use /MKPASSWD with crypt-generic! It will use the old DES scheme, and
+ * you definitely don't want this.
+ *
+ * bcrypt ($2a$) support can be found in the bcrypt module.
  *
  * In a future update, I might add support to fill in the gaps in various
  * operating systems.
@@ -50,26 +62,25 @@
 
 #include <unistd.h>
 
-/* Use a basic whitelist to determine what platforms can support what
- * It isn't pretty, but that's the way this is.
+#ifdef __APPLE__
+#	error "crypt(3) is insecure on this platform, refusing to build."
+#endif
+
+
+/* Check if we can use the SHA algorithms.
+ * Feel free to add your platform to this if you're sure it works, and let me know.
+ *
+ * -- Elizafox
  */
-#if defined(__linux__)
-	// Musl and glibc support these
-#	define HAS_MD5 1
-#	define HAS_SHA 1
-#elif defined(__FreeBSD__) || defined(__sun)
-	/* FreeBSD 8.3+ has support for this, you shouldn't use anything older
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__sun)
+	/* All the major libc's on Linux support SHA passwords.
+	 *
+	 * FreeBSD 8.3+ has support for this, you shouldn't use anything older
 	 * than that as it's unsupported.
 	 *
 	 * Strangely, Solaris supports these too.
 	 */
-#	define HAS_MD5 1
 #	define HAS_SHA 1
-#	define HAS_BLOWFISH 1
-#elif defined(__NetBSD__) || defined(__OpenBSD__)
-	// No support for SHA :(
-#	define HAS_MD5 1
-#	define HAS_BLOWFISH 1
 #endif
 
 
@@ -77,10 +88,19 @@ class CryptHashProvider : public HashProvider
 {
 	const std::string hash_id;
 	const size_t salt_size;
+	size_t rounds;
 
 	std::string Salt()
 	{
-		return hash_id + BinToBase64(ServerInstance->GenRandomStr(salt_size, false));
+		std::string salt = hash_id;
+		if(rounds)
+		{
+			// Valid for SHA, but not blowfish
+			salt += InspIRCd::Format("rounds=%zu$", rounds);
+		}
+
+		salt += BinToBase64(ServerInstance->GenRandomStr(salt_size, false));
+		return salt;
 	}
 	
 	std::string Generate(const std::string& data, const std::string& salt)
@@ -89,10 +109,11 @@ class CryptHashProvider : public HashProvider
 	}
 
 public:
-	CryptHashProvider(Module* parent, const std::string& Name, const std::string& id, const size_t ssize)
+	CryptHashProvider(Module* parent, const std::string& Name, const std::string& id, size_t ssize)
 		: HashProvider(parent, Name)
 		, hash_id(id)
 		, salt_size(ssize)
+		, rounds(0)
 
 	{
 		// Run a self-test
@@ -117,17 +138,16 @@ public:
 		// No need to do anything
 		return raw;
 	}
+
+	void SetRounds(size_t r)
+	{
+		rounds = r;
+	}
 };
 
 class ModuleHashCrypt : public Module
 {
-	CryptHashProvider cryptprov_des;
-#ifdef HAS_MD5
-	CryptHashProvider cryptprov_md5;
-#endif
-#ifdef HAS_BLOWFISH
-	CryptHashProvider cryptprov_blowfish;
-#endif
+	CryptHashProvider cryptprov_generic;
 #ifdef HAS_SHA
 	CryptHashProvider cryptprov_sha256;
 	CryptHashProvider cryptprov_sha512;
@@ -135,18 +155,36 @@ class ModuleHashCrypt : public Module
 
 public:
 	ModuleHashCrypt()
-		: cryptprov_des(this, "hash/crypt-des", "", 2)  // DES is everywhere, although it's shite...
-#ifdef HAS_MD5
-		, cryptprov_md5(this, "hash/crypt-md5", "$1$", 8)
-#endif
-#ifdef HAS_BLOWFISH
-		, cryptprov_blowfish(this, "hash/crypt-blowfish", "$2$", 22)
-#endif
+		: cryptprov_generic(this, "hash/crypt-generic", "", 2)
 #ifdef HAS_SHA
 		, cryptprov_sha256(this, "hash/crypt-sha256", "$5$", 16)
 		, cryptprov_sha512(this, "hash/crypt-sha512", "$6$", 16)
 #endif
 	{
+	}
+
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
+	{
+#ifdef HAS_SHA
+		// 1000 is the lowest amount the algorithms will take
+		ConfigTag* tag = ServerInstance->Config->ConfValue("crypt");
+		long rounds = tag->getInt("rounds", 0, 1000);
+
+		tag = ServerInstance->Config->ConfValue("cryptsha256");
+		long rounds_sha256 = tag->getInt("rounds", 0, 1000);
+
+		tag = ServerInstance->Config->ConfValue("cryptsha512");
+		long rounds_sha512 = tag->getInt("rounds", 0, 1000);
+
+		if(rounds && !rounds_sha256)
+			rounds_sha256 = rounds;
+
+		if(rounds && !rounds_sha512)
+			rounds_sha512 = rounds;
+
+		cryptprov_sha256.SetRounds(rounds_sha256);
+		cryptprov_sha512.SetRounds(rounds_sha512);
+#endif
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
