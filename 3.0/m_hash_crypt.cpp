@@ -99,7 +99,7 @@ public:
 	{
 		// Run a self-test
 		std::string test_hash = GenerateRaw("abc");
-		if(!Compare("abc", test_hash))
+		if(!hash_id.empty() && hash_id != test_hash.substr(0, hash_id.size()))
 			// This shouldn't happen 
 			throw ModuleException("Hash %s does not work with your crypt implementation.");
 	}
