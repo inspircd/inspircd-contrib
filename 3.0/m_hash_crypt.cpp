@@ -30,7 +30,7 @@
  * The following algorithms are implemented:
  * - crypt-generic (passthru to system crypt(3)): this is only intended for
  *   checking passwords that might be in an unimplemented algorithm, such as
- *   MD5; do NOT use /MKPASSWD with this.
+ *   MD5
  * - crypt-sha256 ($5$) (if your system supports it)
  * - crypt-sha512 ($6$) (if your system supports it)
  *
@@ -95,14 +95,14 @@ class CryptHashProvider : public HashProvider
 		std::string salt = hash_id;
 		if(rounds)
 		{
-			// Valid for SHA, but not blowfish
+			// Valid for SHA at least
 			salt += InspIRCd::Format("rounds=%zu$", rounds);
 		}
 
 		salt += BinToBase64(ServerInstance->GenRandomStr(salt_size, false));
 		return salt;
 	}
-	
+
 	std::string Generate(const std::string& data, const std::string& salt)
 	{
 		return crypt(data.c_str(), salt.c_str());
@@ -116,13 +116,28 @@ public:
 		, rounds(0)
 
 	{
-		// Run a self-test
-		std::string test_hash = GenerateRaw("abc");
-		if(!hash_id.empty() && hash_id != test_hash.substr(0, hash_id.size()))
-			// This shouldn't happen 
-			throw ModuleException("Hash %s does not work with your crypt implementation.");
+		/* Check if we have a sham crypt(1)
+		 * This is unlikely to happen with most systems, but better to
+		 * be safe than sorry.
+		 *
+		 * If this does happen, POSIX says you'll only get ENOSYS back.
+		 * This isn't true on Linux, where we can get EPERM (if DES is
+		 * disallowed).
+		 */
+		if(!crypt("abc", "12") && errno == ENOSYS)
+			throw ModuleException("crypt(3) is not implemented on your system, likely due to export restrictions.");
+
+		// Smoke test to make sure the hash *really* works.
+		if(!hash_id.empty())
+		{
+			std::string test_hash = GenerateRaw("abc");
+			if(hash_id != test_hash.substr(0, hash_id.size()))
+			{
+				throw ModuleException("Hash %s does not work with your crypt implementation.");
+			}
+		}
 	}
-	
+
 	bool Compare(const std::string& input, const std::string& hash) CXX11_OVERRIDE
 	{
 		return InspIRCd::TimingSafeCompare(Generate(input, hash), hash);
