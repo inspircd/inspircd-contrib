@@ -88,7 +88,7 @@ class CryptHashProvider : public HashProvider
 {
 	const std::string hash_id;
 	const size_t salt_size;
-	size_t rounds;
+	long rounds;
 
 	std::string Salt()
 	{
@@ -96,7 +96,7 @@ class CryptHashProvider : public HashProvider
 		if(rounds)
 		{
 			// Valid for SHA at least
-			salt += InspIRCd::Format("rounds=%zu$", rounds);
+			salt += InspIRCd::Format("rounds=%ld$", rounds);
 		}
 
 		salt += BinToBase64(ServerInstance->GenRandomStr(salt_size, false));
