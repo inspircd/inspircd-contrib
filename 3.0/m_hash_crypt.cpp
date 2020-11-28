@@ -40,8 +40,8 @@
 /// $ModAuthorMail: elizabeth@interlinked.me
 /// $ModDesc: Implements hash functions using crypt(3)
 /// $ModDepends: core 3
-/// $CompilerFlags: "-lcrypt"
-/// $LinkerFlags: "-lcrypt"
+/// $CompilerFlags: find_compiler_flags("libcrypt" "")
+/// $LinkerFlags: find_linker_flags("libcrypt" "")
 
 
 #include "inspircd.h"
@@ -95,7 +95,7 @@ public:
 
 	{
 		// Run a self-test
-		std::string test_hash = GenerateRaw(std::string("abc"));
+		std::string test_hash = GenerateRaw("abc");
 		if(!Compare("abc", test_hash))
 			// This shouldn't happen 
 			throw ModuleException("Hash %s does not work with your crypt implementation.");
