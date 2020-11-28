@@ -170,10 +170,10 @@ class ModuleHashCrypt : public Module
 
 public:
 	ModuleHashCrypt()
-		: cryptprov_generic(this, "hash/crypt-generic", "", 2)
+		: cryptprov_generic(this, "crypt-generic", "", 2)
 #ifdef HAS_SHA
-		, cryptprov_sha256(this, "hash/crypt-sha256", "$5$", 16)
-		, cryptprov_sha512(this, "hash/crypt-sha512", "$6$", 16)
+		, cryptprov_sha256(this, "crypt-sha256", "$5$", 16)
+		, cryptprov_sha512(this, "crypt-sha512", "$6$", 16)
 #endif
 	{
 	}
