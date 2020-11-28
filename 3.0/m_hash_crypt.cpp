@@ -33,6 +33,10 @@
  * In a future update, I might add support to fill in the gaps in various
  * operating systems.
  *
+ * p.s. the reason for that awful execute() down there is because -lcrypt can't
+ * be reliably detected on many systems that need it with pkg-config. It's an
+ * awful hack, I know.
+ *
  * -- Elizafox, 27 November 2020
  */
 
@@ -40,8 +44,7 @@
 /// $ModAuthorMail: elizabeth@interlinked.me
 /// $ModDesc: Implements hash functions using crypt(3)
 /// $ModDepends: core 3
-/// $CompilerFlags: find_compiler_flags("libcrypt" "")
-/// $LinkerFlags: find_linker_flags("libcrypt" "")
+/// $LinkerFlags: execute("[ $(c++ -lcrypt 2>&1 | grep -c library) -eq 0 ] && echo -lcrypt" "")
 
 
 #include "inspircd.h"
