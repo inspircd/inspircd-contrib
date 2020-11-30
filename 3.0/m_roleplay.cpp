@@ -180,6 +180,7 @@ namespace
 	bool need_op;
 	bool need_mode;
 	std::string npc_host;
+	std::string fakeuid;
 }
 
 /* Sigh. I had to copy this from the PRIVMSG module because it's not exported.
@@ -228,6 +229,41 @@ public:
 		// of these are restricted at the protocol level we only need to check for SOH
 		// and SPACE.
 		return (text.length() >= 2) && (text[0] == '\x1') &&  (text[1] != '\x1') && (text[1] != ' ');
+	}
+};
+
+/* We make a fake user class in the same vein as FakeUser, but not a server.
+ * We just hope nobody looks too closely at it and finds the man behind the
+ * curtain... :p
+ */
+class RoleplayUser : public User
+{
+	const std::string fake_host;
+
+public:
+	RoleplayUser(const std::string& fakenick, const std::string& fakehost)
+		: User(fakeuid, ServerInstance->FakeClient->server, USERTYPE_SERVER)
+		, fake_host(fakehost)
+	{
+		nick = fakenick;
+	}
+
+	CullResult cull() CXX11_OVERRIDE
+	{
+		// Fake users don't quit, they just get culled.
+		quitting = true;
+		// Fake users are not inserted into UserManager::clientlist or uuidlist, so we don't need to modify those here
+		return User::cull();
+	}
+
+	const std::string& GetFullHost() CXX11_OVERRIDE
+	{
+		return fake_host;
+	}
+
+	const std::string& GetFullRealHost() CXX11_OVERRIDE
+	{
+		return fake_host;
 	}
 };
 
@@ -341,16 +377,25 @@ class CommandBaseRoleplay : public Command
 
 	void SendMessage(User* user, Channel* c, const std::string& source, MessageTarget& msgtarget, MessageDetails& msgdetails)
 	{
-		// Inform modules that a message is about to be sent.
-		FOREACH_MOD(OnUserMessage, (user, msgtarget, msgdetails));
+		/* We use a fakeuser here because we're not checking anything.
+		 * We want the real user to be vetted first (that's done
+		 * before we get called), but we don't want the real user having
+		 * messages bogusly propagated as coming from them (spanningtree
+		 * will do this). We also want to make user consumers (like the
+		 * chanhistory module) log this correctly.
+		 */
+		std::string fakemask = MakeFakeHostmask(user, source);
+		RoleplayUser fakeuser(source, fakemask);
 
-		ClientProtocol::Messages::Privmsg privmsg(source, c, msgdetails.text, MSG_PRIVMSG);
+		// Inform modules that a message is about to be sent.
+		FOREACH_MOD(OnUserMessage, (&fakeuser, msgtarget, msgdetails));
+
+		ClientProtocol::Messages::Privmsg privmsg(fakemask, c, msgdetails.text, MSG_PRIVMSG);
 		privmsg.AddTag("inspircd.org/roleplay-msg", &roleplaytag, user->nick);
 		c->Write(ServerInstance->GetRFCEvents().privmsg, privmsg);
-		ServerInstance->PI->SendMessage(c, 0, msgdetails.text, MSG_PRIVMSG);
 
 		// Inform modules that a message was sent.
-		FOREACH_MOD(OnUserPostMessage, (user, msgtarget, msgdetails));
+		FOREACH_MOD(OnUserPostMessage, (&fakeuser, msgtarget, msgdetails));
 	}
 
 	std::string MakeFakeHostmask(User* user, const std::string& source)
@@ -430,8 +475,6 @@ public:
 		if(!CheckMessage(user, msgtarget, msgdetails))
 			return CMD_FAILURE;
 
-		// Spoof the hostmask for the source nickname before sending
-		source = MakeFakeHostmask(user, source);
 		SendMessage(user, c, source, msgtarget, msgdetails);
 
 		/* Since this is a message, if the user is local, then update
@@ -701,6 +744,7 @@ public:
 		, cnpc(this, roleplaymode, roleplaytag)
 		, cnpca(this, roleplaymode, roleplaytag)
 	{
+		fakeuid = ServerInstance->UIDGen.GetUID();
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
