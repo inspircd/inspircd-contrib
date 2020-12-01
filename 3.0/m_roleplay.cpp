@@ -232,9 +232,14 @@ public:
 	}
 };
 
-/* We make a fake user class in the same vein as FakeUser, but not a server.
- * We just hope nobody looks too closely at it and finds the man behind the
- * curtain... :p
+/* We make a fake user class in the same vein as FakeUser, except UserType is
+ * set to zero. This is perfectly legal in C++, as an enumeration is guaranteed
+ * by the standard to hold any value with the same bit width as its largest
+ * member. Since no member in UserType is defined with 0, and since it's
+ * obviously smaller than any other enumeration value, IS_SERVER, IS_LOCAL, and
+ * IS_REMOTE will be none the wiser (none will return anything).
+ *
+ * --Elizafox
  */
 class RoleplayUser : public User
 {
@@ -242,7 +247,7 @@ class RoleplayUser : public User
 
 public:
 	RoleplayUser(const std::string& fakenick, const std::string& fakehost)
-		: User(fakeuid, ServerInstance->FakeClient->server, USERTYPE_SERVER)
+		: User(fakeuid, ServerInstance->FakeClient->server, static_cast<UserType>(0))
 		, fake_host(fakehost)
 	{
 		nick = fakenick;
