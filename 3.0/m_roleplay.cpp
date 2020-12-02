@@ -487,7 +487,7 @@ public:
 		/* Put the tags on as soon as possible just in case anything
 		 * wants to look at it.
 		 */
-		msgdetails.AddTag("inspircd.org/roleplay-msg", &roleplaymsgtag, user->nick);
+		msgdetails.AddTag("inspircd.org/roleplay-msg", &roleplaymsgtag, user->GetFullHost());
 		msgdetails.AddTag("inspircd.org/roleplay-src", &roleplaysrctag, source);
 
 		if(!CheckMessage(user, msgtarget, msgdetails))
