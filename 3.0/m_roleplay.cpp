@@ -310,7 +310,7 @@ public:
 /* This class does the heavy lifting of handling all the sending machinery. It
  * helps cut back heavily on code duplication.
  */
-class CommandBaseRoleplay : public Command
+class CommandBaseRoleplay : public SplitCommand
 {
 	SimpleChannelModeHandler& roleplaymode;
 	RoleplayMsgTag& roleplaymsgtag;
@@ -441,7 +441,7 @@ protected:
 
 public:
 	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
-		: Command(Creator, cmd, params, params)
+		: SplitCommand(Creator, cmd, params, params)
 		, roleplaymode(mode)
 		, roleplaymsgtag(tag_m)
 		, roleplaysrctag(tag_s)
@@ -452,13 +452,8 @@ public:
 	/* Actually send out the message (or an error)
 	 * The machinery for transforming the message/source is in GetSource/GetMessage.
 	 */
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
-		LocalUser* luser = IS_LOCAL(user);
-		if(!luser)
-			// This shouldn't happen.
-			return CMD_FAILURE;
-
 		Channel* c = ServerInstance->FindChan(parameters[0]);
 
 		if(c)
@@ -497,7 +492,7 @@ public:
 		SendMessage(user, c, source, msgtarget, msgdetails);
 
 		// Since this is a message, update the users' idle time.
-		luser->idle_lastmsg = ServerInstance->Time();
+		user->idle_lastmsg = ServerInstance->Time();
 
 		return CMD_SUCCESS;
 	}
@@ -641,7 +636,7 @@ public:
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!user->HasPrivPermission("channels/roleplay"))
 		{
@@ -674,7 +669,7 @@ public:
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!user->HasPrivPermission("channels/roleplay"))
 		{
