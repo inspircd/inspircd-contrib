@@ -392,7 +392,7 @@ class CommandBaseRoleplay : public SplitCommand
 		/* Do the thing.
 		 * Tags should already have been added to msgdetails before we got here.
 		 */
-		ClientProtocol::Messages::Privmsg privmsg(user->GetFullHost(), c, msgdetails.text, MSG_PRIVMSG);
+		ClientProtocol::Messages::Privmsg privmsg(user, c, msgdetails.text, MSG_PRIVMSG);
 		privmsg.AddTags(msgdetails.tags_out);
 		c->Write(ServerInstance->GetRFCEvents().privmsg, privmsg);
 
@@ -495,14 +495,6 @@ public:
 		user->idle_lastmsg = ServerInstance->Time();
 
 		return CMD_SUCCESS;
-	}
-
-	RouteDescriptor GetRouting(User* user, const CommandBase::Params& parameters) CXX11_OVERRIDE
-	{
-		/* spanningtree will broadcast this as a PRIVMSG
-		 * It would be actively harmful to broadcast this.
-		 */
-		return ROUTE_LOCALONLY;
 	}
 };
 
@@ -825,8 +817,10 @@ public:
 
 		const std::string& src = tag->second.value;
 		if(src.empty())
-			// wtf?
-			throw ModuleException("Empty roleplay source tag received");
+		{
+			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Got an empty value in the inspircd.org/roleplay-src tag, this should not happen.");
+			return MOD_RES_DENY;
+		}
 
 		// We need to keep the source alive as long as this message is
 		lastsrc = src;
