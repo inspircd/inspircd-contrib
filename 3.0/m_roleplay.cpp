@@ -44,7 +44,7 @@
  *   privilege.
  * - Tags outgoing messages with the inspircd.org/roleplay-msg tag.
  * - Allows some configuration now; see below.
- *	
+ *
  * -- Elizafox, 25 November 2020
  */
 
@@ -180,6 +180,7 @@ namespace
 	bool need_op;
 	bool need_mode;
 	std::string npc_host;
+	std::string fakeuid;
 }
 
 /* Sigh. I had to copy this from the PRIVMSG module because it's not exported.
@@ -194,6 +195,12 @@ public:
 	MessageDetailsImpl(MessageType mt, const std::string& msg, const ClientProtocol::TagMap& tags)
 		: MessageDetails(mt, msg, tags)
 	{
+	}
+
+	// Not in the base class, but I needed this. :p
+	void AddTag(const std::string& tagname, ClientProtocol::MessageTagProvider* tagprov, const std::string& val, void* tagdata = NULL)
+	{
+		tags_out.insert(std::make_pair(tagname, ClientProtocol::MessageTagData(tagprov, val, tagdata)));
 	}
 
 	bool IsCTCP(std::string& name) const CXX11_OVERRIDE
@@ -227,25 +234,62 @@ public:
 		// contain at least one octet which is not NUL, SOH, CR, LF, or SPACE. As most
 		// of these are restricted at the protocol level we only need to check for SOH
 		// and SPACE.
-		return (text.length() >= 2) && (text[0] == '\x1') &&  (text[1] != '\x1') && (text[1] != ' ');
+		return (text.length() >= 2) && (text[0] == '\x1') && (text[1] != '\x1') && (text[1] != ' ');
 	}
 };
 
-class RoleplayTag : public ClientProtocol::MessageTagProvider
+// We use this to relay the real host of whoever sent the command
+class RoleplayMsgTag : public ClientProtocol::MessageTagProvider
 {
 private:
 	CTCTags::CapReference ctctagcap;
 
 public:
-	RoleplayTag(Module* mod)
-		: ClientProtocol::MessageTagProvider(mod)
-		, ctctagcap(mod)
+	RoleplayMsgTag(Module* mod)
+	: ClientProtocol::MessageTagProvider(mod)
+	, ctctagcap(mod)
 	{
 	}
 
 	bool ShouldSendTag(LocalUser* user, const ClientProtocol::MessageTagData& tagdata) CXX11_OVERRIDE
 	{
 		return ctctagcap.get(user);
+	}
+};
+
+/* Messages need to come from a UserType of some sort. We can't make a fake
+ * client (no, FakeClient will not work, that's for servers only), so we make
+ * it come from the originator. But, we add the inspircd.org/roleplay-src tag
+ * to the message, so the OnUserWrite hook can then spoof it for us. We make
+ * sure the client will never see the evidence of this abomination by returning
+ * false for ShouldSendTag.
+ *
+ * You can't always get what you want, but sometimes you get what you need.
+ *
+ * --Elizafox
+ */
+class RoleplaySrcTag : public ClientProtocol::MessageTagProvider
+{
+public:
+	RoleplaySrcTag(Module* mod)
+		: ClientProtocol::MessageTagProvider(mod)
+	{
+	}
+
+	ModResult OnProcessTag(User* user, const std::string& tagname, std::string& tagvalue) CXX11_OVERRIDE
+	{
+		// Shamelessly ripped off from m_ircv3_msgid. --Elizafox
+		if(!irc::equals(tagname, "inspircd.org/roleplay-src"))
+			return MOD_RES_PASSTHRU;
+
+		// We should only allow this tag if it is added by a remote server.
+		return IS_LOCAL(user) ? MOD_RES_DENY : MOD_RES_ALLOW;
+	}
+
+	bool ShouldSendTag(LocalUser* user, const ClientProtocol::MessageTagData& tagdata) CXX11_OVERRIDE
+	{
+		// Hide the evidence of our crimes from clients.
+		return false;
 	}
 };
 
@@ -266,10 +310,11 @@ public:
 /* This class does the heavy lifting of handling all the sending machinery. It
  * helps cut back heavily on code duplication.
  */
-class CommandBaseRoleplay : public Command
+class CommandBaseRoleplay : public SplitCommand
 {
 	SimpleChannelModeHandler& roleplaymode;
-	RoleplayTag& roleplaytag;
+	RoleplayMsgTag& roleplaymsgtag;
+	RoleplaySrcTag& roleplaysrctag;
 
 	bool CheckMessage(User* user, MessageTarget& msgtarget, MessageDetailsImpl& msgdetails)
 	{
@@ -344,12 +389,21 @@ class CommandBaseRoleplay : public Command
 		// Inform modules that a message is about to be sent.
 		FOREACH_MOD(OnUserMessage, (user, msgtarget, msgdetails));
 
-		ClientProtocol::Messages::Privmsg privmsg(source, c, msgdetails.text, MSG_PRIVMSG);
-		privmsg.AddTag("inspircd.org/roleplay-msg", &roleplaytag, user->nick);
+		/* Do the thing.
+		 * Tags should already have been added to msgdetails before we got here.
+		 */
+		ClientProtocol::Messages::Privmsg privmsg(user, c, msgdetails.text, MSG_PRIVMSG);
+		privmsg.AddTags(msgdetails.tags_out);
 		c->Write(ServerInstance->GetRFCEvents().privmsg, privmsg);
-		ServerInstance->PI->SendMessage(c, 0, msgdetails.text, MSG_PRIVMSG);
 
-		// Inform modules that a message was sent.
+		/* Inform modules that a message was sent.
+		 *
+		 * spanningtree hooks this and will rebroadcast the message,
+		 * tags and all. This is partially why we have to do all this
+		 * roleplay-src crap.
+		 *
+		 * --Elizafox
+		 */
 		FOREACH_MOD(OnUserPostMessage, (user, msgtarget, msgdetails));
 	}
 
@@ -386,10 +440,11 @@ protected:
 	}
 
 public:
-	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode, RoleplayTag& tag)
-		: Command(Creator, cmd, params, params)
+	CommandBaseRoleplay(Module* Creator, const std::string& cmd, int params, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: SplitCommand(Creator, cmd, params, params)
 		, roleplaymode(mode)
-		, roleplaytag(tag)
+		, roleplaymsgtag(tag_m)
+		, roleplaysrctag(tag_s)
 	{
 		allow_empty_last_param = false;
 	}
@@ -397,24 +452,19 @@ public:
 	/* Actually send out the message (or an error)
 	 * The machinery for transforming the message/source is in GetSource/GetMessage.
 	 */
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		Channel* c = ServerInstance->FindChan(parameters[0]);
-		LocalUser* luser = IS_LOCAL(user);
 
-		// Only bother with strict checks if this user is local
-		if(luser)
+		if(c)
 		{
-			if(c)
-			{
-				if(!CheckChannelPermissions(user, c))
-					return CMD_FAILURE;
-			}
-			else
-			{
-				user->WriteNumeric(Numerics::NoSuchChannel(parameters[0]));
+			if(!CheckChannelPermissions(user, c))
 				return CMD_FAILURE;
-			}
+		}
+		else
+		{
+			user->WriteNumeric(Numerics::NoSuchChannel(parameters[0]));
+			return CMD_FAILURE;
 		}
 
 		std::string source = GetSource(parameters);
@@ -427,25 +477,24 @@ public:
 		MessageDetailsImpl msgdetails(MSG_PRIVMSG, GetMessage(parameters), parameters.GetTags());
 		MessageTarget msgtarget(c, 0);
 
+		source = MakeFakeHostmask(user, source);
+
+		/* Put the tags on as soon as possible just in case anything
+		 * wants to look at it.
+		 */
+		msgdetails.AddTag("inspircd.org/roleplay-msg", &roleplaymsgtag, user->GetFullHost());
+		msgdetails.AddTag("inspircd.org/roleplay-src", &roleplaysrctag, source);
+
 		if(!CheckMessage(user, msgtarget, msgdetails))
 			return CMD_FAILURE;
 
-		// Spoof the hostmask for the source nickname before sending
-		source = MakeFakeHostmask(user, source);
+		// Do the thing
 		SendMessage(user, c, source, msgtarget, msgdetails);
 
-		/* Since this is a message, if the user is local, then update
-		 * their idle time.
-		 */
-		if(luser)
-			luser->idle_lastmsg = ServerInstance->Time();
+		// Since this is a message, update the users' idle time.
+		user->idle_lastmsg = ServerInstance->Time();
 
 		return CMD_SUCCESS;
-	}
-
-	RouteDescriptor GetRouting(User* user, const CommandBase::Params& parameters) CXX11_OVERRIDE
-	{
-		return ROUTE_OPT_BCAST;
 	}
 };
 
@@ -465,8 +514,8 @@ protected:
 	}
 
 public:
-	CommandScene(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "SCENE", 2, mode, tag)
+	CommandScene(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "SCENE", 2, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -486,8 +535,8 @@ protected:
 	}
 
 public:
-	CommandSceneA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "SCENEA", 2, mode, tag)
+	CommandSceneA(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "SCENEA", 2, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -508,8 +557,8 @@ protected:
 	}
 
 public:
-	CommandAmbiance(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "AMBIANCE", 2, mode, tag)
+	CommandAmbiance(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "AMBIANCE", 2, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -529,8 +578,8 @@ protected:
 	}
 
 public:
-	CommandNarrator(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "NARRATOR", 2, mode, tag)
+	CommandNarrator(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "NARRATOR", 2, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -551,8 +600,8 @@ protected:
 	}
 
 public:
-	CommandNarratorA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "NARRATORA", 2, mode, tag)
+	CommandNarratorA(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "NARRATORA", 2, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> :<message>";
 	}
@@ -572,14 +621,14 @@ protected:
 	}
 
 public:
-	CommandFSay(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "FSAY", 3, mode, tag)
+	CommandFSay(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "FSAY", 3, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> <nickname> :<message>";
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!user->HasPrivPermission("channels/roleplay"))
 		{
@@ -605,14 +654,14 @@ protected:
 	}
 
 public:
-	CommandFAction(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "FACTION", 3, mode, tag)
+	CommandFAction(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "FACTION", 3, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> <nickname> :<message>";
 		flags_needed = 'o';
 	}
 
-	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		if(!user->HasPrivPermission("channels/roleplay"))
 		{
@@ -641,8 +690,8 @@ protected:
 	}
 
 public:
-	CommandNPC(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "NPC", 3, mode, tag)
+	CommandNPC(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "NPC", 3, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> <nickname> :<message>";
 	}
@@ -665,17 +714,20 @@ protected:
 	}
 
 public:
-	CommandNPCA(Module* Creator, RoleplayMode& mode, RoleplayTag& tag)
-		: CommandBaseRoleplay(Creator, "NPCA", 3, mode, tag)
+	CommandNPCA(Module* Creator, RoleplayMode& mode, RoleplayMsgTag& tag_m, RoleplaySrcTag& tag_s)
+		: CommandBaseRoleplay(Creator, "NPCA", 3, mode, tag_m, tag_s)
 	{
 		syntax = "<channel> <nickname> :<message>";
 	}
 };
 
-class ModuleRoleplay : public Module
+class ModuleRoleplay
+	: public Module
+	, public CTCTags::EventListener
 {
 	RoleplayMode roleplaymode;
-	RoleplayTag roleplaytag;
+	RoleplayMsgTag roleplaymsgtag;
+	RoleplaySrcTag roleplaysrctag;
 
 	CommandScene cscene;
 	CommandSceneA cscenea;
@@ -687,20 +739,46 @@ class ModuleRoleplay : public Module
 	CommandNPC cnpc;
 	CommandNPCA cnpca;
 
+	std::string lastsrc;
+
+	ModResult CopyRoleplayTags(const ClientProtocol::TagMap& tags_in, ClientProtocol::TagMap& tags_out)
+	{
+		/* Seems we need to do this to make the tags stick.
+		 * This logic was copied from m_ircv3_msgid with modifications.
+		 *
+		 * --Elizafox
+		 */
+		ClientProtocol::TagMap::const_iterator iter = tags_in.find("inspircd.org/roleplay-src");
+		if(iter != tags_in.end())
+			// If we got a remote message with this tag, copy it over.
+			tags_out.insert(*iter);
+
+		iter = tags_in.find("inspircd.org/roleplay-msg");
+		if(iter != tags_in.end())
+			tags_out.insert(*iter);
+
+		// Otherwise, no need to do anything.
+		return MOD_RES_PASSTHRU;
+	}
+
 public:
 	ModuleRoleplay()
-		: roleplaymode(this)
-		, roleplaytag(this)
-		, cscene(this, roleplaymode, roleplaytag)
-		, cscenea(this, roleplaymode, roleplaytag)
-		, cambiance(this, roleplaymode, roleplaytag)
-		, cnarrator(this, roleplaymode, roleplaytag)
-		, cnarratora(this, roleplaymode, roleplaytag)
-		, cfsay(this, roleplaymode, roleplaytag)
-		, cfaction(this, roleplaymode, roleplaytag)
-		, cnpc(this, roleplaymode, roleplaytag)
-		, cnpca(this, roleplaymode, roleplaytag)
+		: CTCTags::EventListener(this)
+		, roleplaymode(this)
+		, roleplaymsgtag(this)
+		, roleplaysrctag(this)
+		, cscene(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cscenea(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cambiance(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cnarrator(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cnarratora(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cfsay(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cfaction(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cnpc(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
+		, cnpca(this, roleplaymode, roleplaymsgtag, roleplaysrctag)
 	{
+		// Since we're mangling the source, we need to go first.
+		ServerInstance->Modules->SetPriority(this, I_OnUserWrite, PRIORITY_FIRST);
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
@@ -715,6 +793,42 @@ public:
 		// Warn about possibly insecure configuration
 		if(!(need_mode || need_op))
 			ServerInstance->SNO->WriteToSnoMask('a', "WARNING: Roleplay configuration has needchanmode and needop both disabled, this could allow for apparent spoofing!");
+	}
+
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
+	{
+		return CopyRoleplayTags(details.tags_in, details.tags_out);
+	}
+
+	ModResult OnUserPreTagMessage(User* user, const MessageTarget& target, CTCTags::TagMessageDetails& details) CXX11_OVERRIDE
+	{
+		return CopyRoleplayTags(details.tags_in, details.tags_out);
+	}
+
+	// This is where the magic of rewriting the user happens.
+	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg) CXX11_OVERRIDE
+	{
+		const ClientProtocol::TagMap& tags = msg.GetTags();
+		ClientProtocol::TagMap::const_iterator tag;
+
+		tag = tags.find("inspircd.org/roleplay-src");
+		if(tag == tags.end())
+			return MOD_RES_PASSTHRU;
+
+		const std::string& src = tag->second.value;
+		if(src.empty())
+		{
+			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Got an empty value in the inspircd.org/roleplay-src tag, this should not happen.");
+			return MOD_RES_DENY;
+		}
+
+		// We need to keep the source alive as long as this message is
+		lastsrc = src;
+
+		// Rewrite the source
+		msg.SetSource(lastsrc, msg.GetSourceUser());
+
+		return MOD_RES_PASSTHRU;
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
