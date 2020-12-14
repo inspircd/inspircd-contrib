@@ -19,11 +19,11 @@
 
 #include "inspircd.h"
 
-/* $ModDesc: Provides support for blocking DCC transfers */
-/* $ModAuthor: Jansteen */
-/* $ModAuthorMail: pliantcom@yandex.com */
-/* $ModConfig: <dccblock users="yes" channels="yes"> */
-/* $ModDepends: core 2.0 */
+/// $ModDesc: Provides support for blocking DCC transfers
+/// $ModAuthor: Jansteen
+/// $ModAuthorMail: pliantcom@yandex.com
+/// $ModConfig: <dccblock users="yes" channels="yes">
+/// $ModDepends: core 3
 
 /* Documentation
    This module is used to completely block DCC from being used on your
