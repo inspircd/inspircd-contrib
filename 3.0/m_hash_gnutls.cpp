@@ -20,7 +20,7 @@
 /// $ModAuthor: Attila Molnar
 /// $ModAuthorMail: attilamolnar@hush.com
 /// $ModDesc: Implements hash functions using GnuTLS API
-/// $ModDepends: core 2.0
+/// $ModDepends: core 3
 /// $ModConflicts: m_md5.so
 /// $ModConflicts: m_sha256.so
 
