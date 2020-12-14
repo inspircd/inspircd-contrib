@@ -29,6 +29,7 @@ use warnings FATAL => qw(all);
 use File::Basename;
 
 use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-contrib';
+use constant RM_EOL      => '1.0-1.2';
 use constant RM_EXCLUDE  => qw(1.1 1.2);
 
 if (system 'git --version > /dev/null 2>&1') {
@@ -37,6 +38,9 @@ if (system 'git --version > /dev/null 2>&1') {
 }
 
 open(my $list, '>', 'modules.lst');
+say $list "module update-your-server 0.0.0 https://404.example.com";
+say $list " depends core ${\RM_EOL}";
+say $list " description The version of InspIRCd you are using is EOL. Please upgrade!";
 for my $file (<*/m_*.cpp>) {
 	if (system "git ls-files --error-unmatch -- $file > /dev/null 2>&1") {
 		say STDERR "Skipping $file which is not in Git!";
