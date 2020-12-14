@@ -1,3 +1,6 @@
+module update-your-server 0.0.0 https://404.example.com
+ depends core 1.0-1.2
+ description The version of InspIRCd you are using is EOL. Please upgrade!
 module m_accounthost 2.0.220 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c421705f80863c1d27bd59c33732975ef739cd7e/2.0/m_accounthost.cpp
  description Allows setting hosts on users based on their account name on login.
  depends core 2.0
@@ -414,9 +417,9 @@ module m_geocmd 3.0.560 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
-module m_hash_gnutls 3.0.604 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fa4487e9bf23b75c70fbd5bc0b499f6b957fdb0a/3.0/m_hash_gnutls.cpp
+module m_hash_gnutls 3.0.645 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bc98a5c553250f6305de473ee56bc98f97315406/3.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
- depends core 2.0
+ depends core 3
  conflicts m_md5.so
  conflicts m_sha256.so
 module m_hideidle 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_hideidle.cpp
