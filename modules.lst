@@ -384,6 +384,9 @@ module m_custompenalty 3.0.586 https://raw.githubusercontent.com/inspircd/inspir
 module m_customtags 3.0.545 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e23bc33536fe34c5e89c8c15082299be0499d6f9/3.0/m_customtags.cpp
  depends core 3
  description Allows services to add custom tags to messages sent by clients.
+module m_dccblock 3.0.641 https://raw.githubusercontent.com/inspircd/inspircd-contrib/508ad2e130a6c1c5307cfc173f298318711315aa/3.0/m_dccblock.cpp
+ description Provides support for blocking DCC transfers
+ depends core 2.0
 module m_discordnick 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_discordnick.cpp
  depends core 3
  description Adds support for Discord-style #1234 nick tags.
