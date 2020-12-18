@@ -284,7 +284,7 @@ class TelegrafModule : public Module
 		silent = tag->getBool("silent");
 		reconnectTimeout = tag->getInt("reconnect", 60, 5);
 		irc::sockets::sockaddrs newsa;
-		irc::sockets::aptosa("127.0.0.1", tag->getUInt("port", 1, 65535), newsa);
+		irc::sockets::aptosa("127.0.0.1", tag->getUInt("port", 8094, 1, 65535), newsa);
 		if (connsa != newsa)
 		{
 			if (tSock)
@@ -308,7 +308,7 @@ class TelegrafModule : public Module
 				StartMetrics(true);
 			}
 		}
-		else if ((tSock) && (tSock->GetFd() > -1))
+		else if (tSock && tSock->HasFd())
 		{
 			tSock->SendMetrics();
 		}
@@ -350,8 +350,8 @@ class TelegrafModule : public Module
 			}
 			else
 			{
-				ServerInstance->SNO->WriteGlobalSno('a', "METRICS: Socket error occurred: %s",
-													tSock->getError().c_str());
+				const char* errmsg = tSock ? tSock->getError().c_str() : "unknown error";
+				ServerInstance->SNO->WriteGlobalSno('a', "METRICS: Socket error occurred: %s", errmsg);
 			}
 		}
 		tSock = NULL;
