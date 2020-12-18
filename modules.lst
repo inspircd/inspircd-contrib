@@ -509,7 +509,7 @@ module m_tag_iphost 3.0.618 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_teams 3.0.579 https://raw.githubusercontent.com/inspircd/inspircd-contrib/af35e03ad12c5a3c50c41e344e401385f3c5b169/3.0/m_teams.cpp
  depends core 3
  description Allows users to be managed using services-assigned teams.
-module m_telegraf 3.0.620 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d18a4824bad9df91bae8618c4e75e84eef766021/3.0/m_telegraf.cpp
+module m_telegraf 3.0.648 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7e2922e3db0741e6642195cbcfdefad4877c0952/3.0/m_telegraf.cpp
  description Provides IRCd metrics to a locally running Telegraf instance.
  depends core 3
 module m_tgchange 3.0.633 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9ac90d3cb6c28d02c91db0438e2a9af24099ecca/3.0/m_tgchange.cpp
