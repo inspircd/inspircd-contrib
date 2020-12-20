@@ -100,6 +100,7 @@ public:
 
         // Check that the source has the relaymsg capability.
         if (IS_LOCAL(user) && !cap.get(user)) {
+            user->WriteNumeric(ERR_NOPRIVILEGES, "You must support the draft/relaymsg capability to use this command.");
             return CMD_FAILURE;
         }
 
