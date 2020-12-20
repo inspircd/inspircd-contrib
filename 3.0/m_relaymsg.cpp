@@ -186,18 +186,21 @@ public:
     void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
     {
         ConfigTag* tag = ServerInstance->Config->ConfValue("relaymsg");
-        cap.nick_separators = tag->getString("separators", "/", 1);
-        cmd.fake_ident = tag->getString("ident", "relay");
-        cmd.fake_host = tag->getString("host", ServerInstance->Config->ServerName);
+        std::string fake_ident = tag->getString("ident", "relay");
+        std::string fake_host = tag->getString("host", ServerInstance->Config->ServerName);
 
-        if (!ServerInstance->IsIdent(cmd.fake_ident))
+        // Check these before replacement so that invalid values loaded during /rehash don't get saved
+        if (!ServerInstance->IsIdent(fake_ident))
         {
             throw ModuleException("Invalid ident value for <relaymsg>");
         }
-        if (!ServerInstance->IsHost(cmd.fake_host))
+        if (!ServerInstance->IsHost(fake_host))
         {
             throw ModuleException("Invalid host value for <relaymsg>");
         }
+        cmd.fake_host = fake_host;
+        cmd.fake_ident = fake_ident;
+        cap.nick_separators = tag->getString("separators", "/", 1);
     }
 
     Version GetVersion() CXX11_OVERRIDE
