@@ -135,13 +135,7 @@ public:
         // If the sender was a lcoal user, check that the target includes a nick separator
         if (IS_LOCAL(user))
         {
-            bool accepted = false;
-            for (std::string::const_iterator x = cap.nick_separators.begin(); x != cap.nick_separators.end(); x++) {
-                if (nick.find(*x) != std::string::npos) {
-                    accepted = true;
-                }
-            }
-            if (!accepted)
+            if (nick.find_first_of(cap.nick_separators) == std::string::npos)
             {
                 user->WriteNumeric(ERR_BADRELAYNICK, nick, InspIRCd::Format("Spoofed nickname must include one of the following separators: %s", cap.nick_separators.c_str()));
                 return CMD_FAILURE;
@@ -163,7 +157,7 @@ public:
             params.push_back(nick);
             params.push_back(":" + text);
 
-            ServerInstance->PI->SendEncapsulatedData("*", "RELAYMSG", params, user);
+            ServerInstance->PI->BroadcastEncap("RELAYMSG", params, user);
         }
 
         return CMD_SUCCESS;
@@ -187,7 +181,7 @@ public:
     void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
     {
         ConfigTag* tag = ServerInstance->Config->ConfValue("relaymsg");
-        cap.nick_separators = tag->getString("separators", "/");
+        cap.nick_separators = tag->getString("separators", "/", 1);
         cmd.fake_ident = tag->getString("ident", "relay");
         cmd.fake_host = tag->getString("host", ServerInstance->Config->ServerName);
 
