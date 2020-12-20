@@ -33,7 +33,8 @@ enum
 };
 
 // Registers the draft/relaymsg
-class RelayMsgCap : public Cap::Capability {
+class RelayMsgCap : public Cap::Capability
+{
 public:
     std::string nick_separators;
 
@@ -67,7 +68,8 @@ public:
 };
 
 // Handler for the RELAYMSG command (users and servers)
-class CommandRelayMsg : public Command {
+class CommandRelayMsg : public Command
+{
 private:
     RelayMsgCap& cap;
     RelayMsgCapTag& captag;
@@ -99,9 +101,9 @@ public:
 
     CmdResult Handle(User* user, const CommandBase::Params& parameters)
     {
-        std::string channame = parameters[0];
-        std::string nick = parameters[1];
-        std::string text = parameters[2];
+        const std::string& channame = parameters[0];
+        const std::string& nick = parameters[1];
+        const std::string& text = parameters[2];
 
         // Check that the source has the relaymsg capability.
         if (IS_LOCAL(user) && !cap.get(user)) {
