@@ -73,8 +73,6 @@ class CommandRelayMsg : public Command
 private:
     RelayMsgCap& cap;
     RelayMsgCapTag& captag;
-    std::bitset<UCHAR_MAX> invalid_chars_map;
-    std::string invalid_chars = "!+%@&#$:'\"?*,.";
 
 public:
     std::string fake_host;
@@ -88,14 +86,9 @@ public:
         flags_needed = 'o';
         syntax = "<channel> <nick> <text>";
         allow_empty_last_param = false;
-
-        // Populate a map of disallowed nick characters. Based off m_chghost code
-        for (std::string::const_iterator n = invalid_chars.begin(); n != invalid_chars.end(); n++) {
-            invalid_chars_map.set(static_cast<unsigned char>(*n));
-        }
     }
 
-    std::string GetFakeHostmask(std::string& nick) {
+    std::string GetFakeHostmask(const std::string& nick) {
         return InspIRCd::Format("%s!%s@%s", nick.c_str(), fake_ident.c_str(), fake_host.c_str());
     }
 
@@ -133,13 +126,10 @@ public:
         // Make sure the nick doesn't include any core IRC characters (e.g. *, !)
         // This should still be more flexible than regular nick checking - in particular
         // we want to allow "/" and "~" for relayers
-        for (std::string::const_iterator x = nick.begin(); x != nick.end(); x++)
+        if (nick.find_first_of("!+%@&#$:'\"?*,.") != std::string::npos)
         {
-            if (invalid_chars_map.test(static_cast<unsigned char>(*x)))
-            {
-                user->WriteNumeric(ERR_BADRELAYNICK, nick, "Invalid characters in spoofed nick");
-                return CMD_FAILURE;
-            }
+            user->WriteNumeric(ERR_BADRELAYNICK, nick, "Invalid characters in spoofed nick");
+            return CMD_FAILURE;
         }
 
         // If the sender was a lcoal user, check that the target includes a nick separator
