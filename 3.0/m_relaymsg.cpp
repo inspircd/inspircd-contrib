@@ -145,14 +145,18 @@ public:
         // Send the message to everyone in the channel
         std::string fakeSource = GetFakeHostmask(nick);
         ClientProtocol::Messages::Privmsg privmsg(fakeSource, channel, text);
-        // Tag the message as @relaymsg=<nick> so the sender can recognize it
-        privmsg.AddTag("relaymsg", &captag, user->nick);
+        // Tag the message as @draft/relaymsg=<nick> so the sender can recognize it
+        // Also copy over tags set on the original /relaymsg command
+        privmsg.AddTags(parameters.GetTags());
+        privmsg.AddTag("draft/relaymsg", &captag, user->nick);
         channel->Write(ServerInstance->GetRFCEvents().privmsg, privmsg);
 
         if (IS_LOCAL(user))
         {
             // Pass the message on to other servers
             CommandBase::Params params;
+            // Preserve other message tags sent with the /relaymsg command
+            params.GetTags().insert(parameters.GetTags().begin(), parameters.GetTags().end());
             params.push_back(channame);
             params.push_back(nick);
             params.push_back(":" + text);
