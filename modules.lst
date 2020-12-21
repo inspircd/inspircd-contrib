@@ -473,6 +473,9 @@ module m_qrcode 3.0.570 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_randomnotice 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_randomnotice.cpp
  depends core 3
  description Send a random notice (quote) from a file to all users at a set interval.
+module m_relaymsg 3.0.650 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cf367e0d50899baa911376e7662df5eb4138e9a4/3.0/m_relaymsg.cpp
+ depends core 3
+ description Provides the RELAYMSG command & draft/relaymsg capability for stateless bridging
 module m_require_auth 3.0.563 https://raw.githubusercontent.com/inspircd/inspircd-contrib/faddc5d9c5e418447cfd7e52f13dacaf4be1f9d6/3.0/m_require_auth.cpp
  description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 3
