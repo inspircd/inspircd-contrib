@@ -63,7 +63,7 @@ class CommandASCIICheck
 			if (oldhash == newhash)
 				continue;
 
-			user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: The channel hashcode for %s will change from %zu to %zu",
+			user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: The channel hashcode for %s will change from %lu to %lu",
 				i->first.c_str(), oldhash, newhash));
 			chans++;
 		}
@@ -76,12 +76,12 @@ class CommandASCIICheck
 			if (oldhash == newhash)
 				continue;
 
-			user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: The user hashcode for %s will change from %zu to %zu",
+			user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: The user hashcode for %s will change from %lu to %lu",
 				i->first.c_str(), oldhash, newhash));
 			users++;
 		}
 
-		user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: Check complete: %zu/%zu channels and %zu/%zu users need to be rehashed.",
+		user->WriteNotice(InspIRCd::Format("*** ASCIICHECK: Check complete: %lu/%lu channels and %lu/%lu users need to be rehashed.",
 			chans, ServerInstance->chanlist.size(), users, ServerInstance->Users->clientlist.size()));
 		return CMD_SUCCESS;
 	}
@@ -138,6 +138,24 @@ class ModuleASCIISwitch : public Module
 		{
 			LocalUser* luser = *i;
 			ServerInstance->ISupport.SendTo(luser);
+		}
+
+		// Ask modules to reload their config so they can rehash their hashmaps too.
+		ConfigStatus status(user, false);
+		const ModuleManager::ModuleMap& mods = ServerInstance->Modules->GetModules();
+		for (ModuleManager::ModuleMap::const_iterator i = mods.begin(); i != mods.end(); ++i)
+		{
+			try
+			{
+				ServerInstance->Logs->Log("MODULE", LOG_DEBUG, "Rehashing " + i->first);
+				i->second->ReadConfig(status);
+			}
+			catch (CoreException& modex)
+			{
+				ServerInstance->Logs->Log("MODULE", LOG_DEFAULT, "Exception caught: " + modex.GetReason());
+				if (user)
+					user->WriteNotice("*** ASCIISWITCH: " + i->first + ": " + modex.GetReason());
+			}
 		}
 	}
 
