@@ -327,6 +327,9 @@ module m_xmlsocket 2.0.386 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antirandom 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
+module m_asciiswitch 3.0.652 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1aba05a3a23da047e77cd4d65346f4edddd4e94b/3.0/m_asciiswitch.cpp
+ depends core 3
+ description Allows migrating a live network which is using RFC 1459 casemapping to ASCII casemapping.
 module m_autoaway 3.0.584 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e6d2adbf2527d08246cafcb63ee304bd8a8cf326/3.0/m_autoaway.cpp
  depends core 3
  description Automatically marks idle users as away.
