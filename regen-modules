@@ -29,8 +29,8 @@ use warnings FATAL => qw(all);
 use File::Basename;
 
 use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-contrib';
-use constant RM_EOL      => '1.0-1.2';
-use constant RM_EXCLUDE  => qw(1.1 1.2);
+use constant RM_EOL      => '1-2';
+use constant RM_EXCLUDE  => qw(1.1 1.2 2.0);
 
 if (system 'git --version > /dev/null 2>&1') {
 	say 'Error: Git is not installed and available in the PATH!';
@@ -55,7 +55,7 @@ for my $file (<*/m_*.cpp>) {
 	say $list "module $name $branch.$version ${\RM_BASE_URL}/$revision/$file";
 	open(my $module, $file);
 	while (<$module>) {
-		if ($_ =~ /^\/\* \$(\S+): (.+) \*\/$/ || $_ =~ /^\/\/\/ \$(\S+): (.+)/) {
+		if ($_ =~ /^\/\/\/ \$(\S+): (.+)/) {
 			if ($1 eq 'ModDepends') {
 				say $list " depends $2";
 			} elsif ($1 eq 'ModConflicts') {

@@ -26,7 +26,7 @@ Please make it clear you're asking about a contrib module!
 
 ## Development
 
-### 3.x Example tags:
+### Example Tags
 
 ```
 /// $ModAuthor: w00t
@@ -36,16 +36,4 @@ Please make it clear you're asking about a contrib module!
 /// $ModDepends: core 3
 /// $ModDesc: Provides ircd-side fantasy commands.
 /// $ModMask: mask reason (e.g., deprecated or obsolete)
-```
-
-### 2.0 Example tags:
-
-```
-/* $ModAuthor: w00t */
-/* $ModAuthorMail: w00t@example.com */
-/* $ModConfig: <syncbans channels="#a,#b,#c"> */
-/* $ModConflicts: m_muteban.so */
-/* $ModDepends: core 2.0 */
-/* $ModDesc: Provides ircd-side fantasy commands. */
-/* $ModMask: mask reason (e.g., deprecated or obsolete) */
 ```
