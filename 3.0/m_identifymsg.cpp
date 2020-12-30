@@ -39,7 +39,7 @@ class ModuleIdentifyMsg : public Module
 
 	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg) CXX11_OVERRIDE
 	{
-		if (!msg.GetSourceUser() || msg.GetParams().size() < 2)
+		if (!msg.GetSourceUser() || msg.GetParams().size() < 2 || !cap.get(user))
 			return MOD_RES_PASSTHRU;
 
 		if (!irc::equals(msg.GetCommand(), "NOTICE") && !irc::equals(msg.GetCommand(), "PRIVMSG"))
