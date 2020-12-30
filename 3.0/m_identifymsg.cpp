@@ -37,7 +37,7 @@ class ModuleIdentifyMsg : public Module
 	{
 	}
 
-	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg)
+	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg) CXX11_OVERRIDE
 	{
 		if (!msg.GetSourceUser() || msg.GetParams().size() < 2)
 			return MOD_RES_PASSTHRU;
