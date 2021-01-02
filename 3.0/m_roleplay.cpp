@@ -636,7 +636,7 @@ public:
 			return CMD_FAILURE;
 		}
 
-		return CommandBaseRoleplay::Handle(user, parameters);
+		return CommandBaseRoleplay::HandleLocal(user, parameters);
 	}
 };
 
@@ -669,7 +669,7 @@ public:
 			return CMD_FAILURE;
 		}
 
-		return CommandBaseRoleplay::Handle(user, parameters);
+		return CommandBaseRoleplay::HandleLocal(user, parameters);
 	}
 };
 
