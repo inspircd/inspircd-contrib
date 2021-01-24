@@ -191,10 +191,18 @@ private:
 
 		if (!source->GetClass()->config->getString("password").empty())
 			url.append(",needpass");
-		
+
 		url.insert(0, "/");
-		url.insert(0, source->server_sa.str());
-		url.insert(0, SSLIOHook::IsSSL(&source->eh) ? "ircs://" : "irc://");
+		url.insert(0, ConvToStr(source->server_sa.port()));
+		url.insert(0, ":");
+
+		const SSLIOHook* const ssliohook = SSLIOHook::IsSSL(&source->eh);
+		std::string serverhost;
+		if (ssliohook && ssliohook->GetServerName(serverhost))
+			url.insert(0, serverhost);
+		else
+			url.insert(0, source->server_sa.addr());
+		url.insert(0, ssliohook ? "ircs://" : "irc://");
 
 		QRCode code(url);
 		if (code.GetError())
@@ -213,7 +221,7 @@ private:
 		// Format the QR code and send it to the user.
 		std::string border;
 		for (size_t c = 0; c < code.GetSize() + 2; ++c)
-			border.append(FormatPixel(false)); 
+			border.append(FormatPixel(false));
 
 		WriteMessage(source, border);
 		for (size_t y = 0; y < code.GetSize(); ++y)
@@ -241,46 +249,46 @@ class ModuleQRCode : public Module
 		std::string name = tag->getString(key, def);
 		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-		if (name == "white")
+		if (stdalgo::string::equalsci(name, "white"))
 			return "0";
 
-		if (name == "black")
+		if (stdalgo::string::equalsci(name, "black"))
 			return "1";
 
-		if (name == "blue")
+		if (stdalgo::string::equalsci(name, "blue"))
 			return "2";
 
-		if (name == "green")
+		if (stdalgo::string::equalsci(name, "green"))
 			return "3";
 
-		if (name == "red")
+		if (stdalgo::string::equalsci(name, "red"))
 			return "4";
 
-		if (name == "brown")
+		if (stdalgo::string::equalsci(name, "brown"))
 			return "5";
 
-		if (name == "purple")
+		if (stdalgo::string::equalsci(name, "purple"))
 			return "6";
 
-		if (name == "orange")
+		if (stdalgo::string::equalsci(name, "orange"))
 			return "7";
 
-		if (name == "yellow")
+		if (stdalgo::string::equalsci(name, "yellow"))
 			return "8";
-		
-		if (name == "lightgreen")
+
+		if (stdalgo::string::equalsci(name, "lightgreen"))
 			return "9";
 
-		if (name == "cyan")
+		if (stdalgo::string::equalsci(name, "cyan"))
 			return "10";
 
-		if (name == "lightcyan")
+		if (stdalgo::string::equalsci(name, "lightcyan"))
 			return "11";
 
-		if (name == "lightblue")
+		if (stdalgo::string::equalsci(name, "lightblue"))
 			return "12";
 
-		if (name == "pink")
+		if (stdalgo::string::equalsci(name, "pink"))
 			return "13";
 
 		if (name == "gray" || name == "grey")
