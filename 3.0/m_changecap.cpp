@@ -66,7 +66,7 @@ class ChangeCap : public Command
 		return CMD_SUCCESS;
 	}
 
-	RouteDescriptor GetRouting(User* user, const Params& parameters)
+	RouteDescriptor GetRouting(User* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		return ROUTE_OPT_BCAST;
 	}
