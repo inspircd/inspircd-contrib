@@ -34,13 +34,33 @@ enum
 	RPL_STATSASN = 800
 };
 
+class ASNExt CXX11_FINAL
+	: public LocalIntExt
+{
+public:
+	ASNExt(Module* Creator)
+		: LocalIntExt("asn", ExtensionItem::EXT_USER, Creator)
+	{
+	}
+
+	void FromNetwork(Extensible* container, const std::string& value) CXX11_OVERRIDE
+	{
+		return FromInternal(container, value);
+	}
+
+	std::string ToNetwork(const Extensible* container, void* item) const CXX11_OVERRIDE
+	{
+		return ToInternal(container, item);
+	}
+};
+
 class ASNResolver CXX11_FINAL
 	: public DNS::Request
 {
  private:
 	irc::sockets::sockaddrs theirsa;
 	std::string theiruuid;
-	LocalIntExt& asnext;
+	ASNExt& asnext;
 	LocalIntExt& asnpendingext;
 
 	std::string GetDNS(LocalUser* user)
@@ -73,7 +93,7 @@ class ASNResolver CXX11_FINAL
 
 
  public:
-	ASNResolver(DNS::Manager* dns, Module* Creator, LocalUser* user, LocalIntExt& asn, LocalIntExt& asnpending)
+	ASNResolver(DNS::Manager* dns, Module* Creator, LocalUser* user, ASNExt& asn, LocalIntExt& asnpending)
 		: DNS::Request(dns, Creator, GetDNS(user), DNS::QUERY_TXT, true)
 		, theirsa(user->client_sa)
 		, theiruuid(user->uuid)
@@ -118,7 +138,7 @@ class ModuleASN CXX11_FINAL
 	, public Whois::EventListener
 {
  private:
-	LocalIntExt asnext;
+	ASNExt asnext;
 	LocalIntExt asnpendingext;
 	dynamic_reference<DNS::Manager> dns;
 
@@ -126,7 +146,7 @@ class ModuleASN CXX11_FINAL
 	ModuleASN()
 		: Stats::EventListener(this)
 		, Whois::EventListener(this)
-		, asnext("asn", ExtensionItem::EXT_USER, this)
+		, asnext(this)
 		, asnpendingext("asn-pending", ExtensionItem::EXT_USER, this)
 		, dns(this, "DNS")
 	{
@@ -211,10 +231,10 @@ class ModuleASN CXX11_FINAL
 			return MOD_RES_PASSTHRU;
 
 		std::map<intptr_t, size_t> counts;
-		const UserManager::LocalList& list = ServerInstance->Users.GetLocalUsers();
-		for (UserManager::LocalList::const_iterator iter = list.begin(); iter != list.end(); ++iter)
+		const user_hash& list = ServerInstance->Users.GetUsers();
+		for (user_hash::const_iterator iter = list.begin(); iter != list.end(); ++iter)
 		{
-			intptr_t asn = asnext.get(*iter);
+			intptr_t asn = asnext.get(iter->second);
 			if (!counts.insert(std::make_pair(asn, 1)).second)
 				counts[asn]++;
 		}
