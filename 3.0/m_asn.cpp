@@ -127,8 +127,12 @@ class ASNResolver CXX11_FINAL
 	void OnError(const DNS::Query* query) CXX11_OVERRIDE
 	{
 		LocalUser* them = IS_LOCAL(ServerInstance->FindUUID(theiruuid));
-		if (them && them->client_sa == theirsa)
-			asnpendingext.unset(them);
+		if (!them || them->client_sa != theirsa)
+			return;
+
+		asnpendingext.unset(them);
+		ServerInstance->SNO->WriteGlobalSno('a', "ASN lookup error for %s: %s",
+			them->GetIPString().c_str(), manager->GetErrorStr(query->error).c_str());
 	}
 };
 
@@ -199,9 +203,9 @@ class ModuleASN CXX11_FINAL
 		{
 			asnpendingext.unset(user);
 			delete resolver;
-			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, error.GetReason());
+			ServerInstance->SNO->WriteGlobalSno('a', "ASN lookup error for %s: %s",
+				user->GetIPString().c_str(), error.GetReason().c_str());
 		}
-
 	}
 
 	ModResult OnSetConnectClass(LocalUser* user, ConnectClass* myclass) CXX11_OVERRIDE
