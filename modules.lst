@@ -7,7 +7,7 @@ module m_antirandom 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_asciiswitch 3.0.654 https://raw.githubusercontent.com/inspircd/inspircd-contrib/59c2d698e0a67a8ceff6ed90c89733fd51ea3348/3.0/m_asciiswitch.cpp
  depends core 3
  description Allows migrating a live network which is using RFC 1459 casemapping to ASCII casemapping.
-module m_asn 3.0.676 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9c6236cec6c2360a2d4be33de8f5a5ae944d7fb8/3.0/m_asn.cpp
+module m_asn 3.0.678 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7597b4b535d8a8f9ee9d5703e4095c28baa479f4/3.0/m_asn.cpp
  depends core 3
  description Allows banning users based on Autonomous System number.
 module m_autoaway 3.0.584 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e6d2adbf2527d08246cafcb63ee304bd8a8cf326/3.0/m_autoaway.cpp
