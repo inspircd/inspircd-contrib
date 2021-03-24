@@ -189,17 +189,8 @@ class ModuleASN CXX11_FINAL
 		if (user->quitting)
 			return;
 
-		if (user->MyClass)
-		{
-			if (!user->MyClass->config->getBool("useasn", true))
-				return;
-		}
-		else
-		{
-			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "User has no connect class in OnSetUserIP");
+		if (!user->MyClass || !user->MyClass->config->getBool("useasn", true))
 			return;
-		}
-
 		asnext.unset(user);
 		if (user->client_sa.family() != AF_INET && user->client_sa.family() != AF_INET6)
 			return;
