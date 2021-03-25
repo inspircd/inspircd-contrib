@@ -189,6 +189,8 @@ class ModuleASN CXX11_FINAL
 		if (user->quitting)
 			return;
 
+		if (!user->MyClass || !user->MyClass->config->getBool("useasn", true))
+			return;
 		asnext.unset(user);
 		if (user->client_sa.family() != AF_INET && user->client_sa.family() != AF_INET6)
 			return;
