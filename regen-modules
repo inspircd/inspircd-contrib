@@ -18,15 +18,11 @@
 #
 
 
-BEGIN {
-	require 5.10.0;
-}
-
-use feature ':5.10';
+use v5.10.0;
 use strict;
 use warnings FATAL => qw(all);
 
-use File::Basename;
+use File::Basename qw(basename dirname);
 
 use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-contrib';
 use constant RM_EOL      => '1-2';
