@@ -163,7 +163,16 @@ class CustomTags CXX11_FINAL
 			return;
 
 		for (CustomTagMap::const_iterator iter = tags->begin(); iter != tags->end(); ++iter)
-			msg.AddTag(vendor + "/" + iter->first, this, iter->second);
+			msg.AddTag(vendor + iter->first, this, iter->second);
+	}
+
+	ModResult OnProcessTag(User* user, const std::string& tagname, std::string& tagvalue) CXX11_OVERRIDE
+	{
+		// Check that the tag begins with the customtags vendor prefix.
+		if (irc::find(tagname, vendor) == 0)
+			return MOD_RES_ALLOW;
+
+		return MOD_RES_PASSTHRU;
 	}
 
 	bool ShouldSendTag(LocalUser* user, const ClientProtocol::MessageTagData& tagdata) CXX11_OVERRIDE
@@ -174,14 +183,27 @@ class CustomTags CXX11_FINAL
 
 class ModuleCustomTags CXX11_FINAL
 	: public Module
+	, public CTCTags::EventListener
 	, public Who::EventListener
 {
  private:
 	CustomTags ctags;
 
+	ModResult AddCustomTags(User* user, ClientProtocol::TagMap& tags)
+	{
+		CustomTagMap* tagmap = ctags.ext.get(user);
+		if (!tagmap)
+			return MOD_RES_PASSTHRU;
+
+		for (CustomTagMap::const_iterator iter = tagmap->begin(); iter != tagmap->end(); ++iter)
+			tags.insert(std::make_pair(ctags.vendor + iter->first, ClientProtocol::MessageTagData(&ctags, iter->second)));
+		return MOD_RES_PASSTHRU;
+	}
+
  public:
 	ModuleCustomTags()
-		: Who::EventListener(this)
+		: CTCTags::EventListener(this)
+		, Who::EventListener(this)
 		, ctags(this)
 	{
 	}
@@ -191,6 +213,16 @@ class ModuleCustomTags CXX11_FINAL
 		size_t nick_index;
 		ctags.whox_index = request.GetFieldIndex('n', nick_index) ? nick_index : -1;
 		return MOD_RES_PASSTHRU;
+	}
+
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
+	{
+		return AddCustomTags(user, details.tags_out);
+	}
+
+	ModResult OnUserPreTagMessage(User* user, const MessageTarget& target, CTCTags::TagMessageDetails& details) CXX11_OVERRIDE
+	{
+		return AddCustomTags(user, details.tags_out);
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
@@ -211,7 +243,7 @@ class ModuleCustomTags CXX11_FINAL
 
 		ConfigTag* tag = ServerInstance->Config->ConfValue("customtags");
 		ctags.ext.broadcastchanges = tag->getBool("broadcastchanges");
-		ctags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1);
+		ctags.vendor = tag->getString("vendor", ServerInstance->Config->ServerName, 1) + "/";
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
