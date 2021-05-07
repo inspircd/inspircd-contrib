@@ -8,7 +8,7 @@ on:
       - '3.0/*'
 jobs:
   build:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     env:
       CXXFLAGS: -std=${{ matrix.standard }} -Wno-error=deprecated-declarations
       CXX: ${{ matrix.compiler }}
