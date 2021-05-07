@@ -103,7 +103,7 @@ module m_geocmd 3.0.560 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_globalmessageflood 3.0.515 https://raw.githubusercontent.com/inspircd/inspircd-contrib/62aacc12ea6b823960349d5d7e4d552ad7d6d132/3.0/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
-module m_hash_gnutls 3.0.645 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bc98a5c553250f6305de473ee56bc98f97315406/3.0/m_hash_gnutls.cpp
+module m_hash_gnutls 3.0.690 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc7150a4e1ea62aa82c44047cd44ce27b792acc0/3.0/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 3
  conflicts m_md5.so
