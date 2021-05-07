@@ -31,18 +31,19 @@
 typedef insp::flat_map<std::string, std::string, irc::insensitive_swo> CustomTagMap;
 typedef insp::flat_map<std::string, size_t, irc::insensitive_swo> SpecialMessageMap;
 
-class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
+class CustomTagsExtItem CXX11_FINAL
+	: public SimpleExtItem<CustomTagMap>
 {
  private:
-	dynamic_reference_nocheck<Cap::Capability> ctctagref;
+	CTCTags::CapReference& ctctagcap;
 	ClientProtocol::EventProvider tagmsgprov;
 
  public:
 	bool broadcastchanges;
 
-	CustomTagsExtItem(Module* Creator)
+	CustomTagsExtItem(Module* Creator, CTCTags::CapReference& capref)
 		: SimpleExtItem<CustomTagMap>("custom-tags", ExtensionItem::EXT_USER, Creator)
-		, ctctagref(Creator, "cap/message-tags")
+		, ctctagcap(capref)
 		, tagmsgprov(Creator, "TAGMSG")
 	{
 	}
@@ -73,13 +74,13 @@ class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 		if (!list->empty())
 		{
 			set(user, list);
-			if (!broadcastchanges || !ctctagref)
+			if (!broadcastchanges || !ctctagcap)
 				return;
 
 			ClientProtocol::TagMap tags;
 			CTCTags::TagMessage tagmsg(user, "*", tags);
 			ClientProtocol::Event tagev(tagmsgprov, tagmsg);
-			IRCv3::WriteNeighborsWithCap(user, tagev, **ctctagref, true);
+			IRCv3::WriteNeighborsWithCap(user, tagev, *ctctagcap, true);
 		}
 		else
 		{
@@ -105,10 +106,11 @@ class CustomTagsExtItem : public SimpleExtItem<CustomTagMap>
 	}
 };
 
-class CustomTags : public ClientProtocol::MessageTagProvider
+class CustomTags CXX11_FINAL
+	: public ClientProtocol::MessageTagProvider
 {
  private:
-	Cap::Reference ctctagcap;
+	CTCTags::CapReference ctctagcap;
 
 	User* UserFromMsg(ClientProtocol::Message& msg)
 	{
@@ -140,8 +142,8 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 
 	CustomTags(Module* mod)
 		: ClientProtocol::MessageTagProvider(mod)
-		, ctctagcap(mod, "message-tags")
-		, ext(mod)
+		, ctctagcap(mod)
+		, ext(mod, ctctagcap)
 		, whox_index(-1)
 	{
 	}
@@ -170,7 +172,7 @@ class CustomTags : public ClientProtocol::MessageTagProvider
 	}
 };
 
-class ModuleCustomTags
+class ModuleCustomTags CXX11_FINAL
 	: public Module
 	, public Who::EventListener
 {
