@@ -76,6 +76,9 @@ module m_customtags 3.0.688 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_dccblock 3.0.643 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f9e0cd3b622581427996c1ae1d7891655a001872/3.0/m_dccblock.cpp
  description Provides support for blocking DCC transfers
  depends core 3
+module m_defaulttopic 3.0.692 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5d609aec9b4f0dfb1a2e6261ce6c0efbed88388c/3.0/m_defaulttopic.cpp
+ depends core 3
+ description Adds support for default channel topics.
 module m_discordnick 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_discordnick.cpp
  depends core 3
  description Adds support for Discord-style #1234 nick tags.
