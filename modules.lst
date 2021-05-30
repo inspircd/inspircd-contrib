@@ -183,6 +183,9 @@ module m_rotatelog 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_samove 3.0.630 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1475b75003338e26bc3a47603128e6d12a4d31ab/3.0/m_samove.cpp
  depends core 3
  description Adds /SAMOVE command to move a user from one channel to another (basically combining SAPART+SAJOIN)
+module m_sha512 3.0.694 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cd8b99ae7ed3c73a81645e252efaecdf97d189b7/3.0/m_sha512.cpp
+ depends core 3
+ description Hash provider for SHA512.
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
  depends core 3
  description Slowly disconnects idle users for maintenance
