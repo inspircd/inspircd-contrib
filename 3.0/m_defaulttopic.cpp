@@ -37,7 +37,7 @@ class ModuleDefaultTopic : public Module
 		defaulttopic = tag->getString("defaulttopic", "", 0, ServerInstance->Config->Limits.MaxTopic);
 	}
 
-	void OnUserJoin(Membership* memb, bool sync, bool created, CUList& except)
+	void OnUserJoin(Membership* memb, bool sync, bool created, CUList& except) CXX11_OVERRIDE
 	{
 		if (created && !defaulttopic.empty())
 			memb->chan->SetTopic(ServerInstance->FakeClient, defaulttopic, ServerInstance->Time());
