@@ -23,7 +23,7 @@
 
 /// $ModAuthor: InspIRCd Developers
 /// $ModAuthorMail: noreply@inspircd.org
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Provides the tre regular expression engine which uses the TRE library.
 
 /// $CompilerFlags: find_compiler_flags("tre")
