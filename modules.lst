@@ -225,15 +225,15 @@ module m_xlinetools 3.0.575 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_zombie 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_censor 4.0.697 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1fb8a57d42e7e6e2cf9a14d8a3773df7544561f4/4.0/m_censor.cpp
- depends core 3
+module m_censor 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_censor.cpp
+ depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clones 4.0.697 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1fb8a57d42e7e6e2cf9a14d8a3773df7544561f4/4.0/m_clones.cpp
- depends core 3
+module m_clones 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_clones.cpp
+ depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
-module m_lockserv 4.0.697 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1fb8a57d42e7e6e2cf9a14d8a3773df7544561f4/4.0/m_lockserv.cpp
- depends core 3
+module m_lockserv 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_lockserv.cpp
+ depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_regex_tre 4.0.697 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1fb8a57d42e7e6e2cf9a14d8a3773df7544561f4/4.0/m_regex_tre.cpp
- depends core 3
+module m_regex_tre 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_regex_tre.cpp
+ depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
