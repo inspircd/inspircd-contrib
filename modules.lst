@@ -237,6 +237,9 @@ module m_clones 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_lockserv 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
+module m_modenotice 4.0.703 https://raw.githubusercontent.com/inspircd/inspircd-contrib/168e9804a76e0a07538af36532a6ae1cac66717b/4.0/m_modenotice.cpp
+ depends core 4
+ description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
 module m_regex_tre 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
