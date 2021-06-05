@@ -85,6 +85,9 @@ module m_discordnick 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd
 module m_eventexec 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_eventexec.cpp
  description Executes commands when a specified event occurs.
  depends core 3
+module m_exmode 3.0.705 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f0a09a2e860c98d3d5417511c0e8c2d3d618f99d/3.0/m_exmode.cpp
+ depends core 3
+ description Adds the /EXMODE command which explains a mode change.
 module m_extbanbanlist 3.0.554 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fd2c8818d2d51b0a2ecd0e9a6869dac283dc0da8/3.0/m_extbanbanlist.cpp
  depends core 3
  description Provides extban 'b' - Ban list from another channel
