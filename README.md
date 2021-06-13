@@ -20,7 +20,7 @@ Modules in this repository are not officially supported by the InspIRCd developm
 
 See the module author comments in the module files to find the author.
 
-You may be able to find the author or others who use the module in [\#inspircd on irc.inspircd.org](https://kiwiirc.com/nextclient/irc.inspircd.org:+6697/#inspircd).
+You may be able to find the author or others who use the module in \#inspircd on irc.inspircd.org.
 
 Please make it clear you're asking about a contrib module!
 
