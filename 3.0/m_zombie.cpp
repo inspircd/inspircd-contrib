@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModConfig: <zombie serverzombietime="5m" cleansplit="no" dirtysplit="yes">
+/// $ModConfig: <zombie maxzombies="100" serverzombietime="5m" cleansplit="no" dirtysplit="yes">
 /// $ModDepends: core 3
 /// $ModDesc: Provides support for zombifying users who have split because of a network issue.
 
@@ -266,10 +266,10 @@ private:
 	ZombieServerMap servers;
 	JoinHook joinhook;
 	QuitHook quithook;
+	unsigned int maxzombies;
 	unsigned int zombietime;
 	bool cleansplit;
 	bool dirtysplit;
-
  public:
 	using ServerProtocol::LinkEventListener::OnServerSplit;
 
@@ -283,6 +283,7 @@ private:
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("zombie");
+		maxzombies = tag->getUInt("maxzombies", 100, 0, UINT_MAX);
 		zombietime = tag->getDuration("serverzombietime", 5*60, 30, 10*60);
 		cleansplit = tag->getBool("cleansplit");
 		dirtysplit = tag->getBool("dirtysplit", true);
@@ -327,6 +328,26 @@ private:
 		if (!error && !cleansplit)
 			return;
 
+		if (maxzombies)
+		{
+			ProtocolInterface::ServerList sl;
+			ServerInstance->PI->GetServerList(sl);
+
+			for (ProtocolInterface::ServerList::const_iterator s = sl.begin(); s != sl.end(); ++s)
+			{
+				if (s->servername == server->GetName())
+				{
+					// Does the server have too many users to zombify? If so
+					// then we return early to avoid using too much memory.
+					if (s->usercount > maxzombies)
+						return;
+
+					// We found the server and its below the maxzombie count.
+					break;
+				}
+			}
+		}
+
 		ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Marking server %s as a zombie", server->GetName().c_str());
 		ZombieTimer* timer = new ZombieTimer(server, zombietime);
 		ServerInstance->Timers.AddTimer(timer);
@@ -335,7 +356,7 @@ private:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides support for zombifying users who have split because of a network issue", VF_OPTCOMMON);
+		return Version("Provides support for zombifying users who have split because of a network issue.", VF_OPTCOMMON);
 	}
 };
 
