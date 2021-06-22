@@ -18,6 +18,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
+/// $ModConfig: <solvemsg chanmsg="no" usermsg="yes">
 /// $ModDepends: core 3
 /// $ModDesc: Requires users to solve a basic maths problem before messaging others.
 
@@ -77,12 +78,21 @@ class ModuleSolveMessage : public Module
  private:
 	SimpleExtItem<Problem> ext;
 	CommandSolve cmd;
+	bool chanmsg;
+	bool usermsg;
 
  public:
 	ModuleSolveMessage()
 		: ext("solve-message", ExtensionItem::EXT_USER, this)
 		, cmd(this, ext)
 	{
+	}
+
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
+	{
+		ConfigTag* tag = ServerInstance->Config->ConfValue("solvemsg");
+		chanmsg = tag->getBool("chanmsg", false);
+		usermsg = tag->getBool("usermsg", true);
 	}
 
 	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
@@ -97,12 +107,34 @@ class ModuleSolveMessage : public Module
 	ModResult OnUserPreMessage(User* user, const MessageTarget& msgtarget, MessageDetails& details) CXX11_OVERRIDE
 	{
 		LocalUser* source = IS_LOCAL(user);
-		if (!source || source->exempt || msgtarget.type != MessageTarget::TYPE_USER)
+		if (!source || source->exempt)
 			return MOD_RES_PASSTHRU;
 
-		User* target = msgtarget.Get<User>();
-		if (target->server->IsULine())
-			return MOD_RES_PASSTHRU;
+		switch (msgtarget.type)
+		{
+			case MessageTarget::TYPE_USER:
+			{
+				if (!usermsg)
+					return MOD_RES_PASSTHRU; // Not enabled.
+
+				User* target = msgtarget.Get<User>();
+				if (target->server->IsULine())
+					return MOD_RES_PASSTHRU; // Allow messaging ulines.
+
+				break;
+			}
+
+			case MessageTarget::TYPE_CHANNEL:
+			{
+				if (!chanmsg)
+					return MOD_RES_PASSTHRU; // Not enabled.
+
+				break;
+			}
+
+			case MessageTarget::TYPE_SERVER:
+				return MOD_RES_PASSTHRU; // Only opers can do this.
+		}
 
 		Problem* problem = ext.get(user);
 		if (!problem)
