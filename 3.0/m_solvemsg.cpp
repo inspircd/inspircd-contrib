@@ -29,7 +29,7 @@ struct Problem
 {
 	int first;
 	int second;
-	bool warned;
+	time_t nextwarning;
 };
 
 class CommandSolve : public SplitCommand
@@ -80,6 +80,7 @@ class ModuleSolveMessage : public Module
 	CommandSolve cmd;
 	bool chanmsg;
 	bool usermsg;
+	time_t warntime;
 
  public:
 	ModuleSolveMessage()
@@ -93,6 +94,7 @@ class ModuleSolveMessage : public Module
 		ConfigTag* tag = ServerInstance->Config->ConfValue("solvemsg");
 		chanmsg = tag->getBool("chanmsg", false);
 		usermsg = tag->getBool("usermsg", true);
+		warntime = tag->getDuration("warntime", 60, 1);
 	}
 
 	void OnUserPostInit(LocalUser* user) CXX11_OVERRIDE
@@ -100,7 +102,7 @@ class ModuleSolveMessage : public Module
 		Problem problem;
 		problem.first = ServerInstance->GenRandomInt(9);
 		problem.second = ServerInstance->GenRandomInt(9);
-		problem.warned = false;
+		problem.nextwarning = 0;
 		ext.set(user, problem);
 	}
 
@@ -143,13 +145,13 @@ class ModuleSolveMessage : public Module
 		if (!problem)
 			return MOD_RES_PASSTHRU;
 
-		if (problem->warned)
+		if (problem->nextwarning > ServerInstance->Time())
 			return MOD_RES_DENY;
 
 		user->WriteNotice("*** Before you can send messages you must solve the following problem:");
 		user->WriteNotice(InspIRCd::Format("*** What is %d + %d?", problem->first, problem->second));
 		user->WriteNotice("*** You can enter your answer using /QUOTE SOLVE <answer>");
-		problem->warned = true;
+		problem->nextwarning = ServerInstance->Time() + warntime;
 		return MOD_RES_DENY;
 	}
 
