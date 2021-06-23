@@ -24,6 +24,7 @@
 
 
 #include "inspircd.h"
+#include "modules/account.h"
 
 struct Problem
 {
@@ -80,6 +81,7 @@ class ModuleSolveMessage : public Module
 	CommandSolve cmd;
 	bool chanmsg;
 	bool usermsg;
+	bool exemptregistered;
 	time_t warntime;
 
  public:
@@ -94,6 +96,7 @@ class ModuleSolveMessage : public Module
 		ConfigTag* tag = ServerInstance->Config->ConfValue("solvemsg");
 		chanmsg = tag->getBool("chanmsg", false);
 		usermsg = tag->getBool("usermsg", true);
+		exemptregistered = tag->getBool("exemptregistered", true);
 		warntime = tag->getDuration("warntime", 60, 1);
 	}
 
@@ -111,6 +114,13 @@ class ModuleSolveMessage : public Module
 		LocalUser* source = IS_LOCAL(user);
 		if (!source || source->exempt)
 			return MOD_RES_PASSTHRU;
+
+		if (exemptregistered)
+		{
+			const AccountExtItem* accextitem = GetAccountExtItem();
+			if (accextitem ? accextitem->get(user) : NULL)
+				return MOD_RES_PASSTHRU; // Exempt logged in users.
+		}
 
 		switch (msgtarget.type)
 		{
