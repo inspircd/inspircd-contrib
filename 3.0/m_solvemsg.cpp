@@ -118,7 +118,8 @@ class ModuleSolveMessage : public Module
 		if (exemptregistered)
 		{
 			const AccountExtItem* accextitem = GetAccountExtItem();
-			if (accextitem ? accextitem->get(user) : NULL)
+			const std::string* account = accextitem ? accextitem->get(user) : NULL;
+			if (account)
 				return MOD_RES_PASSTHRU; // Exempt logged in users.
 		}
 
