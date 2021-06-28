@@ -109,6 +109,9 @@ class ModuleSolveMessage : public Module
 		if (!source)
 			return MOD_RES_PASSTHRU;
 
+		if (!source->MyClass->config->getBool("usesolvemsg", true))
+			return MOD_RES_PASSTHRU; // Exempt by connect class.
+
 		if (exemptregistered)
 		{
 			const AccountExtItem* accextitem = GetAccountExtItem();
