@@ -47,12 +47,6 @@ class CommandSolve : public SplitCommand
 
 	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
 	{
-		if (user->exempt)
-		{
-			user->WriteNotice("*** You do not need to solve a problem!");
-			return CMD_FAILURE;
-		}
-
 		Problem* problem = ext.get(user);
 		if (!problem)
 		{
@@ -112,7 +106,7 @@ class ModuleSolveMessage : public Module
 	ModResult OnUserPreMessage(User* user, const MessageTarget& msgtarget, MessageDetails& details) CXX11_OVERRIDE
 	{
 		LocalUser* source = IS_LOCAL(user);
-		if (!source || source->exempt)
+		if (!source)
 			return MOD_RES_PASSTHRU;
 
 		if (exemptregistered)
