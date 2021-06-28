@@ -195,7 +195,7 @@ module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_slowmode 3.0.606 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0d04920ca15b694051ac9b66c8adccdb43895017/3.0/m_slowmode.cpp
  description Provides channel mode +W (slow mode)
  depends core 3
-module m_solvemsg 3.0.717 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5de34e8761bdbe990de5db5b43a8fb4fbcf56cc6/3.0/m_solvemsg.cpp
+module m_solvemsg 3.0.720 https://raw.githubusercontent.com/inspircd/inspircd-contrib/628c10e810e59d983e1b30e7c3da49e8a3213379/3.0/m_solvemsg.cpp
  depends core 3
  description Requires users to solve a basic maths problem before messaging others.
 module m_stats_unlinked 3.0.543 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e69a709889df6821eab30dfc405f7c31d1cfb6f6/3.0/m_stats_unlinked.cpp
