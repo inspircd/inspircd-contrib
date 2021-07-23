@@ -270,6 +270,7 @@ private:
 	unsigned int zombietime;
 	bool cleansplit;
 	bool dirtysplit;
+
  public:
 	using ServerProtocol::LinkEventListener::OnServerSplit;
 
@@ -284,8 +285,8 @@ private:
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("zombie");
 		maxzombies = tag->getUInt("maxzombies", 100, 0, UINT_MAX);
-		zombietime = tag->getDuration("serverzombietime", 5*60, 30, 10*60);
-		cleansplit = tag->getBool("cleansplit");
+		zombietime = tag->getDuration("serverzombietime", 60, 10, 5*60);
+		cleansplit = tag->getBool("cleansplit", true);
 		dirtysplit = tag->getBool("dirtysplit", true);
 	}
 
@@ -356,7 +357,7 @@ private:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides support for zombifying users who have split because of a network issue.", VF_OPTCOMMON);
+		return Version("Provides support for zombifying users who have split because of a network partition.", VF_OPTCOMMON);
 	}
 };
 
