@@ -46,7 +46,7 @@ class ModuleOpModerated : public Module
 		if (target.type != MessageTarget::TYPE_CHANNEL || target.status)
 			return MOD_RES_PASSTHRU;
 
-		if (user->HasPrivPermission("channels/ignore-opmoderated"))
+		if (IS_LOCAL(user) && user->HasPrivPermission("channels/ignore-opmoderated"))
 			return MOD_RES_PASSTHRU;
 
 		Channel* const chan = target.Get<Channel>();
