@@ -43,10 +43,7 @@ class ModuleOpModerated : public Module
 
 	ModResult OnUserPreMessage(User *user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
-		if (target.type != MessageTarget::TYPE_CHANNEL)
-			return MOD_RES_PASSTHRU;
-
-		if (!IS_LOCAL(user) || target.status)
+		if (target.type != MessageTarget::TYPE_CHANNEL || target.status)
 			return MOD_RES_PASSTHRU;
 
 		if (user->HasPrivPermission("channels/ignore-opmoderated"))
