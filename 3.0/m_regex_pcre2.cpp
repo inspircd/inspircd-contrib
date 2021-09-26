@@ -53,7 +53,7 @@ class PCRE2Regex CXX11_FINAL
 	{
 		int errorcode;
 		PCRE2_SIZE erroroffset;
-		regex = pcre2_compile(reinterpret_cast<PCRE2_SPTR8>(pattern.c_str()), pattern.length(), 0, &errorcode, &erroroffset, nullptr);
+		regex = pcre2_compile(reinterpret_cast<PCRE2_SPTR8>(pattern.c_str()), pattern.length(), 0, &errorcode, &erroroffset, NULL);
 		if (!regex)
 		{
 			PCRE2_UCHAR errorstr[128];
@@ -69,8 +69,8 @@ class PCRE2Regex CXX11_FINAL
 
 	bool Matches(const std::string& text) CXX11_OVERRIDE
 	{
-		pcre2_match_data* unused = pcre2_match_data_create(1, nullptr);
-		int result = pcre2_match(regex, reinterpret_cast<PCRE2_SPTR8>(text.c_str()), text.length(), 0, 0, unused, nullptr);
+		pcre2_match_data* unused = pcre2_match_data_create(1, NULL);
+		int result = pcre2_match(regex, reinterpret_cast<PCRE2_SPTR8>(text.c_str()), text.length(), 0, 0, unused, NULL);
 		pcre2_match_data_free(unused);
 		return result >= 0;
 	}
