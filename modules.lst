@@ -156,7 +156,7 @@ module m_noprivatemode 3.0.543 https://raw.githubusercontent.com/inspircd/inspir
 module m_nouidnick 3.0.533 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ba483614627df5bd2a6d5dbfbfb693c7127d5fee/3.0/m_nouidnick.cpp
  depends core 3
  description Disallows changing nick to UID using /NICK
-module m_opmoderated 3.0.726 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f01e6bce5cd1119987f2fe04033b335d27a2f3a/3.0/m_opmoderated.cpp
+module m_opmoderated 3.0.728 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9041f3819a0b7b3c425039cc8d8c8a322b77ff9d/3.0/m_opmoderated.cpp
  depends core 3
  description Implements channel mode +U and extban 'u' - moderator mute
 module m_owoifier 3.0.682 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c724e607c2357e6c365686480bd809467d760e7b/3.0/m_owoifier.cpp
@@ -168,6 +168,9 @@ module m_qrcode 3.0.667 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_randomnotice 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_randomnotice.cpp
  depends core 3
  description Send a random notice (quote) from a file to all users at a set interval.
+module m_regex_pcre2 3.0.729 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ebb47daf70ae33f4fe73c5aabfea548fa198f6ec/3.0/m_regex_pcre2.cpp
+ depends core 3
+ description Provides the pcre2 regular expression engine which uses the PCRE2 library.
 module m_relaymsg 3.0.650 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cf367e0d50899baa911376e7662df5eb4138e9a4/3.0/m_relaymsg.cpp
  depends core 3
  description Provides the RELAYMSG command & draft/relaymsg capability for stateless bridging
