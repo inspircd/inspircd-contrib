@@ -91,7 +91,7 @@ class PCRE2Factory CXX11_FINAL
 	}
 };
 
-class ModuleRegexPCRE2 final
+class ModuleRegexPCRE2 CXX11_FINAL
 	: public Module
 {
  private:
