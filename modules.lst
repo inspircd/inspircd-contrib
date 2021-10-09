@@ -234,24 +234,24 @@ module m_xlinetools 3.0.575 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_zombie 3.0.724 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c5e89410a654e3abf64be62f9d26caa68aa8ab3b/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_censor 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_censor.cpp
+module m_censor 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clones 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_clones.cpp
+module m_clones 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_clones.cpp
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
-module m_lockserv 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_lockserv.cpp
+module m_lockserv 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_modenotice 4.0.703 https://raw.githubusercontent.com/inspircd/inspircd-contrib/168e9804a76e0a07538af36532a6ae1cac66717b/4.0/m_modenotice.cpp
+module m_modenotice 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_modenotice.cpp
  depends core 4
  description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
-module m_protoctl 4.0.722 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b9b587bd783e66acad6a889d55d5733eafd08cb8/4.0/m_protoctl.cpp
+module m_protoctl 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_regex_pcre 4.0.735 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c0295157ed7a602d5eb8ec1d806aa3e2ee2c0db4/4.0/m_regex_pcre.cpp
+module m_regex_pcre 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_regex_pcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.0.699 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b2f9df301a65b12162f4ee61161fc6de528a3701/4.0/m_regex_tre.cpp
+module m_regex_tre 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
