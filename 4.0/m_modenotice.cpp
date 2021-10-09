@@ -20,7 +20,6 @@
  */
 
 /// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
 

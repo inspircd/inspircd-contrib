@@ -23,7 +23,6 @@
  */
 
 /// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
 /// $ModDepends: core 4
 /// $ModDesc: Provides the pcre regular expression engine which uses the PCRE library.
 

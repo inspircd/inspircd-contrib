@@ -25,7 +25,6 @@
  */
 
 /// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
 /// $ModDepends: core 4
 /// $ModDesc: Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
 

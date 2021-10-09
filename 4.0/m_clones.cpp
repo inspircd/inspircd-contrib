@@ -23,7 +23,6 @@
  */
 
 /// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
 

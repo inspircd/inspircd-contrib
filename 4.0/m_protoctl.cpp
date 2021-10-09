@@ -17,7 +17,6 @@
  */
 
 /// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
 /// $ModDepends: core 4
 /// $ModDesc: Provides compatibility with the legacy PROTOCTL system.
 
