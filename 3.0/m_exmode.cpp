@@ -39,7 +39,7 @@ private:
 		: SplitCommand(Creator, "EXMODE", 2)
 	{
 		allow_empty_last_param = false;
-		syntax = "<target> [[(+|-)]<modes> [<mode-parameters>]]";
+		syntax = "<target> [(+|-)]<modes> [<mode-parameters>]";
 	}
 
 	CmdResult HandleLocal(LocalUser* user, const Params& parameters) CXX11_OVERRIDE
