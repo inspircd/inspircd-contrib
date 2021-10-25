@@ -82,7 +82,7 @@ module m_defaulttopic 3.0.696 https://raw.githubusercontent.com/inspircd/inspirc
 module m_discordnick 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_discordnick.cpp
  depends core 3
  description Adds support for Discord-style #1234 nick tags.
-module m_eventexec 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9271cdc801f62d3438da40454a0a70e7d542d769/3.0/m_eventexec.cpp
+module m_eventexec 3.0.741 https://raw.githubusercontent.com/inspircd/inspircd-contrib/082fbfa32f5bbd1382b0af52079d87b817e823a4/3.0/m_eventexec.cpp
  description Executes commands when a specified event occurs.
  depends core 3
 module m_exmode 3.0.739 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b5eea2ed939dd80581b0dceb97bee3da0eec422c/3.0/m_exmode.cpp
