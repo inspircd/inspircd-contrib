@@ -119,6 +119,7 @@ class ModuleEventExec
 				ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Replacing '%s' variable with '%s'", variable.c_str(), titer->second.c_str());
 				command.replace(variable_start, cmdpos - variable_start + 1, titer->second);
 				cmdpos = variable_start + titer->second.length();
+				variable_start = std::string::npos;
 			}
 
 			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Scheduling command for execution: %s", command.c_str());
