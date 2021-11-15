@@ -249,7 +249,7 @@ module m_modenotice 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_protoctl 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_regex_pcre 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_regex_pcre.cpp
+module m_regex_oldpcre 4.0.743 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e3797d1dcf3534d56ba3d85c55aa6253d99e969a/4.0/m_regex_oldpcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
 module m_regex_tre 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_regex_tre.cpp
