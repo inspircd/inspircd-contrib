@@ -64,7 +64,7 @@ class ModuleProtoctl
 
  public:
 	ModuleProtoctl()
-		: Module(VF_VENDOR, "Provides compatibility with the legacy PROTOCTL system.")
+		: Module(VF_NONE, "Provides compatibility with the legacy PROTOCTL system.")
 		, ISupport::EventListener(this)
 		, cmd(this)
 	{

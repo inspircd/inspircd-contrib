@@ -78,7 +78,7 @@ class ModuleSHA512 : public Module
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows other modules to generate SHA-512 hashes.", VF_VENDOR);
+		return Version("Allows other modules to generate SHA-512 hashes.");
 	}
 };
 

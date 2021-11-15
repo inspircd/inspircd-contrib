@@ -96,7 +96,7 @@ class ModuleClones : public Module
 
  public:
 	ModuleClones()
-		: Module(VF_VENDOR, "Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.")
+		: Module(VF_NONE, "Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.")
 		, cmd(this)
 	{
 	}

@@ -67,7 +67,7 @@ class ModuleModeNotice : public Module
 
  public:
 	ModuleModeNotice()
-		: Module(VF_VENDOR, "Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.")
+		: Module(VF_NONE, "Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.")
 		, cmd(this)
 	{
 	}

@@ -158,7 +158,7 @@ class ModuleASN CXX11_FINAL
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Allows banning users based on Autonomous System number.", VF_OPTCOMMON | VF_VENDOR);
+		return Version("Allows banning users based on Autonomous System number.", VF_OPTCOMMON);
 	}
 
 	void On005Numeric(std::map<std::string, std::string>& tokens) CXX11_OVERRIDE
