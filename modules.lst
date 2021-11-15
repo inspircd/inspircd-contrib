@@ -7,7 +7,7 @@ module m_antirandom 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_asciiswitch 3.0.654 https://raw.githubusercontent.com/inspircd/inspircd-contrib/59c2d698e0a67a8ceff6ed90c89733fd51ea3348/3.0/m_asciiswitch.cpp
  depends core 3
  description Allows migrating a live network which is using RFC 1459 casemapping to ASCII casemapping.
-module m_asn 3.0.680 https://raw.githubusercontent.com/inspircd/inspircd-contrib/08e1bed46aea13bd1bd54f03b66e740249e11ee7/3.0/m_asn.cpp
+module m_asn 3.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/3.0/m_asn.cpp
  depends core 3
  description Allows banning users based on Autonomous System number.
 module m_autoaway 3.0.584 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e6d2adbf2527d08246cafcb63ee304bd8a8cf326/3.0/m_autoaway.cpp
@@ -189,7 +189,7 @@ module m_rotatelog 3.0.567 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_samove 3.0.630 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1475b75003338e26bc3a47603128e6d12a4d31ab/3.0/m_samove.cpp
  depends core 3
  description Adds /SAMOVE command to move a user from one channel to another (basically combining SAPART+SAJOIN)
-module m_sha512 3.0.694 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cd8b99ae7ed3c73a81645e252efaecdf97d189b7/3.0/m_sha512.cpp
+module m_sha512 3.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/3.0/m_sha512.cpp
  depends core 3
  description Hash provider for SHA512.
 module m_shed_users 3.0.507 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d1d2eaaacfd98851b493c73bc16a8ef16b2ae697/3.0/m_shed_users.cpp
@@ -234,24 +234,24 @@ module m_xlinetools 3.0.575 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_zombie 3.0.724 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c5e89410a654e3abf64be62f9d26caa68aa8ab3b/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_censor 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_censor.cpp
+module m_censor 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clones 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_clones.cpp
+module m_clones 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_clones.cpp
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
-module m_lockserv 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_lockserv.cpp
+module m_lockserv 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_modenotice 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_modenotice.cpp
+module m_modenotice 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_modenotice.cpp
  depends core 4
  description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
-module m_protoctl 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_protoctl.cpp
+module m_protoctl 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_regex_oldpcre 4.0.743 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e3797d1dcf3534d56ba3d85c55aa6253d99e969a/4.0/m_regex_oldpcre.cpp
+module m_regex_oldpcre 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_regex_oldpcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.0.737 https://raw.githubusercontent.com/inspircd/inspircd-contrib/654eec3e60ca6aca03e5b519e458e9c3698d9091/4.0/m_regex_tre.cpp
+module m_regex_tre 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
