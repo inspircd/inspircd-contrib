@@ -22,8 +22,8 @@
 /// $PackageInfo: require_system("arch") qrencode pkgconf
 /// $PackageInfo: require_system("centos") qrencode-devel pkgconfig
 /// $PackageInfo: require_system("darwin") qrencode pkg-config
-/// $PackageInfo: require_system("debian") libqrencode3 libqrencode-dev pkg-config
-/// $PackageInfo: require_system("ubuntu") libqrencode3 libqrencode-dev pkg-config
+/// $PackageInfo: require_system("debian") libqrencode-dev pkg-config
+/// $PackageInfo: require_system("ubuntu") libqrencode-dev pkg-config
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
