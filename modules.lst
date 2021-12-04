@@ -162,7 +162,7 @@ module m_opmoderated 3.0.728 https://raw.githubusercontent.com/inspircd/inspircd
 module m_owoifier 3.0.682 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c724e607c2357e6c365686480bd809467d760e7b/3.0/m_owoifier.cpp
  description OwO, whats this?
  depends core 3
-module m_qrcode 3.0.667 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5bac7221eee09708ef86fe04c032ac3f4c6f7b0/3.0/m_qrcode.cpp
+module m_qrcode 3.0.748 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4790d81adefaaa8fc5c7408e1c8de0e5c1023ef6/3.0/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 3
 module m_randomnotice 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contrib/60bebb4d07526f77d44b7eb43ea3fea5f995c113/3.0/m_randomnotice.cpp
@@ -231,7 +231,7 @@ module m_totp 3.0.496 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_xlinetools 3.0.575 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bbbe67eb4148d919c3bd8d8fdeb978f6f9633003/3.0/m_xlinetools.cpp
  depends core 3
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module m_zombie 3.0.724 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c5e89410a654e3abf64be62f9d26caa68aa8ab3b/3.0/m_zombie.cpp
+module m_zombie 3.0.747 https://raw.githubusercontent.com/inspircd/inspircd-contrib/414a30a436ec607387b98da36f9f558eb9d91e7d/3.0/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
 module m_censor 4.0.745 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2df29c10fd000c6355318260b51888aad136ce52/4.0/m_censor.cpp
