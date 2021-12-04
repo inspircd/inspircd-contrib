@@ -284,7 +284,7 @@ private:
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("zombie");
-		maxzombies = tag->getUInt("maxzombies", 100, 0, UINT_MAX);
+		maxzombies = tag->getUInt("maxzombies", 100, 1, 250);
 		zombietime = tag->getDuration("serverzombietime", 60, 10, 5*60);
 		cleansplit = tag->getBool("cleansplit", true);
 		dirtysplit = tag->getBool("dirtysplit", true);
