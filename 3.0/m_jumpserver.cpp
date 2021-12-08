@@ -49,6 +49,7 @@ class CommandJumpserver : public Command
 		: Command(Creator, "JUMPSERVER", 0, 4)
 		, sslapi(Creator)
 	{
+		allow_empty_last_param = false;
 		flags_needed = 'o';
 		syntax = "[<server> <port>[:<sslport>] <+/-an> <reason>]";
 		port = 0;
