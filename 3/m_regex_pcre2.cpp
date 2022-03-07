@@ -81,7 +81,7 @@ class PCRE2Factory CXX11_FINAL
 {
  public:
 	PCRE2Factory(Module* Creator)
-		: RegexFactory(Creator, "regex/pcre2")
+		: RegexFactory(Creator, "regex/pcre")
 	{
 	}
 
@@ -105,7 +105,7 @@ class ModuleRegexPCRE2 CXX11_FINAL
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides the pcre2 regular expression engine which uses the PCRE2 library.");
+		return Version("Provides the pcre regular expression engine which uses the PCRE2 library.");
 	}
 };
 
