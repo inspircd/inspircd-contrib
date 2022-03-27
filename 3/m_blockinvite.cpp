@@ -18,7 +18,7 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModConfig: <blockinvite reply="no">
+/// $ModConfig: <blockinvite reply="no" modechar="V">
 /// $ModDepends: core 3
 /// $ModDesc: Provides usermode 'V' - block all INVITEs
 /* Set whether to reply with a blocked message to the source (inviter)
@@ -51,7 +51,7 @@ class ModuleBlockInvite : public Module
 
  public:
 	ModuleBlockInvite()
-		: bi(this, "blockinvite", 'V')
+		: bi(this, "blockinvite", ServerInstance->Config->ConfValue("blockinvite")->getString("modechar", "V", 1, 1)[0])
 		, reply(false)
 	{
 	}

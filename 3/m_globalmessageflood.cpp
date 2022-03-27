@@ -25,6 +25,7 @@
 
 #include "inspircd.h"
 
+/// $ModConfig: <globalflood modechar="x">
 /// $ModDesc: Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
 /// $ModDepends: core 3
 
@@ -74,7 +75,7 @@ class GlobalMsgFlood : public ParamMode<GlobalMsgFlood, SimpleExtItem<globalfloo
  public:
 	/* This an oper only mode */
 	GlobalMsgFlood(Module* Creator)
-		: ParamMode<GlobalMsgFlood, SimpleExtItem<globalfloodsettings> >(Creator, "globalflood", 'x')
+		: ParamMode<GlobalMsgFlood, SimpleExtItem<globalfloodsettings> >(Creator, "globalflood", ServerInstance->Config->ConfValue("globalflood")->getString("modechar", "x", 1, 1)[0])
 	{
 #if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
 		syntax = "[*]<lines>:<seconds>";

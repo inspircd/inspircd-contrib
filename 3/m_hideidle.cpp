@@ -18,6 +18,7 @@
 
 /// $ModAuthor: Attila Molnar
 /// $ModAuthorMail: attilamolnar@hush.com
+/// $ModConfig: <hideidle modechar="a">
 /// $ModDepends: core 3
 /// $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
 
@@ -32,7 +33,7 @@ class ModuleHideIdle : public Module, public Whois::LineEventListener
  public:
 	ModuleHideIdle()
 		: Whois::LineEventListener(this)
-		, hideidle(this, "hideidle", 'a')
+		, hideidle(this, "hideidle", ServerInstance->Config->ConfValue("hideidle")->getString("modechar", "a", 1, 1)[0])
 	{
 	}
 

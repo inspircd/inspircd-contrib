@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// $ModConfig: <opmoderated modechar="U">
 /// $ModDepends: core 3
 /// $ModDesc: Implements channel mode +U and extban 'u' - moderator mute
 
@@ -30,7 +31,7 @@ class ModuleOpModerated : public Module
 
  public:
 	ModuleOpModerated()
-		: opmod(this, "opmoderated", 'U')
+		: opmod(this, "opmoderated", ServerInstance->Config->ConfValue("opmoderated")->getString("modechar", "U", 1, 1)[0])
 		, exemptionprov(this)
 	{
 	}

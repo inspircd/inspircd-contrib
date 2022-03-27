@@ -24,6 +24,7 @@
 
 /// $ModAuthor: Adam
 /// $ModAuthorMail: adam@anope.org
+/// $ModConfig: <slowmode modechar="W">
 /// $ModDesc: Provides channel mode +W (slow mode)
 /// $ModDepends: core 3
 
@@ -88,7 +89,7 @@ class MsgFlood : public ParamMode<MsgFlood, SimpleExtItem<slowmodesettings> >
 {
  public:
 	MsgFlood(Module* Creator)
-		: ParamMode<MsgFlood, SimpleExtItem<slowmodesettings> >(Creator, "slowmode", 'W')
+		: ParamMode<MsgFlood, SimpleExtItem<slowmodesettings> >(Creator, "slowmode", ServerInstance->Config->ConfValue("slowmode")->getString("modechar", "W", 1, 1)[0])
 	{
 #if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
 		syntax = "[cu]<lines>:<seconds>";

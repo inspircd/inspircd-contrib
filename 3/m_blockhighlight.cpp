@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes">
+/// $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes" modechar="V">
 /// $ModDesc: Adds a channel mode which kills clients that mass highlight spam.
 /// $ModDepends: core 3
 
@@ -40,7 +40,7 @@ class ModuleBlockHighlight : public Module
 
 public:
 	ModuleBlockHighlight()
-		: mode(this, "blockhighlight", 'V')
+		: mode(this, "blockhighlight", ServerInstance->Config->ConfValue("blockhighlight")->getString("modechar", "V", 1, 1)[0])
 		, noextmsgmode(this, "noextmsg")
 		, exemptionprov(this)
 	{

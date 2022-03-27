@@ -18,7 +18,7 @@
 
 /// $ModAuthor: genius3000
 /// $ModAuthorMail: genius3000@g3k.solutions
-/// $ModConfig: <joinpartspam allowredirect="no" freeredirect="no">
+/// $ModConfig: <joinpartspam allowredirect="no" freeredirect="no" modechar="x">
 /// $ModDepends: core 3
 /// $ModDesc: Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
 
@@ -261,7 +261,7 @@ class JoinPartSpam : public ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamse
 
  public:
 	JoinPartSpam(Module* Creator, bool& allow, bool& free)
-		: ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamsettings> >(Creator, "joinpartspam", 'x')
+		: ParamMode<JoinPartSpam, SimpleExtItem<joinpartspamsettings> >(Creator, "joinpartspam", ServerInstance->Config->ConfValue("joinpartspam")->getString("modechar", "x", 1, 1)[0])
 		, allowredirect(allow)
 		, freeredirect(free)
 	{
