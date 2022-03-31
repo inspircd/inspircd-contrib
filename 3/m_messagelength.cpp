@@ -19,6 +19,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
+/// $ModConfig: <messagelength modechar="W">
 /// $ModDesc: Adds a channel mode which limits the length of messages.
 /// $ModDepends: core 3
 
@@ -28,7 +29,7 @@ class MessageLengthMode : public ParamMode<MessageLengthMode, LocalIntExt>
 {
  public:
 	MessageLengthMode(Module* Creator)
-		: ParamMode<MessageLengthMode, LocalIntExt>(Creator, "message-length", 'W')
+		: ParamMode<MessageLengthMode, LocalIntExt>(Creator, "message-length", ServerInstance->Config->ConfValue("messagelength")->getString("modechar", "W", 1, 1)[0])
 	{
 #if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
 		syntax = "<max-length>";
