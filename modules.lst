@@ -4,6 +4,9 @@ module update-your-server 0.0.0 https://404.example.com
 module m_antirandom 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
+module m_antisnoop 3.760 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc3de1307ca689b82cf86c6bc344efc2c450cc1e/3/m_antisnoop.cpp
+ description Adds a channel mode which limits the ability of snoopers.
+ depends core 3
 module m_asciiswitch 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_asciiswitch.cpp
  depends core 3
  description Allows migrating a live network which is using RFC 1459 casemapping to ASCII casemapping.
