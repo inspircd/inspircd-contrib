@@ -115,7 +115,7 @@ class ModuleCensor : public Module
 		{
 			const std::string text = tag->getString("text");
 			if (text.empty())
-				throw ModuleException("<badword:text> is empty! at " + tag->source.str());
+				throw ModuleException(this, "<badword:text> is empty! at " + tag->source.str());
 
 			const std::string replace = tag->getString("replace");
 			newcensors[text] = replace;

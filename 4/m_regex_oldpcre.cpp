@@ -52,7 +52,7 @@ class PCREPattern final
 	pcre* regex;
 
  public:
-	PCREPattern(const std::string& pattern, uint8_t options)
+	PCREPattern(const Module* mod, const std::string& pattern, uint8_t options)
 		: Regex::Pattern(pattern, options)
 	{
 		int flags = 0;
@@ -63,7 +63,7 @@ class PCREPattern final
 		int erroroffset;
 		regex = pcre_compile(pattern.c_str(), flags, &error, &erroroffset, NULL);
 		if (!regex)
-			throw Regex::Exception(pattern, error, erroroffset);
+			throw Regex::Exception(mod, pattern, error, erroroffset);
 	}
 
 	~PCREPattern() override
