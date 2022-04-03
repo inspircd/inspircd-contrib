@@ -138,7 +138,7 @@ module m_jumpserver 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_kill_idle 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_kill_idle.cpp
  depends core 3
  description Disconnect idle users matching configured conditions
-module m_messagelength 3.758 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dd2f19f224ac3f1293bf1d20b743557e59a56863/3/m_messagelength.cpp
+module m_messagelength 3.765 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b780f84fc9730994f945d735571d7ffd62160ebd/3/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 3
 module m_namedstats 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_namedstats.cpp
