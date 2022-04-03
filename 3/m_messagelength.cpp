@@ -36,11 +36,14 @@ class MessageLengthMode : public ParamMode<MessageLengthMode, LocalIntExt>
 #endif
 	}
 
-	ModeAction OnSet(User*, Channel* channel, std::string& parameter)
+	ModeAction OnSet(User* source, Channel* channel, std::string& parameter)
 	{
 		size_t length = ConvToNum<size_t>(parameter);
 		if (length == 0 || length > ServerInstance->Config->Limits.MaxLine)
+		{
+			source->WriteNumeric(Numerics::InvalidModeParameter(channel, this, parameter));
 			return MODEACTION_DENY;
+		}
 
 		this->ext.set(channel, length);
 		return MODEACTION_ALLOW;
