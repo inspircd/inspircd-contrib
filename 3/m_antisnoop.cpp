@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModConfig: <antisnoop modechar="W">
+/// $ModConfig: <antisnoop exemptrank="10000" modechar="W">
 /// $ModDesc: Adds a channel mode which limits the ability of snoopers.
 /// $ModDepends: core 3
 
@@ -59,12 +59,19 @@ class ModuleAntiSnoop : public Module
  private:
 	LocalIntExt lastmsg;
 	AntiSnoopMode mode;
+	unsigned long exemptrank;
 
  public:
 	ModuleAntiSnoop()
 		: lastmsg("antisnoop-lastmsg", ExtensionItem::EXT_MEMBERSHIP, this)
 		, mode(this)
 	{
+	}
+
+	void ReadConfig(ConfigStatus& status)
+	{
+		ConfigTag* tag = ServerInstance->Config->ConfValue("antisnoop");
+		exemptrank = tag->getUInt("exemptrank", VOICE_VALUE);
 	}
 
 	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
@@ -88,7 +95,11 @@ class ModuleAntiSnoop : public Module
 		const Channel::MemberMap& users = channel->GetUsers();
 		for (Channel::MemberMap::const_iterator iter = users.begin(); iter != users.end(); ++iter)
 		{
-			if (lastmsg.get(iter->second) < maxidle)
+			Membership* targmemb = iter->second;
+			if (exemptrank && targmemb->getRank() >= exemptrank)
+				continue;
+
+			if (lastmsg.get(targmemb) < maxidle)
 				details.exemptions.insert(iter->first);
 		}
 
