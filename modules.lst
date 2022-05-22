@@ -132,7 +132,7 @@ module m_joinpartsno 3.752 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_joinpartspam 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_joinpartspam.cpp
  depends core 3
  description Adds channel mode +x to block a user after x per y joins and parts/quits (join/part spam)
-module m_jumpserver 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_jumpserver.cpp
+module m_jumpserver 3.769 https://raw.githubusercontent.com/inspircd/inspircd-contrib/bad3608e677c98a9511820cec1a5201a89c6cf75/3/m_jumpserver.cpp
  depends core 3
  description Provides support for the RPL_REDIR numeric and the /JUMPSERVER command.
 module m_kill_idle 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_kill_idle.cpp
