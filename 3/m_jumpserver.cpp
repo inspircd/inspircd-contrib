@@ -60,9 +60,7 @@ class CommandJumpserver : public Command
 	CmdResult Handle(User* user, const Params& parameters) CXX11_OVERRIDE
 	{
 		int n_done = 0;
-		reason = (parameters.size() < 4) ? "Please use this server/port instead" : parameters[3];
 		bool redirect_all_immediately = false;
-		redirect_new_users = true;
 		bool direction = true;
 		std::string n_done_s;
 
@@ -76,11 +74,14 @@ class CommandJumpserver : public Command
 
 			port = 0;
 			sslport = 0;
+			redirect_new_users = false;
 			redirect_to.clear();
 			return CMD_SUCCESS;
 		}
 
 		port = 0;
+		reason = (parameters.size() < 4) ? "Please use this server/port instead" : parameters[3];
+		redirect_new_users = true;
 		redirect_to.clear();
 
 		if (parameters.size() >= 3)
