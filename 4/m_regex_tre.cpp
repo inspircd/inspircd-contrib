@@ -78,6 +78,18 @@ class TREPattern final
 	{
 		return !regexec(&regex, text.c_str(), 0, NULL, 0);
 	}
+
+	std::optional<Regex::MatchCollection> Matches(const std::string& text) override
+	{
+		if (!IsMatch(text))
+			return std::nullopt;
+
+		// The tre engine does not support any kind of capture.
+		static const Regex::Captures unusedc;
+		static const Regex::NamedCaptures unusednc;
+
+		return Regex::MatchCollection(unusedc, unusednc);
+	}
 };
 
 class ModuleRegexTRE : public Module

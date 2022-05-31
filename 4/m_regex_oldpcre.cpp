@@ -76,6 +76,18 @@ class PCREPattern final
 		// This cast is potentially unsafe but it's what pcre_exec expects.
 		return pcre_exec(regex, NULL, text.c_str(), int(text.length()), 0, 0, NULL, 0) >= 0;
 	}
+
+	std::optional<Regex::MatchCollection> Matches(const std::string& text) override
+	{
+		if (!IsMatch(text))
+			return std::nullopt;
+
+		// The old pcre engine does not support any kind of capture.
+		static const Regex::Captures unusedc;
+		static const Regex::NamedCaptures unusednc;
+
+		return Regex::MatchCollection(unusedc, unusednc);
+	}
 };
 
 class ModuleRegexPCRE : public Module
