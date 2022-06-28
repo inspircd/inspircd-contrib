@@ -252,9 +252,12 @@ module m_modenotice 4.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_protoctl 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_regex_oldpcre 4.763 https://raw.githubusercontent.com/inspircd/inspircd-contrib/18a442093624fbfcf11e6f4997a40c7afa9ae3c2/4/m_regex_oldpcre.cpp
+module m_regex_oldpcre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_oldpcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.763 https://raw.githubusercontent.com/inspircd/inspircd-contrib/18a442093624fbfcf11e6f4997a40c7afa9ae3c2/4/m_regex_tre.cpp
+module m_regex_tre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
+module m_userip 4.772 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9d51f86e6509ccb4f426b304908c800bd36f3b22/4/m_userip.cpp
+ depends core 4
+ description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
