@@ -158,7 +158,7 @@ class ModuleIRCv3UTF8Only CXX11_FINAL
 
 	ModResult OnStats(Stats::Context& stats) CXX11_OVERRIDE
 	{
-		if (stats.GetSymbol() != 'u')
+		if (stats.GetSymbol() != 'U')
 			return MOD_RES_PASSTHRU;
 
 		unsigned long totalmsg = validmsg + invalidmsg;
