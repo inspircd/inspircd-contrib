@@ -123,7 +123,7 @@ module m_hideidle 3.756 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_identmeta 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_identmeta.cpp
  depends core 3
  description Stores the ident given in USER as metadata.
-module m_ircv3_utf8only 3.776 https://raw.githubusercontent.com/inspircd/inspircd-contrib/30b9cc0845b49cf7ef29039283935725554868e6/3/m_ircv3_utf8only.cpp
+module m_ircv3_utf8only 3.778 https://raw.githubusercontent.com/inspircd/inspircd-contrib/49e2298bac9f7010c09ac89c6967c2cf26e47352/3/m_ircv3_utf8only.cpp
  description Implements the IRCv3 UTF8ONLY extension.
  depends core 3
 module m_join0 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_join0.cpp
