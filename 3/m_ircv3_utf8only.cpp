@@ -81,14 +81,7 @@ class UTF8Serializer CXX11_FINAL
 
 	ClientProtocol::SerializedMessage Serialize(const ClientProtocol::Message& msg, const ClientProtocol::TagSelection& tagwl) const CXX11_OVERRIDE
 	{
-		const ClientProtocol::SerializedMessage line = serializer->Serialize(msg, tagwl);
-		if (!sanitize)
-			return line;
-
-		ClientProtocol::SerializedMessage newline;
-		newline.reserve(line.length());
-		utf8::unchecked::replace_invalid(line.begin(), line.end(), std::back_inserter(newline));
-		return newline;
+		return serializer->Serialize(msg, tagwl);
 	}
 };
 
@@ -110,6 +103,14 @@ class ModuleIRCv3UTF8Only CXX11_FINAL
 	{
 		for (SerializerMap::const_iterator iter = serializers.begin(); iter != serializers.end(); ++iter)
 			delete iter->second;
+	}
+
+	void init() CXX11_OVERRIDE
+	{
+		// Replace local user's serializers with a UTF-8 version.
+		const UserManager::LocalList& lusers = ServerInstance->Users.GetLocalUsers();
+		for (UserManager::LocalList::const_iterator iter = lusers.begin(); iter != lusers.end(); ++iter)
+			OnUserInit(*iter);
 	}
 
 	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
@@ -158,7 +159,7 @@ class ModuleIRCv3UTF8Only CXX11_FINAL
 
 	ModResult OnStats(Stats::Context& stats) CXX11_OVERRIDE
 	{
-		if (stats.GetSymbol() != 'U')
+		if (stats.GetSymbol() != '8')
 			return MOD_RES_PASSTHRU;
 
 		unsigned long totalmsg = validmsg + invalidmsg;
@@ -173,10 +174,10 @@ class ModuleIRCv3UTF8Only CXX11_FINAL
 
 	void OnUserInit(LocalUser* user) CXX11_OVERRIDE
 	{
-		if (!user->serializer)
-			return; // WTF?
+		if (!user->serializer || user->serializer->creator == this)
+			return; // No serializer or they already have a UTF-8 serializer.
 
-		SerializerMap::const_iterator iter = serializers.find(user->serializer-> name);
+		SerializerMap::const_iterator iter = serializers.find(user->serializer->name);
 		if (iter == serializers.end())
 		{
 			// Serializer doesn't exist, create it.
