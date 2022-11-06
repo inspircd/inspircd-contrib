@@ -61,8 +61,8 @@ public:
 		size_t paramcount = std::min<size_t>(parameters.size(), 5);
 		for (size_t i = 0; i < paramcount; ++i)
 		{
-			User *u = ServerInstance->Users.FindNick(parameters[i]);
-			if ((u) && (u->registered == REG_ALL))
+			auto u = ServerInstance->Users.FindNick(parameters[i], true);
+			if (u)
 			{
 				retbuf += u->nick;
 

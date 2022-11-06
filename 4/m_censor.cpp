@@ -31,6 +31,7 @@
 
 #include "inspircd.h"
 #include "modules/exemption.h"
+#include "numerichelper.h"
 
 typedef insp::flat_map<std::string, std::string, irc::insensitive_swo> CensorMap;
 

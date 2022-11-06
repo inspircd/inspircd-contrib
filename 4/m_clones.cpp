@@ -28,6 +28,7 @@
 
 
 #include "inspircd.h"
+#include "clientprotocolmsg.h"
 #include "modules/ircv3_batch.h"
 
 enum
