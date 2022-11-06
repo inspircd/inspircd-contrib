@@ -243,10 +243,10 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_censor 4.763 https://raw.githubusercontent.com/inspircd/inspircd-contrib/18a442093624fbfcf11e6f4997a40c7afa9ae3c2/4/m_censor.cpp
+module m_censor 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dff269ad5185ea1847e8415027761490baf95c36/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clones 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_clones.cpp
+module m_clones 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dff269ad5185ea1847e8415027761490baf95c36/4/m_clones.cpp
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
 module m_lockserv 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_lockserv.cpp
@@ -264,6 +264,6 @@ module m_regex_oldpcre 4.771 https://raw.githubusercontent.com/inspircd/inspircd
 module m_regex_tre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
-module m_userip 4.772 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9d51f86e6509ccb4f426b304908c800bd36f3b22/4/m_userip.cpp
+module m_userip 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dff269ad5185ea1847e8415027761490baf95c36/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
