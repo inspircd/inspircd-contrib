@@ -126,6 +126,9 @@ module m_hideidle 3.756 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_identmeta 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_identmeta.cpp
  depends core 3
  description Stores the ident given in USER as metadata.
+module m_ircv3_extjwt 3.785 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d210aff791c2088bebef4ee97937f4615a2e2555/3/m_ircv3_extjwt.cpp
+ depends core 3
+ description Provides the DRAFT extjwt IRCv3 extension.
 module m_ircv3_utf8only 3.778 https://raw.githubusercontent.com/inspircd/inspircd-contrib/49e2298bac9f7010c09ac89c6967c2cf26e47352/3/m_ircv3_utf8only.cpp
  description Implements the IRCv3 UTF8ONLY extension.
  depends core 3
@@ -264,6 +267,6 @@ module m_regex_oldpcre 4.771 https://raw.githubusercontent.com/inspircd/inspircd
 module m_regex_tre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
-module m_userip 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dff269ad5185ea1847e8415027761490baf95c36/4/m_userip.cpp
+module m_userip 4.784 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5c4e3db7e5e3502e4c077a5dac96b2c9693136b3/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
