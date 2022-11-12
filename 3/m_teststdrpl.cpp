@@ -52,7 +52,7 @@ class CommandStdRpl : public SplitCommand
 		noterpl.Send(user, this, "EXAMPLE", "NOTE with a command name.");
 
 		failrpl.Send(user, this, "EXAMPLE", 123, "FAIL with variable parameters.");
-		warnrpl.Send(user, this, "EXAMPLE", 123, "FAIL with variable parameters.");
+		warnrpl.Send(user, this, "EXAMPLE", 123, "WARN with variable parameters.");
 		noterpl.Send(user, this, "EXAMPLE", 123, "NOTE with variable parameters.");
 
 		return CMD_SUCCESS;
