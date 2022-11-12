@@ -228,7 +228,7 @@ module m_teams 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib
 module m_telegraf 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_telegraf.cpp
  description Provides IRCd metrics to a locally running Telegraf instance.
  depends core 3
-module m_teststdrpl 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_teststdrpl.cpp
+module m_teststdrpl 3.787 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5dfe1a5c9b8f2d1323cb334bebf781e3a74d40e3/3/m_teststdrpl.cpp
  depends core 3
  description Adds the STDRPL command for testing client standard reply implementations.
 module m_tgchange 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_tgchange.cpp
