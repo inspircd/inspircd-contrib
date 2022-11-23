@@ -112,6 +112,10 @@ class ModuleSolveMessage : public Module
 		if (!source->MyClass->config->getBool("usesolvemsg", true))
 			return MOD_RES_PASSTHRU; // Exempt by connect class.
 
+		std::string ctcpname;
+		if (details.IsCTCP(ctcpname) && !irc::equals(ctcpname, "ACTION"))
+			return MOD_RES_PASSTHRU; // Exempt non-ACTION CTCPs.
+
 		if (exemptregistered)
 		{
 			const AccountExtItem* accextitem = GetAccountExtItem();
