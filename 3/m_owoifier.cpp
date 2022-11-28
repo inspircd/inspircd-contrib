@@ -37,10 +37,11 @@ static const char FACES[6][16] = {
 	"^w^ "
 };
 
-class ModuleOwoifier : public Module
+class ModuleOwoifier CXX11_FINAL
+	: public Module
 {
  public:
-	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) override
+	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) CXX11_OVERRIDE
 	{
 		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;
@@ -68,7 +69,7 @@ class ModuleOwoifier : public Module
 		return MOD_RES_PASSTHRU;
 	}
 
-	Version GetVersion() override
+	Version GetVersion() CXX11_OVERRIDE
 	{
 		return Version("OwO, whats this?", VF_OPTCOMMON);
 	}

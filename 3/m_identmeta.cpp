@@ -24,14 +24,17 @@
 
 #include "inspircd.h"
 
-class ModuleIdentMeta : public Module
+class ModuleIdentMeta CXX11_FINAL
+	: public Module
 {
  private:
 	StringExtItem ext;
 
  public:
 	ModuleIdentMeta()
-		: ext("user-ident", ExtensionItem::EXT_USER, this) { }
+		: ext("user-ident", ExtensionItem::EXT_USER, this)
+	{
+	}
 
 	void OnChangeIdent(User* user, const std::string& ident) CXX11_OVERRIDE
 	{

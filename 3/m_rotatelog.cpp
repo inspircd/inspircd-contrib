@@ -27,10 +27,14 @@
 
 static volatile sig_atomic_t signaled;
 
-class RotateLogTimer : public Timer
+class RotateLogTimer CXX11_FINAL
+	: public Timer
 {
  public:
-	RotateLogTimer() : Timer(3600, true) { }
+	RotateLogTimer()
+		: Timer(3600, true)
+	{
+	}
 
 	bool Tick(time_t) CXX11_OVERRIDE
 	{
@@ -43,7 +47,8 @@ class RotateLogTimer : public Timer
 	}
 };
 
-class ModuleRotateLog : public Module
+class ModuleRotateLog CXX11_FINAL
+	: public Module
 {
  private:
 	RotateLogTimer* timer;

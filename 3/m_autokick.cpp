@@ -25,14 +25,18 @@
 
 #include "inspircd.h"
 
-class ModeWatcherBan : public ModeWatcher
+class ModeWatcherBan CXX11_FINAL
+	: public ModeWatcher
 {
  public:
-	std::string Reason;
+	std::string reason;
 
-	ModeWatcherBan(Module* Creator) : ModeWatcher(Creator, "ban", MODETYPE_CHANNEL) { }
+	ModeWatcherBan(Module* Creator)
+		: ModeWatcher(Creator, "ban", MODETYPE_CHANNEL)
+	{
+	}
 
-	void AfterMode(User* source, User*, Channel* channel, const std::string& parameter, bool adding) CXX11_OVERRIDE
+	void AfterMode(User* source, User* target, Channel* channel, const std::string& parameter, bool adding) CXX11_OVERRIDE
 	{
 		if (adding)
 		{
@@ -47,25 +51,29 @@ class ModeWatcherBan : public ModeWatcher
 				Channel::MemberMap::const_iterator it = iter++;
 				if (IS_LOCAL(it->first) && rank > channel->GetPrefixValue(it->first) && channel->CheckBan(it->first, parameter))
 				{
-					channel->KickUser(ServerInstance->FakeClient, it->first, Reason.c_str());
+					channel->KickUser(ServerInstance->FakeClient, it->first, reason.c_str());
 				}
 			}
 		}
 	}
 };
 
-class ModuleAutoKick : public Module
+class ModuleAutoKick CXX11_FINAL
+	: public Module
 {
  private:
 	ModeWatcherBan mw;
 
  public:
-	ModuleAutoKick() : mw(this) { }
+	ModuleAutoKick()
+		: mw(this)
+	{
+	}
 
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("autokick");
-		mw.Reason = tag->getString("message", "Banned");
+		mw.reason = tag->getString("message", "Banned");
 	}
 
 	Version GetVersion() CXX11_OVERRIDE

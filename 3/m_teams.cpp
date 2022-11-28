@@ -34,7 +34,8 @@ enum
 // Represents a list of teams that a user is a member of.
 typedef insp::flat_set<std::string, irc::insensitive_swo> TeamList;
 
-class TeamExt : public SimpleExtItem<TeamList>
+class TeamExt CXX11_FINAL
+	: public SimpleExtItem<TeamList>
 {
  public:
 	TeamExt(Module* Creator)
@@ -70,7 +71,7 @@ class TeamExt : public SimpleExtItem<TeamList>
 	}
 };
 
-class ModuleTeams
+class ModuleTeams CXX11_FINAL
 	: public Module
 	, public Whois::EventListener
 {

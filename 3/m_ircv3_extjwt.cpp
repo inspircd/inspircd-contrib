@@ -53,7 +53,7 @@ namespace
 	}
 }
 
-struct JWTService
+struct JWTService CXX11_FINAL
 {
 	// The duration that a generated JWT is valid for.
 	unsigned long duration;
@@ -74,7 +74,8 @@ struct JWTService
 
 typedef insp::flat_map<std::string, JWTService, irc::insensitive_swo> ServiceMap;
 
-class ExtJWTMessage : public ClientProtocol::Message
+class ExtJWTMessage CXX11_FINAL
+	: public ClientProtocol::Message
 {
  public:
 	ExtJWTMessage(Channel* chan, const std::string& service, bool last, const std::string& data)
@@ -94,7 +95,8 @@ class ExtJWTMessage : public ClientProtocol::Message
 	}
 };
 
-class ExtJWTVerifier : public HTTPRequestEventListener
+class ExtJWTVerifier CXX11_FINAL
+	: public HTTPRequestEventListener
 {
  private:
 	HTTPdAPI httpapi;
@@ -132,14 +134,14 @@ class ExtJWTVerifier : public HTTPRequestEventListener
 			return MOD_RES_PASSTHRU; // Pass through to another module.
 
 		// Check a service was specified if multiple exist.
-		ServiceMap::iterator service = services.begin();
+		ServiceMap::iterator siter = services.begin();
 		if (services.size() > 1)
 		{
 			if (!pathstream.GetToken(pathtoken))
 				return HandleResponse(request, 400, "No JWT service specified");
 
-			service = services.find(pathtoken);
-			if (service == services.end())
+			siter = services.find(pathtoken);
+			if (siter == services.end())
 				return HandleResponse(request, 400, "No such JWT service: " + pathtoken);
 		}
 
@@ -163,7 +165,7 @@ class ExtJWTVerifier : public HTTPRequestEventListener
 		payload = Base64ToBin(payload, BASE64_URL);
 
 		// Check the header and signature are valid.
-		if (pathtoken != CreateJWT(sha256, payload, service->second.secret))
+		if (pathtoken != CreateJWT(sha256, payload, siter->second.secret))
 			return HandleResponse(request, 401, "Invalid JWT signature specified");
 
 		// Validate the expiry time.
@@ -184,7 +186,8 @@ class ExtJWTVerifier : public HTTPRequestEventListener
 	}
 };
 
-class CommandExtJWT : public SplitCommand
+class CommandExtJWT CXX11_FINAL
+	: public SplitCommand
 {
  private:
 	ChanModeReference privatemode;
@@ -237,17 +240,17 @@ class CommandExtJWT : public SplitCommand
 		}
 
 		// Look up the appropriate JWT service.
-		ServiceMap::iterator service = services.begin();
+		ServiceMap::iterator siter = services.begin();
 		std::string servicename = "*";
 		if (parameters.size() > 1)
 		{
-			service = services.find(parameters[1]);
-			if (service == services.end())
+			siter = services.find(parameters[1]);
+			if (siter == services.end())
 			{
 				fail.Send(user, this, "INVALID_PROFILE", "You specified an invalid JSON Web Token profile!");
 				return CMD_FAILURE;
 			}
-			servicename = service->first;
+			servicename = siter->first;
 		}
 
 		// Create the token JSON.
@@ -257,7 +260,7 @@ class CommandExtJWT : public SplitCommand
 		writer.StartObject();
 		{
 			writer.Key("exp");
-			writer.Uint64(ServerInstance->Time() + service->second.duration);
+			writer.Uint64(ServerInstance->Time() + siter->second.duration);
 
 			writer.Key("iss");
 			writer.String(ServerInstance->Config->ServerName);
@@ -279,10 +282,10 @@ class CommandExtJWT : public SplitCommand
 			}
 			writer.EndArray();
 
-			if (!service->second.verifyurl.empty())
+			if (!siter->second.verifyurl.empty())
 			{
 				writer.Key("vfy");
-				writer.String(service->second.verifyurl);
+				writer.String(siter->second.verifyurl);
 			}
 
 			if (chan)
@@ -307,7 +310,7 @@ class CommandExtJWT : public SplitCommand
 
 
 		// Build the JWT.
-		const std::string token = CreateJWT(sha256, buffer.GetString(), service->second.secret);
+		const std::string token = CreateJWT(sha256, buffer.GetString(), siter->second.secret);
 		size_t startpos = 0;
 		while (token.length() - startpos > MAX_MSG_SIZE)
 		{
@@ -324,7 +327,8 @@ class CommandExtJWT : public SplitCommand
 	}
 };
 
-class ModuleIRCv3ExtJWT : public Module
+class ModuleIRCv3ExtJWT CXX11_FINAL
+	: public Module
 {
  private:
 	CommandExtJWT cmd;

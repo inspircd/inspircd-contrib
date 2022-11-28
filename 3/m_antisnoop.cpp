@@ -54,7 +54,8 @@ class AntiSnoopMode CXX11_FINAL
 	}
 };
 
-class ModuleAntiSnoop : public Module
+class ModuleAntiSnoop CXX11_FINAL
+	: public Module
 {
  private:
 	LocalIntExt lastmsg;

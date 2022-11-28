@@ -45,7 +45,8 @@ namespace
 	}
 }
 
-class ModuleDiscordNick : public Module
+class ModuleDiscordNick CXX11_FINAL
+	: public Module
 {
  private:
 	LocalIntExt ext;

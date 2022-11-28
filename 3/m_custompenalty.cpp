@@ -25,7 +25,8 @@
 
 #include "inspircd.h"
 
-class ModuleCustomPenalty : public Module
+class ModuleCustomPenalty CXX11_FINAL
+	: public Module
 {
  private:
 	void SetPenalties()
@@ -36,7 +37,7 @@ class ModuleCustomPenalty : public Module
 			ConfigTag* tag = i->second;
 
 			std::string name = tag->getString("name");
-			unsigned int penalty = tag->getUInt("value", 1, 1);
+			unsigned int penalty = tag->getUInt("value", 1, 1, UINT_MAX);
 
 			Command* command = ServerInstance->Parser.GetHandler(name);
 			if (!command)

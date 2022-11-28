@@ -25,7 +25,8 @@
 
 #include "inspircd.h"
 
-class ModuleDefaultTopic : public Module
+class ModuleDefaultTopic CXX11_FINAL
+	: public Module
 {
  private:
 	std::string defaulttopic;

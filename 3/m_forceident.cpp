@@ -25,7 +25,8 @@
 
 #include "inspircd.h"
 
-class ModuleForceIdent : public Module
+class ModuleForceIdent CXX11_FINAL
+	: public Module
 {
  public:
 	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE

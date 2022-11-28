@@ -26,7 +26,8 @@
 #include "inspircd.h"
 #include "modules/ircv3_replies.h"
 
-class CommandComplete : public SplitCommand
+class CommandComplete CXX11_FINAL
+	: public SplitCommand
 {
  private:
 	Cap::Reference cap;
@@ -91,7 +92,8 @@ class CommandComplete : public SplitCommand
 	}
 };
 
-class ModuleComplete : public Module
+class ModuleComplete CXX11_FINAL
+	: public Module
 {
  private:
 	CommandComplete cmd;

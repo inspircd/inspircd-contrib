@@ -23,9 +23,8 @@
 
 
 #include "inspircd.h"
-#include "modules/ircv3_replies.h"
 
-class CommandASCIICheck
+class CommandASCIICheck CXX11_FINAL
 	: public SplitCommand
 {
  private:
@@ -87,7 +86,8 @@ class CommandASCIICheck
 	}
 };
 
-class ModuleASCIISwitch : public Module
+class ModuleASCIISwitch CXX11_FINAL
+	: public Module
 {
  private:
 	CommandASCIICheck cmd;

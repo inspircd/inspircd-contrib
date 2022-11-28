@@ -25,10 +25,11 @@
 
 #include "inspircd.h"
 
-class ModuleAutoDrop : public Module
+class ModuleAutoDrop CXX11_FINAL
+	: public Module
 {
  private:
-	std::vector<std::string> Commands;
+	std::vector<std::string> commands;
 
  public:
 	void Prioritize() CXX11_OVERRIDE
@@ -38,22 +39,17 @@ class ModuleAutoDrop : public Module
 
 	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
 	{
-		Commands.clear();
-
 		ConfigTag* tag = ServerInstance->Config->ConfValue("autodrop");
-		std::string commandList = tag->getString("commands", "CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE");
 
-		irc::spacesepstream stream(commandList);
-		std::string token;
-		while (stream.GetToken(token))
-		{
-			Commands.push_back(token);
-		}
+		commands.clear();
+		irc::spacesepstream commandstream(tag->getString("commands", "CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE", 1));
+		for (std::string command; commandstream.GetToken(command); )
+			commands.push_back(command);
 	}
 
-	ModResult OnPreCommand(std::string& command, Command::Params&, LocalUser* user, bool) CXX11_OVERRIDE
+	ModResult OnPreCommand(std::string& command, Command::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
 	{
-		if (user->registered == REG_ALL || std::find(Commands.begin(), Commands.end(), command) == Commands.end())
+		if (user->registered == REG_ALL || !stdalgo::isin(commands, command))
 			return MOD_RES_PASSTHRU;
 
 		user->eh.SetError("Dropped by " MODNAME);

@@ -24,7 +24,8 @@
 
 #include "inspircd.h"
 
-class ModuleCVE20222663 : public Module
+class ModuleCVE20222663 CXX11_FINAL
+	: public Module
 {
  private:
 	std::string find;

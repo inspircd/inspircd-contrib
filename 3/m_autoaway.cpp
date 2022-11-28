@@ -33,10 +33,10 @@ enum
 	RPL_NOWAWAY = 306
 };
 
-class ModuleAutoAway
+class ModuleAutoAway CXX11_FINAL
 	: public Module
 	, public Timer
-	, Away::EventListener
+	, public Away::EventListener
 {
  private:
 	LocalIntExt autoaway;

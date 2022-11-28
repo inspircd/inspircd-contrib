@@ -24,7 +24,8 @@
 
 #include "inspircd.h"
 
-class CommandSVSOper : public Command
+class CommandSVSOper CXX11_FINAL
+	: public Command
 {
  public:
 	CommandSVSOper(Module* Creator)
@@ -62,7 +63,8 @@ class CommandSVSOper : public Command
 	}
 };
 
-class ModuleSVSOper : public Module
+class ModuleSVSOper CXX11_FINAL
+	: public Module
 {
  private:
 	CommandSVSOper command;

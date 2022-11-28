@@ -24,7 +24,8 @@
 
 #include "inspircd.h"
 
-class NoPrivateMode : public Module
+class NoPrivateMode CXX11_FINAL
+	: public Module
 {
  private:
 	ChanModeReference privatemode;
@@ -37,7 +38,7 @@ class NoPrivateMode : public Module
 	{
 	}
 
-	ModResult OnPreMode(User* source, User*, Channel* channel, Modes::ChangeList& modes) CXX11_OVERRIDE
+	ModResult OnPreMode(User* source, User* target, Channel* channel, Modes::ChangeList& modes) CXX11_OVERRIDE
 	{
 		// We only care about channel mode changes from local users
 		if (!IS_LOCAL(source) || !channel)
@@ -46,7 +47,7 @@ class NoPrivateMode : public Module
 		Modes::ChangeList::List& list = modes.getlist();
 		for (Modes::ChangeList::List::iterator iter = list.begin(); iter != list.end(); ++iter)
 		{
-			if (iter->mh == *privatemode)
+			if (iter->adding && iter->mh == *privatemode)
 				iter->mh = *secretmode;
 		}
 		return MOD_RES_PASSTHRU;

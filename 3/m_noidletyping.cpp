@@ -25,7 +25,7 @@
 #include "inspircd.h"
 #include "modules/ctctags.h"
 
-class ModuleNoIdleTyping
+class ModuleNoIdleTyping CXX11_FINAL
 	: public Module
 	, public CTCTags::EventListener
 {

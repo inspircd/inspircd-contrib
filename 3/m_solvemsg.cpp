@@ -26,14 +26,15 @@
 #include "inspircd.h"
 #include "modules/account.h"
 
-struct Problem
+struct Problem CXX11_FINAL
 {
 	int first;
 	int second;
 	time_t nextwarning;
 };
 
-class CommandSolve : public SplitCommand
+class CommandSolve CXX11_FINAL
+	: public SplitCommand
 {
  private:
 	SimpleExtItem<Problem>& ext;
@@ -68,7 +69,8 @@ class CommandSolve : public SplitCommand
 	}
 };
 
-class ModuleSolveMessage : public Module
+class ModuleSolveMessage CXX11_FINAL
+	: public Module
 {
  private:
 	SimpleExtItem<Problem> ext;

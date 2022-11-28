@@ -35,7 +35,8 @@ enum EventType
 	ET_SERVER_UNLINK
 };
 
-class CoreExport CommandThread : public Thread
+class CommandThread CXX11_FINAL
+	: public Thread
 {
  private:
 	std::vector<std::string> commands;
@@ -44,11 +45,6 @@ class CoreExport CommandThread : public Thread
 	CommandThread(const std::vector<std::string>& cmds)
 		: commands(cmds)
 	{
-	}
-
-	virtual ~CommandThread()
-	{
-		// Shuts the compiler up.
 	}
 
 	void Run() CXX11_OVERRIDE
@@ -62,7 +58,7 @@ class CoreExport CommandThread : public Thread
 };
 
 
-class ModuleEventExec
+class ModuleEventExec CXX11_FINAL
 	: public Module
 	, public ServerProtocol::LinkEventListener
 {

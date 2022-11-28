@@ -25,7 +25,8 @@
 #include "inspircd.h"
 #include "modules/ircv3_replies.h"
 
-class CommandStdRpl : public SplitCommand
+class CommandStdRpl CXX11_FINAL
+	: public SplitCommand
 {
  private:
 	IRCv3::Replies::Fail failrpl;
@@ -59,7 +60,8 @@ class CommandStdRpl : public SplitCommand
 	}
 };
 
-class ModuleStdRpl : public Module
+class ModuleStdRpl CXX11_FINAL
+	: public Module
 {
  private:
 	CommandStdRpl cmd;

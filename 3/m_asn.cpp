@@ -166,7 +166,7 @@ class ModuleASN CXX11_FINAL
 		tokens["EXTBAN"].push_back('b');
 	}
 
-	ModResult OnCheckBan(User* user, Channel*, const std::string& mask) CXX11_OVERRIDE
+	ModResult OnCheckBan(User* user, Channel* chan, const std::string& mask) CXX11_OVERRIDE
 	{
 		if ((mask.length() > 2) && (mask[0] == 'b') && (mask[1] == ':'))
 		{

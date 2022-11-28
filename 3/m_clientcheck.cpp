@@ -37,7 +37,7 @@ enum ClientAction
 	CA_PRIVMSG
 };
 
-struct ClientInfo
+struct ClientInfo CXX11_FINAL
 {
 	// The action to take against a client that matches this action.
 	ClientAction action;
@@ -49,7 +49,8 @@ struct ClientInfo
 	Regex* pattern;
 };
 
-class ModuleClientCheck : public Module
+class ModuleClientCheck CXX11_FINAL
+	: public Module
 {
  private:
 	LocalIntExt ext;
