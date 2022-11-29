@@ -55,7 +55,7 @@ class CommandProtoctl final
 	}
 };
 
-class ModuleProtoctl
+class ModuleProtoctl final
 	: public Module
 	, public ISupport::EventListener
 {

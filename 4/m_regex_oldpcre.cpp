@@ -90,7 +90,8 @@ class PCREPattern final
 	}
 };
 
-class ModuleRegexPCRE : public Module
+class ModuleRegexPCRE final
+	: public Module
 {
  private:
 	Regex::SimpleEngine<PCREPattern> regex;

@@ -40,12 +40,15 @@ enum
 	RPL_SERVLOCKOFF = 989
 };
 
-class CommandLockserv : public Command
+class CommandLockserv final
+	: public Command
 {
 	std::string& locked;
 
  public:
-	CommandLockserv(Module* Creator, std::string& lock) : Command(Creator, "LOCKSERV", 0, 1), locked(lock)
+	CommandLockserv(Module* Creator, std::string& lock)
+		: Command(Creator, "LOCKSERV", 0, 1)
+		, locked(lock)
 	{
 		allow_empty_last_param = false;
 		access_needed = CmdAccess::OPERATOR;
@@ -66,12 +69,15 @@ class CommandLockserv : public Command
 	}
 };
 
-class CommandUnlockserv : public Command
+class CommandUnlockserv final
+	: public Command
 {
 	std::string& locked;
 
  public:
-	CommandUnlockserv(Module* Creator, std::string& lock) : Command(Creator, "UNLOCKSERV", 0), locked(lock)
+	CommandUnlockserv(Module* Creator, std::string& lock)
+		: Command(Creator, "UNLOCKSERV")
+		, locked(lock)
 	{
 		access_needed = CmdAccess::OPERATOR;
 	}
@@ -91,7 +97,8 @@ class CommandUnlockserv : public Command
 	}
 };
 
-class ModuleLockserv : public Module
+class ModuleLockserv final
+	: public Module
 {
 	std::string locked;
 	CommandLockserv lockcommand;

@@ -26,30 +26,34 @@
 
 #include "inspircd.h"
 
-class CommandModeNotice : public Command
+class CommandModeNotice final
+	: public Command
 {
  public:
-	CommandModeNotice(Module* parent) : Command(parent,"MODENOTICE",2,2)
+	CommandModeNotice(Module* mod)
+		: Command(mod, "MODENOTICE", 2, 2)
 	{
 		syntax = { "<modeletters> :<message>" };
 		access_needed = CmdAccess::OPERATOR;
 	}
 
-	CmdResult Handle(User* src, const Params& parameters) override
+	CmdResult Handle(User* user, const Params& parameters) override
 	{
-		std::string msg = "*** From " + src->nick + ": " + parameters[1];
-		int mlen = parameters[0].length();
-		const UserManager::LocalList& list = ServerInstance->Users.GetLocalUsers();
-		for (UserManager::LocalList::const_iterator i = list.begin(); i != list.end(); ++i)
+		const std::string message = InspIRCd::Format("*** From %s: %s", user->nick.c_str(), parameters[2].c_str());
+		for (auto* u : ServerInstance->Users.GetLocalUsers())
 		{
-			User* user = *i;
-			for (int n = 0; n < mlen; n++)
+			bool send = true;
+			for (const auto& mode : parameters[0])
 			{
-				if (!user->IsModeSet(parameters[0][n]))
-					goto next_user;
+				if (!u->IsModeSet(mode))
+				{
+					send = false;
+					break;
+				}
 			}
-			user->WriteNotice(msg);
-next_user:	;
+
+			if (send)
+				u->WriteNotice(message);
 		}
 		return CmdResult::SUCCESS;
 	}
@@ -60,7 +64,8 @@ next_user:	;
 	}
 };
 
-class ModuleModeNotice : public Module
+class ModuleModeNotice final
+	: public Module
 {
  private:
 	CommandModeNotice cmd;

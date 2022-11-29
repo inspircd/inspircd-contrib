@@ -92,7 +92,8 @@ class TREPattern final
 	}
 };
 
-class ModuleRegexTRE : public Module
+class ModuleRegexTRE final
+	: public Module
 {
  private:
 	Regex::SimpleEngine<TREPattern> regex;
