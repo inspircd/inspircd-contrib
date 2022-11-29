@@ -252,19 +252,19 @@ module m_censor 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_clones 4.782 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dff269ad5185ea1847e8415027761490baf95c36/4/m_clones.cpp
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
-module m_lockserv 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_lockserv.cpp
+module m_lockserv 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_modenotice 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_modenotice.cpp
+module m_modenotice 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_modenotice.cpp
  depends core 4
  description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
-module m_protoctl 4.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/4/m_protoctl.cpp
+module m_protoctl 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_regex_oldpcre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_oldpcre.cpp
+module m_regex_oldpcre 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_regex_oldpcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.771 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ded4b67446c8d4667a7ebb4447c15ae298b4174b/4/m_regex_tre.cpp
+module m_regex_tre 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
 module m_userip 4.784 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5c4e3db7e5e3502e4c077a5dac96b2c9693136b3/4/m_userip.cpp
