@@ -16,7 +16,7 @@ module m_asn 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1
 module m_autoaway 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_autoaway.cpp
  depends core 3
  description Automatically marks idle users as away.
-module m_autodrop 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_autodrop.cpp
+module m_autodrop 3.795 https://raw.githubusercontent.com/inspircd/inspircd-contrib/69ddc59d5f4fdb721f9d14648aa0e55473cabcae/3/m_autodrop.cpp
  depends core 3
  description Allows clients to be automatically dropped if they execute certain commands before registration.
 module m_autokick 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_autokick.cpp
