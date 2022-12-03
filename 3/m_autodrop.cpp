@@ -30,6 +30,7 @@ class ModuleAutoDrop CXX11_FINAL
 {
  private:
 	std::vector<std::string> commands;
+	std::string message;
 
  public:
 	void Prioritize() CXX11_OVERRIDE
@@ -37,7 +38,7 @@ class ModuleAutoDrop CXX11_FINAL
 		ServerInstance->Modules->SetPriority(this, I_OnPreCommand, PRIORITY_FIRST);
 	}
 
-	void ReadConfig(ConfigStatus&) CXX11_OVERRIDE
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("autodrop");
 
@@ -45,6 +46,9 @@ class ModuleAutoDrop CXX11_FINAL
 		irc::spacesepstream commandstream(tag->getString("commands", "CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE", 1));
 		for (std::string command; commandstream.GetToken(command); )
 			commands.push_back(command);
+
+		if (!tag->readString("message", message, true))
+			message.clear();
 	}
 
 	ModResult OnPreCommand(std::string& command, Command::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
@@ -52,6 +56,11 @@ class ModuleAutoDrop CXX11_FINAL
 		if (user->registered == REG_ALL || !stdalgo::isin(commands, command))
 			return MOD_RES_PASSTHRU;
 
+		if (!message.empty())
+		{
+			user->eh.AddWriteBuf(message);
+			user->eh.DoWrite();
+		}
 		user->eh.SetError("Dropped by " MODNAME);
 		return MOD_RES_DENY;
 	}
