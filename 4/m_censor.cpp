@@ -74,7 +74,7 @@ class ModuleCensor : public Module
 				if (!targchan->IsModeSet(cc))
 					return MOD_RES_PASSTHRU;
 
-				ModResult result = CheckExemption::Call(exemptionprov, user, targchan, "censor");
+				ModResult result = exemptionprov.Check(user, targchan, "censor");
 				if (result == MOD_RES_ALLOW)
 					return MOD_RES_PASSTHRU;
 				break;
@@ -91,7 +91,7 @@ class ModuleCensor : public Module
 			{
 				if (replace.empty())
 				{
-					const std::string msg = InspIRCd::Format("Your message to this channel contained a banned phrase (%s) and was blocked.", find.c_str());
+					const std::string msg = INSP_FORMAT("Your message to this channel contained a banned phrase ({}) and was blocked.", find);
 					if (target.type == MessageTarget::TYPE_CHANNEL)
 						user->WriteNumeric(Numerics::CannotSendTo(target.Get<Channel>(), msg));
 					else

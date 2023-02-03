@@ -39,7 +39,7 @@ class CommandModeNotice final
 
 	CmdResult Handle(User* user, const Params& parameters) override
 	{
-		const std::string message = InspIRCd::Format("*** From %s: %s", user->nick.c_str(), parameters[2].c_str());
+		const std::string message = INSP_FORMAT("*** From {}: {}", user->nick, parameters[2]);
 		for (auto* u : ServerInstance->Users.GetLocalUsers())
 		{
 			bool send = true;

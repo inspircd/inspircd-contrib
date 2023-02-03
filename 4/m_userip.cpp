@@ -77,7 +77,7 @@ public:
 				retbuf += (u->IsAway() ? '-' : '+');
 				retbuf += u->ident;
 				retbuf += '@';
-				retbuf += (u == user || has_privs ? u->GetIPString() : "255.255.255.255");
+				retbuf += (u == user || has_privs ? u->GetAddress() : "255.255.255.255");
 				retbuf += ' ';
 			}
 		}
