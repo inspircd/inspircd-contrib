@@ -64,7 +64,7 @@ class CommandLockserv final
 
 		locked = parameters.empty() ? "Server is temporarily closed. Please try again later." : parameters[0];
 		user->WriteNumeric(RPL_SERVLOCKON, user->server->GetName(), "Closed for new connections");
-		ServerInstance->SNO.WriteGlobalSno('a', "Oper %s used LOCKSERV to temporarily disallow new connections", user->nick.c_str());
+		ServerInstance->SNO.WriteGlobalSno('a', "Oper {} used LOCKSERV to temporarily disallow new connections", user->nick);
 		return CmdResult::SUCCESS;
 	}
 };
@@ -92,7 +92,7 @@ class CommandUnlockserv final
 
 		locked.clear();
 		user->WriteNumeric(RPL_SERVLOCKOFF, user->server->GetName(), "Open for new connections");
-		ServerInstance->SNO.WriteGlobalSno('a', "Oper %s used UNLOCKSERV to allow new connections", user->nick.c_str());
+		ServerInstance->SNO.WriteGlobalSno('a', "Oper {} used UNLOCKSERV to allow new connections", user->nick);
 		return CmdResult::SUCCESS;
 	}
 };
