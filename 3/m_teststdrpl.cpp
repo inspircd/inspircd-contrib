@@ -32,6 +32,7 @@ class CommandStdRpl CXX11_FINAL
 	IRCv3::Replies::Fail failrpl;
 	IRCv3::Replies::Warn warnrpl;
 	IRCv3::Replies::Note noterpl;
+	IRCv3::Replies::CapReference stdrplcap;
 
  public:
 	CommandStdRpl(Module* Creator)
@@ -39,6 +40,7 @@ class CommandStdRpl CXX11_FINAL
 		, failrpl(Creator)
 		, warnrpl(Creator)
 		, noterpl(Creator)
+		, stdrplcap(Creator)
 	{
 	}
 
@@ -55,6 +57,10 @@ class CommandStdRpl CXX11_FINAL
 		failrpl.Send(user, this, "EXAMPLE", 123, "FAIL with variable parameters.");
 		warnrpl.Send(user, this, "EXAMPLE", 123, "WARN with variable parameters.");
 		noterpl.Send(user, this, "EXAMPLE", 123, "NOTE with variable parameters.");
+
+		failrpl.SendIfCap(user, stdrplcap, this, "EXAMPLE", 123, "FAIL with standard-replies cap.");
+		warnrpl.SendIfCap(user, stdrplcap, this, "EXAMPLE", 123, "WARN with standard-replies cap.");
+		noterpl.SendIfCap(user, stdrplcap, this, "EXAMPLE", 123, "NOTE with standard-replies cap.");
 
 		return CMD_SUCCESS;
 	}
