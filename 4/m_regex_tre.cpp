@@ -59,7 +59,7 @@ class TREPattern final
 			return;
 
 		// Retrieve the size of the error message and allocate a buffer.
-		size_t errorsize = regerror(error, &regex, NULL, 0);
+		size_t errorsize = regerror(error, &regex, nullptr, 0);
 		std::vector<char> errormsg(errorsize);
 
 		// Retrieve the error message and free the buffer.
@@ -76,7 +76,7 @@ class TREPattern final
 
 	bool IsMatch(const std::string& text) override
 	{
-		return !regexec(&regex, text.c_str(), 0, NULL, 0);
+		return !regexec(&regex, text.c_str(), 0, nullptr, 0);
 	}
 
 	std::optional<Regex::MatchCollection> Matches(const std::string& text) override

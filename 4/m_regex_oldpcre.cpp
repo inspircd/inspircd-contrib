@@ -61,7 +61,7 @@ class PCREPattern final
 
 		const char* error;
 		int erroroffset;
-		regex = pcre_compile(pattern.c_str(), flags, &error, &erroroffset, NULL);
+		regex = pcre_compile(pattern.c_str(), flags, &error, &erroroffset, nullptr);
 		if (!regex)
 			throw Regex::Exception(mod, pattern, error, erroroffset);
 	}
@@ -74,7 +74,7 @@ class PCREPattern final
 	bool IsMatch(const std::string& text) override
 	{
 		// This cast is potentially unsafe but it's what pcre_exec expects.
-		return pcre_exec(regex, NULL, text.c_str(), int(text.length()), 0, 0, NULL, 0) >= 0;
+		return pcre_exec(regex, nullptr, text.c_str(), int(text.length()), 0, 0, nullptr, 0) >= 0;
 	}
 
 	std::optional<Regex::MatchCollection> Matches(const std::string& text) override
