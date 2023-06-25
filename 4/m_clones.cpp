@@ -55,7 +55,7 @@ class CommandClones : public SplitCommand
 
 	CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
 	{
-		unsigned int limit = ConvToNum<unsigned int>(parameters[0]);
+		auto limit = ConvToNum<unsigned int>(parameters[0]);
 
 		// Syntax of a CLONES reply:
 		// :irc.example.com BATCH +<id> inspircd.org/clones :<min-count>

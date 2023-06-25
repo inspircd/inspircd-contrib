@@ -33,9 +33,9 @@ private:
 
 	static bool IsServerLinked(const ProtocolInterface::ServerList& linkedServers, const std::string& serverName)
 	{
-		for (ProtocolInterface::ServerList::const_iterator it = linkedServers.begin(); it != linkedServers.end(); ++it)
+		for (const auto& linkedServer : linkedServers)
 		{
-			if (it->servername == serverName)
+			if (linkedServer.servername == serverName)
 				return true;
 		}
 		return false;

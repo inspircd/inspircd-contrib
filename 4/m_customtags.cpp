@@ -53,7 +53,7 @@ public:
 		if (!user)
 			return;
 
-		CustomTagMap* list = new CustomTagMap();
+		auto* list = new CustomTagMap();
 		irc::spacesepstream ts(value);
 		while (!ts.StreamEnd())
 		{
@@ -90,9 +90,9 @@ public:
 
 	std::string ToInternal(const Extensible* container, void* item) const noexcept override
 	{
-		CustomTagMap* list = static_cast<CustomTagMap*>(item);
+		auto* list = static_cast<CustomTagMap*>(item);
 		std::string buf;
-		for (CustomTagMap::const_iterator iter = list->begin(); iter != list->end(); ++iter)
+		for (auto iter = list->begin(); iter != list->end(); ++iter)
 		{
 			if (iter != list->begin())
 				buf.push_back(' ');
@@ -113,7 +113,7 @@ private:
 
 	User* UserFromMsg(ClientProtocol::Message& msg)
 	{
-		SpecialMessageMap::const_iterator iter = specialmsgs.find(msg.GetCommand());
+		auto iter = specialmsgs.find(msg.GetCommand());
 		if (iter == specialmsgs.end())
 			return nullptr; // Not a special message.
 
@@ -137,13 +137,13 @@ public:
 	CustomTagsExtItem ext;
 	SpecialMessageMap specialmsgs;
 	std::string vendor;
-	int whox_index;
+	int whox_index{-1};
 
 	CustomTags(Module* mod)
 		: ClientProtocol::MessageTagProvider(mod)
 		, ctctagcap(mod)
 		, ext(mod, ctctagcap)
-		, whox_index(-1)
+		 
 	{
 	}
 
@@ -161,8 +161,8 @@ public:
 		if (!tags)
 			return;
 
-		for (CustomTagMap::const_iterator iter = tags->begin(); iter != tags->end(); ++iter)
-			msg.AddTag(vendor + iter->first, this, iter->second);
+		for (const auto & tag : *tags)
+			msg.AddTag(vendor + tag.first, this, tag.second);
 	}
 
 	ModResult OnProcessTag(User* user, const std::string& tagname, std::string& tagvalue) override
@@ -194,8 +194,8 @@ private:
 		if (!tagmap)
 			return MOD_RES_PASSTHRU;
 
-		for (CustomTagMap::const_iterator iter = tagmap->begin(); iter != tagmap->end(); ++iter)
-			tags.insert(std::make_pair(ctags.vendor + iter->first, ClientProtocol::MessageTagData(&ctags, iter->second)));
+		for (const auto & iter : *tagmap)
+			tags.insert(std::make_pair(ctags.vendor + iter.first, ClientProtocol::MessageTagData(&ctags, iter.second)));
 		return MOD_RES_PASSTHRU;
 	}
 

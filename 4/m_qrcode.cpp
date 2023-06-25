@@ -102,26 +102,6 @@ private:
 		return buffer;
 	}
 
-	std::string URLEncode(const std::string& data)
-	{
-		static const char* hextable = "0123456789ABCDEF";
-
-		std::string buffer;
-		for (std::string::const_iterator iter = data.begin(); iter != data.end(); ++iter)
-		{
-			if (isalnum(*iter))
-			{
-				buffer.push_back(*iter);
-				continue;
-			}
-
-			buffer.push_back('%');
-			buffer.push_back(hextable[*iter >> 4]);
-			buffer.push_back(hextable[*iter & 15]);
-		}
-		return buffer;
-	}
-
 	void WriteMessage(LocalUser* user, const std::string& message)
 	{
 		ClientProtocol::Messages::Privmsg privmsg(ClientProtocol::Messages::Privmsg::nocopy, ServerInstance->FakeClient, user, message);
@@ -155,7 +135,7 @@ public:
 					return CmdResult::FAILURE;
 				}
 
-				url = URLEncode(channel->name);
+				url = Percent::Encode(channel->name);
 				if (channel->IsModeSet(keymode))
 					url.append(",needkey");
 			}
@@ -167,7 +147,7 @@ public:
 					source->WriteNumeric(Numerics::NoSuchNick(parameters[0]));
 					return CmdResult::FAILURE;
 				}
-				url = URLEncode(user->nick) + ",isnick";
+				url = Percent::Encode(user->nick) + ",isnick";
 			}
 		}
 
@@ -282,7 +262,7 @@ private:
 
 		if (name.find_first_not_of("0123456789") == std::string::npos)
 		{
-			const unsigned long value = ConvToNum<unsigned long>(name);
+			const auto value = ConvToNum<unsigned long>(name);
 			if (value <= 99)
 				return ConvToStr(value);
 		}

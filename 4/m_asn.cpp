@@ -192,7 +192,7 @@ public:
 		}
 	}
 
-	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum)
+	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
 	{
 		const std::string asn = klass->config->getString("asn");
 		if (asn.empty())

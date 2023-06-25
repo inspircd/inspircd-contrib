@@ -62,7 +62,7 @@ public:
 		ServerInstance->IsNick = &IsDiscordNick;
 	}
 
-	~ModuleDiscordNick()
+	~ModuleDiscordNick() override
 	{
 		ServerInstance->IsNick = origisnick;
 	}

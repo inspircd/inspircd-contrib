@@ -32,12 +32,12 @@ public:
 	MessageLengthMode(Module* Creator)
 		: ParamMode<MessageLengthMode, IntExtItem>(Creator, "message-length", 'W')
 	{
-		syntax = { "<max-length>" };
+		syntax = "<max-length>" ;
 	}
 
-	bool OnSet(User* source, Channel* channel, std::string& parameter)
+	bool OnSet(User* source, Channel* channel, std::string& parameter) override
 	{
-		size_t length = ConvToNum<size_t>(parameter);
+		auto length = ConvToNum<size_t>(parameter);
 		if (length == 0 || length > ServerInstance->Config->Limits.MaxLine)
 		{
 			source->WriteNumeric(Numerics::InvalidModeParameter(channel, this, parameter));
@@ -72,7 +72,7 @@ public:
 		if (target.type != MessageTarget::TYPE_CHANNEL)
 			return MOD_RES_PASSTHRU;
 
-		Channel* channel = target.Get<Channel>();
+		auto* channel = target.Get<Channel>();
 		if (!channel->IsModeSet(&mode))
 			return MOD_RES_PASSTHRU;
 

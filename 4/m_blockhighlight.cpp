@@ -66,7 +66,7 @@ public:
 		if (details.text.length() < minlen)
 			return MOD_RES_PASSTHRU;
 
-		Channel* const chan = target.Get<Channel>();
+		auto* const chan = target.Get<Channel>();
 		if (chan->GetUsers().size() < minusers)
 			return MOD_RES_PASSTHRU;
 

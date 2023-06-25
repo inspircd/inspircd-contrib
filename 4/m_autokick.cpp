@@ -42,12 +42,12 @@ public:
 			ModeHandler::Rank rank = channel->GetPrefixValue(source);
 
 			const Channel::MemberMap& users = channel->GetUsers();
-			Channel::MemberMap::const_iterator iter = users.begin();
+			auto iter = users.begin();
 
 			while (iter != users.end())
 			{
 				// KickUser invalidates the iterator so copy and increment it here.
-				Channel::MemberMap::const_iterator it = iter++;
+				auto it = iter++;
 				if (IS_LOCAL(it->first) && rank > channel->GetPrefixValue(it->first) && channel->CheckBan(it->first, change.param))
 				{
 					channel->KickUser(ServerInstance->FakeClient, it->first, reason.c_str());

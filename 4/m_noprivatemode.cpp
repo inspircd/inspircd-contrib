@@ -44,11 +44,10 @@ public:
 		if (!IS_LOCAL(source) || !channel)
 			return MOD_RES_PASSTHRU;
 
-		Modes::ChangeList::List& list = modes.getlist();
-		for (Modes::ChangeList::List::iterator iter = list.begin(); iter != list.end(); ++iter)
+		for (auto& change : modes.getlist())
 		{
-			if (iter->adding && iter->mh == *privatemode)
-				iter->mh = *secretmode;
+			if (change.adding && change.mh == *privatemode)
+				change.mh = *secretmode;
 		}
 		return MOD_RES_PASSTHRU;
 	}

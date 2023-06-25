@@ -147,7 +147,7 @@ public:
 				if (!chanmsg)
 					return MOD_RES_PASSTHRU; // Not enabled.
 
-				Channel* target = msgtarget.Get<Channel>();
+				auto* target = msgtarget.Get<Channel>();
 				if (target->GetPrefixValue(user) >= VOICE_VALUE)
 					return MOD_RES_PASSTHRU; // Exempt users with a status rank.
 				break;

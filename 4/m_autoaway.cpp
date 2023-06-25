@@ -106,7 +106,7 @@ public:
 
 
 		const std::string awaymsg = user->awaymsg;
-		autoaway.Set(user, 0);
+		autoaway.Unset(user);
 		user->awaytime = 0;
 		user->awaymsg.clear();
 		user->WriteNumeric(RPL_UNAWAY, "You are no longer automatically marked as being away");

@@ -37,7 +37,7 @@ public:
 		syntax = "<idletime>";
 	}
 
-	bool OnSet(User* source, Channel* channel, std::string& parameter)
+	bool OnSet(User* source, Channel* channel, std::string& parameter) override
 	{
 		unsigned long idletime;
 		if (!Duration::TryFrom(parameter, idletime) || !idletime)
@@ -72,7 +72,7 @@ public:
 	{
 	}
 
-	void ReadConfig(ConfigStatus& status)
+	void ReadConfig(ConfigStatus& status) override
 	{
 		const auto& tag = ServerInstance->Config->ConfValue("antisnoop");
 		exemptrank = tag->getNum<ModeHandler::Rank>("exemptrank", VOICE_VALUE);
@@ -83,7 +83,7 @@ public:
 		if (target.type != MessageTarget::TYPE_CHANNEL)
 			return MOD_RES_PASSTHRU; // We only care about channel messages.
 
-		Channel* channel = target.Get<Channel>();
+		auto* channel = target.Get<Channel>();
 		Membership* memb = channel->GetUser(user);
 		if (memb)
 		{

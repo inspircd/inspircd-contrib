@@ -70,7 +70,7 @@ class ModuleCensor : public Module
 
 			case MessageTarget::TYPE_CHANNEL:
 			{
-				Channel* targchan = target.Get<Channel>();
+				auto* targchan = target.Get<Channel>();
 				if (!targchan->IsModeSet(cc))
 					return MOD_RES_PASSTHRU;
 

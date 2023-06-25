@@ -46,11 +46,10 @@ private:
 
 	ModResult BuildChannelExempts(User* source, Channel* channel, CTCTags::TagMessageDetails& details)
 	{
-		const Channel::MemberMap& members = channel->GetUsers();
-		for (Channel::MemberMap::const_iterator member = members.begin(); member != members.end(); ++member)
+		for (const auto& [member, _] : channel->GetUsers())
 		{
 			if (IsIdle(source))
-				details.exemptions.insert(member->first);
+				details.exemptions.insert(member);
 		}
 		return MOD_RES_PASSTHRU;
 	}
@@ -70,8 +69,8 @@ public:
 
 	ModResult OnUserPreTagMessage(User* user, const MessageTarget& target, CTCTags::TagMessageDetails& details) override
 	{
-		ClientProtocol::TagMap::const_iterator iter = details.tags_out.find("+typing");
-		ClientProtocol::TagMap::const_iterator draftiter = details.tags_out.find("+draft/typing");
+		auto iter = details.tags_out.find("+typing");
+		auto draftiter = details.tags_out.find("+draft/typing");
 		if (iter == details.tags_out.end() && draftiter == details.tags_out.end())
 			return MOD_RES_PASSTHRU;
 
