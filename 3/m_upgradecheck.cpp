@@ -126,12 +126,14 @@ class ModuleUpgradeCheck CXX11_FINAL
 		CheckKey("security", "hidewhois", "moved to <security:hideserver>");
 		CheckModule("censor", "moved to inspircd-contrib");
 		CheckModule("clones", "moved to inspircd-contrib");
+		CheckModule("hostchange", "moved to inspircd-contrib");
 		CheckModule("lockserv", "moved to inspircd-contrib");
 		CheckModule("modenotice", "moved to inspircd-contrib");
 		CheckModule("regex_tre", "moved to inspircd-contrib");
 		CheckModule("userip", "moved to inspircd-contrib");
 		CheckNoValue("class", "snomasks", "no longer defaults to *");
 		CheckTag("power", "replaced with oper command privs");
+		CheckTag("hostchange", "replaced with the cloak_user and cloak_static <cloak> methods");
 		CheckValue("bind", "sslprofile", "gnutls", "ssl config moved from <gnutls> to <sslprofile>");
 		CheckValue("bind", "sslprofile", "mbedtls", "ssl config moved from <mbedtls> to <sslprofile>");
 		CheckValue("bind", "sslprofile", "openssl", "ssl config moved from <openssl> to <sslprofile>");
