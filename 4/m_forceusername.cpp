@@ -20,30 +20,34 @@
 /// $ModConfig: <connect forceident="example">
 /// $ModDepends: core 4
 /// $ModDesc: Allows forcing idents on users based on their connect class.
+/// $ModConfig: <connect forceusername="example">
+/// $ModDepends: core 4
+/// $ModDesc: Allows forcing usernames on users based on their connect class.
 
 
 #include "inspircd.h"
 
-class ModuleForceIdent final
+class ModuleForceUser final
 	: public Module
 {
 public:
-	ModuleForceIdent()
-		: Module(VF_NONE, "Allows forcing idents on users based on their connect class.")
+	ModuleForceUser()
+		: Module(VF_NONE, "Allows forcing usernames on users based on their connect class.")
 	{
 	}
 
 	void OnUserConnect(LocalUser* user) override
 	{
-		const std::string ident = user->GetClass()->config->getString("forceident");
-		if (ServerInstance->IsIdent(ident))
+		const auto& tag = user->GetClass()->config;
+		const std::string username = tag->getString("forceusername", tag->getString("forceident"));
+		if (ServerInstance->IsUser(username))
 		{
-			ServerInstance->Logs.Debug(MODNAME, "Setting ident of user '{}' ({}) in class '{}' to '{}'.",
-				user->nick, user->uuid, user->GetClass()->name, ident);
-			user->ident = ident;
-			user->InvalidateCache();
+			ServerInstance->Logs.Debug(MODNAME, "Setting username of user '{}' ({}) in class '{}' to '{}'.",
+				user->nick, user->uuid, user->GetClass()->name, username);
+
+			user->ChangeDisplayedUser(username);
 		}
 	}
 };
 
-MODULE_INIT(ModuleForceIdent)
+MODULE_INIT(ModuleForceUser)

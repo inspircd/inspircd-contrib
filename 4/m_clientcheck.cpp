@@ -105,7 +105,7 @@ public:
 			}
 
 			ServerInstance->Logs.Debug(MODNAME, "Client check: {} -> {} ({})",
-				ci.pattern->GetPattern(), ci.action, ci.message);
+				ci.pattern->GetPattern(), (int)ci.action, ci.message);
 			newclients.push_back(ci);
 		}
 

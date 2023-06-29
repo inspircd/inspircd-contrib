@@ -75,7 +75,7 @@ public:
 
 				retbuf += '=';
 				retbuf += (u->IsAway() ? '-' : '+');
-				retbuf += u->ident;
+				retbuf += u->GetUser(has_privs);
 				retbuf += '@';
 				retbuf += (u == user || has_privs ? u->GetAddress() : "255.255.255.255");
 				retbuf += ' ';
