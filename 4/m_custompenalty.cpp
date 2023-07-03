@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <penalty name="INVITE" value="60">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Allows the customisation of penalty levels.
 
 

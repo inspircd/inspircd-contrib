@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <solvemsg chanmsg="no" usermsg="yes">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Requires users to solve a basic maths problem before messaging others.
 
 

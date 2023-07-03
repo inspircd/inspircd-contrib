@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Adds a channel mode which limits the length of messages.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 #include "extension.h"

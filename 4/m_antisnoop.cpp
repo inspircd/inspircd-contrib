@@ -20,7 +20,7 @@
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <antisnoop exemptrank="10000">
 /// $ModDesc: Adds a channel mode which limits the ability of snoopers.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 #include "extension.h"

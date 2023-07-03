@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <autokick message="Banned">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Automatically kicks people who match a banned mask.
 
 

@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Adds stats character 'X' which shows unlinked servers.
 
 

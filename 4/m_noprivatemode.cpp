@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Sets channel mode +s (secret) when users try to set channel mode +p (private).
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 

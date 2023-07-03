@@ -20,7 +20,7 @@
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes">
 /// $ModDesc: Adds a channel mode which kills clients that mass highlight spam.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 #include "modules/exemption.h"

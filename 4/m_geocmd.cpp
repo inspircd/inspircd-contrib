@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 
 #include "inspircd.h"

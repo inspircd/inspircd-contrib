@@ -28,7 +28,7 @@
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Provides support for QR code generation via the /QRCODE command.
 /// $ModConfig: <qrcode blockchar=" " darkcolour="black" lightcolour="white">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 
 #include <qrencode.h>

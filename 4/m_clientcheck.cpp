@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Allows detection of clients by version string.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 #include "clientprotocolmsg.h"

@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Adds the /EXMODE command which explains a mode change.
 
 

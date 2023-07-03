@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <options defaulttopic="Welcome to your new channel. See #help for help.">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Adds support for default channel topics.
 
 

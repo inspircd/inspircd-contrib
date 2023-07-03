@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <complete maxsuggestions="10" minlength="3">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Allows clients to automatically complete commands.
 
 

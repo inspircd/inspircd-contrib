@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <autoaway checkperiod="5m" idleperiod="24h" message="Idle">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Automatically marks idle users as away.
 
 

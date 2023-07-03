@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <autodrop commands="CONNECT DELETE GET HEAD OPTIONS PATCH POST PUT TRACE">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Allows clients to be automatically dropped if they execute certain commands before registration.
 
 

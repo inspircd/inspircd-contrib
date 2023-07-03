@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <connect forceident="example">
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Allows forcing idents on users based on their connect class.
 
 

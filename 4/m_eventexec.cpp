@@ -19,7 +19,7 @@
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <eventexec event="startup|shutdown|rehash|link|unlink" command="command to execute goes here">
 /// $ModDesc: Executes commands when a specified event occurs.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 
 #include "inspircd.h"
