@@ -25,7 +25,7 @@ module m_autokick 3.791 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_bannegate 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_bannegate.cpp
  depends core 3
  description Enables ban negation by prefixing the match sequence with ~
-module m_blockhighlight 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_blockhighlight.cpp
+module m_blockhighlight 3.813 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a78ed689695355aef77353eca60a3b51169b13eb/3/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 3
 module m_blockinvite 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_blockinvite.cpp
@@ -270,7 +270,7 @@ module m_blockhighlight 4.810 https://raw.githubusercontent.com/inspircd/inspirc
 module m_censor 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc4e2dbe1d097b2a07079cbca7de0070f96e73a0/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clientcheck 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_clientcheck.cpp
+module m_clientcheck 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 4
 module m_clones 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc4e2dbe1d097b2a07079cbca7de0070f96e73a0/4/m_clones.cpp
@@ -297,9 +297,11 @@ module m_eventexec 4.810 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_exmode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_exmode.cpp
  depends core 4
  description Adds the /EXMODE command which explains a mode change.
-module m_forceident 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_forceident.cpp
+module m_forceusername 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_forceusername.cpp
  depends core 4
  description Allows forcing idents on users based on their connect class.
+ depends core 4
+ description Allows forcing usernames on users based on their connect class.
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 4
@@ -351,6 +353,6 @@ module m_teams 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib
 module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_teststdrpl.cpp
  depends core 4
  description Adds the STDRPL command for testing client standard reply implementations.
-module m_userip 4.797 https://raw.githubusercontent.com/inspircd/inspircd-contrib/594627412343ca7b89843d7776b169175788f397/4/m_userip.cpp
+module m_userip 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
