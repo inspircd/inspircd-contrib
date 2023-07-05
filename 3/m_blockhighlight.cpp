@@ -19,7 +19,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes" modechar="V">
+/// $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes" modechar="V" invertmode="no">
 /// $ModDesc: Adds a channel mode which kills clients that mass highlight spam.
 /// $ModDepends: core 3
 
@@ -33,6 +33,7 @@ class ModuleBlockHighlight : public Module
 	CheckExemption::EventProvider exemptionprov;
 
 	bool ignoreextmsg;
+	bool invertmode;
 	unsigned int minlen;
 	unsigned int minusers;
 	std::string reason;
@@ -50,6 +51,7 @@ public:
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("blockhighlight");
 		ignoreextmsg = tag->getBool("ignoreextmsg", true);
+		invertmode = tag->getBool("invertmode");
 		minlen = tag->getUInt("minlen", 50, 1, ServerInstance->Config->Limits.MaxLine);
 		minusers = tag->getUInt("minusernum", 10, 2);
 		reason = tag->getString("reason", "Mass highlight spam is not allowed");
@@ -69,8 +71,8 @@ public:
 		if (chan->GetUsers().size() < minusers)
 			return MOD_RES_PASSTHRU;
 
-		// We only work if the channel mode is enabled.
-		if (!chan->IsModeSet(mode))
+		// We only work if the channel mode is in the right state.
+		if (chan->IsModeSet(mode) == invertmode)
 			return MOD_RES_PASSTHRU;
 
 		// Exempt operators with the channels/mass-highlight privilege.
@@ -118,7 +120,8 @@ public:
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Adds a channel mode which kills clients that mass highlight spam.");
+		const std::string linkdata = invertmode ? "inverted" : "";
+		return Version("Adds a channel mode which kills clients that mass highlight spam.", VF_NONE, linkdata);
 	}
 };
 
