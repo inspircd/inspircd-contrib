@@ -323,6 +323,9 @@ module m_modenotice 4.797 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_noidletyping 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_noidletyping.cpp
  depends core 4
  description Prevents typing notifications from being sent to idle users.
+module m_nopartmsg 4.815 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3934dce8f50331ef7e205b95333aebcfb6c40b65/4/m_nopartmsg.cpp
+ description Adds extended ban p: (partmsg) which blocks the part message of matching users.
+ depends core 4
 module m_noprivatemode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_noprivatemode.cpp
  description Sets channel mode +s (secret) when users try to set channel mode +p (private).
  depends core 4
