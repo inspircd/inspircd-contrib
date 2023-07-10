@@ -1,6 +1,9 @@
 module update-your-server 0.0.0 https://404.example.com
  depends core 1-2
  description The version of InspIRCd you are using is EOL. Please upgrade!
+module m_antiknocker 3.819 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c1d1e53a61cc2f5f27d6f821afcefd076a18c627/3/m_antiknocker.cpp
+ description Attempts to block a common IRC spambot.
+ depends core 3
 module m_antirandom 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
@@ -246,6 +249,9 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
+module m_antiknocker 4.819 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c1d1e53a61cc2f5f27d6f821afcefd076a18c627/4/m_antiknocker.cpp
+ description Attempts to block a common IRC spambot.
+ depends core 3
 module m_antisnoop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 4
