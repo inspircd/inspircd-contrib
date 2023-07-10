@@ -39,13 +39,13 @@ class ModuleAntiKnocker final
 {
 public:
 	std::regex nickregex;
-	IntExtItem seenlist;
+	IntExtItem seenmsg;
 	unsigned long shunduration;
 	std::string shunreason;
 
 	ModuleAntiKnocker()
 		: Module(VF_NONE, "Attempts to block a common IRC spambot.")
-		, seenlist(this, "seenlist", ExtensionType::USER)
+		, seenmsg(this, "seenmsg", ExtensionType::USER)
 	{
 	}
 
@@ -74,15 +74,15 @@ public:
 		if (!validated || !user->IsFullyConnected())
 			return MOD_RES_PASSTHRU;
 
-		if (command == "LIST")
+		if (command == "PRIVMSG" && irc::equals(parameters[0], "NickServ"))
 		{
-			seenlist.Set(user, ServerInstance->Time());
+			seenmsg.Set(user, ServerInstance->Time());
 			return MOD_RES_PASSTHRU;
 		}
 
-		if (command == "PRIVMSG" && irc::equals(parameters[0], "NickServ"))
+		if (command == "LIST")
 		{
-			time_t whenlist = seenlist.Get(user);
+			time_t whenlist = seenmsg.Get(user);
 			if (ServerInstance->Time() - whenlist <= 3)
 			{
 				// This is almost certainly a bot; punish them!
@@ -105,7 +105,7 @@ public:
 			}
 		}
 
-		seenlist.Unset(user);
+		seenmsg.Unset(user);
 		return MOD_RES_PASSTHRU;
 	}
 
