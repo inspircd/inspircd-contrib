@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/// $CompilerFlags: -std=c++11
+
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDesc: Attempts to block a common IRC spambot.
@@ -25,21 +27,20 @@
 #include <regex>
 
 #include "inspircd.h"
-#include "extension.h"
 #include "modules/shun.h"
 
-class ModuleAntiKnocker final
+class ModuleAntiKnocker CXX11_FINAL
 	: public Module
 {
 public:
 	std::regex nickregex;
-	IntExtItem seenlist;
+	LocalIntExt seenmsg;
 	unsigned long shunduration;
 	std::string shunreason;
 
 	void PunishUser(LocalUser* user)
 	{
-		auto* sh = new Shun(ServerInstance->Time(), shunduration, MODNAME "@" + ServerInstance->Config->ServerName, shunreason, user->GetAddress());
+		Shun* sh = new Shun(ServerInstance->Time(), shunduration, MODNAME "@" + ServerInstance->Config->ServerName, shunreason, user->GetIPString());
 		if (ServerInstance->XLines->AddLine(sh, nullptr))
 		{
 			ServerInstance->XLines->ApplyLines();
@@ -50,75 +51,79 @@ public:
 		delete sh;
 
 		std::string message;
-		if (!user->IsFullyConnected())
-			message = "Connection timeout";
+		if (user->registered != REG_ALL)
+			message = "Registration timeout";
 		else
-			message = INSP_FORMAT("Ping timeout: {} seconds", user->GetClass()->pingtime);
+			message = InspIRCd::Format("Ping timeout: %u seconds", user->GetClass()->pingtime);
 		ServerInstance->Users.QuitUser(user, message);
 	}
 
 	ModuleAntiKnocker()
-		: Module(VF_NONE, "Attempts to block a common IRC spambot.")
-		, seenlist(this, "seenlist", ExtensionType::USER)
+		: seenmsg("seenmsg", ExtensionItem::EXT_USER, this)
 	{
 	}
 
-	void ReadConfig(ConfigStatus& status) override
+	Version GetVersion() CXX11_OVERRIDE
 	{
-		const auto& tag = ServerInstance->Config->ConfValue("antiknock");
+		return Version("Attempts to block a common IRC spambot.");
+	}
+
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
+	{
+		ConfigTag* tag = ServerInstance->Config->ConfValue("antiknock");
 
 		const std::string nick = tag->getString("nickregex", "(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])");
 		try
 		{
 			std::regex newnickregex(nick);
 			std::swap(nickregex, newnickregex);
-			ServerInstance->Logs.Debug(MODNAME, "Nick regex set to {}", nick);
+			ServerInstance->Logs->Log(MODNAME, LOG_DEBUG, "Nick regex set to %s", nick.c_str());
 		}
 		catch (const std::regex_error& err)
 		{
-			throw ModuleException(this, INSP_FORMAT("<antiknock:nickregex> is invalid: {}", err.what()));
+			throw ModuleException(InspIRCd::Format("<antiknock:nickregex> is invalid: %s", err.what()));
 		}
 
 		shunduration = tag->getDuration("shunduration", 60*60, 60);
 		shunreason = tag->getString("shunreason", "User was caught in an antiknock trap", 1);
 	}
 
-	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated) override
+	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
 	{
-		if (!validated || !user->IsFullyConnected())
+		if (!validated || user->registered != REG_ALL)
 			return MOD_RES_PASSTHRU;
-
-		if (command == "LIST")
-		{
-			seenlist.Set(user, ServerInstance->Time());
-			return MOD_RES_PASSTHRU;
-		}
 
 		if (command == "PRIVMSG" && irc::equals(parameters[0], "NickServ"))
 		{
-			time_t whenlist = seenlist.Get(user);
+			seenmsg.set(user, ServerInstance->Time());
+			return MOD_RES_PASSTHRU;
+		}
+
+		if (command == "LIST")
+		{
+			time_t whenlist = seenmsg.get(user);
 			if (ServerInstance->Time() - whenlist <= 3)
 			{
 				// This is almost certainly a bot; punish them!
-				ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) was caught in an knocker trap!",
-						user->nick, user->GetRealUserHost());
+				ServerInstance->SNO.WriteToSnoMask('a', "User %s (%s) was caught in an knocker trap!",
+						user->nick.c_str(), user->MakeHost().c_str());
 
 				PunishUser(user);
 				return MOD_RES_DENY;
 			}
 		}
 
-		seenlist.Unset(user);
+		seenmsg.unset(user);
 		return MOD_RES_PASSTHRU;
 	}
 
-	ModResult OnUserPreNick(LocalUser* user, const std::string& newnick) override
+	ModResult OnUserPreNick(LocalUser* user, const std::string& newnick) CXX11_OVERRIDE
 	{
 		if (!std::regex_match(newnick, nickregex))
 			return MOD_RES_PASSTHRU;
 
-		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) was prevented from using a knocker nick: {}",
-			user->nick, user->GetRealUserHost(), newnick);
+		ServerInstance->SNO.WriteToSnoMask('a', "User %s (%s) was prevented from using a knocker nick: %s",
+			user->nick.c_str(), user->MakeHost().c_str(), newnick.c_str());
 
 		PunishUser(user);
 		return MOD_RES_DENY;
