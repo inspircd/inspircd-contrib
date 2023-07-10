@@ -19,7 +19,7 @@
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDesc: Attempts to block a common IRC spambot.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 
 #include <regex>
