@@ -180,9 +180,6 @@ module m_qrcode 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_randomnotice 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_randomnotice.cpp
  depends core 3
  description Send a random notice (quote) from a file to all users at a set interval.
-module m_regex_pcre2 3.754 https://raw.githubusercontent.com/inspircd/inspircd-contrib/24852fb104a4756c270374941d7f8438c1a21ebd/3/m_regex_pcre2.cpp
- depends core 3
- description Provides the pcre2 regular expression engine which uses the PCRE2 library.
 module m_relaymsg 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_relaymsg.cpp
  depends core 3
  description Provides the RELAYMSG command & draft/relaymsg capability for stateless bridging
