@@ -1,7 +1,7 @@
 module update-your-server 0.0.0 https://404.example.com
  depends core 1-2
  description The version of InspIRCd you are using is EOL. Please upgrade!
-module m_antiknocker 3.819 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c1d1e53a61cc2f5f27d6f821afcefd076a18c627/3/m_antiknocker.cpp
+module m_antiknocker 3.824 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3efc2b12dc91dcbe11e403de831e9341224d039f/3/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 3
 module m_antirandom 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_antirandom.cpp
@@ -249,7 +249,7 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_antiknocker 4.821 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1ca37efc8c14b89e0d86c510ebfcdf827f5d2cc0/4/m_antiknocker.cpp
+module m_antiknocker 4.823 https://raw.githubusercontent.com/inspircd/inspircd-contrib/267fb850dbb46b1f8ef6c3df78aa673c2eb43c4f/4/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 4
 module m_antisnoop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_antisnoop.cpp
