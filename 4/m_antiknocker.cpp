@@ -28,12 +28,6 @@
 #include "extension.h"
 #include "modules/shun.h"
 
-enum
-{
-	// From RFC 1459.
-	ERR_NICKNAMEINUSE = 433
-};
-
 class ModuleAntiKnocker final
 	: public Module
 {
@@ -42,6 +36,26 @@ public:
 	IntExtItem seenmsg;
 	unsigned long shunduration;
 	std::string shunreason;
+
+	void PunishUser(LocalUser* user)
+	{
+		auto* sh = new Shun(ServerInstance->Time(), shunduration, MODNAME "@" + ServerInstance->Config->ServerName, shunreason, user->GetAddress());
+		if (ServerInstance->XLines->AddLine(sh, nullptr))
+		{
+			ServerInstance->XLines->ApplyLines();
+			return;
+		}
+
+		// No shunning? Annoying. Just quit em.
+		delete sh;
+
+		std::string message;
+		if (!user->IsFullyConnected())
+			message = "Connection timeout";
+		else
+			message = INSP_FORMAT("Ping timeout: {} seconds", user->GetClass()->pingtime);
+		ServerInstance->Users.QuitUser(user, message);
+	}
 
 	ModuleAntiKnocker()
 		: Module(VF_NONE, "Attempts to block a common IRC spambot.")
@@ -89,18 +103,7 @@ public:
 				ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) was caught in an knocker trap!",
 						user->nick, user->GetRealUserHost());
 
-				auto* sh = new Shun(ServerInstance->Time(), shunduration, MODNAME "@" + ServerInstance->Config->ServerName, shunreason, user->GetAddress());
-				if (ServerInstance->XLines->AddLine(sh, nullptr))
-				{
-					ServerInstance->XLines->ApplyLines();
-					return MOD_RES_DENY;
-				}
-
-				// No shunning? Annoying. Just quit em.
-				delete sh;
-
-				const std::string message = INSP_FORMAT("Ping timeout: {} seconds", user->GetClass()->pingtime);
-				ServerInstance->Users.QuitUser(user, message);
+				PunishUser(user);
 				return MOD_RES_DENY;
 			}
 		}
@@ -116,7 +119,8 @@ public:
 
 		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) was prevented from using a knocker nick: {}",
 			user->nick, user->GetRealUserHost(), newnick);
-		user->WriteNumeric(ERR_NICKNAMEINUSE, newnick, "Nickname is already in use.");
+
+		PunishUser(user);
 		return MOD_RES_DENY;
 	}
 };
