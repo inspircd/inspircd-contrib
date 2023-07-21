@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Attempts to block a common IRC spambot.
 /// $ModDepends: core 4
 
