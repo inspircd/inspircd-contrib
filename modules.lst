@@ -153,6 +153,9 @@ module m_kill_idle 3.752 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_messagelength 3.765 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b780f84fc9730994f945d735571d7ffd62160ebd/3/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 3
+module m_messagesocket 3.828 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6d203e70d744507d00ac125d5f67158fbdd8533d/3/m_messagesocket.cpp
+ description Allows sending messages to all local users from a socket.
+ depends core 3
 module m_namedstats 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_namedstats.cpp
  description Allows /STATS queries by name
  depends core 3
@@ -249,7 +252,7 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_antiknocker 4.826 https://raw.githubusercontent.com/inspircd/inspircd-contrib/12d70b5c43e08606cf66a74ee70743d7d51e1a2e/4/m_antiknocker.cpp
+module m_antiknocker 4.829 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0bc07531f939fc6d3ad12a06c8e7fdfaac01d6ef/4/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 4
 module m_antisnoop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_antisnoop.cpp
@@ -319,6 +322,9 @@ module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-cont
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
 module m_messagelength 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
+ depends core 4
+module m_messagesocket 4.828 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6d203e70d744507d00ac125d5f67158fbdd8533d/4/m_messagesocket.cpp
+ description Allows sending messages to all local users from a socket.
  depends core 4
 module m_modenotice 4.797 https://raw.githubusercontent.com/inspircd/inspircd-contrib/594627412343ca7b89843d7776b169175788f397/4/m_modenotice.cpp
  depends core 4
