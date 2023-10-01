@@ -19,13 +19,13 @@ jobs:
           brew update || true
           brew install pkg-config
       - name: Checkout InspIRCd@insp3
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'inspircd/inspircd'
           ref: 'insp3'
           path: 'inspircd'
       - name: Checkout self
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: 'contrib'
       - name: (Pull Request) Set the build target to only the changed modules
