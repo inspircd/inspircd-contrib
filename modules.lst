@@ -1,7 +1,7 @@
 module update-your-server 0.0.0 https://404.example.com
  depends core 1-2
  description The version of InspIRCd you are using is EOL. Please upgrade!
-module m_antiknocker 3.824 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3efc2b12dc91dcbe11e403de831e9341224d039f/3/m_antiknocker.cpp
+module m_antiknocker 3.832 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0a3a058eb37cfcf36ea909f72765f8467c395611/3/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 3
 module m_antirandom 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_antirandom.cpp
