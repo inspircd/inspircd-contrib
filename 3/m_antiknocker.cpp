@@ -20,6 +20,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
+/// $ModConfig: <antiknock nickregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" donick="yes" donotice="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
 /// $ModDesc: Attempts to block a common IRC spambot.
 /// $ModDepends: core 3
 
@@ -33,6 +34,9 @@ class ModuleAntiKnocker CXX11_FINAL
 	: public Module
 {
 public:
+	bool docmd;
+	bool donick;
+	bool donotice;
 	std::regex nickregex;
 	LocalIntExt seenmsg;
 	unsigned long shunduration;
@@ -84,13 +88,16 @@ public:
 			throw ModuleException(InspIRCd::Format("<antiknock:nickregex> is invalid: %s", err.what()));
 		}
 
-		shunduration = tag->getDuration("shunduration", 60*60, 60);
+		docmd = tag->getBool("docmd", true);
+		donick = tag->getBool("donick", true);
+		donotice = tag->getBool("donotice", false);
+		shunduration = tag->getDuration("shunduration", 60*15, 60);
 		shunreason = tag->getString("shunreason", "User was caught in an antiknock trap", 1);
 	}
 
 	ModResult OnPreCommand(std::string& command, CommandBase::Params& parameters, LocalUser* user, bool validated) CXX11_OVERRIDE
 	{
-		if (!validated || user->registered != REG_ALL)
+		if (!docmd || !validated || user->registered != REG_ALL)
 			return MOD_RES_PASSTHRU;
 
 		if (command == "PRIVMSG" && irc::equals(parameters[0], "NickServ"))
@@ -119,7 +126,7 @@ public:
 
 	ModResult OnUserPreNick(LocalUser* user, const std::string& newnick) CXX11_OVERRIDE
 	{
-		if (!std::regex_match(newnick, nickregex))
+		if (!donick || !std::regex_match(newnick, nickregex))
 			return MOD_RES_PASSTHRU;
 
 		ServerInstance->SNO.WriteToSnoMask('a', "User %s (%s) was prevented from using a knocker nick: %s",
@@ -127,6 +134,12 @@ public:
 
 		PunishUser(user);
 		return MOD_RES_DENY;
+	}
+
+	void OnUserConnect(LocalUser* user) CXX11_OVERRIDE
+	{
+		if (donotice)
+			user->WriteNotice("*** You are not welcome on this network if you are a malicious bot. If you are not a malicious bot bot please ignore this message.");
 	}
 };
 
