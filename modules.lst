@@ -34,6 +34,9 @@ module m_blockhighlight 3.813 https://raw.githubusercontent.com/inspircd/inspirc
 module m_blockinvite 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_blockinvite.cpp
  depends core 3
  description Provides usermode 'V' - block all INVITEs
+module m_blocksock 3.834 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8f0e03f4d166cbc4542a25604b8c6e61a283da47/3/m_blocksock.cpp
+ depends core 3
+ description Allows blocking IP addresses from making any socket connections to the server.
 module m_changecap 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_changecap.cpp
  description Provides the CHANGECAP command that allows a channel op to change the capitalization of the channel name.
  depends core 3
