@@ -385,7 +385,7 @@ class ModuleIRCv3ExtJWT CXX11_FINAL
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Provides the DRAFT extjwt IRCv3 extension", VF_OPTCOMMON);
+		return Version("Provides the DRAFT extjwt IRCv3 extension", VF_NONE);
 	}
 };
 
