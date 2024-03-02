@@ -129,6 +129,9 @@ module m_hash_gnutls 3.752 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_hideidle 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_hideidle.cpp
  depends core 3
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
+module m_httpd_api 3.836 https://raw.githubusercontent.com/inspircd/inspircd-contrib/aaf44f79c3b5bd3ddac761e33d23a07ace6e29ed/3/m_httpd_api.cpp
+ depends core 3, m_httpd
+ description Provides a HTTP(s) API that allows users to query to reteive some information on the IRCd and Network.
 module m_identmeta 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_identmeta.cpp
  depends core 3
  description Stores the ident given in USER as metadata.
