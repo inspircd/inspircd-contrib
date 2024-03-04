@@ -264,10 +264,10 @@ module m_antiknocker 4.829 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antisnoop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 4
-module m_asn 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_asn.cpp
+module m_asn 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_asn.cpp
  depends core 4
  description Allows banning users based on Autonomous System number.
-module m_autoaway 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_autoaway.cpp
+module m_autoaway 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_autoaway.cpp
  depends core 4
  description Automatically marks idle users as away.
 module m_autodrop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_autodrop.cpp
@@ -294,7 +294,7 @@ module m_complete 4.810 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_custompenalty.cpp
  depends core 4
  description Allows the customisation of penalty levels.
-module m_customtags 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_customtags.cpp
+module m_customtags 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_customtags.cpp
  depends core 4
  description Allows services to add custom tags to messages sent by clients.
 module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_defaulttopic.cpp
@@ -303,7 +303,7 @@ module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_discordnick 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_discordnick.cpp
  depends core 4
  description Adds support for Discord-style #1234 nick tags.
-module m_eventexec 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_eventexec.cpp
+module m_eventexec 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_eventexec.cpp
  description Executes commands when a specified event occurs.
  depends core 4
 module m_exmode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_exmode.cpp
@@ -317,19 +317,16 @@ module m_forceusername 4.812 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 4
-module m_hostchange 4.804 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c7dce36e140f31e1e664496cb92102052cbb1d3a/4/m_hostchange.cpp
+module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_identmeta 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_identmeta.cpp
- depends core 4
- description Stores the ident given in USER as metadata.
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_messagelength 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_messagelength.cpp
+module m_messagelength 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 4
-module m_messagesocket 4.828 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6d203e70d744507d00ac125d5f67158fbdd8533d/4/m_messagesocket.cpp
+module m_messagesocket 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_messagesocket.cpp
  description Allows sending messages to all local users from a socket.
  depends core 4
 module m_modenotice 4.797 https://raw.githubusercontent.com/inspircd/inspircd-contrib/594627412343ca7b89843d7776b169175788f397/4/m_modenotice.cpp
@@ -347,7 +344,7 @@ module m_noprivatemode 4.810 https://raw.githubusercontent.com/inspircd/inspircd
 module m_protoctl 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_qrcode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_qrcode.cpp
+module m_qrcode 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 4
 module m_regex_oldpcre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_oldpcre.cpp
@@ -356,7 +353,7 @@ module m_regex_oldpcre 4.806 https://raw.githubusercontent.com/inspircd/inspircd
 module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
-module m_solvemsg 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_solvemsg.cpp
+module m_solvemsg 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
 module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_stats_unlinked.cpp
@@ -365,7 +362,7 @@ module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspirc
 module m_svsoper 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_svsoper.cpp
  depends core 4
  description Allows services to forcibly oper a user.
-module m_teams 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_teams.cpp
+module m_teams 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_teams.cpp
  depends core 4
  description Allows users to be managed using services-assigned teams.
 module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_teststdrpl.cpp
