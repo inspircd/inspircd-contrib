@@ -33,6 +33,7 @@
 
 #include "inspircd.h"
 #include "modules/account.h"
+#include "utility/string.h"
 
 // Holds information about a <hostchange> rule.
 class HostRule final
@@ -108,7 +109,7 @@ public:
 
 	bool Matches(LocalUser* user) const
 	{
-		if (!klass.empty() && !stdalgo::string::equalsci(klass, user->GetClass()->GetName()))
+		if (!klass.empty() && !insp::equalsci(klass, user->GetClass()->GetName()))
 			return false;
 
 		if (!ports.empty() && !ports.count(user->server_sa.port()))
@@ -174,17 +175,17 @@ public:
 
 			// Determine what type of host rule this is.
 			const std::string action = tag->getString("action");
-			if (stdalgo::string::equalsci(action, "addaccount"))
+			if (insp::equalsci(action, "addaccount"))
 			{
 				// The hostname is in the format [prefix]<account>[suffix].
 				rules.emplace_back(tag, HostRule::HostChangeAction::ADD_ACCOUNT, mask, tag->getString("prefix"), tag->getString("suffix"));
 			}
-			else if (stdalgo::string::equalsci(action, "addnick"))
+			else if (insp::equalsci(action, "addnick"))
 			{
 				// The hostname is in the format [prefix]<nick>[suffix].
 				rules.emplace_back(tag, HostRule::HostChangeAction::ADD_NICK, mask, tag->getString("prefix"), tag->getString("suffix"));
 			}
-			else if (stdalgo::string::equalsci(action, "set"))
+			else if (insp::equalsci(action, "set"))
 			{
 				// Ensure that we have the <hostchange:value> parameter.
 				const std::string value = tag->getString("value");
@@ -257,8 +258,7 @@ public:
 			if (!newhost.empty())
 			{
 				user->WriteNotice("Setting your virtual host: " + newhost);
-				if (!user->ChangeDisplayedHost(newhost))
-					user->WriteNotice("Could not set your virtual host: " + newhost);
+				user->ChangeDisplayedHost(newhost);
 				return;
 			}
 		}

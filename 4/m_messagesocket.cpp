@@ -23,6 +23,7 @@
 
 
 #include "inspircd.h"
+#include "utility/string.h"
 
 class MessageSocket;
 
@@ -103,7 +104,7 @@ public:
 
 	ModResult OnAcceptConnection(int nfd, ListenSocket* from, const irc::sockets::sockaddrs& client, const irc::sockets::sockaddrs& server) override
 	{
-		if (!stdalgo::string::equalsci(from->bind_tag->getString("type"), "message"))
+		if (!insp::equalsci(from->bind_tag->getString("type"), "message"))
 			return MOD_RES_PASSTHRU;
 
 		sockets.push_front(new MessageSocket(nfd));

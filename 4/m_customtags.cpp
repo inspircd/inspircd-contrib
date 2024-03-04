@@ -211,7 +211,7 @@ public:
 	ModResult OnWhoLine(const Who::Request& request, LocalUser* source, User* user, Membership* memb, Numeric::Numeric& numeric) override
 	{
 		size_t nick_index;
-		ctags.whox_index = request.GetFieldIndex('n', nick_index) ? nick_index : -1;
+		ctags.whox_index = request.GetFieldIndex('n', nick_index) ? static_cast<int>(nick_index) : -1;
 		return MOD_RES_PASSTHRU;
 	}
 

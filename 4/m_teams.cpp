@@ -162,7 +162,7 @@ public:
 		TeamList* teams = ext.Get(whois.GetTarget());
 		if (teams)
 		{
-			const std::string teamstr = stdalgo::string::join(*teams);
+			const std::string teamstr = insp::join(*teams);
 			whois.SendLine(RPL_WHOISTEAMS, teamstr, "is a member of these teams");
 		}
 	}

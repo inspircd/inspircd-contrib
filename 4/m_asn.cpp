@@ -51,7 +51,7 @@ public:
 	bool IsMatch(User* user, Channel* channel, const std::string& text) override
 	{
 		const std::string asnstr = ConvToStr(asnext.Get(user));
-		return stdalgo::string::equalsci(asnstr, text);
+		return insp::equalsci(asnstr, text);
 	}
 };
 
@@ -203,7 +203,7 @@ public:
 		for (std::string token; asnstream.GetToken(token); )
 		{
 			// If the user matches this ASN then they can use this connect class.
-			if (stdalgo::string::equalsci(asnstr, token))
+			if (insp::equalsci(asnstr, token))
 				return MOD_RES_PASSTHRU;
 		}
 

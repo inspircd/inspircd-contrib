@@ -24,6 +24,8 @@
 
 #include "inspircd.h"
 #include "modules/server.h"
+#include "stringutils.h"
+#include "utility/string.h"
 
 enum EventType
 {
@@ -108,15 +110,15 @@ public:
 
 			// Ensure that the <eventexec:event> value is well formed.
 			EventType event;
-			if (stdalgo::string::equalsci(eventstr, "startup"))
+			if (insp::equalsci(eventstr, "startup"))
 				event = ET_STARTUP;
-			else if (stdalgo::string::equalsci(eventstr, "shutdown"))
+			else if (insp::equalsci(eventstr, "shutdown"))
 				event = ET_SHUTDOWN;
-			else if (stdalgo::string::equalsci(eventstr, "rehash"))
+			else if (insp::equalsci(eventstr, "rehash"))
 				event = ET_REHASH;
-			else if (stdalgo::string::equalsci(eventstr, "link"))
+			else if (insp::equalsci(eventstr, "link"))
 				event = ET_SERVER_LINK;
-			else if (stdalgo::string::equalsci(eventstr, "unlink"))
+			else if (insp::equalsci(eventstr, "unlink"))
 				event = ET_SERVER_UNLINK;
 			else
 				throw ModuleException(this, "<eventexec:event> contains an unrecognised event '" + eventstr + "', at " + tag->source.str());

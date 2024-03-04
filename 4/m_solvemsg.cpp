@@ -28,8 +28,8 @@
 
 struct Problem final
 {
-	int first;
-	int second;
+	unsigned long first;
+	unsigned long second;
 	time_t nextwarning;
 };
 

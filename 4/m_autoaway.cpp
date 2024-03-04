@@ -76,23 +76,23 @@ public:
 				continue;
 
 			autoaway.Set(user);
-			user->awaytime = ServerInstance->Time();
-			user->awaymsg.assign(message, 0, ServerInstance->Config->Limits.MaxAway);
+			const auto prevstate = user->away;
+			user->away.emplace(message);
 			user->WriteNumeric(RPL_NOWAWAY, "You have been automatically marked as being away");
-			awayevprov.Call(&Away::EventListener::OnUserAway, user);
+			awayevprov.Call(&Away::EventListener::OnUserAway, user, prevstate);
 		}
 		setting = false;
 		return true;
 	}
 
-	void OnUserAway(User* user) override
+	void OnUserAway(User* user, const std::optional<AwayState>& prevstate) override
 	{
 		// If the user is changing their away status then unmark them.
 		if (IS_LOCAL(user) && !setting)
 			autoaway.Unset(user);
 	}
 
-	void OnUserBack(User* user, const std::string& awaymessage) override
+	void OnUserBack(User* user, const std::optional<AwayState>& prevstate) override
 	{
 		// If the user is unsetting their away status then unmark them.
 		if (IS_LOCAL(user))
@@ -104,13 +104,11 @@ public:
 		if (!IS_LOCAL(user) || !autoaway.Get(user))
 			return;
 
-
-		const std::string awaymsg = user->awaymsg;
+		const auto prevstate = user->away;
 		autoaway.Unset(user);
-		user->awaytime = 0;
-		user->awaymsg.clear();
+		user->away.reset();
 		user->WriteNumeric(RPL_UNAWAY, "You are no longer automatically marked as being away");
-		awayevprov.Call(&Away::EventListener::OnUserBack, user, awaymsg);
+		awayevprov.Call(&Away::EventListener::OnUserBack, user, prevstate);
 	}
 };
 

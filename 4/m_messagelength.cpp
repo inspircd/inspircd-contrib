@@ -76,7 +76,7 @@ public:
 		if (!channel->IsModeSet(&mode))
 			return MOD_RES_PASSTHRU;
 
-		unsigned int msglength = mode.ext.Get(channel);
+		size_t msglength = (size_t)mode.ext.Get(channel);
 		if (details.text.length() > msglength)
 			details.text.resize(msglength);
 

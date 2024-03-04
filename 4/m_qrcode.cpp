@@ -37,6 +37,8 @@
 #include "clientprotocolmsg.h"
 #include "modules/ssl.h"
 #include "numerichelper.h"
+#include "stringutils.h"
+#include "utility/string.h"
 
 class QRCode final
 {
@@ -212,46 +214,46 @@ private:
 		std::string name = tag->getString(key, def);
 		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 
-		if (stdalgo::string::equalsci(name, "white"))
+		if (insp::equalsci(name, "white"))
 			return "0";
 
-		if (stdalgo::string::equalsci(name, "black"))
+		if (insp::equalsci(name, "black"))
 			return "1";
 
-		if (stdalgo::string::equalsci(name, "blue"))
+		if (insp::equalsci(name, "blue"))
 			return "2";
 
-		if (stdalgo::string::equalsci(name, "green"))
+		if (insp::equalsci(name, "green"))
 			return "3";
 
-		if (stdalgo::string::equalsci(name, "red"))
+		if (insp::equalsci(name, "red"))
 			return "4";
 
-		if (stdalgo::string::equalsci(name, "brown"))
+		if (insp::equalsci(name, "brown"))
 			return "5";
 
-		if (stdalgo::string::equalsci(name, "purple"))
+		if (insp::equalsci(name, "purple"))
 			return "6";
 
-		if (stdalgo::string::equalsci(name, "orange"))
+		if (insp::equalsci(name, "orange"))
 			return "7";
 
-		if (stdalgo::string::equalsci(name, "yellow"))
+		if (insp::equalsci(name, "yellow"))
 			return "8";
 
-		if (stdalgo::string::equalsci(name, "lightgreen"))
+		if (insp::equalsci(name, "lightgreen"))
 			return "9";
 
-		if (stdalgo::string::equalsci(name, "cyan"))
+		if (insp::equalsci(name, "cyan"))
 			return "10";
 
-		if (stdalgo::string::equalsci(name, "lightcyan"))
+		if (insp::equalsci(name, "lightcyan"))
 			return "11";
 
-		if (stdalgo::string::equalsci(name, "lightblue"))
+		if (insp::equalsci(name, "lightblue"))
 			return "12";
 
-		if (stdalgo::string::equalsci(name, "pink"))
+		if (insp::equalsci(name, "pink"))
 			return "13";
 
 		if (name == "gray" || name == "grey")
