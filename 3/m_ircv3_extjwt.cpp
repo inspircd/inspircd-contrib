@@ -227,11 +227,13 @@ class CommandExtJWT CXX11_FINAL
 
 		// Is the user expecting a user token or a channel token?
 		Channel* chan = NULL;
+		Membership* memb = NULL;
 		if (parameters[0] != "*")
 		{
 			// Chec that the target channel actually exists.
 			chan = ServerInstance->FindChan(parameters[0]);
-			if (!chan || chan->IsModeSet(privatemode) || chan->IsModeSet(secretmode))
+			memb = chan ? chan->GetUser(user) : NULL;
+			if (!chan || (!memb && (chan->IsModeSet(privatemode) || chan->IsModeSet(secretmode))))
 			{
 				// The target channel does not exist.
 				user->WriteNumeric(Numerics::NoSuchChannel(parameters[0]));
@@ -294,7 +296,6 @@ class CommandExtJWT CXX11_FINAL
 				writer.String(chan->name);
 
 				writer.Key("joined");
-				Membership* memb = chan->GetUser(user);
 				writer.Uint64(memb ? ext.get(memb) : 0);
 
 				writer.Key("cmodes");
