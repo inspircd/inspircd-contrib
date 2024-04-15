@@ -353,7 +353,7 @@ module m_regex_oldpcre 4.806 https://raw.githubusercontent.com/inspircd/inspircd
 module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
-module m_solvemsg 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_solvemsg.cpp
+module m_solvemsg 4.845 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4c4bc00c7196f32d756b1f63003ca7f692387449/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
 module m_ssl_mbedtls 4.842 https://raw.githubusercontent.com/inspircd/inspircd-contrib/482c3660c142faf9f97edd012f6f6fcc8a4206c6/4/m_ssl_mbedtls.cpp
@@ -362,9 +362,6 @@ module m_ssl_mbedtls 4.842 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_stats_unlinked.cpp
  depends core 4
  description Adds stats character 'X' which shows unlinked servers.
-module m_svsoper 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_svsoper.cpp
- depends core 4
- description Allows services to forcibly oper a user.
 module m_teams 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_teams.cpp
  depends core 4
  description Allows users to be managed using services-assigned teams.
