@@ -356,6 +356,9 @@ module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_solvemsg 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
+module m_ssl_mbedtls 4.842 https://raw.githubusercontent.com/inspircd/inspircd-contrib/482c3660c142faf9f97edd012f6f6fcc8a4206c6/4/m_ssl_mbedtls.cpp
+ depends core 4
+ description Allows TLS encrypted connections using the mbedTLS library.
 module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_stats_unlinked.cpp
  depends core 4
  description Adds stats character 'X' which shows unlinked servers.
