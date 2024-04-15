@@ -55,7 +55,7 @@ public:
 			return CmdResult::FAILURE;
 		}
 
-		int result = ConvToNum<int>(parameters[0]);
+		const auto result = ConvToNum<unsigned long>(parameters[0]);
 		if (result != (problem->first + problem->second))
 		{
 			user->WriteNotice(INSP_FORMAT("*** {} is not the correct answer.", parameters[0]));
