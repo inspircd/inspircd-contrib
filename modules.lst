@@ -261,7 +261,7 @@ module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_antiknocker 4.829 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0bc07531f939fc6d3ad12a06c8e7fdfaac01d6ef/4/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 4
-module m_antisnoop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_antisnoop.cpp
+module m_antisnoop 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 4
 module m_asn 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_asn.cpp
@@ -276,10 +276,10 @@ module m_autodrop 4.810 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_autokick 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_autokick.cpp
  depends core 4
  description Automatically kicks people who match a banned mask.
-module m_blockhighlight 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_blockhighlight.cpp
+module m_blockhighlight 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 4
-module m_censor 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc4e2dbe1d097b2a07079cbca7de0070f96e73a0/4/m_censor.cpp
+module m_censor 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
 module m_clientcheck 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_clientcheck.cpp
@@ -294,7 +294,7 @@ module m_complete 4.810 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_custompenalty.cpp
  depends core 4
  description Allows the customisation of penalty levels.
-module m_customtags 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_customtags.cpp
+module m_customtags 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_customtags.cpp
  depends core 4
  description Allows services to add custom tags to messages sent by clients.
 module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_defaulttopic.cpp
@@ -323,7 +323,7 @@ module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
-module m_messagelength 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_messagelength.cpp
+module m_messagelength 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 4
 module m_messagesocket 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_messagesocket.cpp
@@ -332,7 +332,7 @@ module m_messagesocket 4.838 https://raw.githubusercontent.com/inspircd/inspircd
 module m_modenotice 4.797 https://raw.githubusercontent.com/inspircd/inspircd-contrib/594627412343ca7b89843d7776b169175788f397/4/m_modenotice.cpp
  depends core 4
  description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
-module m_noidletyping 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_noidletyping.cpp
+module m_noidletyping 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_noidletyping.cpp
  depends core 4
  description Prevents typing notifications from being sent to idle users.
 module m_nopartmsg 4.815 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3934dce8f50331ef7e205b95333aebcfb6c40b65/4/m_nopartmsg.cpp
@@ -353,7 +353,7 @@ module m_regex_oldpcre 4.806 https://raw.githubusercontent.com/inspircd/inspircd
 module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
-module m_solvemsg 4.845 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4c4bc00c7196f32d756b1f63003ca7f692387449/4/m_solvemsg.cpp
+module m_solvemsg 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
 module m_ssl_mbedtls 4.842 https://raw.githubusercontent.com/inspircd/inspircd-contrib/482c3660c142faf9f97edd012f6f6fcc8a4206c6/4/m_ssl_mbedtls.cpp
