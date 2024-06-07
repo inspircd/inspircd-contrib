@@ -67,7 +67,7 @@ public:
 		duration = tag->getDuration("duration", 60*10, 60);
 	}
 
-	ModResult OnUserPreTagMessage(User* user, const MessageTarget& target, CTCTags::TagMessageDetails& details) override
+	ModResult OnUserPreTagMessage(User* user, MessageTarget& target, CTCTags::TagMessageDetails& details) override
 	{
 		auto iter = details.tags_out.find("+typing");
 		auto draftiter = details.tags_out.find("+draft/typing");

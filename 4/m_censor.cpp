@@ -53,7 +53,7 @@ class ModuleCensor : public Module
 	}
 
 	// format of a config entry is <badword text="shit" replace="poo">
-	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) override
+	ModResult OnUserPreMessage(User* user, MessageTarget& target, MessageDetails& details) override
 	{
 		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;

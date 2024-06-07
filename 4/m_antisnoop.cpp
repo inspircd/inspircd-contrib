@@ -78,7 +78,7 @@ public:
 		exemptrank = tag->getNum<ModeHandler::Rank>("exemptrank", VOICE_VALUE);
 	}
 
-	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) override
+	ModResult OnUserPreMessage(User* user, MessageTarget& target, MessageDetails& details) override
 	{
 		if (target.type != MessageTarget::TYPE_CHANNEL)
 			return MOD_RES_PASSTHRU; // We only care about channel messages.

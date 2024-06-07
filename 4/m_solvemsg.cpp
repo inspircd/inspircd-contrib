@@ -108,7 +108,7 @@ public:
 		ext.Set(user, problem);
 	}
 
-	ModResult OnUserPreMessage(User* user, const MessageTarget& msgtarget, MessageDetails& details) override
+	ModResult OnUserPreMessage(User* user, MessageTarget& msgtarget, MessageDetails& details) override
 	{
 		LocalUser* source = IS_LOCAL(user);
 		if (!source)

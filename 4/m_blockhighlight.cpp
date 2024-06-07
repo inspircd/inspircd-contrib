@@ -57,7 +57,7 @@ public:
 		stripcolor = tag->getBool("stripcolor", true);
 	}
 
-	ModResult OnUserPreMessage(User* user, const MessageTarget& target, MessageDetails& details) override
+	ModResult OnUserPreMessage(User* user, MessageTarget& target, MessageDetails& details) override
 	{
 		if ((target.type != MessageTarget::TYPE_CHANNEL) || (!IS_LOCAL(user)))
 			return MOD_RES_PASSTHRU;
