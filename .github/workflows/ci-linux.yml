@@ -2,13 +2,14 @@ name: Linux CI
 on:
   push:
     paths:
+      - '.github/*'
       - '3.0/*'
   pull_request:
     paths:
       - '3.0/*'
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     env:
       CXXFLAGS: -std=${{ matrix.standard }} -Wno-error=deprecated-declarations
       CXX: ${{ matrix.compiler }}
@@ -18,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update --assume-yes
-          sudo apt-get install --assume-yes --no-install-recommends clang g++ git make libc++-dev libc++abi-dev pkg-config
+          sudo apt-get install --assume-yes --no-install-recommends clang g++ git make pkg-config
       - name: Checkout InspIRCd@insp3
         uses: actions/checkout@v4
         with:
