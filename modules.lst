@@ -300,6 +300,9 @@ module m_customtags 4.847 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_defaulttopic.cpp
  depends core 4
  description Adds support for default channel topics.
+module m_delayuse 4.850 https://raw.githubusercontent.com/inspircd/inspircd-contrib/d50cfa0a667d12b14295d98878a56bdf8abcf577/4/m_delayuse.cpp
+ depends core 4
+ description Allows delaying the recreation of channels and reuse of nicknames.
 module m_discordnick 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_discordnick.cpp
  depends core 4
  description Adds support for Discord-style #1234 nick tags.
@@ -371,3 +374,9 @@ module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_userip 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
+module m_cloak_md5 5.849 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a219b3afcffd98d4474b56b522cca7e123e66f5c/5/m_cloak_md5.cpp
+ depends core 5
+ description Adds the half and full cloaking methods for use with the cloak module.
+module m_md5 5.849 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a219b3afcffd98d4474b56b522cca7e123e66f5c/5/m_md5.cpp
+ depends core 5
+ description Allows other modules to generate MD5 hashes.
