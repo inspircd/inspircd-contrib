@@ -285,6 +285,9 @@ module m_censor 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_clientcheck 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 4
+module m_cloak_unreal 4.853 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a29004e8665bf978ae513e5d23077ea897c91242/4/m_cloak_unreal.cpp
+ depends core 4
+ description Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.
 module m_clones 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cc4e2dbe1d097b2a07079cbca7de0070f96e73a0/4/m_clones.cpp
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
