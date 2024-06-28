@@ -29,8 +29,7 @@ Please make it clear you're asking about a contrib module!
 ### Example Tags
 
 ```
-/// $ModAuthor: w00t
-/// $ModAuthorMail: w00t@example.com
+/// $ModAuthor: w00t <w00t@example.com>
 /// $ModConfig: <syncbans channels="#a,#b,#c">
 /// $ModConflicts: m_muteban.so
 /// $ModDepends: core 3
