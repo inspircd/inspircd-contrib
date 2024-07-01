@@ -326,7 +326,7 @@ module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_ircv3_extjwt 4.859 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c5df40527de7aa01093b3da6eefea87cc74aa246/4/m_ircv3_extjwt.cpp
+module m_ircv3_extjwt 4.861 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4ad1c1595d45f978f4db16e2a89d61293a0c7fb9/4/m_ircv3_extjwt.cpp
  depends core 3
  description Provides the DRAFT extjwt IRCv3 extension.
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
