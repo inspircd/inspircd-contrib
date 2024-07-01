@@ -26,6 +26,7 @@
 #include "inspircd.h"
 #include "modules/account.h"
 #include "modules/hash.h"
+#include "modules/httpd.h"
 #include "modules/ircv3_replies.h"
 #include "modules/isupport.h"
 #include "numerichelper.h"
@@ -63,9 +64,13 @@ struct JWTService final
 	// The shared secret between the IRC server and the external service.
 	std::string secret;
 
-	JWTService(unsigned long d, const std::string& s)
+	// The URL for verifying JWT for this service.
+	std::string verifyurl;
+
+	JWTService(unsigned long d, const std::string& s, const std::string& v)
 		: duration(d)
 		, secret(s)
+		, verifyurl(v)
 	{
 	}
 };
@@ -93,6 +98,98 @@ public:
 	}
 };
 
+class ExtJWTVerifier final
+	: public HTTPRequestEventListener
+{
+private:
+	HTTPdAPI httpapi;
+	dynamic_reference_nocheck<HashProvider>& sha256;
+	ServiceMap& services;
+
+
+	ModResult HandleResponse(HTTPRequest& request, unsigned int code, const std::string& reason)
+	{
+		std::stringstream data(reason); // This API is awful.
+		HTTPDocumentResponse response(const_cast<Module*>(GetModule()), request, &data, code);
+		response.headers.SetHeader("X-Powered-By", MODNAME);
+		if (!reason.empty())
+			response.headers.SetHeader("Content-Type", "text/plain");
+		httpapi->SendResponse(response);
+		return MOD_RES_DENY;
+	}
+
+public:
+	ExtJWTVerifier(Module* Creator, ServiceMap& Services, dynamic_reference_nocheck<HashProvider>& SHA256)
+		: HTTPRequestEventListener(Creator)
+		, httpapi(Creator)
+		, sha256(SHA256)
+		, services(Services)
+	{
+	}
+
+	ModResult OnHTTPRequest(HTTPRequest& request) override
+	{
+		irc::sepstream pathstream(request.GetPath(), '/');
+		std::string pathtoken;
+
+		// Check the root /extjwt path was specified.
+		if (!pathstream.GetToken(pathtoken) || !insp::equalsci(pathtoken, "extjwt"))
+			return MOD_RES_PASSTHRU; // Pass through to another module.
+
+		// Check a service was specified if multiple exist.
+		ServiceMap::iterator siter = services.begin();
+		if (services.size() > 1)
+		{
+			if (!pathstream.GetToken(pathtoken))
+				return HandleResponse(request, 400, "No JWT service specified");
+
+			siter = services.find(pathtoken);
+			if (siter == services.end())
+				return HandleResponse(request, 400, "No such JWT service: " + pathtoken);
+		}
+
+		// Check that a pathtoken was specified.
+		if (!pathstream.GetToken(pathtoken))
+			return HandleResponse(request, 400, "No JWT specified");
+
+		// The server does not have the sha256 module loaded.
+		if (!sha256)
+			return HandleResponse(request, 500, "HMAC-SHA256 support is not available");
+
+		// Check that the JWT is well formed.
+		std::string header;
+		std::string payload;
+		std::string signature;
+		irc::sepstream tokenstream(pathtoken, '.');
+		if (!tokenstream.GetToken(header) || !tokenstream.GetToken(payload) || !tokenstream.GetToken(signature))
+			return HandleResponse(request, 401, "Malformed JWT specified");
+
+		// Decode the payload.
+		payload = Base64::Decode(payload, BASE64_URL);
+
+		// Check the header and signature are valid.
+		if (pathtoken != CreateJWT(sha256, payload, siter->second.secret))
+			return HandleResponse(request, 401, "Invalid JWT signature specified");
+
+		// Validate the expiry time.
+		rapidjson::Document document;
+		if (document.Parse(payload).HasParseError() || !document.IsObject())
+			return HandleResponse(request, 401, "Malformed JWT payload specified");
+
+		rapidjson::Value::ConstMemberIterator eiter = document.FindMember("exp");
+		if (eiter == document.MemberEnd() || !eiter->value.IsInt64())
+			return HandleResponse(request, 401, "Malformed JWT payload specified");
+
+		time_t expiry = eiter->value.GetInt64();
+		if (expiry < ServerInstance->Time())
+			return HandleResponse(request, 401, "Expired JWT specified");
+
+		// XXX: should the issuer be verified here too?
+		return HandleResponse(request, 200, "JWT token validated");
+	}
+};
+
+
 class CommandExtJWT final
 	: public SplitCommand
 {
@@ -102,6 +199,7 @@ private:
 	ClientProtocol::EventProvider protoev;
 	ChanModeReference secretmode;
 	IRCv3::Replies::Fail failrpl;
+	ExtJWTVerifier verifier;
 
 public:
 	IntExtItem ext;
@@ -115,6 +213,7 @@ public:
 		, protoev(Creator, "EXTJWT")
 		, secretmode(Creator, "secret")
 		, failrpl(Creator)
+		, verifier(Creator, services, sha256)
 		, ext(Creator, "join-time", ExtensionType::MEMBERSHIP)
 		, sha256(Creator, "hash/sha256")
 	{
@@ -255,6 +354,7 @@ public:
 		{
 			// A JWT can live for any time between ten seconds and ten minutes (default: 30 seconds).
 			const auto duration = tag->getDuration("duration", 30, 10, 10*60);
+			const auto verifyurl = tag->getString("verifyurl");
 
 			// Always require a secret.
 			const auto secret = tag->getString("secret");
@@ -267,7 +367,7 @@ public:
 				throw ModuleException(this, "<extjwt:name> is a required field, at " + tag->source.str());
 
 			// If the insertion fails a JWTService with this name already exists.
-			if (!newservices.emplace(name, JWTService(duration, secret)).second)
+			if (!newservices.emplace(name, JWTService(duration, secret, verifyurl)).second)
 				throw ModuleException(this, "<extjwt:name> (" + name + ") must be unique, at " + tag->source.str());
 		}
 
