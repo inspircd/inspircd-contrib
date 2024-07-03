@@ -20,7 +20,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Provides the DRAFT extjwt IRCv3 extension.
 
 #include "inspircd.h"

@@ -20,7 +20,7 @@
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@witchery.services
 /// $ModDesc: Prevents clients from sending messages that trigger CVE-2024-39844.
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 #include "inspircd.h"
 
