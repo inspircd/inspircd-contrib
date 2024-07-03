@@ -39,7 +39,7 @@ private:
 
 public:
 	ModuleProfileLink()
-		: Module(VF_OPTCOMMON, "Adds a profile link to the WHOIS response for registered users, ignoring services, bots, and ulines.")
+		: Module(VF_OPTCOMMON, "Adds a profile link to the WHOIS response for registered users, ignoring services, bots.")
 		, Whois::EventListener(this)
 		, accountapi(this)
 	{
