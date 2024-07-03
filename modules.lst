@@ -303,9 +303,9 @@ module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd
 module m_customtags 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_customtags.cpp
  depends core 4
  description Allows services to add custom tags to messages sent by clients.
-module m_cve_2024_39844 4.863 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5f5e27ace1d7ac3916ea0aecfe538888d16b2661/4/m_cve_2024_39844.cpp
+module m_cve_2024_39844 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_cve_2024_39844.cpp
  description Prevents clients from sending messages that trigger CVE-2024-39844.
- depends core 3
+ depends core 4
 module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_defaulttopic.cpp
  depends core 4
  description Adds support for default channel topics.
@@ -332,8 +332,8 @@ module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_ircv3_extjwt 4.861 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4ad1c1595d45f978f4db16e2a89d61293a0c7fb9/4/m_ircv3_extjwt.cpp
- depends core 3
+module m_ircv3_extjwt 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_ircv3_extjwt.cpp
+ depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
  depends core 4
