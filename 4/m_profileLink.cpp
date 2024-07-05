@@ -19,6 +19,7 @@
 /// $ModAuthor: Jean Chevronnet <mike.chevronnet@gmail.com>
 /// $ModDepends: core 4
 /// $ModDesc: Adds a profile link to the WHOIS response for registered users, ignoring services, bots.
+/// $ModConfig: <profilelink baseurl="https://example.com/profil/">
 
 #include "inspircd.h"
 #include "modules/whois.h"
@@ -36,13 +37,22 @@ class ModuleProfileLink final
 {
 private:
 	Account::API accountapi;
+	std::string profileBaseUrl;
+	UserModeReference botmode;
 
 public:
 	ModuleProfileLink()
 		: Module(VF_OPTCOMMON, "Adds a profile link to the WHOIS response for registered users, ignoring services, bots.")
 		, Whois::EventListener(this)
 		, accountapi(this)
+		, botmode(this, "bot")
 	{
+	}
+
+	void ReadConfig(ConfigStatus& status) override
+	{
+		auto& tag = ServerInstance->Config->ConfValue("profilelink");
+		profileBaseUrl = tag->getString("baseurl");
 	}
 
 	void OnWhois(Whois::Context& whois) override
@@ -50,7 +60,11 @@ public:
 		User* target = whois.GetTarget();
 
 		// Skip services, bots.
-		if (target->server->IsService() || target->IsModeSet('B'))
+		if (target->server->IsService() || target->IsModeSet(botmode))
+			return;
+
+		// Ensure the account module is loaded before attempting to get the account name.
+		if (!accountapi)
 			return;
 
 		// Check if the user has an account name (is registered).
@@ -58,14 +72,14 @@ public:
 		if (account)
 		{
 			// Construct the profile URL using the user's account name.
-			const std::string profileUrl = "https://www.reseau-entrenous.fr/profil/" + *account;
+			const std::string profileUrl = profileBaseUrl + *account;
 			// Send the profile URL in the WHOIS response.
-			whois.SendLine(RPL_WHOISPROFILE, target->nick, "Profil: " + profileUrl);
+			whois.SendLine(RPL_WHOISPROFILE, "*", "Profil: " + profileUrl);
 		}
 		else
 		{
 			// Indicate that the account is not registered.
-			whois.SendLine(RPL_WHOISPROFILE, target->nick, "Profil: L'utilisateur n'est pas connecté ou le compte n'est pas enregistré.");
+			whois.SendLine(RPL_WHOISPROFILE, "*", "Profil: L'utilisateur n'est pas connecté ou le compte n'est pas enregistré.");
 		}
 	}
 };
