@@ -35,12 +35,6 @@
 #include <mutex>
 #include <regex>
 
-enum
-{
-    // Define a custom WHOIS numeric reply for the IP info.
-    RPL_WHOISIPINFO = 695,
-};
-
 class IPInfoResolver : public Thread
 {
 private:
@@ -104,7 +98,7 @@ private:
         cachedinfo.Set(localuser, info);
 
         std::lock_guard<std::mutex> lock(mtx);
-        localuser->WriteNumeric(RPL_WHOISIPINFO, localuser->nick, "ip info: " + info);
+        localuser->WriteNumeric(RPL_WHOISSPECIAL, localuser->nick, "ip info: " + info);
     }
 
 public:
@@ -183,21 +177,21 @@ public:
 
         if (!target->client_sa.is_ip())
         {
-            whois.SendLine(RPL_WHOISIPINFO, "ip info: ip not found, possible UNIX socket user.");
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info: no ip address found, maybe using UNIX socket connection.");
             return;
         }
 
         // Check for private IP addresses
         if (IsPrivateIP(target->client_sa.addr()))
         {
-            whois.SendLine(RPL_WHOISIPINFO, "ip info: user is connecting from a private ip address.");
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info: user is  connecting from a private IP address.");
             return;
         }
 
         const std::string* cached = cachedinfo.Get(target);
         if (cached)
         {
-            whois.SendLine(RPL_WHOISIPINFO, "ip info(cached): " + *cached);
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info(cached): " + *cached);
         }
         else
         {
@@ -207,4 +201,5 @@ public:
 };
 
 MODULE_INIT(ModuleIPInfo)
+
 
