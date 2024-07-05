@@ -3,7 +3,7 @@
  *
  *   Copyright (C) 2024 Jean Chevronnet <mike.chevronnet@gmail.com>
  *
-* This file contains a third party module for InspIRCd.  You can
+ * This file contains a third party module for InspIRCd.  You can
  * redistribute it and/or modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation, version 2.
  *
@@ -27,28 +27,28 @@
 #include "inspircd.h"
 #include "extension.h"
 #include "modules/httpd.h"
-#include "modules/stats.h"
 #include "modules/whois.h"
+#include "thread.h"
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <curl/curl.h>
-#include <thread>
 #include <mutex>
+#include <regex>
 
 enum
 {
-    // deff custom numeric for this information in whois
+    // Define a custom WHOIS numeric reply for the IP info.
     RPL_WHOISIPINFO = 695,
 };
 
-class IPInfoResolver
+class IPInfoResolver : public Thread
 {
 private:
-    std::thread worker;
     std::mutex mtx;
     StringExtItem& cachedinfo;
     std::string apikey;
     std::string theiruuid;
+    LocalUser* user;
 
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* s)
     {
@@ -56,7 +56,7 @@ private:
         return size * nmemb;
     }
 
-    void DoRequest(LocalUser* user)
+    void OnStart() override
     {
         CURL* curl;
         CURLcode res;
@@ -66,7 +66,7 @@ private:
         curl = curl_easy_init();
         if (curl)
         {
-            std::string url = "http://ipinfo.io/" + user->client_sa.addr() + "?token=" + apikey;
+            std::string url = "https://ipinfo.io/" + user->client_sa.addr() + "?token=" + apikey;
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
@@ -85,13 +85,13 @@ private:
         curl_global_cleanup();
     }
 
-    void ParseResponse(LocalUser* user, const std::string& response)
+    void ParseResponse(LocalUser* localuser, const std::string& response)
     {
         rapidjson::Document document;
         if (document.Parse(response.c_str()).HasParseError())
         {
             std::lock_guard<std::mutex> lock(mtx);
-            ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to parse JSON for %s: %s", user->nick.c_str(), rapidjson::GetParseError_En(document.GetParseError()));
+            ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to parse JSON for %s: %s", localuser->nick.c_str(), rapidjson::GetParseError_En(document.GetParseError()));
             return;
         }
 
@@ -101,38 +101,59 @@ private:
         std::string org = document.HasMember("org") ? document["org"].GetString() : "Unknown";
 
         std::string info = "City: " + city + ", Region: " + region + ", Country: " + country + ", Org: " + org;
-        cachedinfo.Set(user, info);
+        cachedinfo.Set(localuser, info);
 
         std::lock_guard<std::mutex> lock(mtx);
-        user->WriteNumeric(RPL_WHOISIPINFO, user->nick, "hes/her ip information: " + info);
+        localuser->WriteNumeric(RPL_WHOISIPINFO, localuser->nick, "ip info: " + info);
     }
 
 public:
-    IPInfoResolver(Module* Creator, LocalUser* user, StringExtItem& cache, const std::string& key)
-        : cachedinfo(cache), apikey(key), theiruuid(user->uuid)
+    IPInfoResolver(Module* Creator, LocalUser* localuser, StringExtItem& cache, const std::string& key)
+        : Thread(), cachedinfo(cache), apikey(key), theiruuid(localuser->uuid), user(localuser)
     {
-        worker = std::thread(&IPInfoResolver::DoRequest, this, user);
-    }
-
-    ~IPInfoResolver()
-    {
-        if (worker.joinable())
+        if (localuser->client_sa.is_ip())
         {
-            worker.join();
+            this->Start();
         }
     }
 };
 
-class ModuleIPInfo : public Module, public Stats::EventListener, public Whois::EventListener
+class ModuleIPInfo : public Module, public Whois::EventListener
 {
 private:
     StringExtItem cachedinfo;
     std::string apikey;
 
+    bool IsPrivateIP(const std::string& ip)
+    {
+        // Regex patterns for private IPv4 addresses
+        std::regex private_ipv4_patterns[] = {
+            std::regex("^10\\..*"),
+            std::regex("^172\\.(1[6-9]|2[0-9]|3[0-1])\\..*"),
+            std::regex("^192\\.168\\..*")
+        };
+
+        // Check IPv4 addresses
+        for (const auto& pattern : private_ipv4_patterns)
+        {
+            if (std::regex_match(ip, pattern))
+                return true;
+        }
+
+        // Check IPv6 link-local addresses (fe80::/10)
+        if (ip.find("fe80:") == 0)
+            return true;
+
+        // Check loopback addresses
+        if (ip == "127.0.0.1" || ip == "::1")
+            return true;
+
+        return false;
+    }
+
 public:
     ModuleIPInfo()
         : Module(VF_VENDOR, "Adds IPinfo.io information to WHOIS responses for opers, using a configured API key.")
-        , Stats::EventListener(this)
         , Whois::EventListener(this)
         , cachedinfo(this, "ipinfo", ExtensionType::USER)
     {
@@ -160,30 +181,30 @@ public:
         if (!whois.GetSource()->IsOper())
             return;
 
+        if (!target->client_sa.is_ip())
+        {
+            whois.SendLine(RPL_WHOISIPINFO, "ip info: ip not found, possible UNIX socket user.");
+            return;
+        }
+
+        // Check for private IP addresses
+        if (IsPrivateIP(target->client_sa.addr()))
+        {
+            whois.SendLine(RPL_WHOISIPINFO, "ip info: user is connecting from a private ip address.");
+            return;
+        }
+
         const std::string* cached = cachedinfo.Get(target);
         if (cached)
         {
-            whois.SendLine(RPL_WHOISIPINFO, "hes/her ip information(cached): " + *cached);
+            whois.SendLine(RPL_WHOISIPINFO, "ip info(cached): " + *cached);
         }
         else
         {
             new IPInfoResolver(this, IS_LOCAL(target), cachedinfo, apikey);
         }
     }
-
-    ModResult OnStats(Stats::Context& stats) override
-    {
-        return MOD_RES_PASSTHRU;
-    }
-
-    void OnUnloadModule(Module* mod) override
-    {
-        const UserManager::LocalList& users = ServerInstance->Users.GetLocalUsers();
-        for (const auto& user : users)
-        {
-            cachedinfo.Unset(user);
-        }
-    }
 };
 
 MODULE_INIT(ModuleIPInfo)
+
