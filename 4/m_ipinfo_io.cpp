@@ -42,7 +42,7 @@ private:
     StringExtItem& cachedinfo;
     std::string apikey;
     std::string theiruuid;
-    LocalUser* user;
+    User* resolved_user; // Renamed to avoid shadowing
 
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* s)
     {
@@ -60,7 +60,7 @@ private:
         curl = curl_easy_init();
         if (curl)
         {
-            std::string url = "https://ipinfo.io/" + user->client_sa.addr() + "?token=" + apikey;
+            std::string url = "https://ipinfo.io/" + resolved_user->client_sa.addr() + "?token=" + apikey;
             curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
             curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
@@ -68,24 +68,24 @@ private:
             if (res != CURLE_OK)
             {
                 std::lock_guard<std::mutex> lock(mtx);
-                ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to get data for %s: %s", user->nick.c_str(), curl_easy_strerror(res));
+                ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to get data for %s: %s", resolved_user->nick.c_str(), curl_easy_strerror(res));
             }
             else
             {
-                ParseResponse(user, response);
+                ParseResponse(resolved_user, response);
             }
             curl_easy_cleanup(curl);
         }
         curl_global_cleanup();
     }
 
-    void ParseResponse(LocalUser* localuser, const std::string& response)
+    void ParseResponse(User* user, const std::string& response)
     {
         rapidjson::Document document;
         if (document.Parse(response.c_str()).HasParseError())
         {
             std::lock_guard<std::mutex> lock(mtx);
-            ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to parse JSON for %s: %s", localuser->nick.c_str(), rapidjson::GetParseError_En(document.GetParseError()));
+            ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to parse JSON for %s: %s", user->nick.c_str(), rapidjson::GetParseError_En(document.GetParseError()));
             return;
         }
 
@@ -95,17 +95,17 @@ private:
         std::string org = document.HasMember("org") ? document["org"].GetString() : "Unknown";
 
         std::string info = "City: " + city + ", Region: " + region + ", Country: " + country + ", Org: " + org;
-        cachedinfo.Set(localuser, info);
+        cachedinfo.Set(user, info);
 
         std::lock_guard<std::mutex> lock(mtx);
-        localuser->WriteNumeric(RPL_WHOISSPECIAL, localuser->nick, "ip info: " + info);
+        user->WriteNumeric(RPL_WHOISSPECIAL, user->nick, "ip info: " + info);
     }
 
 public:
-    IPInfoResolver(Module* Creator, LocalUser* localuser, StringExtItem& cache, const std::string& key)
-        : Thread(), cachedinfo(cache), apikey(key), theiruuid(localuser->uuid), user(localuser)
+    IPInfoResolver(Module* Creator, User* user, StringExtItem& cache, const std::string& key)
+        : Thread(), cachedinfo(cache), apikey(key), theiruuid(user->uuid), resolved_user(user)
     {
-        if (localuser->client_sa.is_ip())
+        if (user->client_sa.is_ip())
         {
             this->Start();
         }
@@ -149,7 +149,7 @@ public:
     ModuleIPInfo()
         : Module(VF_VENDOR, "Adds IPinfo.io information to WHOIS responses for opers, using a configured API key.")
         , Whois::EventListener(this)
-        , cachedinfo(this, "ipinfo", ExtensionType::USER)
+        , cachedinfo(this, "ipinfo", ExtensionType::USER, true)
     {
     }
 
@@ -169,7 +169,11 @@ public:
     {
         User* target = whois.GetTarget();
 
-        if (target->server->IsService() || target->IsModeSet('B'))
+        if (target->server->IsService())
+            return;
+
+        UserModeReference botmode(this, "bot");
+        if (target->IsModeSet(botmode))
             return;
 
         if (!whois.GetSource()->IsOper())
@@ -177,29 +181,38 @@ public:
 
         if (!target->client_sa.is_ip())
         {
-            whois.SendLine(RPL_WHOISSPECIAL, "ip info: no ip address found, maybe using UNIX socket connection.");
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info: no IP address found, maybe using UNIX socket connection.");
             return;
         }
 
         // Check for private IP addresses
         if (IsPrivateIP(target->client_sa.addr()))
         {
-            whois.SendLine(RPL_WHOISSPECIAL, "ip info: user is  connecting from a private IP address.");
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info: user is connecting from a private IP address.");
             return;
         }
 
-        const std::string* cached = cachedinfo.Get(target);
-        if (cached)
+        if (IS_LOCAL(target))
         {
-            whois.SendLine(RPL_WHOISSPECIAL, "ip info(cached): " + *cached);
+            const std::string* cached = cachedinfo.Get(target);
+            if (cached)
+            {
+                whois.SendLine(RPL_WHOISSPECIAL, "ip info (cached): " + *cached);
+            }
+            else
+            {
+                new IPInfoResolver(this, target, cachedinfo, apikey);
+            }
         }
-        else
+        else if (IS_REMOTE(target))
         {
-            new IPInfoResolver(this, IS_LOCAL(target), cachedinfo, apikey);
+            // Send request to remote server to fetch IP info
+            whois.SendLine(RPL_WHOISSPECIAL, "ip info: target is a remote user.");
         }
     }
 };
 
 MODULE_INIT(ModuleIPInfo)
+
 
 
