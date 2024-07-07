@@ -332,6 +332,9 @@ module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
+module m_ipinfo_io 4.867 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1e9e93ffb5d19e097abc9c6514f7220a50754dda/4/m_ipinfo_io.cpp
+ description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
+ depends core 4
 module m_ircv3_extjwt 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_ircv3_extjwt.cpp
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
@@ -356,6 +359,9 @@ module m_nopartmsg 4.815 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_noprivatemode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_noprivatemode.cpp
  description Sets channel mode +s (secret) when users try to set channel mode +p (private).
  depends core 4
+module m_profileLink 4.867 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1e9e93ffb5d19e097abc9c6514f7220a50754dda/4/m_profileLink.cpp
+ depends core 4
+ description Adds a profile link to the WHOIS response for registered users, ignoring services, bots.
 module m_protoctl 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
