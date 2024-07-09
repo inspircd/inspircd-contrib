@@ -73,7 +73,7 @@ private:
             {
                 // Append random ID to the existing reason parameter
                 AppendRandomID(parameters.back());
-                std::string log_message = fmt::format("{} {} {}: {}", source->nick, command, parameters[0], parameters.back());
+                std::string log_message = INSP_FORMAT("{} {} {}: {}", source->nick, command, parameters[0], parameters.back());
                 ServerInstance->SNO.WriteToSnoMask('a', log_message);
             }
         }
