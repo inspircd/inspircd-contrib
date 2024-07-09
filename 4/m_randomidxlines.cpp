@@ -7,12 +7,9 @@
  * License as published by the Free Software Foundation, version 2.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /// $ModAuthor: Jean reverse Chevronnet <mike.chevronnet@gmail.com>
@@ -21,6 +18,7 @@
 
 #include "inspircd.h"
 #include "xline.h"
+#include "timeutils.h"
 #include <random>
 
 class ModuleRandomIDxLines : public Module
@@ -52,12 +50,7 @@ private:
 
     bool IsValidDuration(const std::string& duration)
     {
-        for (char c : duration)
-        {
-            if (!isdigit(c) && c != 's' && c != 'm' && c != 'h' && c != 'd' && c != 'w')
-                return false;
-        }
-        return true;
+        return Duration::IsValid(duration);
     }
 
     bool XLineExists(const std::string& command, const std::string& target)
@@ -80,7 +73,7 @@ private:
             {
                 // Append random ID to the existing reason parameter
                 AppendRandomID(parameters.back());
-                std::string log_message = INSP_FORMAT("{} {} {}: {}", source->nick, command, parameters[0], parameters.back());
+                std::string log_message = fmt::format("{} {} {}: {}", source->nick, command, parameters[0], parameters.back());
                 ServerInstance->SNO.WriteToSnoMask('a', log_message);
             }
         }
@@ -99,7 +92,7 @@ public:
         if (!validated)
             return MOD_RES_PASSTHRU;
 
-        // Handle commands
+        // Handle specific commands to append the random ID only when creating or modifying a line
         if ((command == "ZLINE" || command == "GLINE" || command == "KLINE" || command == "KILL"))
         {
             return HandleLineCommand(command, user, parameters);
