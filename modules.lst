@@ -368,6 +368,9 @@ module m_protoctl 4.793 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_qrcode 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 4
+module m_randomidxlines 4.869 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e454c12513ba770f73449ab28b75d5e05e62c5c1/4/m_randomidxlines.cpp
+ description Enhances /zline, /gline, /kline, /kill and similar commands by adding a random ID to the end for better log identification.
+ depends core 4
 module m_regex_pcre 4.855 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b1b82736e851b6530cfa281ea48f968139859638/4/m_regex_pcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
