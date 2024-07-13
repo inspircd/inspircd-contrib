@@ -28,15 +28,23 @@
 /// $ModDepends: core 4
 /// $ModDesc: Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
 
+
+///$CompilerFlags: find_compiler_flags("icu-uc")
+///$LinkerFlags: find_linker_flags("icu-uc")
+///$CompilerFlags: find_compiler_flags("icu-i18n")
+/// $LinkerFlags: find_linker_flags("icu-i18n")
+
 #include "inspircd.h"
 #include "modules/exemption.h"
 #include "numerichelper.h"
 #include "utility/string.h"
 #include <codecvt>
 #include <locale>
-​
+#include <unicode/regex.h>
+#include <unicode/unistr.h>
+
 typedef insp::flat_map<std::string, std::string, irc::insensitive_swo> CensorMap;
-​
+
 class ModuleCensor : public Module
 {
  private:
@@ -44,21 +52,21 @@ class ModuleCensor : public Module
 	CensorMap censors;
 	SimpleUserMode cu;
 	SimpleChannelMode cc;
-	std::vector<char32_t> allowed_smileys;
-​
+	std::unique_ptr<icu::RegexPattern> emoji_pattern;
+
 	bool IsMixedUTF8(const std::string& text)
 	{
 		if (text.empty())
 			return false;
-​
+
 		enum ScriptType { SCRIPT_UNKNOWN, SCRIPT_LATIN, SCRIPT_NONLATIN };
 		ScriptType detected = SCRIPT_UNKNOWN;
-​
+
 		for (const auto& c : text)
 		{
 			if (static_cast<unsigned char>(c) < 128)
 				continue; // ASCII characters are ignored
-​
+
 			if (std::isalpha(static_cast<unsigned char>(c)))
 			{
 				ScriptType current = std::islower(static_cast<unsigned char>(c)) || std::isupper(static_cast<unsigned char>(c)) ? SCRIPT_LATIN : SCRIPT_NONLATIN;
@@ -72,29 +80,43 @@ class ModuleCensor : public Module
 				}
 			}
 		}
-​
+
 		return false;
 	}
-​
+
 	// Helper function to convert UTF-8 string to UTF-32
 	std::u32string to_utf32(const std::string& utf8)
 	{
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
 		return convert.from_bytes(utf8);
 	}
-​
+
 	// Helper function to convert UTF-32 character to UTF-8
 	std::string to_utf8(char32_t utf32_char)
 	{
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
 		return convert.to_bytes(utf32_char);
 	}
-​
+
+	bool IsEmojiOnly(const std::string& text)
+	{
+		UErrorCode status = U_ZERO_ERROR;
+		icu::UnicodeString ustr(text.c_str(), "UTF-8");
+		std::unique_ptr<icu::RegexMatcher> emoji_matcher(emoji_pattern->matcher(ustr, status));
+		if (U_FAILURE(status))
+		{
+			throw ModuleException(this, "Failed to create regex matcher for emojis");
+		}
+
+		// Check if the entire text is matched by the emoji pattern
+		return emoji_matcher->matches(status, status);
+	}
+
 	bool IsAllowed(const std::string& text)
 	{
 		static const std::string allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
 		std::u32string utf32_text = to_utf32(text);
-​
+
 		for (char32_t c : utf32_text)
 		{
 			std::string utf8_char = to_utf8(c);
@@ -102,18 +124,19 @@ class ModuleCensor : public Module
 			{
 				continue;
 			}
-			else if (std::find(allowed_smileys.begin(), allowed_smileys.end(), c) != allowed_smileys.end())
+			else if (IsEmojiOnly(utf8_char))
 			{
-				continue;
+				continue; // Allow emojis matching the regex
 			}
 			else
 			{
 				return false;
 			}
 		}
+
 		return true;
 	}
-​
+
  public:
 	ModuleCensor()
 		: Module(VF_NONE, "Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages and blocks messages with mixed UTF-8 scripts, only allowing certain Unicode smileys.")
@@ -121,51 +144,38 @@ class ModuleCensor : public Module
 		, cu(this, "u_censor", 'G')
 		, cc(this, "censor", 'G')
 	{
+		UErrorCode status = U_ZERO_ERROR;
+		emoji_pattern = std::unique_ptr<icu::RegexPattern>(icu::RegexPattern::compile("\\p{Emoji}", 0, status));
+		if (U_FAILURE(status))
+		{
+			throw ModuleException(this, "Failed to compile emoji regex pattern");
+		}
 	}
-​
+
 	void ReadConfig(ConfigStatus& status) override
 	{
 		CensorMap newcensors;
-		allowed_smileys.clear();
 		for (const auto& [_, badword_tag] : ServerInstance->Config->ConfTags("badword"))
 		{
 			const std::string text = badword_tag->getString("text");
 			if (text.empty())
 				throw ModuleException(this, "<badword:text> is empty! at " + badword_tag->source.str());
-​
+
 			const std::string replace = badword_tag->getString("replace");
 			newcensors[text] = replace;
 		}
 		censors.swap(newcensors);
-​
-		for (const auto& [_, smileys_tag] : ServerInstance->Config->ConfTags("allowedsmileys"))
-		{
-			const std::string smileys = smileys_tag->getString("smiley");
-			if (smileys.empty())
-				throw ModuleException(this, "<allowedsmileys:smiley> is empty! at " + smileys_tag->source.str());
-​
-			std::istringstream iss(smileys);
-			std::string smiley;
-			while (iss >> smiley)
-			{
-				if (smiley.substr(0, 2) != "U+")
-					throw ModuleException(this, "Invalid format for smiley in <allowedsmileys> at " + smileys_tag->source.str());
-​
-				char32_t smiley_char = static_cast<char32_t>(std::stoul(smiley.substr(2), nullptr, 16));
-				allowed_smileys.push_back(smiley_char);
-			}
-		}
 	}
-​
+
 	ModResult OnUserPreMessage(User* user, MessageTarget& target, MessageDetails& details) override
 	{
 		if (!IS_LOCAL(user))
 			return MOD_RES_PASSTHRU;
-​
+
 		// Allow IRC operators to bypass the restrictions
 		if (user->IsOper())
 			return MOD_RES_PASSTHRU;
-​
+
 		switch (target.type)
 		{
 			case MessageTarget::TYPE_USER:
@@ -175,27 +185,27 @@ class ModuleCensor : public Module
 					return MOD_RES_PASSTHRU;
 				break;
 			}
-​
+
 			case MessageTarget::TYPE_CHANNEL:
 			{
 				auto* targchan = target.Get<Channel>();
 				if (!targchan->IsModeSet(cc))
 					return MOD_RES_PASSTHRU;
-​
+
 				ModResult result = exemptionprov.Check(user, targchan, "censor");
 				if (result == MOD_RES_ALLOW)
 					return MOD_RES_PASSTHRU;
 				break;
 			}
-​
+
 			default:
 				return MOD_RES_PASSTHRU;
 		}
-​
+
 		if (IsMixedUTF8(details.text) || !IsAllowed(details.text))
 		{
-			const std::string msg = "Your message contained disallowed characters and was blocked. IRC operator's has been notified (AntiSpam purpose).";
-​
+			const std::string msg = "Your message contained disallowed characters and was blocked. IRC operators have been notified (Spamfilter purpose).";
+
 			// Announce to opers
 			std::string oper_announcement;
 			if (target.type == MessageTarget::TYPE_CHANNEL)
@@ -209,14 +219,14 @@ class ModuleCensor : public Module
 				oper_announcement = INSP_FORMAT("MixedCharacterUTF8 notice: User {} sent a private message to {} containing disallowed characters: '{}', which was blocked.", user->nick, targuser->nick, details.text);
 			}
 			ServerInstance->SNO.WriteGlobalSno('a', oper_announcement);
-​
+
 			if (target.type == MessageTarget::TYPE_CHANNEL)
 				user->WriteNumeric(Numerics::CannotSendTo(target.Get<Channel>(), msg));
 			else
 				user->WriteNumeric(Numerics::CannotSendTo(target.Get<User>(), msg));
 			return MOD_RES_DENY;
 		}
-​
+
 		for (const auto& [find, replace] : censors)
 		{
 			size_t censorpos;
@@ -224,8 +234,8 @@ class ModuleCensor : public Module
 			{
 				if (replace.empty())
 				{
-					const std::string msg = INSP_FORMAT("Your message to this channel contained a banned phrase ({}) and was blocked.", find);
-​
+					const std::string msg = INSP_FORMAT("Your message to this channel contained a banned phrase ({}) and was blocked. IRC operators have been notified (Spamfilter purpose).", find);
+
 					// Announce to opers
 					std::string oper_announcement;
 					if (target.type == MessageTarget::TYPE_CHANNEL)
@@ -239,19 +249,20 @@ class ModuleCensor : public Module
 						oper_announcement = INSP_FORMAT("BannedPhrase notice: User {} sent a private message to {} containing banned phrase ({}): '{}', which was blocked.", user->nick, targuser->nick, find, details.text);
 					}
 					ServerInstance->SNO.WriteGlobalSno('a', oper_announcement);
-​
+
 					if (target.type == MessageTarget::TYPE_CHANNEL)
 						user->WriteNumeric(Numerics::CannotSendTo(target.Get<Channel>(), msg));
 					else
 						user->WriteNumeric(Numerics::CannotSendTo(target.Get<User>(), msg));
 					return MOD_RES_DENY;
 				}
-​
+
 				details.text.replace(censorpos, find.size(), replace);
 			}
 		}
 		return MOD_RES_PASSTHRU;
 	}
 };
-​
+
 MODULE_INIT(ModuleCensor)
+
