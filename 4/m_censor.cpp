@@ -1,3 +1,23 @@
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/// $ModAuthor: InspIRCd Developers
+/// $ModDepends: core 4
+/// $ModDesc: Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
+
+
+///$CompilerFlags: find_compiler_flags("icu-uc")
+///$LinkerFlags: find_linker_flags("icu-uc")
+///$CompilerFlags: find_compiler_flags("icu-i18n")
+/// $LinkerFlags: find_linker_flags("icu-i18n")
+
 #include "inspircd.h"
 #include "modules/exemption.h"
 #include "numerichelper.h"
