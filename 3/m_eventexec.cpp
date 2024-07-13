@@ -47,6 +47,8 @@ class CommandThread CXX11_FINAL
 	{
 	}
 
+	virtual ~CommandThread() { }
+
 	void Run() CXX11_OVERRIDE
 	{
 		for (std::vector<std::string>::const_iterator iter = commands.begin(); iter != commands.end(); ++iter)

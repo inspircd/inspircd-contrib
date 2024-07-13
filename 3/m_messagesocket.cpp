@@ -78,8 +78,8 @@ public:
 			recvq.erase(0, eolpos + 1);
 
 			// Handle accidental Windows newlines.
-			if (message.back() == '\r')
-				message.pop_back();
+			if (!message.empty() && *message.rbegin() == '\r')
+				message.erase(message.end() - 1);
 
 			const UserManager::LocalList& list = ServerInstance->Users.GetLocalUsers();
 			for (UserManager::LocalList::const_iterator i = list.begin(); i != list.end(); ++i)

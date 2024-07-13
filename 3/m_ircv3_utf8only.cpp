@@ -167,7 +167,7 @@ class ModuleIRCv3UTF8Only CXX11_FINAL
 
 		double validpct = static_cast<double>(validmsg) / static_cast<double>(totalmsg) * 100;
 		double invalidpct = static_cast<double>(invalidmsg) / static_cast<double>(totalmsg) * 100;
-		stats.AddRow(RPL_STATS, stats.GetSymbol(), InspIRCd::Format("UTF-8: valid%% %3.2lf%%, invalid%% %3.2lf%%", validpct, invalidpct));
+		stats.AddRow(RPL_STATS, stats.GetSymbol(), InspIRCd::Format("UTF-8: valid%% %3.2f%%, invalid%% %3.2f%%", (float)validpct, (float)invalidpct));
 
 		return MOD_RES_DENY;
 	}

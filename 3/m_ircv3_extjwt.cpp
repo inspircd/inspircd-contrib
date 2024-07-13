@@ -23,6 +23,11 @@
 /// $ModDepends: core 3
 /// $ModDesc: Provides the DRAFT extjwt IRCv3 extension.
 
+/// $PackageInfo: require_system("debian") rapidjson-dev
+/// $PackageInfo: require_system("darwin") rapidjson
+/// $PackageInfo: require_system("ubuntu") rapidjson-dev
+
+
 #include "inspircd.h"
 #include "modules/account.h"
 #include "modules/hash.h"

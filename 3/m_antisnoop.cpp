@@ -69,7 +69,7 @@ class ModuleAntiSnoop CXX11_FINAL
 	{
 	}
 
-	void ReadConfig(ConfigStatus& status)
+	void ReadConfig(ConfigStatus& status) CXX11_OVERRIDE
 	{
 		ConfigTag* tag = ServerInstance->Config->ConfValue("antisnoop");
 		exemptrank = tag->getUInt("exemptrank", VOICE_VALUE);

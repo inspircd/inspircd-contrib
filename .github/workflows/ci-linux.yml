@@ -3,10 +3,12 @@ on:
   push:
     paths:
       - '.github/*'
-      - '3.0/*'
+      - '3/*'
   pull_request:
     paths:
-      - '3.0/*'
+      - '.github/*'
+      - '3/*'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,20 +39,20 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
           echo INSPIRCD_TARGET=$( \
           git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} | \
-          for f in `cat`; do if [[ "$f" = "3.0/"*".cpp" ]]; \
+          for f in `cat`; do if [[ "$f" = "3/"*".cpp" ]]; \
           then echo "$(basename $f .cpp) "; fi; done) >> $GITHUB_ENV
       - name: (Push/PR Fallback) Set the build target to all of the modules
         if: github.event_name == 'push' || env.INSPIRCD_TARGET == ''
-        run: echo INSPIRCD_TARGET=$(for f in contrib/3.0/*; do echo "$(basename $f .cpp) "; done) >> $GITHUB_ENV
+        run: echo INSPIRCD_TARGET=$(for f in contrib/3/*; do echo "$(basename $f .cpp) "; done) >> $GITHUB_ENV
       - name: Symlink the modules
         run: |
           cd inspircd/src/modules
-          ln -s ../../../contrib/3.0/* .
+          ln -s ../../../contrib/3/* .
       - name: Check for additional dependencies
         run: |
           cd inspircd
           echo PACKAGES=$( \
-          for f in ../contrib/3.0/*; do if [[ "$INSPIRCD_TARGET" = *"$(basename $f .cpp)"* ]]; \
+          for f in ../contrib/3/*; do if [[ "$INSPIRCD_TARGET" = *"$(basename $f .cpp)"* ]]; \
           then ./tools/directive $f PackageInfo; fi; done) >> $GITHUB_ENV
       - name: Install additional dependencies
         if: env.PACKAGES != ''
