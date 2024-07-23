@@ -37,7 +37,7 @@ open(my $list, '>', 'modules.lst');
 say $list "module update-your-server 0.0.0 https://404.example.com";
 say $list " depends core ${\RM_EOL}";
 say $list " description The version of InspIRCd you are using is EOL. Please upgrade!";
-for my $file (<*/m_*.cpp>) {
+for my $file (<*/*.cpp>) {
 	if (system "git ls-files --error-unmatch -- $file > /dev/null 2>&1") {
 		say STDERR "Skipping $file which is not in Git!";
 		next;
