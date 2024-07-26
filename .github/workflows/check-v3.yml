@@ -1,4 +1,4 @@
-name: v3 CI
+name: Check v3 modules
 on:
   push:
     paths:
