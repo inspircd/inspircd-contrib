@@ -1,6 +1,9 @@
 module update-your-server 0.0.0 https://404.example.com
  depends core 1-2
  description The version of InspIRCd you are using is EOL. Please upgrade!
+module m_hash_crypt 3.0.876 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2629ac0819ce33cea12ea2bc02ffefeae3368d86/3.0/m_hash_crypt.cpp
+ description Implements hash functions using crypt(3)
+ depends core 3
 module m_antiknocker 3.832 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0a3a058eb37cfcf36ea909f72765f8467c395611/3/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 3
