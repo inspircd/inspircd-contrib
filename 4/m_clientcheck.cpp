@@ -144,10 +144,10 @@ public:
 		size_t msgsize = parameters[1].size();
 		size_t lastpos = msgsize - (parameters[1][msgsize - 1] == '\x1' ? 9 : 10);
 
-		const std::string version = parameters[1].substr(9, lastpos);
+		const std::string versionstr = parameters[1].substr(9, lastpos);
 		for (const auto& ci : clients)
 		{
-			if (!ci.pattern->Matches(version))
+			if (!ci.pattern->Matches(versionstr))
 				continue;
 
 			switch (ci.action)
