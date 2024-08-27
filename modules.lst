@@ -324,9 +324,7 @@ module m_eventexec 4.838 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_exmode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_exmode.cpp
  depends core 4
  description Adds the /EXMODE command which explains a mode change.
-module m_forceusername 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_forceusername.cpp
- depends core 4
- description Allows forcing idents on users based on their connect class.
+module m_forceusername 4.889 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b32413e868fbdc6d6099d27f766fb8096eb417a4/4/m_forceusername.cpp
  depends core 4
  description Allows forcing usernames on users based on their connect class.
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
