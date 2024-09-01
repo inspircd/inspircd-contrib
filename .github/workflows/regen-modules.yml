@@ -3,7 +3,7 @@ on:
   - push
 jobs:
   build:
-    if: github.repository == 'inspircd/inspircd-contrib'
+    if: github.repository == 'inspircd/inspircd-contrib' && github.ref_name == 'master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
