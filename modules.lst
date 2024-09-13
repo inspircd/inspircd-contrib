@@ -255,7 +255,7 @@ module m_timedstaticquit 3.752 https://raw.githubusercontent.com/inspircd/inspir
 module m_totp 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_upgradecheck 3.805 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fe1550a6b1dbf117be248caff3fb8377261c119f/3/m_upgradecheck.cpp
+module m_upgradecheck 3.893 https://raw.githubusercontent.com/inspircd/inspircd-contrib/203de04f52437240e156977e8cc6dfb0f72af79a/3/m_upgradecheck.cpp
  description Checks the server config for deprecated config entries that might cause trouble when upgrading to v4.
  depends core 3
 module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_xlinetools.cpp
@@ -270,7 +270,7 @@ module m_antiknocker 4.887 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antisnoop 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 4
-module m_asn 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_asn.cpp
+module m_asn 4.894 https://raw.githubusercontent.com/inspircd/inspircd-contrib/76a126d4d48587fb5b5276b2f999fbb996b14ce3/4/m_asn.cpp
  depends core 4
  description Allows banning users based on Autonomous System number.
 module m_autoaway 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_autoaway.cpp
