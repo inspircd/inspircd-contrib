@@ -43,7 +43,7 @@ private:
 
 public:
 	ASNExtBan(Module* Creator, IntExtItem& asn)
-		: ExtBan::MatchingBase(Creator, "asn", 'n')
+		: ExtBan::MatchingBase(Creator, "asn", 'b')
 		, asnext(asn)
 	{
 	}
