@@ -1,0 +1,94 @@
+name: Check v4 modules
+on:
+  push:
+    paths:
+      - .github/workflows/check-v4.yml
+      - 4/*
+  pull_request:
+    paths:
+      - .github/workflows/check-v4.yml
+      - 4/*
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CXX: ${{ matrix.compiler }}
+      INSPIRCD_DEBUG: 3
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update --assume-yes
+          sudo apt-get install --assume-yes --no-install-recommends \
+            clang \
+            curl \
+            g++ \
+            git \
+            jq \
+            make \
+            pkg-config
+
+      - name: Retrieve latest release
+        run: |
+          echo INSPIRCD_VERSION=$(curl https://api.github.com/repos/inspircd/inspircd/releases | jq --raw-output 'map(select((.draft or .prerelease | not) and (.tag_name | startswith("v4.")))) | first .tag_name') >> $GITHUB_ENV
+
+      - name: Checkout InspIRCd
+        uses: actions/checkout@v4
+        with:
+          repository: inspircd/inspircd
+          ref: ${{ env.INSPIRCD_VERSION }}
+          path: inspircd
+
+      - name: Checkout InspIRCd contrib
+        uses: actions/checkout@v4
+        with:
+          path: contrib
+
+      - name: Get changed modules
+        id: changed-modules
+        uses: tj-actions/changed-files@v45
+        with:
+          files: 4/*.cpp
+          path: contrib
+
+      - name: Work out what modules to build
+        working-directory: inspircd
+        run: |
+          if [ '${{ steps.changed-modules.outputs.any_changed }}' = true ]
+          then
+            export FILES=$(cd ${{ github.workspace }}/contrib && readlink -f ${{ steps.changed-modules.outputs.all_changed_files }})
+          else
+            export FILES=$(readlink -f ${{ github.workspace }}/contrib/4/*.cpp)
+          fi
+
+          for FILE in ${FILES}
+          do
+            export MODULES="${MODULES} ${FILE}"
+            export PACKAGES="${PACKAGES} $(./tools/directive ${FILE} PackageInfo)"
+            export TARGETS="${TARGETS} $(basename $FILE .cpp)"
+          done
+          echo "INSPIRCD_MODULES=${MODULES%% }" >> $GITHUB_ENV
+          echo "INSPIRCD_PACKAGES=${PACKAGES%% }" >> $GITHUB_ENV
+          echo "INSPIRCD_TARGET=${TARGETS%%   }" >> $GITHUB_ENV
+
+      - name: Install module dependencies
+        if: env.INSPIRCD_PACKAGES != ''
+        working-directory: inspircd
+        run: |
+          sudo apt-get install --assume-yes --no-install-recommends ${INSPIRCD_PACKAGES}
+
+      - name: Build the changed modules
+        working-directory: inspircd
+        run: |
+          cp -v ${INSPIRCD_MODULES} src/modules
+          ./configure --development --disable-auto-extras
+          make --jobs $(($(getconf _NPROCESSORS_ONLN) + 1))
+
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler:
+          - clang++
+          - g++

@@ -23,6 +23,7 @@
 /// $CompilerFlags: find_compiler_flags("RapidJSON")
 /// $CompilerFlags: find_compiler_flags("libcurl")
 /// $LinkerFlags: find_linker_flags("libcurl")
+/// $PackageInfo: require_system("ubuntu") libcurl4-gnutls-dev rapidjson-dev
 
 #include "inspircd.h"
 #include "extension.h"

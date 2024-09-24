@@ -7,7 +7,7 @@ module m_antiknocker 3.832 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_antirandom 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_antirandom.cpp
  description A module to prevent against bots using random patterns.
  depends core 3
-module m_antisnoop 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_antisnoop.cpp
+module m_antisnoop 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 3
 module m_asciiswitch 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_asciiswitch.cpp
@@ -97,7 +97,7 @@ module m_defaulttopic 3.791 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_discordnick 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_discordnick.cpp
  depends core 3
  description Adds support for Discord-style #1234 nick tags.
-module m_eventexec 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_eventexec.cpp
+module m_eventexec 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_eventexec.cpp
  description Executes commands when a specified event occurs.
  depends core 3
 module m_exmode 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_exmode.cpp
@@ -124,6 +124,9 @@ module m_geocmd 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_globalmessageflood 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_globalmessageflood.cpp
  description Provides channel mode +x (oper only top-level channel flood protection with SNOMASK +F)
  depends core 3
+module m_hash_crypt 3.883 https://raw.githubusercontent.com/inspircd/inspircd-contrib/facedd757444ba4839b9148f6b6892bee3e7a4b0/3/m_hash_crypt.cpp
+ description Implements hash functions using crypt(3)
+ depends core 3
 module m_hash_gnutls 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_hash_gnutls.cpp
  description Implements hash functions using GnuTLS API
  depends core 3
@@ -132,16 +135,16 @@ module m_hash_gnutls 3.752 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_hideidle 3.756 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3856e563a9690511ed594338c7a56a9b1c729254/3/m_hideidle.cpp
  depends core 3
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
-module m_httpd_api 3.836 https://raw.githubusercontent.com/inspircd/inspircd-contrib/aaf44f79c3b5bd3ddac761e33d23a07ace6e29ed/3/m_httpd_api.cpp
+module m_httpd_api 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_httpd_api.cpp
  depends core 3, m_httpd
  description Provides a HTTP(s) API that allows users to query to reteive some information on the IRCd and Network.
 module m_identmeta 3.791 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1073fc1751604e95b4cee8586eb0db677c89f382/3/m_identmeta.cpp
  depends core 3
  description Stores the ident given in USER as metadata.
-module m_ircv3_extjwt 3.840 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2cae8c9d5fa675b608afb91c842294428a9546e0/3/m_ircv3_extjwt.cpp
+module m_ircv3_extjwt 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_ircv3_extjwt.cpp
  depends core 3
  description Provides the DRAFT extjwt IRCv3 extension.
-module m_ircv3_utf8only 3.778 https://raw.githubusercontent.com/inspircd/inspircd-contrib/49e2298bac9f7010c09ac89c6967c2cf26e47352/3/m_ircv3_utf8only.cpp
+module m_ircv3_utf8only 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_ircv3_utf8only.cpp
  description Implements the IRCv3 UTF8ONLY extension.
  depends core 3
 module m_join0 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_join0.cpp
@@ -162,7 +165,7 @@ module m_kill_idle 3.752 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_messagelength 3.765 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b780f84fc9730994f945d735571d7ffd62160ebd/3/m_messagelength.cpp
  description Adds a channel mode which limits the length of messages.
  depends core 3
-module m_messagesocket 3.828 https://raw.githubusercontent.com/inspircd/inspircd-contrib/6d203e70d744507d00ac125d5f67158fbdd8533d/3/m_messagesocket.cpp
+module m_messagesocket 3.871 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cabd4efe32b9ddb545e790118255fc2a3a567420/3/m_messagesocket.cpp
  description Allows sending messages to all local users from a socket.
  depends core 3
 module m_namedstats 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_namedstats.cpp
@@ -252,7 +255,7 @@ module m_timedstaticquit 3.752 https://raw.githubusercontent.com/inspircd/inspir
 module m_totp 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_upgradecheck 3.805 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fe1550a6b1dbf117be248caff3fb8377261c119f/3/m_upgradecheck.cpp
+module m_upgradecheck 3.893 https://raw.githubusercontent.com/inspircd/inspircd-contrib/203de04f52437240e156977e8cc6dfb0f72af79a/3/m_upgradecheck.cpp
  description Checks the server config for deprecated config entries that might cause trouble when upgrading to v4.
  depends core 3
 module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_xlinetools.cpp
@@ -261,13 +264,13 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_antiknocker 4.829 https://raw.githubusercontent.com/inspircd/inspircd-contrib/0bc07531f939fc6d3ad12a06c8e7fdfaac01d6ef/4/m_antiknocker.cpp
+module m_antiknocker 4.887 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fcf25a6621351cbfa21699b233816043ca997275/4/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 4
 module m_antisnoop 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_antisnoop.cpp
  description Adds a channel mode which limits the ability of snoopers.
  depends core 4
-module m_asn 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_asn.cpp
+module m_asn 4.894 https://raw.githubusercontent.com/inspircd/inspircd-contrib/76a126d4d48587fb5b5276b2f999fbb996b14ce3/4/m_asn.cpp
  depends core 4
  description Allows banning users based on Autonomous System number.
 module m_autoaway 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_autoaway.cpp
@@ -285,7 +288,7 @@ module m_blockhighlight 4.847 https://raw.githubusercontent.com/inspircd/inspirc
 module m_censor 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clientcheck 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_clientcheck.cpp
+module m_clientcheck 4.885 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a977b7ad09b270263c2325b16cafaba6d6746a70/4/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 4
 module m_cloak_unreal 4.853 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a29004e8665bf978ae513e5d23077ea897c91242/4/m_cloak_unreal.cpp
@@ -321,9 +324,7 @@ module m_eventexec 4.838 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_exmode 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_exmode.cpp
  depends core 4
  description Adds the /EXMODE command which explains a mode change.
-module m_forceusername 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_forceusername.cpp
- depends core 4
- description Allows forcing idents on users based on their connect class.
+module m_forceusername 4.889 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b32413e868fbdc6d6099d27f766fb8096eb417a4/4/m_forceusername.cpp
  depends core 4
  description Allows forcing usernames on users based on their connect class.
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
@@ -332,7 +333,7 @@ module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_ipinfo_io 4.867 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1e9e93ffb5d19e097abc9c6514f7220a50754dda/4/m_ipinfo_io.cpp
+module m_ipinfo_io 4.880 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1a7421bf2d28393b9b2aa16b1ceccea9d0da3ba3/4/m_ipinfo_io.cpp
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
 module m_ircv3_extjwt 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_ircv3_extjwt.cpp
@@ -395,9 +396,9 @@ module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_userip 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
-module m_cloak_md5 5.849 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a219b3afcffd98d4474b56b522cca7e123e66f5c/5/m_cloak_md5.cpp
+module cloak_md5 5.873 https://raw.githubusercontent.com/inspircd/inspircd-contrib/86b9049717107211f30f34b4e3b1e55dc85147ba/5/cloak_md5.cpp
  depends core 5
  description Adds the half and full cloaking methods for use with the cloak module.
-module m_md5 5.849 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a219b3afcffd98d4474b56b522cca7e123e66f5c/5/m_md5.cpp
+module md5 5.873 https://raw.githubusercontent.com/inspircd/inspircd-contrib/86b9049717107211f30f34b4e3b1e55dc85147ba/5/md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.

@@ -16,14 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// requires: nlohmann-json3-dev
 
+/// $CompilerFlags: -std=c++17
 /// $ModAuthor: synmuffin (irc.xfnet.org)
 /// $ModAuthorMail: jnewing [at] gmail [dot] com
 /// $ModConfig: <httpapi token="32-character_long_API_Token">
 /// $ModDepends: core 3, m_httpd
 /// $ModDesc: Provides a HTTP(s) API that allows users to query to reteive some information on the IRCd and Network.
 
+/// $PackageInfo: require_system("debian") nlohmann-json3-dev pkg-config
+/// $PackageInfo: require_system("darwin") nlohmann-json pkg-config
+/// $PackageInfo: require_system("ubuntu") nlohmann-json3-dev pkg-config
 
 // clean and simple JSON hpp libaray for C++ (MIT License)
 // https://github.com/nlohmann/json
@@ -575,11 +578,11 @@ nlohmann::json JSON_API::api_xlines(HTTPRequest& request)
 
             if (params["filter"]["type"].is_array())
             {
-                typeFilter = params["filter"]["type"];
+                typeFilter = params["filter"]["type"].get<std::vector<std::string>>();
             }
             else
             {
-                typeFilter = { params["filter"]["type"] };
+                typeFilter = { params["filter"]["type"].get<std::string>() };
             }
 
             // filter
