@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
-/// $ModConfig: <antiknock nickregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" donick="yes" donotice="yes" doshun="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
+/// $ModConfig: <antiknock nickregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" dokill="yes" donick="yes" donotice="yes" doshun="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
 /// $ModDesc: Attempts to block a common IRC spambot.
 /// $ModDepends: core 4
 
@@ -33,6 +33,7 @@ class ModuleAntiKnocker final
 {
 public:
 	bool docmd;
+	bool dokill;
 	bool donick;
 	bool donotice;
 	bool doshun;
@@ -56,12 +57,15 @@ public:
 			delete sh;
 		}
 
-		std::string message;
-		if (!user->IsFullyConnected())
-			message = "Connection timeout";
-		else
-			message = INSP_FORMAT("Ping timeout: {} seconds", user->GetClass()->pingtime);
-		ServerInstance->Users.QuitUser(user, message);
+		if (dokill)
+		{
+			std::string message;
+			if (!user->IsFullyConnected())
+				message = "Connection timeout";
+			else
+				message = INSP_FORMAT("Ping timeout: {} seconds", user->GetClass()->pingtime);
+			ServerInstance->Users.QuitUser(user, message);
+		}
 	}
 
 	ModuleAntiKnocker()
@@ -87,6 +91,7 @@ public:
 		}
 
 		docmd = tag->getBool("docmd", true);
+		dokill = tag->getBool("dokill", true);
 		donick = tag->getBool("donick", true);
 		donotice = tag->getBool("donotice", true);
 		doshun = tag->getBool("doshun", true);
