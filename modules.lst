@@ -264,7 +264,7 @@ module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_zombie 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_zombie.cpp
  depends core 3
  description Provides support for zombifying users who have split because of a network issue.
-module m_antiknocker 4.887 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fcf25a6621351cbfa21699b233816043ca997275/4/m_antiknocker.cpp
+module m_antiknocker 4.896 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4aa2deafe34b7c77d65b88c9245d114f3a42c781/4/m_antiknocker.cpp
  description Attempts to block a common IRC spambot.
  depends core 4
 module m_antisnoop 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_antisnoop.cpp

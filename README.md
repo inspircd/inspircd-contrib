@@ -20,7 +20,7 @@ Modules in this repository are not officially supported by the InspIRCd developm
 
 See the module author comments in the module files to find the author.
 
-You may be able to find the author or others who use the module in \#inspircd or \#inspircd.dev on irc.chatspike.net.
+You may be able to find the author or others who use the module in \#inspircd or \#inspircd.dev on irc.teranova.net.
 
 Please make it clear you're asking about a contrib module!
 
