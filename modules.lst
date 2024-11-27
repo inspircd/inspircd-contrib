@@ -300,6 +300,9 @@ module m_clones 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_complete 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_complete.cpp
  depends core 4
  description Allows clients to automatically complete commands.
+module m_conn_banner 4.899 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7c0e3f62ea5896fa8b7b358c03f5617fb3e84647/4/m_conn_banner.cpp
+ depends core 4
+ description Displays a static text to every connecting user before registration
 module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_custompenalty.cpp
  depends core 4
  description Allows the customisation of penalty levels.
@@ -330,6 +333,9 @@ module m_forceusername 4.889 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 4
+module m_hideidle 4.899 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7c0e3f62ea5896fa8b7b358c03f5617fb3e84647/4/m_hideidle.cpp
+ depends core 4
+ description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
