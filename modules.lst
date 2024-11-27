@@ -300,7 +300,7 @@ module m_clones 4.808 https://raw.githubusercontent.com/inspircd/inspircd-contri
 module m_complete 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_complete.cpp
  depends core 4
  description Allows clients to automatically complete commands.
-module m_conn_banner 4.899 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7c0e3f62ea5896fa8b7b358c03f5617fb3e84647/4/m_conn_banner.cpp
+module m_conn_banner 4.902 https://raw.githubusercontent.com/inspircd/inspircd-contrib/54b5aa021103111f3b8475ba919ee604cf954c32/4/m_conn_banner.cpp
  depends core 4
  description Displays a static text to every connecting user before registration
 module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_custompenalty.cpp
@@ -309,7 +309,7 @@ module m_custompenalty 4.810 https://raw.githubusercontent.com/inspircd/inspircd
 module m_customtags 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_customtags.cpp
  depends core 4
  description Allows services to add custom tags to messages sent by clients.
-module m_cve_2024_39844 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_cve_2024_39844.cpp
+module m_cve_2024_39844 4.902 https://raw.githubusercontent.com/inspircd/inspircd-contrib/54b5aa021103111f3b8475ba919ee604cf954c32/4/m_cve_2024_39844.cpp
  description Prevents clients from sending messages that trigger CVE-2024-39844.
  depends core 4
 module m_defaulttopic 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_defaulttopic.cpp
@@ -333,7 +333,7 @@ module m_forceusername 4.889 https://raw.githubusercontent.com/inspircd/inspircd
 module m_geocmd 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_geocmd.cpp
  description Provides the /GEOLOCATE command which performs Geolocation lookups on arbitrary IP addresses.
  depends core 4
-module m_hideidle 4.899 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7c0e3f62ea5896fa8b7b358c03f5617fb3e84647/4/m_hideidle.cpp
+module m_hideidle 4.902 https://raw.githubusercontent.com/inspircd/inspircd-contrib/54b5aa021103111f3b8475ba919ee604cf954c32/4/m_hideidle.cpp
  depends core 4
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
 module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_hostchange.cpp
@@ -342,7 +342,7 @@ module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_ipinfo_io 4.880 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1a7421bf2d28393b9b2aa16b1ceccea9d0da3ba3/4/m_ipinfo_io.cpp
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
-module m_ircv3_extjwt 4.865 https://raw.githubusercontent.com/inspircd/inspircd-contrib/66a7d02926fb4189478d7fcfdc7f7501c5a5748e/4/m_ircv3_extjwt.cpp
+module m_ircv3_extjwt 4.902 https://raw.githubusercontent.com/inspircd/inspircd-contrib/54b5aa021103111f3b8475ba919ee604cf954c32/4/m_ircv3_extjwt.cpp
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
@@ -384,6 +384,9 @@ module m_regex_pcre 4.855 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
+module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8c7730ee7338fca1f36172ea59d8b67c695d6e4e/4/m_require_auth.cpp
+ description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
+ depends core 4
 module m_solvemsg 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
