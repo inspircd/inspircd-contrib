@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Attila Molnar
-/// $ModAuthorMail: attilamolnar@hush.com
+/// $ModAuthor: Attila Molnar <attilamolnar@hush.com>
 /// $ModDepends: core 4
 /// $ModDesc: Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
 

@@ -17,8 +17,7 @@
  */
 
 
-/// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Prevents clients from sending messages that trigger CVE-2024-39844.
 /// $ModDepends: core 4
 

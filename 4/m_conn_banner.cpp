@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Attila Molnar
-/// $ModAuthorMail: attilamolnar@hush.com
+/// $ModAuthor: Attila Molnar <attilamolnar@hush.com>
 /// $ModConfig: <connbanner text="Banner text goes here.">
 /// $ModDepends: core 4
 /// $ModDesc: Displays a static text to every connecting user before registration
