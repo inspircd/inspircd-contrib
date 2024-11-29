@@ -342,7 +342,7 @@ module m_hostchange 4.838 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_ipinfo_io 4.880 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1a7421bf2d28393b9b2aa16b1ceccea9d0da3ba3/4/m_ipinfo_io.cpp
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
-module m_ircv3_extjwt 4.902 https://raw.githubusercontent.com/inspircd/inspircd-contrib/54b5aa021103111f3b8475ba919ee604cf954c32/4/m_ircv3_extjwt.cpp
+module m_ircv3_extjwt 4.905 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a89263cd0d09f53d93772493cb33570e55e043a0/4/m_ircv3_extjwt.cpp
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
 module m_lockserv 4.799 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e546323c7c796b4c94ca80bdd9a5255211a46ab1/4/m_lockserv.cpp
@@ -372,16 +372,16 @@ module m_profileLink 4.867 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_protoctl 4.793 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9161ee47d5110bbbd7b056fa9b0d9a0e7ad18bf/4/m_protoctl.cpp
  depends core 4
  description Provides compatibility with the legacy PROTOCTL system.
-module m_qrcode 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_qrcode.cpp
+module m_qrcode 4.904 https://raw.githubusercontent.com/inspircd/inspircd-contrib/028e18b70364d6136d9923e3582f3a9b09ca6f0b/4/m_qrcode.cpp
  description Provides support for QR code generation via the /QRCODE command.
  depends core 4
 module m_randomidxlines 4.869 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e454c12513ba770f73449ab28b75d5e05e62c5c1/4/m_randomidxlines.cpp
  description Enhances /zline, /gline, /kline, /kill and similar commands by adding a random ID to the end for better log identification.
  depends core 4
-module m_regex_pcre 4.855 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b1b82736e851b6530cfa281ea48f968139859638/4/m_regex_pcre.cpp
+module m_regex_pcre 4.904 https://raw.githubusercontent.com/inspircd/inspircd-contrib/028e18b70364d6136d9923e3582f3a9b09ca6f0b/4/m_regex_pcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.806 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c76c44ac28de44d49c1883b35943f5a3408eda74/4/m_regex_tre.cpp
+module m_regex_tre 4.904 https://raw.githubusercontent.com/inspircd/inspircd-contrib/028e18b70364d6136d9923e3582f3a9b09ca6f0b/4/m_regex_tre.cpp
  depends core 4
  description Provides the tre regular expression engine which uses the TRE library.
 module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8c7730ee7338fca1f36172ea59d8b67c695d6e4e/4/m_require_auth.cpp
@@ -390,7 +390,7 @@ module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_solvemsg 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
-module m_ssl_mbedtls 4.842 https://raw.githubusercontent.com/inspircd/inspircd-contrib/482c3660c142faf9f97edd012f6f6fcc8a4206c6/4/m_ssl_mbedtls.cpp
+module m_ssl_mbedtls 4.904 https://raw.githubusercontent.com/inspircd/inspircd-contrib/028e18b70364d6136d9923e3582f3a9b09ca6f0b/4/m_ssl_mbedtls.cpp
  depends core 4
  description Allows TLS encrypted connections using the mbedTLS library.
 module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_stats_unlinked.cpp
