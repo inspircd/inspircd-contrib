@@ -29,8 +29,7 @@
 
 /// $PackageInfo: require_system("arch") mbedtls
 /// $PackageInfo: require_system("darwin") mbedtls
-/// $PackageInfo: require_system("debian") libmbedtls-dev
-/// $PackageInfo: require_system("ubuntu") libmbedtls-dev
+/// $PackageInfo: require_system("debian~") libmbedtls-dev
 
 
 #include "inspircd.h"
