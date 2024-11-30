@@ -20,10 +20,9 @@
 /// $LinkerFlags: find_linker_flags("libqrencode")
 
 /// $PackageInfo: require_system("arch") qrencode pkgconf
-/// $PackageInfo: require_system("centos") qrencode-devel pkgconfig
 /// $PackageInfo: require_system("darwin") qrencode pkg-config
-/// $PackageInfo: require_system("debian") libqrencode-dev pkg-config
-/// $PackageInfo: require_system("ubuntu") libqrencode-dev pkg-config
+/// $PackageInfo: require_system("debian~") libqrencode-dev pkg-config
+/// $PackageInfo: require_system("rhel~") qrencode-devel pkgconfig
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDesc: Provides support for QR code generation via the /QRCODE command.

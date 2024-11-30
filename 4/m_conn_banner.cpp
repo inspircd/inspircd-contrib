@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2022 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2012 Attila Molnar <attilamolnar@hush.com>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -16,29 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
-/// $ModDesc: Prevents clients from sending messages that trigger CVE-2024-39844.
+/// $ModAuthor: Attila Molnar <attilamolnar@hush.com>
+/// $ModConfig: <connbanner text="Banner text goes here.">
 /// $ModDepends: core 4
+/// $ModDesc: Displays a static text to every connecting user before registration
+
 
 #include "inspircd.h"
 
-class ModuleCVE202439844 final
+class ModuleConnBanner final
 	: public Module
 {
+private:
+	std::string text;
+
 public:
-	ModuleCVE202439844()
-		: Module(VF_NONE, "Prevents clients from sending messages that trigger CVE-2024-39844.")
+	ModuleConnBanner()
+		: Module(VF_NONE, "Displays a static text to every connecting user before registration")
 	{
 	}
 
-	void OnUserKick(User* source, Membership* memb, const std::string &reason, CUList& except_list) override
+	void ReadConfig(ConfigStatus& status) override
 	{
-		// HACK HACK HACK
-		std::string& mutreason = const_cast<std::string&>(reason);
-		std::replace(mutreason.begin(), mutreason.end(), '}', ' ');
+		const auto& tag = ServerInstance->Config->ConfValue("connbanner");
+		text = tag->getString("text");
+	}
+
+	void OnUserPostInit(LocalUser* user) override
+	{
+		if (!text.empty())
+			user->WriteNotice("*** " + text);
 	}
 };
 
-MODULE_INIT(ModuleCVE202439844)
-
+MODULE_INIT(ModuleConnBanner)
