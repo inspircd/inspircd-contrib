@@ -24,6 +24,7 @@
 /// $ModDepends: core 5
 /// $ModDesc: Allows other modules to generate MD5 hashes.
 
+
 #include "inspircd.h"
 #include "modules/hash.h"
 
