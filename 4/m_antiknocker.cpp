@@ -133,8 +133,8 @@ public:
 		if (!donick || !std::regex_match(newnick, nickregex))
 			return MOD_RES_PASSTHRU;
 
-		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) was prevented from using a knocker nick: {}",
-			user->nick, user->GetRealUserHost(), newnick);
+		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] in class {} was prevented from using a knocker nick: {}",
+			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newnick);
 
 		PunishUser(user);
 		return MOD_RES_DENY;
