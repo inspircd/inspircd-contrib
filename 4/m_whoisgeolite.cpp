@@ -18,7 +18,7 @@
 
 /// $ModAuthor: reverse <mike.chevronnet@gmail.com>
 /// $ModDesc: Adds city and country information to WHOIS using the MaxMind database.
-/// $ModConfig: loadmodule <module name="whoisgeocity"> / add path <geolite dbpath="conf/geodata/GeoLite2-City.mmdb">
+/// $ModConfig: <geolite dbpath="conf/geodata/GeoLite2-City.mmdb">
 /// $ModDepends: core 4
 
 /// $CompilerFlags: find_compiler_flags("libmaxminddb")
@@ -48,7 +48,7 @@ public:
 	ModuleWhoisGeoLite()
 		: Module(VF_OPTCOMMON, "Adds city and country information to WHOIS using the MaxMind database.")
 		, Whois::EventListener(this)
-		, country_item(this, "geo-lite-country", ExtensionType::USER) // Corrected initialization
+		, country_item(this, "geo-lite-country", ExtensionType::USER, true) // Corrected synchronisation
 	{
 	}
 
@@ -56,7 +56,10 @@ public:
 	{
 		// Load configuration and get the path to the GeoLite2 database
 		auto& tag = ServerInstance->Config->ConfValue("geolite");
-		dbpath = tag->getString("dbpath", "/etc/GeoLite2-City.mmdb");
+
+		// Use PrependConfig to ensure the path is resolved correctly
+		dbpath = ServerInstance->Config->Paths.PrependConfig(tag->getString("dbpath", "data/GeoLite2-City.mmdb"));
+
 
 		// Attempt to open the MaxMind GeoLite2-City database
 		int status_open = MMDB_open(dbpath.c_str(), MMDB_MODE_MMAP, &mmdb);
