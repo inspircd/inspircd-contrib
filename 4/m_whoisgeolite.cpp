@@ -17,8 +17,8 @@
  */
 
 /// $ModAuthor: reverse <mike.chevronnet@gmail.com>
-/// $ModDesc: Adds city information to WHOIS using the MaxMind database.
-/// $ModConfig: add path <geolite dbpath="path/geodata/GeoLite2-City.mmdb">
+/// $ModDesc: Adds city and country information to WHOIS using the MaxMind database.
+/// $ModConfig: loadmodule <module name="whoisgeocity"> / add path <geolite dbpath="conf/geodata/GeoLite2-City.mmdb">
 /// $ModDepends: core 4
 
 /// $CompilerFlags: find_compiler_flags("libmaxminddb")
@@ -33,6 +33,7 @@
 #include "inspircd.h"
 #include "modules/whois.h"
 #include <maxminddb.h>
+#include "extension.h"
 
 class ModuleWhoisGeoLite final
 	: public Module
@@ -40,13 +41,14 @@ class ModuleWhoisGeoLite final
 {
 private:
 	MMDB_s mmdb;       // MaxMind database object
-	bool db_loaded;    // Flag to indicate if the database was successfully loaded
 	std::string dbpath;
+	StringExtItem country_item;  // For storing the country information
 
 public:
 	ModuleWhoisGeoLite()
-		: Module(VF_OPTCOMMON, "Adds city information to WHOIS using the MaxMind database.")
-		, Whois::EventListener(this), db_loaded(false)
+		: Module(VF_OPTCOMMON, "Adds city and country information to WHOIS using the MaxMind database.")
+		, Whois::EventListener(this)
+		, country_item(this, "geo-lite-country", ExtensionType::USER) // Corrected initialization
 	{
 	}
 
@@ -59,11 +61,12 @@ public:
 		// Attempt to open the MaxMind GeoLite2-City database
 		int status_open = MMDB_open(dbpath.c_str(), MMDB_MODE_MMAP, &mmdb);
 		if (status_open != MMDB_SUCCESS) {
-			ServerInstance->SNO.WriteGlobalSno('a', "GeoLite2: Failed to open GeoLite2 database: " + std::string(MMDB_strerror(status_open)));
-			db_loaded = false;
+			// Construct the error message
+			std::string error_msg = "GeoLite2: Failed to open GeoLite2 database: " + std::string(MMDB_strerror(status_open));
+			// Throw exception with module pointer and error message
+			throw ModuleException(this, error_msg.c_str());
 		} else {
 			ServerInstance->SNO.WriteGlobalSno('a', "GeoLite2: Successfully opened GeoLite2 database.");
-			db_loaded = true;
 		}
 	}
 
@@ -72,14 +75,20 @@ public:
 		User* source = whois.GetSource();  // The user issuing the WHOIS command
 		User* target = whois.GetTarget();  // The user being WHOIS'd
 
-		// Only allow IRC operators to see the city information
+		// Only allow IRC operators to see the city and country information
 		if (!source->IsOper()) {
 			return;
 		}
 
-		// Check if the user is remote
+		// Check if the user is remote (i.e., not local)
 		if (!IS_LOCAL(target)) {
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "City: User is connected from a remote server.");
+			// If the country information is available for the remote user, send it
+			const std::string* country = country_item.Get(target);
+			if (country) {
+				whois.SendLine(RPL_WHOISSPECIAL, "is connecting from Country: " + *country);
+			} else {
+				whois.SendLine(RPL_WHOISSPECIAL, "City: Unknown (no country data).");
+			}
 			return;
 		}
 
@@ -87,53 +96,49 @@ public:
 
 		// Ensure the user is local and has a valid IP address
 		if (!luser || !luser->client_sa.is_ip()) {
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "City: No valid IP address (possibly using a Unix socket).");
-			return;
-		}
-
-		// Ensure the MaxMind database is loaded
-		if (!db_loaded) {
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "City: GeoLite2 database not loaded.");
+			whois.SendLine(RPL_WHOISSPECIAL, "City: No valid IP address (possibly using a Unix socket).");
 			return;
 		}
 
 		// Perform the GeoLite2 lookup using the socket address
 		int gai_error = 0;
-		const struct sockaddr* addr = reinterpret_cast<const struct sockaddr*>(&luser->client_sa);
+		const struct sockaddr* addr = &luser->client_sa.sa;  // Use sa directly without casting
 		MMDB_lookup_result_s result = MMDB_lookup_sockaddr(&mmdb, addr, &gai_error);
 
 		if (gai_error != 0) {
 			ServerInstance->SNO.WriteGlobalSno('a', "GeoLite2: getaddrinfo error: " + std::string(gai_strerror(gai_error)));
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "City: Unknown (lookup error).");
+			whois.SendLine(RPL_WHOISSPECIAL, "City: Unknown (lookup error).");
 			return;
 		}
 
 		if (!result.found_entry) {
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "City: Unknown (no database entry).");
+			whois.SendLine(RPL_WHOISSPECIAL, "City: Unknown (no database entry).");
 			return;
 		}
 
-		// Retrieve the city name
+		// Retrieve the city and country information
 		MMDB_entry_data_s city_data = {};
+		MMDB_entry_data_s country_data = {};
 		int status = MMDB_get_value(&result.entry, &city_data, "city", "names", "en", nullptr);
+		status = MMDB_get_value(&result.entry, &country_data, "country", "names", "en", nullptr);
 
-		if (status == MMDB_SUCCESS && city_data.has_data) {
-			// If the city is found, add it to the WHOIS response
-			std::string city(city_data.utf8_string, city_data.data_size);
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "is connecting from City: " + city);
-		} else {
-			// City not found
-			whois.SendLine(RPL_WHOISSPECIAL, "*", "is connecting from City: Unknown.");
-		}
+		// If the city and country are found, add it to the WHOIS response
+		std::string city = (status == MMDB_SUCCESS && city_data.has_data) ? std::string(city_data.utf8_string, city_data.data_size) : "Unknown";
+		std::string country = (status == MMDB_SUCCESS && country_data.has_data) ? std::string(country_data.utf8_string, country_data.data_size) : "Unknown";
+
+		// Store the country information for remote users to access
+		country_item.Set(target, country);
+
+		// Send the WHOIS response with city and country information
+		whois.SendLine(RPL_WHOISSPECIAL, "is connecting from City: " + city + ", Country: " + country);
 	}
 
 	~ModuleWhoisGeoLite() override
 	{
 		// Close the MaxMind database when the module is unloaded
-		if (db_loaded) {
-			MMDB_close(&mmdb);
-		}
+		MMDB_close(&mmdb);
 	}
+
 };
 
 MODULE_INIT(ModuleWhoisGeoLite)
