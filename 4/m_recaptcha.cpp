@@ -10,7 +10,7 @@
  */
 
 /// $ModAuthor: reverse mike.chevronnet@gmail.com
-/// $ModConfig: <captchaconfig conninfo="dbname=example user=postgres password=secret hostaddr=127.0.0.1 port=5432" url="http://example.com/verify/" whitelistchan="#help,#support">
+/// $ModConfig: <captchaconfig conninfo="dbname=example user=postgres password=secret hostaddr=127.0.0.1 port=5432" url="http://meme.com/verify/" whitelistchan="#help,#support">
 /// $ModDepends: core 4
 
 
@@ -18,14 +18,14 @@
 /// $LinkerFlags: find_linker_flags("libpq")
 
 /// $PackageInfo: require_system("alpine") libpq-dev pkgconf
-/// $PackageInfo: require_system("arch") pkgconf libpq
+/// $PackageInfo: require_system("arch") pkgconf llibpq
 /// $PackageInfo: require_system("darwin") libpq pkg-config
 /// $PackageInfo: require_system("debian~") libpq-dev pkg-config
-/// $PackageInfo: require_system("rhel~") pkg-config libmaxminddb-devel
-
+/// $PackageInfo: require_system("rhel~") pkg-config libpq-devel
 
 #include "inspircd.h"
 #include "extension.h"
+#include "modules/account.h"
 #include <libpq-fe.h>
 #include <unordered_map>
 #include <unordered_set>
@@ -40,6 +40,7 @@ private:
     PGconn* db;
     std::unordered_map<std::string, std::chrono::steady_clock::time_point> ip_cache;
     StringExtItem captcha_success; // Extension item for syncing captcha status
+    Account::API account_api;      // NickServ account API
 
     static constexpr int CACHE_DURATION_MINUTES = 10;
 
@@ -50,7 +51,7 @@ private:
             db = PQconnectdb(conninfo.c_str());
             if (PQstatus(db) != CONNECTION_OK)
             {
-                throw ModuleException(this, "Database connection unavailable, unable to verify CAPTCHA.");
+                throw ModuleException(this, "*** reCAPTCHA: Database connection unavailable, unable to verify CAPTCHA.");
             }
         }
         return db;
@@ -69,7 +70,7 @@ private:
         PGconn* conn = GetConnection();
         if (!conn)
         {
-            throw ModuleException(this, "Database connection unavailable, unable to verify CAPTCHA.");
+            throw ModuleException(this, "*** reCAPTCHA: Database connection unavailable, unable to verify CAPTCHA.");
         }
 
         std::string query = INSP_FORMAT("SELECT COUNT(*) FROM ircaccess_alloweduser WHERE ip_address = '{}'", ip);
@@ -77,7 +78,7 @@ private:
 
         if (PQresultStatus(res) != PGRES_TUPLES_OK)
         {
-            std::string error_msg = INSP_FORMAT("Failed to execute query: {}", PQerrorMessage(conn));
+            std::string error_msg = INSP_FORMAT("*** reCAPTCHA: Failed to execute query: {}", PQerrorMessage(conn));
             PQclear(res);
             throw ModuleException(this, error_msg);
         }
@@ -87,7 +88,7 @@ private:
 
         if (count > 0)
         {
-            ip_cache[ip] = now + std::chrono::minutes(CACHE_DURATION_MINUTES); // Cache for defined duration
+            ip_cache[ip] = now + std::chrono::minutes(CACHE_DURATION_MINUTES); // Cache
             return true;
         }
 
@@ -197,13 +198,14 @@ public:
         : Module(VF_VENDOR, "Requires users to solve a Google reCAPTCHA before joining channels."),
           db(nullptr),
           captcha_success(this, "captcha-success", ExtensionType::USER, true), // Sync with all servers
-          cmd(this, this) // Initialize the command
+          account_api(this),
+          cmd(this, this) // Initialize reCAPTCHA command
     {
     }
 
     void init() override
     {
-        // Command is automatically registered
+        // Command registered automatically
     }
 
     void ReadConfig(ConfigStatus& status) override
@@ -250,19 +252,29 @@ public:
         if (whitelist_channels.count(cname))
             return MOD_RES_PASSTHRU;
 
+        // Allow users identified via NickServ to bypass
+        const std::string* account_name = account_api->GetAccountName(user);
+        if (account_name)
+        {
+            ServerInstance->Logs.Normal(MODNAME, INSP_FORMAT("*** reCAPTCHA: User {} bypassed due to NickServ identification.", user->nick));
+            return MOD_RES_PASSTHRU;
+        }
+
         // Sync and check if user has already passed CAPTCHA
         if (captcha_success.Get(user))
             return MOD_RES_PASSTHRU;
 
+        // No account? no in whitelistchans? then do CAPTCHA
         std::string client_sa_str = user->client_sa.str();
         std::string ip = ExtractIP(client_sa_str);
 
         if (!CheckCaptcha(ip))
         {
-            user->WriteNotice("*** reCAPTCHA: Google recaptcha verification is required: You must verify at " + captcha_url + " before joining channels. Need assistance? Join #help .");
+            user->WriteNotice("*** reCAPTCHA: Google reCAPTCHA verification required: You must verify at " + captcha_url + " before joining channels.");
             return MOD_RES_DENY;
         }
 
+        // Already done CAPTCHA, we good :D
         captcha_success.Set(user, "passed");
         return MOD_RES_PASSTHRU;
     }
