@@ -9,12 +9,20 @@
  * License as published by the Free Software Foundation; version 2.
  */
 
-/// $CompilerFlags: find_compiler_flags("libpq")
-/// $LinkerFlags: find_linker_flags("libpq")
-
 /// $ModAuthor: reverse mike.chevronnet@gmail.com
 /// $ModConfig: <captchaconfig conninfo="dbname=example user=postgres password=secret hostaddr=127.0.0.1 port=5432" url="http://example.com/verify/" whitelistchan="#help,#support">
 /// $ModDepends: core 4
+
+
+/// $CompilerFlags: find_compiler_flags("libpq")
+/// $LinkerFlags: find_linker_flags("libpq")
+
+/// $PackageInfo: require_system("alpine") libpq-dev pkgconf
+/// $PackageInfo: require_system("arch") pkgconf libpq
+/// $PackageInfo: require_system("darwin") libpq pkg-config
+/// $PackageInfo: require_system("debian~") libpq-dev pkg-config
+/// $PackageInfo: require_system("rhel~") pkg-config libmaxminddb-devel
+
 
 #include "inspircd.h"
 #include "extension.h"
