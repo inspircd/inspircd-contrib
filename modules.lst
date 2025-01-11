@@ -285,6 +285,9 @@ module m_autokick 4.810 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_blockhighlight 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_blockhighlight.cpp
  description Adds a channel mode which kills clients that mass highlight spam.
  depends core 4
+module m_blocksock 4.913 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886bd76ea83c0f88ce911b1dc818e7ec0646df7b/4/m_blocksock.cpp
+ depends core 4
+ description Allows blocking IP addresses from making any socket connections to the server.
 module m_censor 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
@@ -405,6 +408,9 @@ module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_userip 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
+module m_usernamemeta 4.913 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886bd76ea83c0f88ce911b1dc818e7ec0646df7b/4/m_usernamemeta.cpp
+ depends core 4
+ description Stores the username given in USER as metadata.
 module m_whoisgeolite 4.911 https://raw.githubusercontent.com/inspircd/inspircd-contrib/522a745644bae15102c8242be95fef008931ddff/4/m_whoisgeolite.cpp
  description Adds city and country information to WHOIS using the MaxMind database.
  depends core 4
