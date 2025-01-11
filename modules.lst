@@ -408,7 +408,7 @@ module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_userip 4.812 https://raw.githubusercontent.com/inspircd/inspircd-contrib/530a46b200879d8df23209254dd22252f1a79d68/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
-module m_usernamemeta 4.913 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886bd76ea83c0f88ce911b1dc818e7ec0646df7b/4/m_usernamemeta.cpp
+module m_usernamemeta 4.915 https://raw.githubusercontent.com/inspircd/inspircd-contrib/277247da0a9d80b4dbf6d81b0aecd7d9b951c34d/4/m_usernamemeta.cpp
  depends core 4
  description Stores the username given in USER as metadata.
 module m_whoisgeolite 4.911 https://raw.githubusercontent.com/inspircd/inspircd-contrib/522a745644bae15102c8242be95fef008931ddff/4/m_whoisgeolite.cpp
