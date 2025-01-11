@@ -38,7 +38,7 @@ public:
 	{
 	}
 
-	void OnChangeUser(User* user, const std::string& newuser) override
+	void OnChangeRealUser(User* user, const std::string& newuser) override
 	{
 		if (IS_LOCAL(user) && !ext.Get(user))
 		{
