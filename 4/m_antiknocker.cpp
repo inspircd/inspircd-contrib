@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
-/// $ModConfig: <antiknock nickregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" dokill="yes" donick="yes" donotice="yes" doshun="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
+/// $ModConfig: <antiknock nameregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" dokill="yes" donick="yes" donotice="yes" doreal="yes" doshun="yes" douser="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
 /// $ModDesc: Attempts to block a common IRC spambot.
 /// $ModDepends: core 4
 
@@ -36,8 +36,10 @@ public:
 	bool dokill;
 	bool donick;
 	bool donotice;
+	bool doreal;
 	bool doshun;
-	std::regex nickregex;
+	bool douser;
+	std::regex nameregex;
 	IntExtItem seenmsg;
 	unsigned long shunduration;
 	std::string shunreason;
@@ -78,23 +80,25 @@ public:
 	{
 		const auto& tag = ServerInstance->Config->ConfValue("antiknock");
 
-		const std::string nick = tag->getString("nickregex", "(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])");
+		const std::string nick = tag->getString("nameregex", "(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])");
 		try
 		{
-			std::regex newnickregex(nick);
-			std::swap(nickregex, newnickregex);
-			ServerInstance->Logs.Debug(MODNAME, "Nick regex set to {}", nick);
+			std::regex newnameregex(nick);
+			std::swap(nameregex, newnameregex);
+			ServerInstance->Logs.Debug(MODNAME, "Name regex set to {}", nick);
 		}
 		catch (const std::regex_error& err)
 		{
-			throw ModuleException(this, INSP_FORMAT("<antiknock:nickregex> is invalid: {}", err.what()));
+			throw ModuleException(this, INSP_FORMAT("<antiknock:nameregex> is invalid: {}", err.what()));
 		}
 
 		docmd = tag->getBool("docmd", true);
 		dokill = tag->getBool("dokill", true);
 		donick = tag->getBool("donick", true);
 		donotice = tag->getBool("donotice", true);
+		doreal = tag->getBool("doreal", true);
 		doshun = tag->getBool("doshun", true);
+		douser = tag->getBool("douser", true);
 		shunduration = tag->getDuration("shunduration", 60*15, 60);
 		shunreason = tag->getString("shunreason", "User was caught in an antiknock trap", 1);
 	}
@@ -130,20 +134,44 @@ public:
 
 	ModResult OnUserPreNick(LocalUser* user, const std::string& newnick) override
 	{
-		if (!donick || !std::regex_match(newnick, nickregex))
+		if (!donick || !std::regex_match(newnick, nameregex))
 			return MOD_RES_PASSTHRU;
 
-		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] in class {} was prevented from using a knocker nick: {}",
+		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] (class: {}) was prevented from using a knocker nickname: {}",
 			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newnick);
 
 		PunishUser(user);
 		return MOD_RES_DENY;
 	}
 
+	void OnChangeRealUser(User* user, const std::string& newuser) override
+	{
+		auto* luser = IS_LOCAL(user);
+		if (!luser || !douser || !std::regex_match(newuser, nameregex))
+			return;
+
+		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] (class: {}) was prevented from using a knocker username: {}",
+			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newuser);
+
+		PunishUser(luser);
+	}
+
+	void OnChangeRealName(User* user, const std::string& newreal) override
+	{
+		auto* luser = IS_LOCAL(user);
+		if (!luser || !douser || !std::regex_match(newreal, nameregex))
+			return;
+
+		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] (class: {}) was prevented from using a knocker real name: {}",
+			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newreal);
+
+		PunishUser(luser);
+	}
+
 	void OnUserConnect(LocalUser* user) override
 	{
 		if (donotice)
-			user->WriteNotice("*** You are not welcome on this network if you are a malicious bot. If you are not a malicious bot bot please ignore this message.");
+			user->WriteNotice("*** You are not welcome on this network if you are a malicious bot. If you are not a malicious bot please ignore this message.");
 	}
 };
 
