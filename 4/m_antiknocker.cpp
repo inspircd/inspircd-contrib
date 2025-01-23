@@ -151,7 +151,7 @@ public:
 			return;
 
 		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] (class: {}) was prevented from using a knocker username: {}",
-			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newuser);
+			user->nick, user->GetRealUserHost(), user->GetAddress(), luser->GetClass()->name, newuser);
 
 		PunishUser(luser);
 	}
@@ -163,7 +163,7 @@ public:
 			return;
 
 		ServerInstance->SNO.WriteToSnoMask('a', "User {} ({}) [{}] (class: {}) was prevented from using a knocker real name: {}",
-			user->nick, user->GetRealUserHost(), user->GetAddress(), user->GetClass()->name, newreal);
+			user->nick, user->GetRealUserHost(), user->GetAddress(), luser->GetClass()->name, newreal);
 
 		PunishUser(luser);
 	}
