@@ -23,6 +23,12 @@
 
 /// $LinkerFlags: -lmaxminddb
 
+/// $PackageInfo: require_system("alpine") libmaxminddb-dev pkgconf
+/// $PackageInfo: require_system("arch") pkgconf libmaxminddb
+/// $PackageInfo: require_system("darwin") libmaxminddb pkg-config
+/// $PackageInfo: require_system("debian~") libmaxminddb-dev pkg-config
+/// $PackageInfo: require_system("rhel~") pkg-config libmaxminddb-devel
+
 #include "inspircd.h"
 #include "modules/whois.h"
 #include "extension.h"
