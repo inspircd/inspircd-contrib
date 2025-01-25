@@ -21,7 +21,8 @@
 /// $ModConfig: <geomaxlite dbpath="path/geodata/GeoLite2-City.mmdb">
 /// $ModDepends: core 4
 
-/// $LinkerFlags: -lmaxminddb
+/// $CompilerFlags: find_compiler_flags("libmaxminddb")
+/// $LinkerFlags: find_linker_flags("libmaxminddb")
 
 /// $PackageInfo: require_system("alpine") libmaxminddb-dev pkgconf
 /// $PackageInfo: require_system("arch") pkgconf libmaxminddb
