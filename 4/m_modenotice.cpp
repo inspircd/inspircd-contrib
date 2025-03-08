@@ -39,7 +39,7 @@ class CommandModeNotice final
 
 	CmdResult Handle(User* user, const Params& parameters) override
 	{
-		const std::string message = INSP_FORMAT("*** From {}: {}", user->nick, parameters[2]);
+		const std::string message = INSP_FORMAT("*** From {}: {}", user->nick, parameters[1]);
 		for (auto* u : ServerInstance->Users.GetLocalUsers())
 		{
 			bool send = true;
