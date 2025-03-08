@@ -360,7 +360,7 @@ module m_messagelength 4.847 https://raw.githubusercontent.com/inspircd/inspircd
 module m_messagesocket 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_messagesocket.cpp
  description Allows sending messages to all local users from a socket.
  depends core 4
-module m_modenotice 4.797 https://raw.githubusercontent.com/inspircd/inspircd-contrib/594627412343ca7b89843d7776b169175788f397/4/m_modenotice.cpp
+module m_modenotice 4.923 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3594b95fe536518d9e628b48a9156916dc99d8ca/4/m_modenotice.cpp
  depends core 4
  description Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
 module m_noidletyping 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_noidletyping.cpp
