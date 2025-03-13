@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: InspIRCd Developers
+/// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModConfig: <cloak method="unreal-md5|unreal-md5-ip|unreal-sha256|unreal-sha256-ip" key1="foo" key2="bar" key3="baz" prefix="Clk">
 /// $ModDepends: core 4
 /// $ModDesc: Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.
@@ -166,8 +166,8 @@ public:
 		// IMPORTANT: link data is sent over unauthenticated server links so we
 		// can't directly send the key here. Instead we use dummy cloaks that
 		// allow verification of or less the same thing.
-		data["cloak-v4"] = hash ? Generate("123.123.123.123")                        : broken;
-		data["cloak-v6"] = hash ? Generate("dead:beef:cafe::")                       : broken;
+		data["cloak-v4"] = hash ? Generate("123.123.123.123")  : broken;
+		data["cloak-v6"] = hash ? Generate("dead:beef:cafe::") : broken;
 
 		if (cloakhost)
 		{
