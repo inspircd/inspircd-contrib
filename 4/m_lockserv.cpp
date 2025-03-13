@@ -25,6 +25,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#lockserv
 
 
 #include "inspircd.h"

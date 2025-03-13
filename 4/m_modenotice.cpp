@@ -22,6 +22,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /MODENOTICE command which sends a message to all users with the specified user modes set.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#modenotice
 
 
 #include "inspircd.h"

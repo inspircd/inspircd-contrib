@@ -26,6 +26,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#userip
 
 
 #include "inspircd.h"

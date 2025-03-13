@@ -24,6 +24,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Provides the tre regular expression engine which uses the TRE library.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#regex_tre
 
 /// $CompilerFlags: find_compiler_flags("tre")
 /// $LinkerFlags: find_linker_flags("tre")
