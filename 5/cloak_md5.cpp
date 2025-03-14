@@ -185,32 +185,7 @@ struct CloakInfo final
 		return rv;
 	}
 
-	std::string GetCompatLinkData()
-	{
-		std::string data = "broken";
-		if (md5)
-		{
-			switch (mode)
-			{
-				case MODE_HALF_CLOAK:
-					// Use old cloaking verification to stay compatible with 2.0
-					// But verify domainparts and ignorecase when use 3.0-only features
-					if (domainparts == 3 && !ignorecase)
-						data = prefix + SegmentCloak("*", 3, 8) + suffix;
-					else
-					{
-						irc::sockets::sockaddrs sa;
-						data = GenCloak(sa, "", data + ConvToStr(domainparts)) + (ignorecase ? "-ci" : "");
-					}
-					break;
-				case MODE_OPAQUE:
-					data = prefix + SegmentCloak("*", 4, 8) + suffix + (ignorecase ? "-ci" : "");
-			}
-		}
-		return data;
-	}
-
-	void GetLinkData(Module::LinkData& data, std::string& compatdata) override
+	void GetLinkData(Module::LinkData& data) override
 	{
 		data["domain-parts"] = ConvToStr(domainparts);
 		data["ignore-case"] = ignorecase ? "yes" : "no";
@@ -221,11 +196,10 @@ struct CloakInfo final
 		// can't directly send the key here. Instead we use dummy cloaks that
 		// allow verification of or less the same thing.
 		const std::string broken = "missing-md5-module";
-		data["cloak-v4"]   = md5 ? Generate("123.123.123.123")                        : broken;
-		data["cloak-v6"]   = md5 ? Generate("dead:beef:cafe::")                       : broken;
-		data["cloak-host"] = md5 ? Generate("extremely.long.inspircd.cloak.example")  : broken;
-
-		compatdata = GetCompatLinkData();
+		auto cloak = [this](const auto *str) { return Cloak(str)->ToString(); };
+		data["cloak-v4"]   = md5 ? cloak("123.123.123.123")                        : broken;
+		data["cloak-v6"]   = md5 ? cloak("dead:beef:cafe::")                       : broken;
+		data["cloak-host"] = md5 ? cloak("extremely.long.inspircd.cloak.example")  : broken;
 	}
 
 	bool IsLinkSensitive() const override
@@ -258,18 +232,18 @@ struct CloakInfo final
 		return chost;
 	}
 
-	std::string Generate(LocalUser* user) override ATTR_NOT_NULL(2)
+	std::optional<Cloak::Info> Cloak(LocalUser* user) override ATTR_NOT_NULL(2)
 	{
 		if (!md5 || !user->client_sa.is_ip() || !MatchesUser(user))
-			return {};
+			return std::nullopt;
 
 		return GenCloak(user->client_sa, user->GetAddress(), user->GetRealHost());
 	}
 
-	std::string Generate(const std::string& hostip) override
+	std::optional<Cloak::Info> Cloak(const std::string& hostip) override
 	{
 		if (!md5)
-			return {};
+			return std::nullopt;
 
 		irc::sockets::sockaddrs sa;
 		const char* ipaddr = sa.from_ip(hostip) ? hostip.c_str() : "";
