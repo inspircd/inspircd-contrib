@@ -19,6 +19,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Provides compatibility with the legacy PROTOCTL system.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#protoctl
 
 
 #include "inspircd.h"

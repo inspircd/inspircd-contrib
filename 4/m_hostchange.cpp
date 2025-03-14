@@ -29,6 +29,7 @@
 /// $ModConfig: <hostchange mask="*root@*" action="addnick" prefix="example/users/">
 /// $ModConfig: <hostchange mask="a@example.com" action="set" value="foo.bar.baz">
 /// $ModConfig: <hostchange mask="*@localhost" ports="7000,7001,7005-7007" action="set" value="blahblah.foo" class="local">
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#hostchange
 
 
 #include "inspircd.h"

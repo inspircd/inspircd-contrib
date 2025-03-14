@@ -24,6 +24,7 @@
 /// $ModConfig: <sslprofile name="Clients" provider="mbedtls" cafile="" certfile="cert.pem" crlfile="" dhfile="dhparams.pem" hash="sha256" keyfile="key.pem" mindhbits="2048" outrecsize="2048" requestclientcert="yes">
 /// $ModDepends: core 4
 /// $ModDesc: Allows TLS encrypted connections using the mbedTLS library.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#ssl_mbedtls
 
 /// $LinkerFlags: -lmbedtls
 

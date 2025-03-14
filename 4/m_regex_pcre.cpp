@@ -25,6 +25,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModDepends: core 4
 /// $ModDesc: Provides the pcre regular expression engine which uses the PCRE library.
+/// $ModLink: https://docs.inspircd.org/4/moved-modules/#regex_pcre
 
 /// $CompilerFlags: execute("pcre-config --cflags" "PCRE_CXXFLAGS")
 /// $LinkerFlags: execute("pcre-config --libs" "PCRE_LDFLAGS" "-lpcre")
