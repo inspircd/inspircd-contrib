@@ -11,6 +11,7 @@
  
 /// $ModAuthor: reverse <mike.chevronnet@gmail.com>
 /// $ModDesc: Google reCAPTCHA v2 verification.
+/// $ModConfig: <captchaconfig url="https://your-captcha-site.com" dbid="default" hmac_key="changeThisKey" whitelistchans="#help,#support" whitelistports="6697,6698" message="*** reCAPTCHA: Verify your connection at {url}.">
 /// $ModDepends: core 4
 
 #include "inspircd.h"
@@ -173,12 +174,11 @@ public:
             return;
         }
 
-        std::string formatted_query = INSP_FORMAT(
-            "SELECT COUNT(*) FROM recaptcha_app_verificationtoken WHERE token = '{}' AND created_at + INTERVAL '30 minutes' > NOW()",
-            token);
+        SQL::ParamList params;
+        params.push_back(token);
 
-        sql->Submit(new ValidateTokenQuery(this, user, captcha_verified), formatted_query);
-    }
+        sql->Submit(new ValidateTokenQuery(this, user, captcha_verified), query, params);
+    }   
 
 private:
     void NotifyUserToVerify(User* user)
