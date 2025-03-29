@@ -24,7 +24,10 @@
 /// $ModDepends: core 4
 
 /// $LinkerFlags: -lcrypto -lcurl
-
+/// $PackageInfo: require_system("arch") jwt-cpp curl nlohmann-json
+/// $PackageInfo: require_system("debian") libjwt-dev libcurl4-openssl-dev nlohmann-json3-dev
+/// $PackageInfo: require_system("ubuntu") libjwt-dev libcurl4-openssl-dev nlohmann-json3-dev
+/// $PackageInfo: require_system("fedora") libjwt-devel libcurl-devel nlohmann-json-devel
 
 #include "inspircd.h"
 #include "modules/account.h"
