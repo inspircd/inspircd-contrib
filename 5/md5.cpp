@@ -368,24 +368,43 @@ void MD5_Final(unsigned char *result, MD5_CTX *ctx)
 #endif
 }
 
-class MD5Provider final
-	: public HashProvider
+class MD5Context final
+	: public Hash::Context
 {
-public:
-	std::string GenerateRaw(const std::string& data) override
-	{
-		MD5_CTX context;
-		MD5_Init(&context);
-		MD5_Update(&context, reinterpret_cast<const unsigned char*>(data.data()), data.length());
+private:
+	MD5_CTX context;
 
-		std::vector<unsigned char> bytes(16);
-		MD5_Final(bytes.data(), &context);
-		return std::string(reinterpret_cast<const char*>(bytes.data()), bytes.size());
+public:
+	MD5Context()
+	{
+		MD5_Init(&context);
 	}
 
-	MD5Provider(Module* parent)
-		: HashProvider(parent, "md5", 16, 64)
+	void Update(const unsigned char *data, size_t len) override
 	{
+		MD5_Update(&context, data, static_cast<unsigned long>(len));
+	}
+
+	std::string Finalize() override
+	{
+		std::vector<unsigned char> digest(16);
+		MD5_Final(digest.data(), &context);
+		return std::string(reinterpret_cast<const char *>(digest.data()), digest.size());
+	}
+};
+
+class MD5Provider final
+	: public Hash::Provider
+{
+public:
+	MD5Provider(Module* parent)
+		: Hash::Provider(parent, "md5", 16, 64)
+	{
+	}
+
+	std::unique_ptr<Hash::Context> CreateContext() override
+	{
+		return std::make_unique<MD5Context>();
 	}
 };
 

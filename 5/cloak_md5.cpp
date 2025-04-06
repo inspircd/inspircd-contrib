@@ -67,7 +67,7 @@ struct CloakInfo final
 	std::string key;
 
 	// Dynamic reference to the md5 implementation.
-	dynamic_reference_nocheck<HashProvider> md5;
+	Hash::ProviderRef md5;
 
 	// The prefix for cloaks (e.g. MyNet-).
 	std::string prefix;
@@ -81,7 +81,7 @@ struct CloakInfo final
 		, domainparts(tag->getNum<unsigned int>("domainparts", 3, 1, 10))
 		, ignorecase(tag->getBool("ignorecase"))
 		, key(Key)
-		, md5(engine->creator, "hash/md5")
+		, md5(engine->creator, "md5")
 		, prefix(tag->getString("prefix"))
 		, suffix(tag->getString("suffix", ".IP"))
 	{
@@ -105,7 +105,7 @@ struct CloakInfo final
 		else
 			input.append(item);
 
-		std::string rv = md5->GenerateRaw(input).substr(0, len);
+		std::string rv = md5->Hash(input).substr(0, len);
 		for(size_t i = 0; i < len; i++)
 		{
 			// this discards 3 bits per byte. We have an
@@ -256,7 +256,7 @@ class MD5Engine final
 {
 private:
 	// Dynamic reference to the md5 implementation.
-	dynamic_reference_nocheck<HashProvider> md5;
+	Hash::ProviderRef md5;
 
 	// The method used for cloaking users.
 	CloakMode mode;
@@ -264,7 +264,7 @@ private:
 public:
 	MD5Engine(Module* Creator, const std::string& Name, CloakMode cm)
 		: Cloak::Engine(Creator, Name)
-		, md5(Creator, "hash/md5")
+		, md5(Creator, "md5")
 		, mode(cm)
 	{
 	}

@@ -30,6 +30,7 @@
 
 
 #include "inspircd.h"
+#include "modules/hash.h"
 #include "utility/string.h"
 
 struct CustomVhost final
@@ -49,7 +50,7 @@ struct CustomVhost final
 
 	bool CheckPass(const std::string& pass) const
 	{
-		return InspIRCd::CheckPassword(password, hash, pass);
+		return Hash::CheckPassword(password, hash, pass);
 	}
 };
 
