@@ -300,10 +300,13 @@ public:
 				writer.Key("cmodes");
 				writer.StartArray();
 				{
-					for (const auto* mh : memb->modes)
+					if (memb)
 					{
-						auto chr = mh->GetModeChar();
-						writer.String(&chr, 1);
+						for (const auto* mh : memb->modes)
+						{
+							auto chr = mh->GetModeChar();
+							writer.String(&chr, 1);
+						}
 					}
 				}
 				writer.EndArray();
