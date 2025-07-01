@@ -57,7 +57,7 @@ public:
 
 	ModResult OnPreCommand(std::string& command, Command::Params& parameters, LocalUser* user, bool validated) override
 	{
-		if (!user->IsFullyConnected() || !stdalgo::isin(commands, command))
+		if (user->IsFullyConnected() || !stdalgo::isin(commands, command))
 			return MOD_RES_PASSTHRU;
 
 		if (!message.empty())
