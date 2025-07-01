@@ -119,7 +119,7 @@ private:
 
 public:
 	ModuleStartTLS()
-		: Module(VF_VENDOR, "Provides the IRCv3 tls client capability.")
+		: Module(VF_VENDOR, "Provides the deprecated IRCv3 tls client capability.")
 		, starttls(this, ssl)
 		, tls(this, ssl)
 		, ssl(this, "ssl")
