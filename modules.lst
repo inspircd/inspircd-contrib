@@ -423,7 +423,7 @@ module cloak_md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contr
 module md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.907 https://raw.githubusercontent.com/inspircd/inspircd-contrib/56b8583169dc888cec54ff43d824e3b3711234d3/5/starttls.cpp
+module starttls 5.943 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c94933635ae0a8129d7f38c5218ee2023ddb2407/5/starttls.cpp
  depends core 5
  description Provides the IRCv3 tls client capability.
 module vhost 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/vhost.cpp
