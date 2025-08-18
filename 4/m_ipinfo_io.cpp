@@ -35,7 +35,6 @@
 #include <curl/curl.h>
 #include <mutex>
 #include <regex>
-#include <fmt/core.h>
 
 class IPInfoResolver : public Thread
 {
@@ -70,7 +69,7 @@ private:
             if (res != CURLE_OK)
             {
                 std::lock_guard<std::mutex> lock(mtx);
-                ServerInstance->SNO.WriteGlobalSno('a', fmt::format("IPInfo: Failed to get data for {}: {}", resolved_user->nick, curl_easy_strerror(res)));
+                ServerInstance->SNO.WriteGlobalSno('a', "IPInfo: Failed to get data for {}: {}", resolved_user->nick, curl_easy_strerror(res));
             }
             else
             {
