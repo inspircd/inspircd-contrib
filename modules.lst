@@ -345,7 +345,7 @@ module m_hideidle 4.902 https://raw.githubusercontent.com/inspircd/inspircd-cont
 module m_hostchange 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_hostchange.cpp
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_ipinfo_io 4.880 https://raw.githubusercontent.com/inspircd/inspircd-contrib/1a7421bf2d28393b9b2aa16b1ceccea9d0da3ba3/4/m_ipinfo_io.cpp
+module m_ipinfo_io 4.945 https://raw.githubusercontent.com/inspircd/inspircd-contrib/34a74034f7b69081b1944c8d548b403b509b3f8e/4/m_ipinfo_io.cpp
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
 module m_ircv3_extjwt 4.939 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7be000f4208c5058140c43533c3f92595d3b70ab/4/m_ircv3_extjwt.cpp
