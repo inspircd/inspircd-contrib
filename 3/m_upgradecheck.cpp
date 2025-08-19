@@ -108,7 +108,7 @@ class ModuleUpgradeCheck CXX11_FINAL
 		locationstream << '>';
 
 		const std::string fulltag = locationstream.str();
-		ServerInstance->Logs->Log(MODNAME, LOG_DEFAULT, "%s at %s: %s", fulltag.c_str(), location.c_str(), message.c_str());
+		ServerInstance->Logs->Log(MODNAME, LOG_SPARSE, "%s at %s: %s", fulltag.c_str(), location.c_str(), message.c_str());
 	}
 
  public:
@@ -124,11 +124,14 @@ class ModuleUpgradeCheck CXX11_FINAL
 		CheckKey("options", "moronbanner", "moved to <options:xlinemessage>");
 		CheckKey("repeat", "maxsecs", "moved to <repeat:maxtime>");
 		CheckKey("security", "hidewhois", "moved to <security:hideserver>");
+		CheckModule("blockcaps", "moved to inspircd-contrib");
 		CheckModule("censor", "moved to inspircd-contrib");
 		CheckModule("clones", "moved to inspircd-contrib");
+		CheckModule("flashpolicyd", "obsolete now Adobe Flash is EOL");
 		CheckModule("hostchange", "moved to inspircd-contrib");
 		CheckModule("lockserv", "moved to inspircd-contrib");
 		CheckModule("modenotice", "moved to inspircd-contrib");
+		CheckModule("nationalchars", "replaced with the codepage module");
 		CheckModule("regex_pcre", "moved to inspircd-contrib");
 		CheckModule("regex_tre", "moved to inspircd-contrib");
 		CheckModule("ssl_mbedtls", "moved to inspircd-contrib");
@@ -139,11 +142,12 @@ class ModuleUpgradeCheck CXX11_FINAL
 		CheckValue("bind", "sslprofile", "gnutls", "ssl config moved from <gnutls> to <sslprofile>");
 		CheckValue("bind", "sslprofile", "mbedtls", "ssl config moved from <mbedtls> to <sslprofile>");
 		CheckValue("bind", "sslprofile", "openssl", "ssl config moved from <openssl> to <sslprofile>");
+		CheckValue("config", "format", "compat", "compat-style configuration removed (migrate to xml-style)");
 		CheckValue("link", "sslprofile", "gnutls", "ssl config moved from <gnutls> to <sslprofile>");
 		CheckValue("link", "sslprofile", "mbedtls", "ssl config moved from <mbedtls> to <sslprofile>");
 		CheckValue("link", "sslprofile", "openssl", "ssl config moved from <openssl> to <sslprofile>");
 		CheckValue("oper", "autologin", "if-host-match", "value replaced with relaxed or strict");
-		CheckValue("options", "casemapping", "rfc1459", "casemapping removed (replace with ascii)");
+		CheckValue("options", "casemapping", "rfc1459", "casemapping removed (migrate to ascii)");
 		CheckValueBool("cban", "glob", false, "now always enabled");
 		CheckValueBool("cgiirc", "opernotice", true, "replaced with oper snomask privileges");
 		CheckValueBool("chanhistory", "enableumode", false, "now always enabled");
@@ -156,7 +160,9 @@ class ModuleUpgradeCheck CXX11_FINAL
 		CheckValueBool("override", "enableumode", false, "now always enabled");
 		CheckValueBool("security", "allowcoreunload", true, "now always disabled");
 		CheckValueBool("showwhois", "showfromopers", true, "replaced with the users/secret-whois oper priv");
+		CheckValueBool("shun", "affectsopers", false, "replaced with the servers/ignore-shuns oper priv");
 		CheckValueBool("sslmodes", "enableumode", false, "now always enabled");
+		CheckValueBool("svshold", "silent", false, "now always enabled");
 	}
 
 	Version GetVersion() CXX11_OVERRIDE
