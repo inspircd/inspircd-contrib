@@ -255,7 +255,7 @@ module m_timedstaticquit 3.752 https://raw.githubusercontent.com/inspircd/inspir
 module m_totp 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_totp.cpp
  description Enables two factor authentification for oper blocks
  depends core 3
-module m_upgradecheck 3.893 https://raw.githubusercontent.com/inspircd/inspircd-contrib/203de04f52437240e156977e8cc6dfb0f72af79a/3/m_upgradecheck.cpp
+module m_upgradecheck 3.948 https://raw.githubusercontent.com/inspircd/inspircd-contrib/693370f91d14c6df20725ed207f5b3a75be2cd58/3/m_upgradecheck.cpp
  description Checks the server config for deprecated config entries that might cause trouble when upgrading to v4.
  depends core 3
 module m_xlinetools 3.752 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9705e755cd2f51ee45b6df7dabf127bd6b435966/3/m_xlinetools.cpp
