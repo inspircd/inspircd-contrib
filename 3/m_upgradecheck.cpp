@@ -140,8 +140,8 @@ class ModuleUpgradeCheck CXX11_FINAL
 		CheckValue("bind", "sslprofile", "mbedtls", "ssl config moved from <mbedtls> to <sslprofile>");
 		CheckValue("bind", "sslprofile", "openssl", "ssl config moved from <openssl> to <sslprofile>");
 		CheckValue("link", "sslprofile", "gnutls", "ssl config moved from <gnutls> to <sslprofile>");
-		CheckValue("link", "sslprofile", "mbedtls", "ssl config moved from <gnutls> to <sslprofile>");
-		CheckValue("link", "sslprofile", "openssl", "ssl config moved from <gnutls> to <sslprofile>");
+		CheckValue("link", "sslprofile", "mbedtls", "ssl config moved from <mbedtls> to <sslprofile>");
+		CheckValue("link", "sslprofile", "openssl", "ssl config moved from <openssl> to <sslprofile>");
 		CheckValue("oper", "autologin", "if-host-match", "value replaced with relaxed or strict");
 		CheckValue("options", "casemapping", "rfc1459", "casemapping removed (replace with ascii)");
 		CheckValueBool("cban", "glob", false, "now always enabled");
