@@ -23,13 +23,13 @@ jobs:
           sudo apt-get update --assume-yes
           sudo apt-get install --assume-yes --no-install-recommends clang g++ git make pkg-config
       - name: Checkout InspIRCd@insp3
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: 'inspircd/inspircd'
           ref: 'insp3'
           path: 'inspircd'
       - name: Checkout self
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: 'contrib'
       - name: (Pull Request) Set the build target to only the changed modules
