@@ -73,7 +73,7 @@ public:
 		const auto& clientcheck = ServerInstance->Config->ConfValue("clientcheck");
 
 		const std::string engine = clientcheck->getString("engine");
-		Regex::EngineReference newrf(this, engine.empty() ? "regex": "regex/" + engine);
+		Regex::EngineReference newrf(this, engine);
 		if (!newrf)
 			throw ModuleException(this, "<clientcheck:engine> (" + engine + ") is not a recognised regex engine.");
 
