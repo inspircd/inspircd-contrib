@@ -291,7 +291,7 @@ module m_blocksock 4.913 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_censor 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_censor.cpp
  depends core 4
  description Allows the server administrator to define inappropriate phrases that are not allowed to be used in private or channel messages.
-module m_clientcheck 4.885 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a977b7ad09b270263c2325b16cafaba6d6746a70/4/m_clientcheck.cpp
+module m_clientcheck 4.951 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f4c7e4005e426464fb4c5bcf12fed5a21f0887de/4/m_clientcheck.cpp
  description Allows detection of clients by version string.
  depends core 4
 module m_cloak_unreal 4.925 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5c470571bcafbfaa234994322412ae3cc9bbadb3/4/m_cloak_unreal.cpp
