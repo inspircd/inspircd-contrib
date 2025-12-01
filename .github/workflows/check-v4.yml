@@ -35,14 +35,14 @@ jobs:
           echo INSPIRCD_VERSION=$(curl https://api.github.com/repos/inspircd/inspircd/releases | jq --raw-output 'map(select((.draft or .prerelease | not) and (.tag_name | startswith("v4.")))) | first .tag_name') >> $GITHUB_ENV
 
       - name: Checkout InspIRCd
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: inspircd/inspircd
           ref: ${{ env.INSPIRCD_VERSION }}
           path: inspircd
 
       - name: Checkout InspIRCd contrib
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: contrib
 
