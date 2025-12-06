@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2015-2016 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2015-2025 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -26,37 +26,84 @@
 #include "extension.h"
 #include "modules/account.h"
 
+enum Operation
+{
+	OP_ADD = 0,
+	OP_SUB = 1,
+	OP_END = OP_SUB,
+};
+
 struct Problem final
 {
 	unsigned long first;
+	Operation operation;
 	unsigned long second;
-	time_t nextwarning;
+	long result;
+	time_t nextwarning = 0;
+
+	Problem(User *u)
+		: first(ServerInstance->GenRandomInt(9))
+		, operation(static_cast<Operation>(ServerInstance->GenRandomInt(OP_END + 1)))
+		, second(ServerInstance->GenRandomInt(9))
+		, result(Calculate(operation, first, second))
+	{
+		ServerInstance->Logs.Debug(MODNAME, "{}: {} = {}", u->uuid, ToString(), result);
+	}
+
+	static long Calculate(Operation o, unsigned long f, unsigned long s)
+	{
+		switch (o)
+		{
+			case OP_ADD:
+				return f + s;
+			case OP_SUB:
+				return f - s;
+		}
+		return 0; // Should never happen.
+	}
+
+	std::string ToString() const
+	{
+		char opsym;
+		switch (operation)
+		{
+			case OP_ADD:
+				opsym = '+';
+				break;
+			case OP_SUB:
+				opsym = '-';
+				break;
+			default:
+				opsym = '?'; // Should never happen.
+				break;
+		}
+		return INSP_FORMAT("{} {} {}", first, opsym, second);
+	}
 };
 
 class CommandSolve final
 	: public SplitCommand
 {
-private:
-	SimpleExtItem<Problem>& ext;
-
 public:
-	CommandSolve(Module* Creator, SimpleExtItem<Problem>& Ext)
-		: SplitCommand(Creator, "SOLVE", 1, 1)
-		, ext(Ext)
+	SimpleExtItem<Problem> ext;
+
+	CommandSolve(Module* mod)
+		: SplitCommand(mod, "SOLVE", 1, 1)
+		, ext(mod, "solve-message", ExtensionType::USER)
 	{
 	}
 
 	CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
 	{
-		Problem* problem = ext.Get(user);
+		const auto* problem = ext.Get(user);
 		if (!problem)
 		{
 			user->WriteNotice("** You have already solved your problem!");
 			return CmdResult::FAILURE;
 		}
 
-		const auto result = ConvToNum<unsigned long>(parameters[0]);
-		if (result != (problem->first + problem->second))
+		const auto result = ConvToNum<long>(parameters[0]);
+		if (result != problem->result)
 		{
 			user->WriteNotice(INSP_FORMAT("*** {} is not the correct answer.", parameters[0]));
 			user->CommandFloodPenalty += 10000;
@@ -73,7 +120,6 @@ class ModuleSolveMessage final
 	: public Module
 {
 private:
-	SimpleExtItem<Problem> ext;
 	CommandSolve cmd;
 	Account::API accountapi;
 	bool chanmsg;
@@ -84,8 +130,7 @@ private:
 public:
 	ModuleSolveMessage()
 		: Module(VF_NONE, "Requires users to solve a basic maths problem before messaging others.")
-		, ext(this, "solve-message", ExtensionType::USER)
-		, cmd(this, ext)
+		, cmd(this)
 		, accountapi(this)
 	{
 	}
@@ -101,11 +146,7 @@ public:
 
 	void OnUserPostInit(LocalUser* user) override
 	{
-		Problem problem;
-		problem.first = ServerInstance->GenRandomInt(9);
-		problem.second = ServerInstance->GenRandomInt(9);
-		problem.nextwarning = 0;
-		ext.Set(user, problem);
+		cmd.ext.Set(user, new Problem(user));
 	}
 
 	ModResult OnUserPreMessage(User* user, MessageTarget& msgtarget, MessageDetails& details) override
@@ -137,7 +178,7 @@ public:
 
 				User* target = msgtarget.Get<User>();
 				if (target->server->IsService())
-					return MOD_RES_PASSTHRU; // Allow messaging ulines.
+					return MOD_RES_PASSTHRU; // Allow messaging services.
 
 				break;
 			}
@@ -157,7 +198,7 @@ public:
 				return MOD_RES_PASSTHRU; // Only opers can do this.
 		}
 
-		Problem* problem = ext.Get(user);
+		auto* problem = cmd.ext.Get(user);
 		if (!problem)
 			return MOD_RES_PASSTHRU;
 
@@ -165,7 +206,7 @@ public:
 			return MOD_RES_DENY;
 
 		user->WriteNotice("*** Before you can send messages you must solve the following problem:");
-		user->WriteNotice(INSP_FORMAT("*** What is {} + {}?", problem->first, problem->second));
+		user->WriteNotice(INSP_FORMAT("*** What is {}?", problem->ToString()));
 		user->WriteNotice("*** You can enter your answer using /QUOTE SOLVE <answer>");
 		problem->nextwarning = ServerInstance->Time() + warntime;
 		return MOD_RES_DENY;
