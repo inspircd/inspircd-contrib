@@ -387,9 +387,6 @@ module m_randomidxlines 4.869 https://raw.githubusercontent.com/inspircd/inspirc
 module m_regex_pcre 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_regex_pcre.cpp
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
-module m_regex_tre 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_regex_tre.cpp
- depends core 4
- description Provides the tre regular expression engine which uses the TRE library.
 module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8c7730ee7338fca1f36172ea59d8b67c695d6e4e/4/m_require_auth.cpp
  description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 4
