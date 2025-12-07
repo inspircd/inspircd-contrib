@@ -390,7 +390,7 @@ module m_regex_pcre 4.927 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8c7730ee7338fca1f36172ea59d8b67c695d6e4e/4/m_require_auth.cpp
  description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 4
-module m_solvemsg 4.847 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7f09d3cfdbeba535984854b1d6be4f632a150877/4/m_solvemsg.cpp
+module m_solvemsg 4.957 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e10ecedb22ac90900f2dc24ff8d04348c455ac38/4/m_solvemsg.cpp
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
 module m_ssl_mbedtls 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_ssl_mbedtls.cpp
