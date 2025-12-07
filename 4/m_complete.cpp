@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2020 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2020-2025 Sadie Powell <sadie@witchery.services>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -24,6 +24,7 @@
 
 #include "inspircd.h"
 #include "modules/ircv3_replies.h"
+#include "modules/isupport.h"
 
 class CommandComplete final
 	: public SplitCommand
@@ -72,17 +73,35 @@ public:
 		size_t maxsent = 0;
 		for (const auto& [_, command] : ServerInstance->Parser.GetCommands())
 		{
-			if (!irc::find(command->name, parameters[0]))
+			if (irc::find(command->name, parameters[0]))
+				continue;
+
+			// Don't show privileged commands to users without the privilege.
+			auto usable = true;
+			switch (command->access_needed)
 			{
-				for (const auto& syntaxline : command->syntax)
-				{
-					ClientProtocol::Message msg("COMPLETE");
-					msg.PushParamRef(command->name);
-					msg.PushParamRef(syntaxline);
-					ClientProtocol::Event ev(evprov, msg);
-					user->Send(ev);
-					maxsent++;
-				}
+				case CmdAccess::NORMAL: // Everyone can use user commands.
+					break;
+
+				case CmdAccess::OPERATOR: // Only opers can use oper commands.
+					usable = user->HasCommandPermission(command->name);
+					break;
+
+				case CmdAccess::SERVER: // Nobody can use server commands.
+					usable = false;
+					break;
+			}
+			if (!usable)
+				continue;
+
+			for (const auto& syntaxline : command->syntax)
+			{
+				ClientProtocol::Message msg("COMPLETE");
+				msg.PushParamRef(command->name);
+				msg.PushParamRef(syntaxline);
+				ClientProtocol::Event ev(evprov, msg);
+				user->Send(ev);
+				maxsent++;
 			}
 
 			if (maxsent > maxsuggestions)
@@ -94,6 +113,7 @@ public:
 
 class ModuleComplete final
 	: public Module
+	, public ISupport::EventListener
 {
 private:
 	CommandComplete cmd;
@@ -101,6 +121,7 @@ private:
 public:
 	ModuleComplete()
 		: Module(VF_NONE, "Allows clients to automatically complete commands.")
+		, ISupport::EventListener(this)
 		, cmd(this)
 	{
 	}
@@ -110,6 +131,11 @@ public:
 		const auto& tag = ServerInstance->Config->ConfValue("complete");
 		cmd.maxsuggestions = tag->getNum<size_t>("maxsuggestions", 10, 1);
 		cmd.minlength = tag->getNum<size_t>("minlength", 3, 1);
+	}
+
+	void OnBuildISupport(ISupport::TokenMap& tokens) override
+	{
+		tokens["COMPLETE"] = INSP_FORMAT("L:{},S:{}", cmd.minlength, cmd.maxsuggestions);
 	}
 };
 
