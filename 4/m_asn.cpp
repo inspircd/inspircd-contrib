@@ -20,7 +20,6 @@
 /// $ModDepends: core 4
 /// $ModDesc: Allows banning users based on Autonomous System number.
 
-
 #include "inspircd.h"
 #include "extension.h"
 #include "modules/dns.h"
@@ -92,7 +91,6 @@ private:
 		return buffer.str();
 	}
 
-
 public:
 	ASNResolver(DNS::Manager* dns, Module* Creator, LocalUser* user, IntExtItem& asn, BoolExtItem& asnpending)
 		: DNS::Request(dns, Creator, GetDNS(user), DNS::QUERY_TXT, true)
@@ -109,7 +107,6 @@ public:
 		if (!them || them->client_sa != theirsa)
 			return;
 
-		// The DNS reply must contain an TXT result.
 		const DNS::ResourceRecord* record = result->FindAnswerOfType(DNS::QUERY_TXT);
 		if (!record)
 		{
@@ -122,8 +119,9 @@ public:
 		asnext.Set(them, asn);
 		asnpendingext.Unset(them);
 		ServerInstance->Logs.Debug(MODNAME, "ASN for {} ({}) is {}", them->uuid, them->GetAddress(), asn);
+		
 	}
-
+	
 	void OnError(const DNS::Query* query) override
 	{
 		auto* them = ServerInstance->Users.FindUUID<LocalUser>(theiruuid);
@@ -146,6 +144,8 @@ private:
 	ASNExtBan asnextban;
 	BoolExtItem asnpendingext;
 	DNS::ManagerRef dns;
+	bool opers_only;
+	bool showinwhois;
 
 public:
 	ModuleASN()
@@ -156,13 +156,88 @@ public:
 		, asnextban(this, asnext)
 		, asnpendingext(this, "asn-pending", ExtensionType::USER)
 		, dns(this)
+		, opers_only(true)
+		, showinwhois(true)
 	{
 	}
 
-	ModResult OnCheckReady(LocalUser* user) override
+	void ReadConfig(ConfigStatus& status) override
 	{
+		auto tag = ServerInstance->Config->ConfValue("asn");
+		
+		// Should ASN info be restricted to opers only?
+		opers_only = tag->getBool("opers", true);
+		
+		// Show ASN in WHOIS output?
+		showinwhois = tag->getBool("showinwhois", true);
+		
+		// Log the configured settings
+		ServerInstance->SNO.WriteToSnoMask('a', "ASN module: opers={}, showinwhois={}",
+			opers_only ? "yes" : "no", showinwhois ? "yes" : "no");
+	}
+
+	ModResult OnStats(Stats::Context& stats) override
+	{
+		if (stats.GetSymbol() != 'b')
+			return MOD_RES_PASSTHRU;
+
+		if (opers_only && !stats.GetSource()->HasPrivPermission("users/auspex"))
+			return MOD_RES_DENY;
+
+		std::map<intptr_t, size_t> counts;
+		for (const auto& [_, u] : ServerInstance->Users.GetUsers())
+		{
+			intptr_t asn = asnext.Get(u);
+			if (!counts.insert(std::make_pair(asn, 1)).second)
+				counts[asn]++;
+		}
+
+		for (const auto& [asn, count] : counts)
+			stats.AddRow(RPL_STATSASN, asn, count);
+
+		return MOD_RES_DENY;
+	}
+
+	void OnWhois(Whois::Context& whois) override
+	{
+		if (!showinwhois)
+			return;
+			
+		if (whois.GetTarget()->server->IsService())
+			return;
+
+		if (opers_only && !whois.GetSource()->HasPrivPermission("users/auspex"))
+			return;
+
+		intptr_t asn = asnext.Get(whois.GetTarget());
+		if (asn)
+			whois.SendLine(RPL_WHOISASN, "is connecting from autonomous system: AS" + ConvToStr(asn));
+		else
+			whois.SendLine(RPL_WHOISASN, "is connecting from an unknown autonomous system");
+	}
+	
+	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
+	{
+		const std::string asn = klass->config->getString("asn");
+		if (asn.empty())
+			return MOD_RES_PASSTHRU;
+
 		// Block until ASN info is available.
 		return asnpendingext.Get(user) ? MOD_RES_DENY : MOD_RES_PASSTHRU;
+
+		const std::string asnstr = ConvToStr(asnext.Get(user));
+		irc::spacesepstream asnstream(asn);
+		for (std::string token; asnstream.GetToken(token); )
+		{
+			// If the user matches this ASN then they can use this connect class.
+			if (insp::equalsci(asnstr, token))
+				return MOD_RES_PASSTHRU;
+		}
+
+		// A list of ASNs were specified but the user didn't match any of them.
+		ServerInstance->Logs.Debug("CONNECTCLASS", "The {} connect class is not suitable as the origin ASN ({}) is not any of {}",
+			klass->GetName(), asnstr, asn);
+		return MOD_RES_DENY;
 	}
 
 	void OnChangeRemoteAddress(LocalUser* user) override
@@ -170,9 +245,7 @@ public:
 		if (user->quitting)
 			return;
 
-		if (!user->GetClass() || !user->GetClass()->config->getBool("useasn", true))
-			return;
-
+		// Always perform ASN lookups for all users
 		asnext.Unset(user);
 		if (!user->client_sa.is_ip())
 			return;
@@ -190,57 +263,6 @@ public:
 			ServerInstance->SNO.WriteGlobalSno('a', "ASN lookup error for {}: {}",
 				user->GetAddress(), error.GetReason());
 		}
-	}
-
-	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
-	{
-		const std::string asn = klass->config->getString("asn");
-		if (asn.empty())
-			return MOD_RES_PASSTHRU;
-
-		const std::string asnstr = ConvToStr(asnext.Get(user));
-		irc::spacesepstream asnstream(asn);
-		for (std::string token; asnstream.GetToken(token); )
-		{
-			// If the user matches this ASN then they can use this connect class.
-			if (insp::equalsci(asnstr, token))
-				return MOD_RES_PASSTHRU;
-		}
-
-		// A list of ASNs were specified but the user didn't match any of them.
-		ServerInstance->Logs.Debug("CONNECTCLASS", "The {} connect class is not suitable as the origin ASN ({}) is not any of {}",
-			klass->GetName(), asnstr, asn);
-		return MOD_RES_DENY;
-	}
-
-	ModResult OnStats(Stats::Context& stats) override
-	{
-		if (stats.GetSymbol() != 'b')
-			return MOD_RES_PASSTHRU;
-
-		std::map<intptr_t, size_t> counts;
-		for (const auto& [_, u] : ServerInstance->Users.GetUsers())
-		{
-			intptr_t asn = asnext.Get(u);
-			if (!counts.insert(std::make_pair(asn, 1)).second)
-				counts[asn]++;
-		}
-
-		for (const auto& [asn, count] : counts)
-			stats.AddRow(RPL_STATSASN, asn, count);
-		return MOD_RES_DENY;
-	}
-
-	void OnWhois(Whois::Context& whois) override
-	{
-		if (whois.GetTarget()->server->IsService())
-			return;
-
-		intptr_t asn = asnext.Get(whois.GetTarget());
-		if (asn)
-			whois.SendLine(RPL_WHOISASN, asn, "is connecting from AS" + ConvToStr(asn));
-		else
-			whois.SendLine(RPL_WHOISASN, "*", "is connecting from an unknown autonomous system");
 	}
 };
 
