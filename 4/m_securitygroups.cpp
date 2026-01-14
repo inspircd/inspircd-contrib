@@ -124,8 +124,8 @@ private:
 			if (!list || list->empty() || text.empty())
 				return false;
 
-			irc::commasepstream groups(*list);
-			for (std::string group; groups.GetToken(group); )	// group names are stored as comma-separated values
+			irc::commasepstream groupstream(*list);
+			for (std::string group; groupstream.GetToken(group); )	// group names are stored as comma-separated values
 			{
 				if (InspIRCd::Match(group, text, ascii_case_insensitive_map))
 					return true;
