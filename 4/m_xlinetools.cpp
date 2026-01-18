@@ -1,4 +1,4 @@
-/*
+/* 
  * InspIRCd -- Internet Relay Chat Daemon
  *
  *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
@@ -23,43 +23,17 @@
 
 #include "inspircd.h"
 #include "xline.h"
+#include "timeutils.h"
 #include <cctype>
 #include <climits>
 #include <ctime>
-#include <cstdio>
-#include <cstdarg>
 #include <cstring>
 #include <vector>
+#include <string>
 
 namespace
 {
 	enum MatchType { MATCH_ONLY, MATCH_NONE, MATCH_ANY };
-
-	/* Small printf-style helper that returns a std::string. */
-	std::string Format(const char* fmt, ...)
-	{
-		va_list ap;
-		va_start(ap, fmt);
-		char stackbuf[512];
-		va_list ap_copy;
-		va_copy(ap_copy, ap);
-		int needed = vsnprintf(stackbuf, sizeof(stackbuf), fmt, ap_copy);
-		va_end(ap_copy);
-
-		std::string out;
-		if (needed < 0) { va_end(ap); return std::string(); }
-		if (static_cast<size_t>(needed) < sizeof(stackbuf)) { out.assign(stackbuf, static_cast<size_t>(needed)); va_end(ap); return out; }
-
-		std::vector<char> buf(static_cast<size_t>(needed) + 1);
-		va_list ap_copy2;
-		va_copy(ap_copy2, ap);
-		vsnprintf(buf.data(), buf.size(), fmt, ap_copy2);
-		va_end(ap_copy2);
-
-		out.assign(buf.data(), static_cast<size_t>(needed));
-		va_end(ap);
-		return out;
-	}
 
 	struct Criteria
 	{
@@ -76,29 +50,8 @@ namespace
 		return user->HasCommandPermission(type);
 	}
 
-	/* TimeString: format a unix timestamp to "YYYY-MM-DD HH:MM:SS" */
-	std::string TimeString(time_t ts)
-	{
-		char buf[64] = {0};
-#if defined(_MSC_VER)
-		std::tm tm;
-		localtime_s(&tm, &ts);
-		std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
-#else
-		std::tm tm;
-#if defined(_POSIX_VERSION) && !defined(__APPLE__)
-		localtime_r(&ts, &tm);
-#else
-		std::tm* tptr = std::localtime(&ts);
-		if (tptr) tm = *tptr;
-		else std::memset(&tm, 0, sizeof(tm));
-#endif
-		std::strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm);
-#endif
-		return std::string(buf);
-	}
-
-	/* ParseDuration: parse strings like "1h30m" or "1y2w3d..." into seconds */
+	/* ParseDuration: parse strings like "1h30m" or "1y2w3d..." into seconds.
+	 * Keep a local parser for conversion but prefer core Duration::IsValid for validation. */
 	bool ParseDuration(const std::string& s_in, unsigned long& out)
 	{
 		out = 0;
@@ -147,28 +100,12 @@ namespace
 		return true;
 	}
 
-	std::string DurationString(unsigned long seconds)
-	{
-		if (seconds == 0) return "0s";
-		unsigned long rem = seconds;
-		const unsigned long YEAR = 31536000UL, WEEK = 604800UL, DAY = 86400UL, HOUR = 3600UL, MIN = 60UL;
-		std::string out;
-		auto push = [&](unsigned long v, char unit) { if (v == 0) return; out += std::to_string(v); out.push_back(unit); };
-		if (rem >= YEAR) { push(rem / YEAR, 'y'); rem %= YEAR; }
-		if (rem >= WEEK) { push(rem / WEEK, 'w'); rem %= WEEK; }
-		if (rem >= DAY)  { push(rem / DAY, 'd'); rem %= DAY; }
-		if (rem >= HOUR) { push(rem / HOUR, 'h'); rem %= HOUR; }
-		if (rem >= MIN)  { push(rem / MIN, 'm'); rem %= MIN; }
-		if (rem > 0)     { push(rem, 's'); }
-		return out;
-	}
-
 	bool IsValidDurationString(const std::string& s)
 	{
 		if (s.empty()) return false;
 		if (s == "0") return true;
-		unsigned long dummy = 0;
-		return ParseDuration(s, dummy);
+		// Prefer core Duration validation if available.
+		return Duration::IsValid(s);
 	}
 
 	bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
@@ -275,19 +212,27 @@ class CommandXBase : public SplitCommand
 			matched++;
 			if (count) { i = safei; continue; }
 
-			std::string expires;
 			const std::string display = xline->Displayable();
-			const std::string duration = (xline->duration == 0 ? "permanent" : DurationString(xline->duration));
+			const std::string duration = (xline->duration == 0 ? "permanent" : Duration::ToString(xline->duration));
 			const std::string reason = xline->reason;
-			const std::string settime = TimeString(xline->set_time);
-			if (xline->duration == 0) expires = "doesn't expire";
-			else expires = Format("expires in %s (on %s)", DurationString(xline->expiry - ServerInstance->Time()).c_str(), TimeString(xline->expiry).c_str());
+			const std::string settime = Time::ToString(xline->set_time);
 
-			std::string ret;
-			if (remove && ServerInstance->XLines->DelLine(display.c_str(), linetype, ret, user))
-				ServerInstance->SNO.WriteToSnoMask('x', "%s removed %s on %s: %s", user->nick.c_str(), BuildTypeStr(linetype).c_str(), display.c_str(), reason.c_str());
+			std::string expires;
+			if (xline->duration == 0)
+				expires = "doesn't expire";
 			else
-				user->WriteNotice(Format("%s on %s set by %s on %s, duration '%s', %s: %s", BuildTypeStr(linetype).c_str(), display.c_str(), xline->source.c_str(), settime.c_str(), duration.c_str(), expires.c_str(), reason.c_str()));
+				expires = std::string("expires in ") + Duration::ToString(xline->expiry - ServerInstance->Time()) + " (on " + Time::ToString(xline->expiry) + ")";
+
+			std::string out;
+			if (remove && ServerInstance->XLines->DelLine(display.c_str(), linetype, out, user))
+			{
+				ServerInstance->SNO.WriteToSnoMask('x', "%s removed %s on %s: %s", user->nick.c_str(), BuildTypeStr(linetype).c_str(), display.c_str(), reason.c_str());
+			}
+			else
+			{
+				out = BuildTypeStr(linetype) + " on " + display + " set by " + xline->source + " on " + settime + ", duration '" + duration + "', " + expires + ": " + reason;
+				user->WriteNotice(out);
+			}
 
 			i = safei;
 		}
@@ -303,29 +248,29 @@ class CommandXBase : public SplitCommand
 
 		if (args.type == "*")
 		{
-			if (!count) user->WriteNotice(Format("%s matches from all X-line types (%s)", action.c_str(), criteria.c_str()));
+			if (!count) user->WriteNotice(action + " matches from all X-line types (" + criteria + ")");
 			std::vector<std::string> xlinetypes = ServerInstance->XLines->GetAllTypes();
 			for (const auto& x : xlinetypes)
 			{
-				if (remove && !HasCommandPermission(user, x)) { user->WriteNotice(Format("Skipping type '%s' as your oper type does not have access to remove these.", x.c_str())); continue; }
+				if (remove && !HasCommandPermission(user, x)) { user->WriteNotice(std::string("Skipping type '") + x + "' as your oper type does not have access to remove these."); continue; }
 				XLineLookup* xlines = ServerInstance->XLines->GetAll(x);
 				if (xlines) ProcessLines(user, args, x, xlines, matched, total, count, remove);
 			}
-			if (count) user->WriteNotice(Format("%u of %u X-lines matched (%s)", matched, total, criteria.c_str()));
-			else user->WriteNotice(Format("End of list, %u/%u X-lines %s", matched, total, (remove ? "removed" : "matched")));
+			if (count) user->WriteNotice(std::to_string(matched) + " of " + std::to_string(total) + " X-lines matched (" + criteria + ")");
+			else user->WriteNotice(std::string("End of list, ") + std::to_string(matched) + "/" + std::to_string(total) + " X-lines " + (remove ? "removed" : "matched"));
 		}
 		else
 		{
 			std::string linetype = args.type; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, Format("%s :Permission Denied - your oper type does not have access to remove X-lines of type '%s'", user->nick.c_str(), linetype.c_str())); return false; }
+			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to remove X-lines of type '" + linetype + "'")); return false; }
 			XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
-			if (!xlines) { user->WriteNotice(Format("Invalid X-line type '%s' (or not yet used X-line)", linetype.c_str())); return false; }
-			if (xlines->empty()) { user->WriteNotice(Format("No X-lines of type '%s' exist", linetype.c_str())); return false; }
+			if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return false; }
+			if (xlines->empty()) { user->WriteNotice(std::string("No X-lines of type '") + linetype + "' exist"); return false; }
 
-			if (!count) user->WriteNotice(Format("%s matches of X-line type '%s' (%s)", action.c_str(), linetype.c_str(), criteria.c_str()));
+			if (!count) user->WriteNotice(action + " matches of X-line type '" + linetype + "' (" + criteria + ")");
 			ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
-			if (count) user->WriteNotice(Format("%u of %u X-lines of type '%s' matched (%s)", matched, total, linetype.c_str(), criteria.c_str()));
-			else user->WriteNotice(Format("End of list, %u/%u X-lines of type '%s' %s", matched, total, linetype.c_str(), (remove ? "removed" : "matched")));
+			if (count) user->WriteNotice(std::to_string(matched) + " of " + std::to_string(total) + " X-lines of type '" + linetype + "' matched (" + criteria + ")");
+			else user->WriteNotice(std::string("End of list, ") + std::to_string(matched) + "/" + std::to_string(total) + " X-lines of type '" + linetype + "' " + (remove ? "removed" : "matched"));
 		}
 		return true;
 	}
@@ -340,13 +285,13 @@ class CommandXBase : public SplitCommand
 	{
 		if (!user->IsOper())
 		{
-			user->WriteNumeric(ERR_NOPRIVILEGES, Format("%s :Permission Denied - this command is for operators only", user->nick.c_str()));
+			user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - this command is for operators only"));
 			return CmdResult::FAILURE;
 		}
 
 		if (parameters.empty() || parameters[0].empty() || parameters[0][0] != '-' || parameters[0].find('=') == std::string::npos)
 		{
-			user->WriteNotice(Format("Incorrect argument syntax \"%s\"", parameters.empty() ? "" : parameters[0].c_str()));
+			user->WriteNotice(std::string("Incorrect argument syntax \"") + (parameters.empty() ? "" : parameters[0]) + "\"");
 			return CmdResult::FAILURE;
 		}
 
@@ -374,7 +319,7 @@ class CommandXCopy : public SplitCommand
 	{
 		if (!user->IsOper())
 		{
-			user->WriteNumeric(ERR_NOPRIVILEGES, Format("%s :Permission Denied - this command is for operators only", user->nick.c_str()));
+			user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - this command is for operators only"));
 			return CmdResult::FAILURE;
 		}
 
@@ -392,14 +337,14 @@ class CommandXCopy : public SplitCommand
 		}
 
 		std::string linetype = xtype; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, Format("%s :Permission Denied - your oper type does not have access to copy an X-line of type '%s'", user->nick.c_str(), linetype.c_str())); return CmdResult::FAILURE; }
+		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to copy an X-line of type '" + linetype + "'")); return CmdResult::FAILURE; }
 
 		XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
-		if (!xlines) { user->WriteNotice(Format("Invalid X-line type '%s' (or not yet used X-line)", linetype.c_str())); return CmdResult::FAILURE; }
+		if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return CmdResult::FAILURE; }
 
 		XLine* oldxline = NULL;
 		for (LookupIter i = xlines->begin(); i != xlines->end(); ++i) { if (irc::equals(i->second->Displayable(), oldmask)) { oldxline = i->second; break; } }
-		if (!oldxline) { user->WriteNotice(Format("Could not find \"%s\" in %ss", oldmask.c_str(), BuildTypeStr(linetype).c_str())); return CmdResult::FAILURE; }
+		if (!oldxline) { user->WriteNotice(std::string("Could not find \"") + oldmask + "\" in " + BuildTypeStr(linetype) + "s"); return CmdResult::FAILURE; }
 
 		if ((oldmask.find('!') != std::string::npos && newmask.find('!') == std::string::npos) ||
 		    (oldmask.find('!') == std::string::npos && newmask.find('!') != std::string::npos) ||
@@ -425,12 +370,15 @@ class CommandXCopy : public SplitCommand
 		else duration = (oldxline->duration == 0 ? 0 : (oldxline->set_time + oldxline->duration - ServerInstance->Time()));
 
 		const std::string& reason = (!args.reason.empty() ? args.reason : oldxline->reason);
-		const std::string expires = (duration == 0 ? "" : Format(", expires in %s (on %s)", DurationString(duration).c_str(), TimeString(ServerInstance->Time() + duration).c_str()));
+		std::string expires;
+		if (duration == 0) expires = "";
+		else expires = std::string(", expires in ") + Duration::ToString(duration) + " (on " + Time::ToString(ServerInstance->Time() + duration) + ")";
 
 		XLine* newxline = xlf->Generate(ServerInstance->Time(), duration, user->nick, reason, newmask);
+		std::string ret;
 		if (ServerInstance->XLines->AddLine(newxline, user))
 			ServerInstance->SNO.WriteToSnoMask('x', "%s added %s %s for %s%s: %s", user->nick.c_str(), (duration == 0 ? "permanent" : "timed"), BuildTypeStr(linetype).c_str(), newmask.c_str(), expires.c_str(), reason.c_str());
-		else { user->WriteNotice(Format("Failed to add %s on \"%s\"", BuildTypeStr(linetype).c_str(), newmask.c_str())); delete newxline; return CmdResult::FAILURE; }
+		else { user->WriteNotice(std::string("Failed to add ") + BuildTypeStr(linetype) + " on \"" + newmask + "\""); delete newxline; return CmdResult::FAILURE; }
 
 		return CmdResult::SUCCESS;
 	}
@@ -445,17 +393,12 @@ class ModuleXLineTools : public Module
 
  public:
 	ModuleXLineTools()
-		: Module(0, "X-line management tools")
+		: Module(VF_NONE, "X-line management tools")
 		, xcount(this, "XCOUNT")
 		, xremove(this, "XREMOVE")
 		, xsearch(this, "XSEARCH")
 		, xcopy(this)
 	{
-	}
-
-	std::string GetVersion() const
-	{
-		return "X-line management tools";
 	}
 };
 
