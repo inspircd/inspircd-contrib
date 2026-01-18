@@ -168,11 +168,11 @@ class CommandXBase : public SplitCommand
 			XLine* xline = i->second;
 
 			if ((args.config == MATCH_ONLY && (!xline->from_config && xline->source != "<Config>")) ||
-				(args.config == MATCH_NONE && (xline->from_config || xline->source == "<Config>"))) { i = safei; continue; }
+			    (args.config == MATCH_NONE && (xline->from_config || xline->source == "<Config>"))) { i = safei; continue; }
 
 			bool negate = args.mask[0] == '!';
 			bool match = InspIRCd::MatchCIDR(xline->Displayable(), (negate ? args.mask.substr(1) : args.mask)) ||
-				InspIRCd::MatchCIDR((negate ? args.mask.substr(1) : args.mask), xline->Displayable());
+			             InspIRCd::MatchCIDR((negate ? args.mask.substr(1) : args.mask), xline->Displayable());
 			if ((negate && match) || (!negate && !match)) { i = safei; continue; }
 
 			negate = args.reason[0] == '!'; match = InspIRCd::Match(xline->reason, (negate ? args.reason.substr(1) : args.reason));
@@ -194,9 +194,9 @@ class CommandXBase : public SplitCommand
 				bool prefixed = args.duration[0] == '+' || args.duration[0] == '-'; unsigned long duration = 0;
 				if (!ParseDuration(prefixed ? args.duration.substr(1) : args.duration, duration)) { i = safei; continue; }
 				if ((xline->duration == 0 && args.duration != "0") ||
-					(args.duration[0] == '+' && xline->duration <= duration) ||
-					(args.duration[0] == '-' && xline->duration >= duration) ||
-					(!prefixed && xline->duration != duration)) { i = safei; continue; }
+				    (args.duration[0] == '+' && xline->duration <= duration) ||
+				    (args.duration[0] == '-' && xline->duration >= duration) ||
+				    (!prefixed && xline->duration != duration)) { i = safei; continue; }
 			}
 
 			if (!args.expires.empty())
@@ -205,8 +205,8 @@ class CommandXBase : public SplitCommand
 				if (!ParseDuration(prefixed ? args.expires.substr(1) : args.expires, expires_dur)) { i = safei; continue; }
 				unsigned long expires = ServerInstance->Time() + static_cast<long>(expires_dur);
 				if ((xline->duration == 0) ||
-					(prefixed && xline->set_time + xline->duration < expires) ||
-					(!prefixed && xline->set_time + xline->duration > expires)) { i = safei; continue; }
+				    (prefixed && xline->set_time + xline->duration < expires) ||
+				    (!prefixed && xline->set_time + xline->duration > expires)) { i = safei; continue; }
 			}
 
 			matched++;
@@ -262,15 +262,15 @@ class CommandXBase : public SplitCommand
 		else
 		{
 			std::string linetype = args.type; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to remove X-lines of type '") + linetype + "'"); return false; }
+			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to remove X-lines of type '" + linetype + "'")); return false; }
 			XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 			if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return false; }
 			if (xlines->empty()) { user->WriteNotice(std::string("No X-lines of type '") + linetype + "' exist"); return false; }
 
-			if (!count) user->WriteNotice(action + " matches of X-line type '") + linetype + "' (" + criteria + ")");
+			if (!count) user->WriteNotice(action + " matches of X-line type '" + linetype + "' (" + criteria + ")");
 			ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
-			if (count) user->WriteNotice(std::to_string(matched) + " of " + std::to_string(total) + " X-lines of type '") + linetype + "' matched (" + criteria + ")");
-			else user->WriteNotice(std::string("End of list, ") + std::to_string(matched) + "/" + std::to_string(total) + " X-lines of type '") + linetype + "' " + (remove ? "removed" : "matched"));
+			if (count) user->WriteNotice(std::to_string(matched) + " of " + std::to_string(total) + " X-lines of type '" + linetype + "' matched (" + criteria + ")");
+			else user->WriteNotice(std::string("End of list, ") + std::to_string(matched) + "/" + std::to_string(total) + " X-lines of type '" + linetype + "' " + (remove ? "removed" : "matched"));
 		}
 		return true;
 	}
@@ -291,7 +291,7 @@ class CommandXBase : public SplitCommand
 
 		if (parameters.empty() || parameters[0].empty() || parameters[0][0] != '-' || parameters[0].find('=') == std::string::npos)
 		{
-			user->WriteNotice(std::string("Incorrect argument syntax "").append((parameters.empty() ? "" : parameters[0])));
+			user->WriteNotice(std::string("Incorrect argument syntax \"") + (parameters.empty() ? "" : parameters[0]) + "\"");
 			return CmdResult::FAILURE;
 		}
 
@@ -337,19 +337,19 @@ class CommandXCopy : public SplitCommand
 		}
 
 		std::string linetype = xtype; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to copy an X-line of type '") + linetype + "'"); return CmdResult::FAILURE; }
+		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to copy an X-line of type '" + linetype + "'")); return CmdResult::FAILURE; }
 
 		XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 		if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return CmdResult::FAILURE; }
 
 		XLine* oldxline = NULL;
 		for (LookupIter i = xlines->begin(); i != xlines->end(); ++i) { if (irc::equals(i->second->Displayable(), oldmask)) { oldxline = i->second; break; } }
-		if (!oldxline) { user->WriteNotice(std::string("Could not find '") + oldmask + "' in " + BuildTypeStr(linetype) + "s"); return CmdResult::FAILURE; }
+		if (!oldxline) { user->WriteNotice(std::string("Could not find \"") + oldmask + "\" in " + BuildTypeStr(linetype) + "s"); return CmdResult::FAILURE; }
 
 		if ((oldmask.find('!') != std::string::npos && newmask.find('!') == std::string::npos) ||
-			(oldmask.find('!') == std::string::npos && newmask.find('!') != std::string::npos) ||
-			(oldmask.find('@') != std::string::npos && newmask.find('@') == std::string::npos) ||
-			(oldmask.find('@') == std::string::npos && newmask.find('@') != std::string::npos))
+		    (oldmask.find('!') == std::string::npos && newmask.find('!') != std::string::npos) ||
+		    (oldmask.find('@') != std::string::npos && newmask.find('@') == std::string::npos) ||
+		    (oldmask.find('@') == std::string::npos && newmask.find('@') != std::string::npos))
 		{
 			user->WriteNotice("Old and new mask must follow the same format (n!u@h or u@h or h)");
 			return CmdResult::FAILURE;
@@ -372,4 +372,34 @@ class CommandXCopy : public SplitCommand
 		const std::string& reason = (!args.reason.empty() ? args.reason : oldxline->reason);
 		std::string expires;
 		if (duration == 0) expires = "";
-		else expires = std::string(
+		else expires = std::string(", expires in ") + Duration::ToString(duration) + " (on " + Time::ToString(ServerInstance->Time() + duration) + ")";
+
+		XLine* newxline = xlf->Generate(ServerInstance->Time(), duration, user->nick, reason, newmask);
+		std::string ret;
+		if (ServerInstance->XLines->AddLine(newxline, user))
+			ServerInstance->SNO.WriteToSnoMask('x', "%s added %s %s for %s%s: %s", user->nick.c_str(), (duration == 0 ? "permanent" : "timed"), BuildTypeStr(linetype).c_str(), newmask.c_str(), expires.c_str(), reason.c_str());
+		else { user->WriteNotice(std::string("Failed to add ") + BuildTypeStr(linetype) + " on \"" + newmask + "\""); delete newxline; return CmdResult::FAILURE; }
+
+		return CmdResult::SUCCESS;
+	}
+};
+
+class ModuleXLineTools : public Module
+{
+	CommandXBase xcount;
+	CommandXBase xremove;
+	CommandXBase xsearch;
+	CommandXCopy xcopy;
+
+ public:
+	ModuleXLineTools()
+		: Module(VF_NONE, "X-line management tools")
+		, xcount(this, "XCOUNT")
+		, xremove(this, "XREMOVE")
+		, xsearch(this, "XSEARCH")
+		, xcopy(this)
+	{
+	}
+};
+
+MODULE_INIT(ModuleXLineTools)
