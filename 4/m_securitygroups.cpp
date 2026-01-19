@@ -143,7 +143,7 @@ private:
 	};
 
 	std::vector<SecurityGroup> groups;
-	IntExtItem* repouserext = nullptr;
+	bool usesreputation = false;
 
 	Account::API accountapi;
 	UserCertificateAPI sslapi;
@@ -188,20 +188,29 @@ private:
 			return true;
 
 		// Check common user masks.
-		if (InspIRCd::Match(user->GetRealMask(), mask, ascii_case_insensitive_map))
+		if (InspIRCd::Match(user->GetRealMask(), mask))
 			return true;
-		if (InspIRCd::Match(user->GetRealUserHost(), mask, ascii_case_insensitive_map))
+		if (InspIRCd::Match(user->GetRealUserHost(), mask))
 			return true;
-		if (InspIRCd::Match(user->GetUserHost(), mask, ascii_case_insensitive_map))
+		if (InspIRCd::Match(user->GetUserHost(), mask))
 			return true;
-		if (InspIRCd::Match(user->GetRealHost(), mask, ascii_case_insensitive_map))
+		if (InspIRCd::Match(user->GetRealHost(), mask))
 			return true;
 
 		// Check IP/CIDR.
-		if (InspIRCd::MatchCIDR(user->GetAddress(), mask, ascii_case_insensitive_map))
+		if (InspIRCd::MatchCIDR(user->GetAddress(), mask))
 			return true;
 
 		return false;
+	}
+
+	static IntExtItem* GetReputationExt()
+	{
+		auto* extitem = ServerInstance->Extensions.GetItem("reputation");
+		if (!extitem || extitem->extype != ExtensionType::USER)
+			return nullptr;
+
+		return static_cast<IntExtItem*>(extitem);
 	}
 
 	bool Matches(LocalUser* user, const SecurityGroup& group)
@@ -243,6 +252,7 @@ private:
 
 		if (group.score_min != -1 || group.score_max != -1)
 		{
+			IntExtItem* repouserext = GetReputationExt();
 			if (!repouserext)
 				return false;
 
@@ -302,12 +312,7 @@ public:
 	void ReadConfig(ConfigStatus& status) override
 	{
 		std::vector<SecurityGroup> newgroups;
-		repouserext = nullptr;
-		if (auto* extitem = ServerInstance->Extensions.GetItem("reputation"))
-		{
-			if (extitem->extype == ExtensionType::USER)
-				repouserext = static_cast<IntExtItem*>(extitem);
-		}
+		usesreputation = false;
 
 		for (const auto& [_, tag] : ServerInstance->Config->ConfTags("securitygroup"))
 		{
@@ -333,6 +338,8 @@ public:
 				throw ModuleException(this, "<securitygroup> scoremin/scoremax must be >= 0 (or omitted) at " + tag->source.str());
 			if (group.score_min != -1 && group.score_max != -1 && group.score_min > group.score_max)
 				throw ModuleException(this, "<securitygroup> scoremin must be <= scoremax at " + tag->source.str());
+			if (group.score_min != -1 || group.score_max != -1)
+				usesreputation = true;
 
 			if (group.require_tls && group.require_insecure)
 				throw ModuleException(this, "<securitygroup> can not have both tls and insecure enabled at " + tag->source.str());
@@ -340,8 +347,20 @@ public:
 			newgroups.push_back(group);
 		}
 
+		if (usesreputation && !GetReputationExt())
+			throw ModuleException(this, "<securitygroup> uses scoremin/scoremax but the reputation user extension (from the reputation module) is not loaded");
+
 		groups.swap(newgroups);
 
+		for (auto* user : ServerInstance->Users.GetLocalUsers())
+			Rebuild(user);
+	}
+
+	void OnUnloadModule(Module* mod) override
+	{
+		// If reputation is unloaded then immediately drop any score-based memberships.
+		if (!usesreputation)
+			return;
 		for (auto* user : ServerInstance->Users.GetLocalUsers())
 			Rebuild(user);
 	}
