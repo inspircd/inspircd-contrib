@@ -51,7 +51,7 @@ namespace
 	}
 
 	/* ParseDuration: parse strings like "1h30m" or "1y2w3d..." into seconds.
-	 * Keep a local parser for conversion but prefer core Duration::IsValid for validation. */
+	 * This is a local parser that safely converts a duration string to seconds. */
 	bool ParseDuration(const std::string& s_in, unsigned long& out)
 	{
 		out = 0;
@@ -100,14 +100,21 @@ namespace
 		return true;
 	}
 
-	bool IsValidDurationString(const std::string& s)
+	/* TryParseDuration: unified entry used by the module.
+	 * Prefer to use core Duration::TryParse if it exists in the core; if not,
+	 * fall back to the local ParseDuration implementation above.
+	 *
+	 * Note: many InspIRCd cores don't have a Duration::TryParse symbol exported;
+	 * to be maximally compatible we use the local parser here. If your core has
+	 * a TryParse/FromString API you can replace the body with that call.
+	 */
+	bool TryParseDuration(const std::string& s, unsigned long& out)
 	{
-		if (s.empty()) return false;
-		if (s == "0") return true;
-		// Prefer core Duration validation if available.
-		return Duration::IsValid(s);
+		// If core provides TryParse/FromString, replace this with that call.
+		return ParseDuration(s, out);
 	}
 
+	/* ProcessArgs: parse -set/-duration/-expires using TryParseDuration for validation/parsing */
 	bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
 	{
 		if (!params.size()) return false;
@@ -130,9 +137,68 @@ namespace
 			else if (irc::find(param, mreason) != std::string::npos) { argreason = true; const std::string val(param.substr(mreason.length())); args.reason = (!val.empty() ? val : "*"); }
 			else if (irc::find(param, msource) != std::string::npos) { argreason = false; const std::string val(param.substr(msource.length())); args.source = (!val.empty() ? val : "*"); }
 			else if (irc::find(param, msetby) != std::string::npos) { argreason = false; const std::string val(param.substr(msetby.length())); args.source = (!val.empty() ? val : "*"); }
-			else if (irc::find(param, mset) != std::string::npos) { argreason = false; const std::string val(param.substr(mset.length())); args.set = IsValidDurationString(val[0] == '-' ? val.substr(1) : val) ? val : ""; }
-			else if (irc::find(param, mduration) != std::string::npos) { argreason = false; const std::string val(param.substr(mduration.length())); if (val == "0") args.duration = val; else { bool prefixed = val[0] == '-' || val[0] == '+'; args.duration = IsValidDurationString(prefixed ? val.substr(1) : val) ? val : ""; } }
-			else if (irc::find(param, mexpires) != std::string::npos) { argreason = false; const std::string val(param.substr(mexpires.length())); args.expires = IsValidDurationString(val[0] == '+' ? val.substr(1) : val) ? val : ""; }
+			else if (irc::find(param, mset) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mset.length()));
+				if (val.empty())
+					args.set.clear();
+				else
+				{
+					unsigned long dummy = 0;
+					if (val[0] == '-')
+					{
+						if (TryParseDuration(val.substr(1), dummy)) args.set = val;
+						else args.set.clear();
+					}
+					else
+					{
+						if (TryParseDuration(val, dummy)) args.set = val;
+						else args.set.clear();
+					}
+				}
+			}
+			else if (irc::find(param, mduration) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mduration.length()));
+				if (val == "0")
+					args.duration = val;
+				else
+				{
+					bool prefixed = !val.empty() && (val[0] == '-' || val[0] == '+');
+					unsigned long dummy = 0;
+					if (prefixed)
+					{
+						if (TryParseDuration(val.substr(1), dummy)) args.duration = val;
+						else args.duration.clear();
+					}
+					else
+					{
+						if (TryParseDuration(val, dummy)) args.duration = val;
+						else args.duration.clear();
+					}
+				}
+			}
+			else if (irc::find(param, mexpires) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mexpires.length()));
+				if (val.empty())
+					args.expires.clear();
+				else if (val[0] == '+')
+				{
+					unsigned long dummy = 0;
+					if (TryParseDuration(val.substr(1), dummy)) args.expires = val;
+					else args.expires.clear();
+				}
+				else
+				{
+					unsigned long dummy = 0;
+					if (TryParseDuration(val, dummy)) args.expires = val;
+					else args.expires.clear();
+				}
+			}
 			else { if (argreason) args.reason.append(" " + param); else return false; }
 		}
 		return true;
@@ -184,7 +250,7 @@ class CommandXBase : public SplitCommand
 			if (!args.set.empty())
 			{
 				bool prefixed = args.set[0] == '-'; unsigned long dur = 0;
-				if (!ParseDuration(prefixed ? args.set.substr(1) : args.set, dur)) { i = safei; continue; }
+				if (!TryParseDuration(prefixed ? args.set.substr(1) : args.set, dur)) { i = safei; continue; }
 				long set = static_cast<long>(ServerInstance->Time()) - static_cast<long>(dur);
 				if ((prefixed && xline->set_time < set) || (!prefixed && xline->set_time > set)) { i = safei; continue; }
 			}
@@ -192,7 +258,7 @@ class CommandXBase : public SplitCommand
 			if (!args.duration.empty())
 			{
 				bool prefixed = args.duration[0] == '+' || args.duration[0] == '-'; unsigned long duration = 0;
-				if (!ParseDuration(prefixed ? args.duration.substr(1) : args.duration, duration)) { i = safei; continue; }
+				if (!TryParseDuration(prefixed ? args.duration.substr(1) : args.duration, duration)) { i = safei; continue; }
 				if ((xline->duration == 0 && args.duration != "0") ||
 				    (args.duration[0] == '+' && xline->duration <= duration) ||
 				    (args.duration[0] == '-' && xline->duration >= duration) ||
@@ -202,7 +268,7 @@ class CommandXBase : public SplitCommand
 			if (!args.expires.empty())
 			{
 				bool prefixed = args.expires[0] == '+'; unsigned long expires_dur = 0;
-				if (!ParseDuration(prefixed ? args.expires.substr(1) : args.expires, expires_dur)) { i = safei; continue; }
+				if (!TryParseDuration(prefixed ? args.expires.substr(1) : args.expires, expires_dur)) { i = safei; continue; }
 				unsigned long expires = ServerInstance->Time() + static_cast<long>(expires_dur);
 				if ((xline->duration == 0) ||
 				    (prefixed && xline->set_time + xline->duration < expires) ||
@@ -262,7 +328,7 @@ class CommandXBase : public SplitCommand
 		else
 		{
 			std::string linetype = args.type; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to remove X-lines of type '" + linetype + "'")); return false; }
+			if (remove && !HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, "Permission Denied - your oper type does not have access to remove X-lines of this type"); return false; }
 			XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 			if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return false; }
 			if (xlines->empty()) { user->WriteNotice(std::string("No X-lines of type '") + linetype + "' exist"); return false; }
@@ -285,7 +351,7 @@ class CommandXBase : public SplitCommand
 	{
 		if (!user->IsOper())
 		{
-			user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - this command is for operators only"));
+			user->WriteNumeric(ERR_NOPRIVILEGES, "Permission Denied - this command is for operators only");
 			return CmdResult::FAILURE;
 		}
 
@@ -319,7 +385,7 @@ class CommandXCopy : public SplitCommand
 	{
 		if (!user->IsOper())
 		{
-			user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - this command is for operators only"));
+			user->WriteNumeric(ERR_NOPRIVILEGES, "Permission Denied - this command is for operators only");
 			return CmdResult::FAILURE;
 		}
 
@@ -337,7 +403,7 @@ class CommandXCopy : public SplitCommand
 		}
 
 		std::string linetype = xtype; std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
-		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, std::string(user->nick + " :Permission Denied - your oper type does not have access to copy an X-line of type '" + linetype + "'")); return CmdResult::FAILURE; }
+		if (!HasCommandPermission(user, linetype)) { user->WriteNumeric(ERR_NOPRIVILEGES, "Permission Denied - your oper type does not have access to copy an X-line of this type"); return CmdResult::FAILURE; }
 
 		XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
 		if (!xlines) { user->WriteNotice(std::string("Invalid X-line type '") + linetype + "' (or not yet used X-line)"); return CmdResult::FAILURE; }
@@ -361,7 +427,7 @@ class CommandXCopy : public SplitCommand
 		unsigned long duration = 0;
 		if (!args.duration.empty())
 		{
-			if (!ParseDuration(args.duration[0] == '+' || args.duration[0] == '-' ? args.duration.substr(1) : args.duration, duration))
+			if (!TryParseDuration(args.duration[0] == '+' || args.duration[0] == '-' ? args.duration.substr(1) : args.duration, duration))
 			{
 				user->WriteNotice("Invalid duration string");
 				return CmdResult::FAILURE;
