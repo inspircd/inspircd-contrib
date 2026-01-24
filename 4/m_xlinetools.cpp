@@ -71,40 +71,6 @@ namespace
         return user->HasCommandPermission(type);
     }
 
-    // Parser simple compatible con InspIRCd 4.8.0
-    bool ParseSimpleDuration(const std::string& s, unsigned long& out)
-    {
-        if (s.empty())
-            return false;
-
-        char suffix = s.back();
-        unsigned long multiplier = 1;
-        std::string number = s;
-
-        switch (suffix)
-        {
-            case 's': multiplier = 1; number = s.substr(0, s.size() - 1); break;
-            case 'm': multiplier = 60; number = s.substr(0, s.size() - 1); break;
-            case 'h': multiplier = 3600; number = s.substr(0, s.size() - 1); break;
-            case 'd': multiplier = 86400; number = s.substr(0, s.size() - 1); break;
-            case 'w': multiplier = 604800; number = s.substr(0, s.size() - 1); break;
-            default:
-                multiplier = 1;
-                number = s;
-                break;
-        }
-
-        for (char c : number)
-        {
-            if (!isdigit(c))
-                return false;
-        }
-
-        unsigned long base = strtoul(number.c_str(), nullptr, 10);
-        out = base * multiplier;
-        return true;
-    }
-
     bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
     {
         if (params.empty())
@@ -177,7 +143,7 @@ namespace
                     unsigned long dummy = 0;
                     std::string raw = (val[0] == '-' ? val.substr(1) : val);
 
-                    if (ParseSimpleDuration(raw, dummy))
+                    if (Duration::TryFrom(raw, dummy))
                         args.set = val;
                     else
                         args.set.clear();
@@ -197,7 +163,7 @@ namespace
                     unsigned long dummy = 0;
                     std::string raw = ((val[0] == '+' || val[0] == '-') ? val.substr(1) : val);
 
-                    if (ParseSimpleDuration(raw, dummy))
+                    if (Duration::TryFrom(raw, dummy))
                         args.duration = val;
                     else
                         args.duration.clear();
@@ -217,7 +183,7 @@ namespace
                     unsigned long dummy = 0;
                     std::string raw = (val[0] == '+' ? val.substr(1) : val);
 
-                    if (ParseSimpleDuration(raw, dummy))
+                    if (Duration::TryFrom(raw, dummy))
                         args.expires = val;
                     else
                         args.expires.clear();
@@ -333,7 +299,7 @@ class CommandXBase : public SplitCommand
                 unsigned long dur = 0;
                 std::string raw = (prefixed ? args.set.substr(1) : args.set);
 
-                if (!ParseSimpleDuration(raw, dur))
+                if (!Duration::TryFrom(raw, dur))
                 {
                     i = safei;
                     continue;
@@ -354,7 +320,7 @@ class CommandXBase : public SplitCommand
                 unsigned long duration = 0;
                 std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
 
-                if (!ParseSimpleDuration(raw, duration))
+                if (!Duration::TryFrom(raw, duration))
                 {
                     i = safei;
                     continue;
@@ -377,7 +343,7 @@ class CommandXBase : public SplitCommand
                 unsigned long expires_dur = 0;
                 std::string raw = (prefixed ? args.expires.substr(1) : args.expires);
 
-                if (!ParseSimpleDuration(raw, expires_dur))
+                if (!Duration::TryFrom(raw, expires_dur))
                 {
                     i = safei;
                     continue;
@@ -536,7 +502,7 @@ class CommandXBase : public SplitCommand
                     criteria));
             }
 
-		    ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
+            ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
 
             if (count)
             {
@@ -617,6 +583,7 @@ public:
     }
 
     CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
+
     {
         if (!user->IsOper())
         {
@@ -707,7 +674,7 @@ public:
             bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
             std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
 
-            if (!ParseSimpleDuration(raw, duration))
+            if (!Duration::TryFrom(raw, duration))
             {
                 user->WriteNotice("Invalid duration string");
                 return CmdResult::FAILURE;
