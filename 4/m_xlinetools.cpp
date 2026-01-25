@@ -1,23 +1,4 @@
-/* 
- * InspIRCd -- Internet Relay Chat Daemon
- *
- *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
- *
- * This file is a module for InspIRCd.  InspIRCd is free software: you can
- * redistribute it and/or modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation, version 2.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/// $ModAuthor: genius3000
-/// $ModAuthorMail: genius3000@g3k.solutions
+/// $ModAuthor: MathiasJRL <pellirc@gmail.com>
 /// $ModDepends: core 4
 /// $ModDesc: X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
 
@@ -31,719 +12,715 @@
 
 namespace
 {
-    enum MatchType
-    {
-        MATCH_ONLY,
-        MATCH_NONE,
-        MATCH_ANY
-    };
+	enum MatchType
+	{
+		MATCH_ONLY,
+		MATCH_NONE,
+		MATCH_ANY
+	};
 
-    struct Criteria
-    {
-        MatchType config;
-        std::string type;
-        std::string mask;
-        std::string reason;
-        std::string source;
-        std::string set;
-        std::string duration;
-        std::string expires;
+	struct Criteria
+	{
+		MatchType config;
+		std::string type;
+		std::string mask;
+		std::string reason;
+		std::string source;
+		std::string set;
+		std::string duration;
+		std::string expires;
 
-        Criteria()
-            : config(MATCH_ANY)
-        {
-        }
+		Criteria()
+			: config(MATCH_ANY)
+		{
+		}
 
-        Criteria(const std::string& t, const std::string& m, const std::string& r, const std::string& s)
-            : config(MATCH_ANY)
-            , type(t)
-            , mask(m)
-            , reason(r)
-            , source(s)
-        {
-        }
-    };
+		Criteria(const std::string& t, const std::string& m, const std::string& r, const std::string& s)
+			: config(MATCH_ANY)
+			, type(t)
+			, mask(m)
+			, reason(r)
+			, source(s)
+		{
+		}
+	};
 
-    bool HasCommandPermission(LocalUser* user, std::string type)
-    {
-        if (type.length() <= 2)
-            type.append("LINE");
-        return user->HasCommandPermission(type);
-    }
+	bool HasCommandPermission(LocalUser* user, std::string type)
+	{
+		if (type.length() <= 2)
+			type.append("LINE");
+		return user->HasCommandPermission(type);
+	}
 
-    bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
-    {
-        if (params.empty())
-            return false;
+	bool ProcessArgs(const CommandBase::Params& params, Criteria& args)
+	{
+		if (params.empty())
+			return false;
 
-        bool argreason = false;
+		bool argreason = false;
 
-        const std::string mconfig("-config=");
-        const std::string mtype("-type=");
-        const std::string mmask("-mask=");
-        const std::string mreason("-reason=");
-        const std::string msource("-source=");
-        const std::string msetby("-setby=");
-        const std::string mset("-set=");
-        const std::string mduration("-duration=");
-        const std::string mexpires("-expires=");
+		const std::string mconfig("-config=");
+		const std::string mtype("-type=");
+		const std::string mmask("-mask=");
+		const std::string mreason("-reason=");
+		const std::string msource("-source=");
+		const std::string msetby("-setby=");
+		const std::string mset("-set=");
+		const std::string mduration("-duration=");
+		const std::string mexpires("-expires=");
 
-        for (const auto& param : params)
-        {
-            if (irc::find(param, mconfig) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mconfig.length()));
-                if (irc::equals(val, "yes") || irc::equals(val, "true"))
-                    args.config = MATCH_ONLY;
-                else if (irc::equals(val, "no") || irc::equals(val, "false"))
-                    args.config = MATCH_NONE;
-            }
-            else if (irc::find(param, mtype) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mtype.length()));
-                args.type = (!val.empty() ? val : "*");
-            }
-            else if (irc::find(param, mmask) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mmask.length()));
-                args.mask = (!val.empty() ? val : "*");
-            }
-            else if (irc::find(param, mreason) != std::string::npos)
-            {
-                argreason = true;
-                const std::string val(param.substr(mreason.length()));
-                args.reason = (!val.empty() ? val : "*");
-            }
-            else if (irc::find(param, msource) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(msource.length()));
-                args.source = (!val.empty() ? val : "*");
-            }
-            else if (irc::find(param, msetby) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(msetby.length()));
-                args.source = (!val.empty() ? val : "*");
-            }
-            else if (irc::find(param, mset) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mset.length()));
+		for (const auto& param : params)
+		{
+			if (irc::find(param, mconfig) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mconfig.length()));
+				if (irc::equals(val, "yes") || irc::equals(val, "true"))
+					args.config = MATCH_ONLY;
+				else if (irc::equals(val, "no") || irc::equals(val, "false"))
+					args.config = MATCH_NONE;
+			}
+			else if (irc::find(param, mtype) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mtype.length()));
+				args.type = (!val.empty() ? val : "*");
+			}
+			else if (irc::find(param, mmask) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mmask.length()));
+				args.mask = (!val.empty() ? val : "*");
+			}
+			else if (irc::find(param, mreason) != std::string::npos)
+			{
+				argreason = true;
+				const std::string val(param.substr(mreason.length()));
+				args.reason = (!val.empty() ? val : "*");
+			}
+			else if (irc::find(param, msource) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(msource.length()));
+				args.source = (!val.empty() ? val : "*");
+			}
+			else if (irc::find(param, msetby) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(msetby.length()));
+				args.source = (!val.empty() ? val : "*");
+			}
+			else if (irc::find(param, mset) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mset.length()));
 
-                if (val.empty())
-                {
-                    args.set.clear();
-                }
-                else
-                {
-                    unsigned long dummy = 0;
-                    std::string raw = (val[0] == '-' ? val.substr(1) : val);
+				if (val.empty())
+				{
+					args.set.clear();
+				}
+				else
+				{
+					unsigned long dummy = 0;
+					std::string raw = (val[0] == '-' ? val.substr(1) : val);
 
-                    if (Duration::TryFrom(raw, dummy))
-                        args.set = val;
-                    else
-                        args.set.clear();
-                }
-            }
-            else if (irc::find(param, mduration) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mduration.length()));
+					if (Duration::TryFrom(raw, dummy))
+						args.set = val;
+					else
+						args.set.clear();
+				}
+			}
+			else if (irc::find(param, mduration) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mduration.length()));
 
-                if (val == "0")
-                {
-                    args.duration = val;
-                }
-                else
-                {
-                    unsigned long dummy = 0;
-                    std::string raw = ((val[0] == '+' || val[0] == '-') ? val.substr(1) : val);
+				if (val == "0")
+				{
+					args.duration = val;
+				}
+				else
+				{
+					unsigned long dummy = 0;
+					std::string raw = ((val[0] == '+' || val[0] == '-') ? val.substr(1) : val);
 
-                    if (Duration::TryFrom(raw, dummy))
-                        args.duration = val;
-                    else
-                        args.duration.clear();
-                }
-            }
-            else if (irc::find(param, mexpires) != std::string::npos)
-            {
-                argreason = false;
-                const std::string val(param.substr(mexpires.length()));
+					if (Duration::TryFrom(raw, dummy))
+						args.duration = val;
+					else
+						args.duration.clear();
+				}
+			}
+			else if (irc::find(param, mexpires) != std::string::npos)
+			{
+				argreason = false;
+				const std::string val(param.substr(mexpires.length()));
 
-                if (val.empty())
-                {
-                    args.expires.clear();
-                }
-                else
-                {
-                    unsigned long dummy = 0;
-                    std::string raw = (val[0] == '+' ? val.substr(1) : val);
+				if (val.empty())
+				{
+					args.expires.clear();
+				}
+				else
+				{
+					unsigned long dummy = 0;
+					std::string raw = (val[0] == '+' ? val.substr(1) : val);
 
-                    if (Duration::TryFrom(raw, dummy))
-                        args.expires = val;
-                    else
-                        args.expires.clear();
-                }
-            }
-            else
-            {
-                if (argreason)
-                    args.reason.append(" " + param);
-                else
-                    return false;
-            }
-        }
+					if (Duration::TryFrom(raw, dummy))
+						args.expires = val;
+					else
+						args.expires.clear();
+				}
+			}
+			else
+			{
+				if (argreason)
+					args.reason.append(" " + param);
+				else
+					return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    std::string BuildCriteriaStr(const Criteria& args)
-    {
-        std::string criteria;
-        const std::string sep(", ");
+	std::string BuildCriteriaStr(const Criteria& args)
+	{
+		std::string criteria;
+		const std::string sep(", ");
 
-        if (args.mask != "*")
-            criteria.append("Mask: " + args.mask + sep);
-        if (args.reason != "*")
-            criteria.append("Reason: " + args.reason + sep);
-        if (args.source != "*")
-            criteria.append("Source: " + args.source + sep);
-        if (args.config != MATCH_ANY)
-            criteria.append("From Config: " + std::string(args.config == MATCH_ONLY ? "yes" : "no") + sep);
-        if (!args.set.empty())
-            criteria.append("Set: " + args.set + sep);
-        if (!args.duration.empty())
-            criteria.append("Duration: " + args.duration + sep);
-        if (!args.expires.empty())
-            criteria.append("Expires: " + args.expires + sep);
+		if (args.mask != "*")
+			criteria.append("Mask: " + args.mask + sep);
+		if (args.reason != "*")
+			criteria.append("Reason: " + args.reason + sep);
+		if (args.source != "*")
+			criteria.append("Source: " + args.source + sep);
+		if (args.config != MATCH_ANY)
+			criteria.append("From Config: " + std::string(args.config == MATCH_ONLY ? "yes" : "no") + sep);
+		if (!args.set.empty())
+			criteria.append("Set: " + args.set + sep);
+		if (!args.duration.empty())
+			criteria.append("Duration: " + args.duration + sep);
+		if (!args.expires.empty())
+			criteria.append("Expires: " + args.expires + sep);
 
-        if (criteria.empty())
-            criteria.append("No specific criteria");
-        else if (criteria[criteria.length() - 1] == ' ')
-            criteria.erase(criteria.length() - 2, 2);
+		if (criteria.empty())
+			criteria.append("No specific criteria");
+		else if (criteria[criteria.length() - 1] == ' ')
+			criteria.erase(criteria.length() - 2, 2);
 
-        return criteria;
-    }
+		return criteria;
+	}
 
-    std::string BuildTypeStr(const std::string& type)
-    {
-        if (type.length() <= 2)
-            return type + "-line";
-        return type;
-    }
+	std::string BuildTypeStr(const std::string& type)
+	{
+		if (type.length() <= 2)
+			return type + "-line";
+		return type;
+	}
 }
-
 class CommandXBase : public SplitCommand
 {
-    void ProcessLines(LocalUser* user, const Criteria& args, const std::string& linetype,
-                      XLineLookup* xlines, unsigned int& matched, unsigned int& total,
-                      const bool count, const bool remove)
-    {
-        total += xlines->size();
+	void ProcessLines(LocalUser* user, const Criteria& args, const std::string& linetype,
+		XLineLookup* xlines, unsigned int& matched, unsigned int& total,
+		const bool count, const bool remove)
+	{
+		total += xlines->size();
 
-        LookupIter safei;
-        for (LookupIter i = xlines->begin(); i != xlines->end(); )
-        {
-            safei = i;
-            ++safei;
+		LookupIter safei;
+		for (LookupIter i = xlines->begin(); i != xlines->end(); )
+		{
+			safei = i;
+			++safei;
 
-            XLine* xline = i->second;
+			XLine* xline = i->second;
 
-            // Config-only / non-config filters
-            if ((args.config == MATCH_ONLY && (!xline->from_config && xline->source != "<Config>"))
-             || (args.config == MATCH_NONE && (xline->from_config || xline->source == "<Config>")))
-            {
-                i = safei;
-                continue;
-            }
+			// Config-only / non-config filters
+			if ((args.config == MATCH_ONLY && (!xline->from_config && xline->source != "<Config>"))
+			 || (args.config == MATCH_NONE && (xline->from_config || xline->source == "<Config>")))
+			{
+				i = safei;
+				continue;
+			}
 
-            // Mask
-            bool negate = !args.mask.empty() && args.mask[0] == '!';
-            const std::string mask = (negate ? args.mask.substr(1) : args.mask);
-            bool match = InspIRCd::MatchCIDR(xline->Displayable(), mask)
-                      || InspIRCd::MatchCIDR(mask, xline->Displayable());
-            if ((negate && match) || (!negate && !match))
-            {
-                i = safei;
-                continue;
-            }
+			// Mask
+			bool negate = !args.mask.empty() && args.mask[0] == '!';
+			const std::string mask = (negate ? args.mask.substr(1) : args.mask);
+			bool match = InspIRCd::MatchCIDR(xline->Displayable(), mask)
+				|| InspIRCd::MatchCIDR(mask, xline->Displayable());
+			if ((negate && match) || (!negate && !match))
+			{
+				i = safei;
+				continue;
+			}
 
-            // Reason
-            negate = !args.reason.empty() && args.reason[0] == '!';
-            const std::string reasonmask = (negate ? args.reason.substr(1) : args.reason);
-            match = InspIRCd::Match(xline->reason, reasonmask);
-            if ((negate && match) || (!negate && !match))
-            {
-                i = safei;
-                continue;
-            }
+			// Reason
+			negate = !args.reason.empty() && args.reason[0] == '!';
+			const std::string reasonmask = (negate ? args.reason.substr(1) : args.reason);
+			match = InspIRCd::Match(xline->reason, reasonmask);
+			if ((negate && match) || (!negate && !match))
+			{
+				i = safei;
+				continue;
+			}
 
-            // Source
-            negate = !args.source.empty() && args.source[0] == '!';
-            const std::string sourcemask = (negate ? args.source.substr(1) : args.source);
-            match = InspIRCd::Match(xline->source, sourcemask);
-            if ((negate && match) || (!negate && !match))
-            {
-                i = safei;
-                continue;
-            }
+			// Source
+			negate = !args.source.empty() && args.source[0] == '!';
+			const std::string sourcemask = (negate ? args.source.substr(1) : args.source);
+			match = InspIRCd::Match(xline->source, sourcemask);
+			if ((negate && match) || (!negate && !match))
+			{
+				i = safei;
+				continue;
+			}
 
-            // Set time filter
-            if (!args.set.empty())
-            {
-                bool prefixed = args.set[0] == '-';
-                unsigned long dur = 0;
-                std::string raw = (prefixed ? args.set.substr(1) : args.set);
+			// Set time filter
+			if (!args.set.empty())
+			{
+				bool prefixed = args.set[0] == '-';
+				unsigned long dur = 0;
+				std::string raw = (prefixed ? args.set.substr(1) : args.set);
 
-                if (!Duration::TryFrom(raw, dur))
-                {
-                    i = safei;
-                    continue;
-                }
+				if (!Duration::TryFrom(raw, dur))
+				{
+					i = safei;
+					continue;
+				}
 
-                long set = static_cast<long>(ServerInstance->Time()) - static_cast<long>(dur);
-                if ((prefixed && xline->set_time < set) || (!prefixed && xline->set_time > set))
-                {
-                    i = safei;
-                    continue;
-                }
-            }
+				long set = static_cast<long>(ServerInstance->Time()) - static_cast<long>(dur);
+				if ((prefixed && xline->set_time < set) || (!prefixed && xline->set_time > set))
+				{
+					i = safei;
+					continue;
+				}
+			}
 
-            // Duration filter
-            if (!args.duration.empty())
-            {
-                bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
-                unsigned long duration = 0;
-                std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
+			// Duration filter
+			if (!args.duration.empty())
+			{
+				bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
+				unsigned long duration = 0;
+				std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
 
-                if (!Duration::TryFrom(raw, duration))
-                {
-                    i = safei;
-                    continue;
-                }
+				if (!Duration::TryFrom(raw, duration))
+				{
+					i = safei;
+					continue;
+				}
 
-                if ((xline->duration == 0 && args.duration != "0")
-                 || (args.duration[0] == '+' && xline->duration <= duration)
-                 || (args.duration[0] == '-' && xline->duration >= duration)
-                 || (!prefixed && xline->duration != duration))
-                {
-                    i = safei;
-                    continue;
-                }
-            }
+				if ((xline->duration == 0 && args.duration != "0")
+				 || (args.duration[0] == '+' && xline->duration <= duration)
+				 || (args.duration[0] == '-' && xline->duration >= duration)
+				 || (!prefixed && xline->duration != duration))
+				{
+					i = safei;
+					continue;
+				}
+			}
 
-            // Expires filter
-            if (!args.expires.empty())
-            {
-                bool prefixed = args.expires[0] == '+';
-                unsigned long expires_dur = 0;
-                std::string raw = (prefixed ? args.expires.substr(1) : args.expires);
+			// Expires filter
+			if (!args.expires.empty())
+			{
+				bool prefixed = args.expires[0] == '+';
+				unsigned long expires_dur = 0;
+				std::string raw = (prefixed ? args.expires.substr(1) : args.expires);
 
-                if (!Duration::TryFrom(raw, expires_dur))
-                {
-                    i = safei;
-                    continue;
-                }
+				if (!Duration::TryFrom(raw, expires_dur))
+				{
+					i = safei;
+					continue;
+				}
 
-                unsigned long expires = ServerInstance->Time() + static_cast<long>(expires_dur);
-                if ((xline->duration == 0)
-                 || (prefixed && xline->set_time + xline->duration < expires)
-                 || (!prefixed && xline->set_time + xline->duration > expires))
-                {
-                    i = safei;
-                    continue;
-                }
-            }
+				unsigned long expires = ServerInstance->Time() + static_cast<long>(expires_dur);
+				if ((xline->duration == 0)
+				 || (prefixed && xline->set_time + xline->duration < expires)
+				 || (!prefixed && xline->set_time + xline->duration > expires))
+				{
+					i = safei;
+					continue;
+				}
+			}
 
-            ++matched;
+			++matched;
 
-            if (count)
-            {
-                i = safei;
-                continue;
-            }
+			if (count)
+			{
+				i = safei;
+				continue;
+			}
 
-            const std::string display = xline->Displayable();
-            const std::string duration = (xline->duration == 0 ? "permanent" : Duration::ToString(xline->duration));
-            const std::string reason = xline->reason;
-            const std::string settime = Time::ToString(xline->set_time);
+			const std::string display = xline->Displayable();
+			const std::string duration = (xline->duration == 0 ? "permanent" : Duration::ToString(xline->duration));
+			const std::string reason = xline->reason;
+			const std::string settime = Time::ToString(xline->set_time);
 
-            std::string expires;
-            if (xline->duration == 0)
-                expires = "doesn't expire";
-            else
-                expires = INSP_FORMAT("expires in {} (on {})",
-                    Duration::ToString(xline->expiry - ServerInstance->Time()),
-                    Time::ToString(xline->expiry));
+			std::string expires;
+			if (xline->duration == 0)
+				expires = "doesn't expire";
+			else
+				expires = INSP_FORMAT("expires in {} (on {})",
+					Duration::ToString(xline->expiry - ServerInstance->Time()),
+					Time::ToString(xline->expiry));
 
-            if (remove)
-            {
-                std::string out;
-                if (ServerInstance->XLines->DelLine(display.c_str(), linetype, out, user))
-                {
-                    ServerInstance->SNO.WriteToSnoMask('x',
-                        INSP_FORMAT("{} removed {} on {}: {}",
-                            user->nick,
-                            BuildTypeStr(linetype),
-                            display,
-                            reason));
-                }
-            }
-            else
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "{} on {} set by {} on {}, duration '{}', {}: {}",
-                    BuildTypeStr(linetype),
-                    display,
-                    xline->source,
-                    settime,
-                    duration,
-                    expires,
-                    reason));
-            }
+			if (remove)
+			{
+				std::string out;
+				if (ServerInstance->XLines->DelLine(display.c_str(), linetype, out, user))
+				{
+					ServerInstance->SNO.WriteToSnoMask('x',
+						INSP_FORMAT("{} removed {} on {}: {}",
+							user->nick,
+							BuildTypeStr(linetype),
+							display,
+							reason));
+				}
+			}
+			else
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"{} on {} set by {} on {}, duration '{}', {}: {}",
+					BuildTypeStr(linetype),
+					display,
+					xline->source,
+					settime,
+					duration,
+					expires,
+					reason));
+			}
 
-            i = safei;
-        }
-    }
+			i = safei;
+		}
+	}
 
-    bool HandleCmd(LocalUser* user, const Criteria& args, Command* cmd)
-    {
-        const bool count = (cmd->name == "XCOUNT");
-        const bool remove = (cmd->name == "XREMOVE");
+	bool HandleCmd(LocalUser* user, const Criteria& args, Command* cmd)
+	{
+		const bool count = (cmd->name == "XCOUNT");
+		const bool remove = (cmd->name == "XREMOVE");
 
-        const std::string action = (remove ? "Removing" : "Listing");
-        const std::string criteria = BuildCriteriaStr(args);
+		const std::string action = (remove ? "Removing" : "Listing");
+		const std::string criteria = BuildCriteriaStr(args);
 
-        unsigned int matched = 0;
-        unsigned int total = 0;
+		unsigned int matched = 0;
+		unsigned int total = 0;
 
-        if (args.type == "*")
-        {
-            if (!count)
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "{} matches from all X-line types ({})",
-                    action,
-                    criteria));
-            }
+		if (args.type == "*")
+		{
+			if (!count)
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"{} matches from all X-line types ({})",
+					action,
+					criteria));
+			}
 
-            std::vector<std::string> xlinetypes = ServerInstance->XLines->GetAllTypes();
-            for (const auto& x : xlinetypes)
-            {
-                if (remove && !HasCommandPermission(user, x))
-                {
-                    user->WriteNotice(INSP_FORMAT(
-                        "Skipping type '{}' as your oper type does not have access to remove these.",
-                        x));
-                    continue;
-                }
+			std::vector<std::string> xlinetypes = ServerInstance->XLines->GetAllTypes();
+			for (const auto& x : xlinetypes)
+			{
+				if (remove && !HasCommandPermission(user, x))
+				{
+					user->WriteNotice(INSP_FORMAT(
+						"Skipping type '{}' as your oper type does not have access to remove these.",
+						x));
+					continue;
+				}
 
-                XLineLookup* xlines = ServerInstance->XLines->GetAll(x);
-                if (xlines)
-                    ProcessLines(user, args, x, xlines, matched, total, count, remove);
-            }
+				XLineLookup* xlines = ServerInstance->XLines->GetAll(x);
+				if (xlines)
+					ProcessLines(user, args, x, xlines, matched, total, count, remove);
+			}
 
-            if (count)
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "{} of {} X-lines matched ({})",
-                    matched,
-                    total,
-                    criteria));
-            }
-            else
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "End of list, {}/{} X-lines {}",
-                    matched,
-                    total,
-                    (remove ? "removed" : "matched")));
-            }
-        }
-        else
-        {
-            std::string linetype = args.type;
-            std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
+			if (count)
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"{} of {} X-lines matched ({})",
+					matched,
+					total,
+					criteria));
+			}
+			else
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"End of list, {}/{} X-lines {}",
+					matched,
+					total,
+					(remove ? "removed" : "matched")));
+			}
+		}
+		else
+		{
+			std::string linetype = args.type;
+			std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
 
-            if (remove && !HasCommandPermission(user, linetype))
-            {
-                user->WriteNumeric(ERR_NOPRIVILEGES,
-                    "Permission Denied - your oper type does not have access to remove X-lines of this type");
-                return false;
-            }
+			if (remove && !HasCommandPermission(user, linetype))
+			{
+				user->WriteNumeric(ERR_NOPRIVILEGES,
+					"Permission Denied - your oper type does not have access to remove X-lines of this type");
+				return false;
+			}
 
-            XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
-            if (!xlines)
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "Invalid X-line type '{}' (or not yet used X-line)",
-                    linetype));
-                return false;
-            }
+			XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
+			if (!xlines)
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"Invalid X-line type '{}' (or not yet used X-line)",
+					linetype));
+				return false;
+			}
 
-            if (xlines->empty())
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "No X-lines of type '{}' exist",
-                    linetype));
-                return false;
-            }
+			if (xlines->empty())
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"No X-lines of type '{}' exist",
+					linetype));
+				return false;
+			}
 
-            if (!count)
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "{} matches of X-line type '{}' ({})",
-                    action,
-                    linetype,
-                    criteria));
-            }
+			if (!count)
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"{} matches of X-line type '{}' ({})",
+					action,
+					linetype,
+					criteria));
+			}
 
-            ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
+			ProcessLines(user, args, linetype, xlines, matched, total, count, remove);
 
-            if (count)
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "{} of {} X-lines of type '{}' matched ({})",
-                    matched,
-                    total,
-                    linetype,
-                    criteria));
-            }
-            else
-            {
-                user->WriteNotice(INSP_FORMAT(
-                    "End of list, {}/{} X-lines of type '{}' {}",
-                    matched,
-                    total,
-                    linetype,
-                    (remove ? "removed" : "matched")));
-            }
-        }
+			if (count)
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"{} of {} X-lines of type '{}' matched ({})",
+					matched,
+					total,
+					linetype,
+					criteria));
+			}
+			else
+			{
+				user->WriteNotice(INSP_FORMAT(
+					"End of list, {}/{} X-lines of type '{}' {}",
+					matched,
+					total,
+					linetype,
+					(remove ? "removed" : "matched")));
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
 public:
-    CommandXBase(Module* Creator, const std::string& cmdname)
-        : SplitCommand(Creator, cmdname, 1)
-    {
-        syntax = {
-            "-type=<type|*> -mask=[!]<mask> -reason=[!]<reason> "
-            "-source=[!]<source> -set=[-]<time> -duration=[-+]<time> "
-            "-expires=[+]<time> -config=<yes|no>"
-        };
-    }
+	CommandXBase(Module* Creator, const std::string& cmdname)
+		: SplitCommand(Creator, cmdname, 1)
+	{
+		syntax = {
+			"-type=<type|*> -mask=[!]<mask> -reason=[!]<reason> "
+			"-source=[!]<source> -set=[-]<time> -duration=[-+]<time> "
+			"-expires=[+]<time> -config=<yes|no>"
+		};
+	}
 
-    CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
-    {
-        if (!user->IsOper())
-        {
-            user->WriteNumeric(ERR_NOPRIVILEGES,
-                "Permission Denied - this command is for operators only");
-            return CmdResult::FAILURE;
-        }
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
+	{
+		if (!user->IsOper())
+		{
+			user->WriteNumeric(ERR_NOPRIVILEGES,
+				"Permission Denied - this command is for operators only");
+			return CmdResult::FAILURE;
+		}
 
-        if (parameters.empty() || parameters[0].empty()
-            || parameters[0][0] != '-' || parameters[0].find('=') == std::string::npos)
-        {
-            user->WriteNotice(INSP_FORMAT(
-                "Incorrect argument syntax \"{}\"",
-                (parameters.empty() ? std::string() : parameters[0])));
-            return CmdResult::FAILURE;
-        }
+		if (parameters.empty() || parameters[0].empty()
+			|| parameters[0][0] != '-' || parameters[0].find('=') == std::string::npos)
+		{
+			user->WriteNotice(INSP_FORMAT(
+				"Incorrect argument syntax \"{}\"",
+				(parameters.empty() ? std::string() : parameters[0])));
+			return CmdResult::FAILURE;
+		}
 
-        Criteria args("*", "*", "*", "*");
-        if (!ProcessArgs(parameters, args))
-        {
-            user->WriteNotice("There was a problem processing the given arguments");
-            return CmdResult::FAILURE;
-        }
+		Criteria args("*", "*", "*", "*");
+		if (!ProcessArgs(parameters, args))
+		{
+			user->WriteNotice("There was a problem processing the given arguments");
+			return CmdResult::FAILURE;
+		}
 
-        if (!HandleCmd(user, args, this))
-            return CmdResult::FAILURE;
+		if (!HandleCmd(user, args, this))
+			return CmdResult::FAILURE;
 
-        return CmdResult::SUCCESS;
-    }
+		return CmdResult::SUCCESS;
+	}
 };
-
 class CommandXCopy : public SplitCommand
 {
 public:
-    CommandXCopy(Module* Creator)
-        : SplitCommand(Creator, "XCOPY", 3)
-    {
-        syntax = {
-            "<X-line type> <old mask> <new mask> "
-            "[-duration=<time> -reason=<reason>]"
-        };
-    }
+	CommandXCopy(Module* Creator)
+		: SplitCommand(Creator, "XCOPY", 3)
+	{
+		syntax = {
+			"<X-line type> <old mask> <new mask> "
+			"[-duration=<time> -reason=<reason>]"
+		};
+	}
 
-    CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
+	{
+		if (!user->IsOper())
+		{
+			user->WriteNumeric(ERR_NOPRIVILEGES,
+				"Permission Denied - this command is for operators only");
+			return CmdResult::FAILURE;
+		}
 
-    {
-        if (!user->IsOper())
-        {
-            user->WriteNumeric(ERR_NOPRIVILEGES,
-                "Permission Denied - this command is for operators only");
-            return CmdResult::FAILURE;
-        }
+		if (parameters.size() < 3)
+		{
+			user->WriteNotice("Usage: /XCOPY <X-line type> <old mask> <new mask> "
+				"[-duration=<time> -reason=<reason>]");
+			return CmdResult::FAILURE;
+		}
 
-        if (parameters.size() < 3)
-        {
-            user->WriteNotice("Usage: /XCOPY <X-line type> <old mask> <new mask> "
-                "[-duration=<time> -reason=<reason>]");
-            return CmdResult::FAILURE;
-        }
+		const std::string& xtype   = parameters[0];
+		const std::string& oldmask = parameters[1];
+		const std::string& newmask = parameters[2];
 
-        const std::string& xtype   = parameters[0];
-        const std::string& oldmask = parameters[1];
-        const std::string& newmask = parameters[2];
+		Criteria args;
+		if (parameters.size() > 3)
+		{
+			CommandBase::Params optional(parameters.begin() + 3, parameters.end());
+			if (!ProcessArgs(optional, args))
+			{
+				user->WriteNotice("There was a problem processing the given arguments");
+				return CmdResult::FAILURE;
+			}
+		}
 
-        Criteria args;
-        if (parameters.size() > 3)
-        {
-            CommandBase::Params optional(parameters.begin() + 3, parameters.end());
-            if (!ProcessArgs(optional, args))
-            {
-                user->WriteNotice("There was a problem processing the given arguments");
-                return CmdResult::FAILURE;
-            }
-        }
+		std::string linetype = xtype;
+		std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
 
-        std::string linetype = xtype;
-        std::transform(linetype.begin(), linetype.end(), linetype.begin(), ::toupper);
+		if (!HasCommandPermission(user, linetype))
+		{
+			user->WriteNumeric(ERR_NOPRIVILEGES,
+				"Permission Denied - your oper type does not have access to copy an X-line of this type");
+			return CmdResult::FAILURE;
+		}
 
-        if (!HasCommandPermission(user, linetype))
-        {
-            user->WriteNumeric(ERR_NOPRIVILEGES,
-                "Permission Denied - your oper type does not have access to copy an X-line of this type");
-            return CmdResult::FAILURE;
-        }
+		XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
+		if (!xlines)
+		{
+			user->WriteNotice(INSP_FORMAT(
+				"Invalid X-line type '{}' (or not yet used X-line)",
+				linetype));
+			return CmdResult::FAILURE;
+		}
 
-        XLineLookup* xlines = ServerInstance->XLines->GetAll(linetype);
-        if (!xlines)
-        {
-            user->WriteNotice(INSP_FORMAT(
-                "Invalid X-line type '{}' (or not yet used X-line)",
-                linetype));
-            return CmdResult::FAILURE;
-        }
+		XLine* oldxline = nullptr;
+		for (LookupIter i = xlines->begin(); i != xlines->end(); ++i)
+		{
+			if (irc::equals(i->second->Displayable(), oldmask))
+			{
+				oldxline = i->second;
+				break;
+			}
+		}
 
-        XLine* oldxline = nullptr;
-        for (LookupIter i = xlines->begin(); i != xlines->end(); ++i)
-        {
-            if (irc::equals(i->second->Displayable(), oldmask))
-            {
-                oldxline = i->second;
-                break;
-            }
-        }
+		if (!oldxline)
+		{
+			user->WriteNotice(INSP_FORMAT(
+				"Could not find \"{}\" in {}s",
+				oldmask,
+				BuildTypeStr(linetype)));
+			return CmdResult::FAILURE;
+		}
 
-        if (!oldxline)
-        {
-            user->WriteNotice(INSP_FORMAT(
-                "Could not find \"{}\" in {}s",
-                oldmask,
-                BuildTypeStr(linetype)));
-            return CmdResult::FAILURE;
-        }
+		if ((oldmask.find('!') != std::string::npos && newmask.find('!') == std::string::npos)
+		 || (oldmask.find('!') == std::string::npos && newmask.find('!') != std::string::npos)
+		 || (oldmask.find('@') != std::string::npos && newmask.find('@') == std::string::npos)
+		 || (oldmask.find('@') == std::string::npos && newmask.find('@') != std::string::npos))
+		{
+			user->WriteNotice("Old and new mask must follow the same format (n!u@h or u@h or h)");
+			return CmdResult::FAILURE;
+		}
 
-        if ((oldmask.find('!') != std::string::npos && newmask.find('!') == std::string::npos)
-         || (oldmask.find('!') == std::string::npos && newmask.find('!') != std::string::npos)
-         || (oldmask.find('@') != std::string::npos && newmask.find('@') == std::string::npos)
-         || (oldmask.find('@') == std::string::npos && newmask.find('@') != std::string::npos))
-        {
-            user->WriteNotice("Old and new mask must follow the same format (n!u@h or u@h or h)");
-            return CmdResult::FAILURE;
-        }
+		XLineFactory* xlf = ServerInstance->XLines->GetFactory(linetype);
+		if (!xlf)
+		{
+			user->WriteNotice("Great! You just broke the matrix!");
+			return CmdResult::FAILURE;
+		}
 
-        XLineFactory* xlf = ServerInstance->XLines->GetFactory(linetype);
-        if (!xlf)
-        {
-            user->WriteNotice("Great! You just broke the matrix!");
-            return CmdResult::FAILURE;
-        }
+		unsigned long duration = 0;
+		if (!args.duration.empty())
+		{
+			bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
+			std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
 
-        unsigned long duration = 0;
-        if (!args.duration.empty())
-        {
-            bool prefixed = args.duration[0] == '+' || args.duration[0] == '-';
-            std::string raw = (prefixed ? args.duration.substr(1) : args.duration);
+			if (!Duration::TryFrom(raw, duration))
+			{
+				user->WriteNotice("Invalid duration string");
+				return CmdResult::FAILURE;
+			}
+		}
+		else
+		{
+			duration = (oldxline->duration == 0
+				? 0
+				: (oldxline->set_time + oldxline->duration - ServerInstance->Time()));
+		}
 
-            if (!Duration::TryFrom(raw, duration))
-            {
-                user->WriteNotice("Invalid duration string");
-                return CmdResult::FAILURE;
-            }
-        }
-        else
-        {
-            duration = (oldxline->duration == 0
-                ? 0
-                : (oldxline->set_time + oldxline->duration - ServerInstance->Time()));
-        }
+		const std::string& reason = (!args.reason.empty() ? args.reason : oldxline->reason);
 
-        const std::string& reason = (!args.reason.empty() ? args.reason : oldxline->reason);
+		std::string expires;
+		if (duration == 0)
+		{
+			expires.clear();
+		}
+		else
+		{
+			expires = INSP_FORMAT(
+				", expires in {} (on {})",
+				Duration::ToString(duration),
+				Time::ToString(ServerInstance->Time() + duration));
+		}
 
-        std::string expires;
-        if (duration == 0)
-        {
-            expires.clear();
-        }
-        else
-        {
-            expires = INSP_FORMAT(
-                ", expires in {} (on {})",
-                Duration::ToString(duration),
-                Time::ToString(ServerInstance->Time() + duration));
-        }
+		XLine* newxline = xlf->Generate(ServerInstance->Time(), duration, user->nick, reason, newmask);
+		if (ServerInstance->XLines->AddLine(newxline, user))
+		{
+			ServerInstance->SNO.WriteToSnoMask('x',
+				INSP_FORMAT("{} added {} {} for {}{}: {}",
+					user->nick,
+					(duration == 0 ? "permanent" : "timed"),
+					BuildTypeStr(linetype),
+					newmask,
+					expires,
+					reason));
+		}
+		else
+		{
+			user->WriteNotice(INSP_FORMAT(
+				"Failed to add {} on \"{}\"",
+				BuildTypeStr(linetype),
+				newmask));
+			delete newxline;
+			return CmdResult::FAILURE;
+		}
 
-        XLine* newxline = xlf->Generate(ServerInstance->Time(), duration, user->nick, reason, newmask);
-        if (ServerInstance->XLines->AddLine(newxline, user))
-        {
-            ServerInstance->SNO.WriteToSnoMask('x',
-                INSP_FORMAT("{} added {} {} for {}{}: {}",
-                    user->nick,
-                    (duration == 0 ? "permanent" : "timed"),
-                    BuildTypeStr(linetype),
-                    newmask,
-                    expires,
-                    reason));
-        }
-        else
-        {
-            user->WriteNotice(INSP_FORMAT(
-                "Failed to add {} on \"{}\"",
-                BuildTypeStr(linetype),
-                newmask));
-            delete newxline;
-            return CmdResult::FAILURE;
-        }
-
-        return CmdResult::SUCCESS;
-    }
+		return CmdResult::SUCCESS;
+	}
 };
-
 class ModuleXLineTools : public Module
 {
-    CommandXBase xcount;
-    CommandXBase xremove;
-    CommandXBase xsearch;
-    CommandXCopy xcopy;
+	CommandXBase xcount;
+	CommandXBase xremove;
+	CommandXBase xsearch;
+	CommandXCopy xcopy;
 
 public:
-    ModuleXLineTools()
-        : Module(VF_NONE, "X-line management tools")
-        , xcount(this, "XCOUNT")
-        , xremove(this, "XREMOVE")
-        , xsearch(this, "XSEARCH")
-        , xcopy(this)
-    {
-    }
+	ModuleXLineTools()
+		: Module(VF_NONE, "X-line management tools")
+		, xcount(this, "XCOUNT")
+		, xremove(this, "XREMOVE")
+		, xsearch(this, "XSEARCH")
+		, xcopy(this)
+	{
+	}
 };
 
 MODULE_INIT(ModuleXLineTools)
