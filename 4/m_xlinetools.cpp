@@ -1,3 +1,8 @@
+/* 
+ * Based on the original module by Matt Schatz <genius3000@g3k.solutions>.
+ * Updated for InspIRCd v4 by MathiasJRL <pellirc@gmail.com>.
+ */
+
 /// $ModAuthor: MathiasJRL <pellirc@gmail.com>
 /// $ModDepends: core 4
 /// $ModDesc: X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
