@@ -354,6 +354,9 @@ module m_ircv3_extjwt 4.966 https://raw.githubusercontent.com/inspircd/inspircd-
 module m_ircv3_extjwt_rapidjson 4.965 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b894be2698838c512d0015a3c2633fcd6e07a403/4/m_ircv3_extjwt_rapidjson.cpp
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
+module m_kill_idle 4.972 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c421c0b7bfbc77f85ba57b7441345dfc6af1d1cb/4/m_kill_idle.cpp
+ depends core 3
+ description Disconnect idle users matching configured conditions
 module m_lockserv 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
@@ -411,6 +414,9 @@ module m_teams 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib
 module m_teststdrpl 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_teststdrpl.cpp
  depends core 4
  description Adds the STDRPL command for testing client standard reply implementations.
+module m_tgchange 4.972 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c421c0b7bfbc77f85ba57b7441345dfc6af1d1cb/4/m_tgchange.cpp
+ description Implements "target change" detection to help prevent spam bots
+ depends core 3
 module m_userip 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_userip.cpp
  depends core 4
  description Adds the /USERIP command which allows users to find out the IP address of one or more connected users.
