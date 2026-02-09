@@ -65,6 +65,12 @@ jobs:
 
           for FILE in ${FILES}
           do
+            SKIP_BUILD=$(./tools/directive ${FILE} SkipBuild)
+            if [ -n "${SKIP_BUILD}" ]
+            then
+              echo "Not building ${FILE} because ${SKIP_BUILD}"
+              continue
+            fi
             export MODULES="${MODULES} ${FILE}"
             export PACKAGES="${PACKAGES} $(./tools/directive ${FILE} PackageInfo)"
             export TARGETS="${TARGETS} $(basename $FILE .cpp)"
@@ -81,6 +87,7 @@ jobs:
 
       - name: Build the changed modules
         working-directory: inspircd
+        if: env.INSPIRCD_MODULES != ''
         run: |
           cp -v ${INSPIRCD_MODULES} src/modules
           ./configure --development --disable-auto-extras
