@@ -20,7 +20,7 @@
 
 /// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDepends: core 4
-/// $ModDesc: Provides the DRAFT extjwt IRCv3 extension.
+/// $ModDesc: Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
 
 /// $PackageInfo: require_system("debian~") rapidjson-dev
 /// $PackageInfo: require_system("darwin") rapidjson
@@ -288,6 +288,12 @@ public:
 					writer.String(&mode, 1);
 			}
 			writer.EndArray();
+
+			if (!siter->second.verifyurl.empty())
+			{
+				writer.Key("vfy");
+				writer.String(siter->second.verifyurl);
+			}
 
 			if (chan)
 			{
