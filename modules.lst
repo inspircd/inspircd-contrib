@@ -348,9 +348,12 @@ module m_hostchange 4.927 https://raw.githubusercontent.com/inspircd/inspircd-co
 module m_ipinfo_io 4.945 https://raw.githubusercontent.com/inspircd/inspircd-contrib/34a74034f7b69081b1944c8d548b403b509b3f8e/4/m_ipinfo_io.cpp
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
-module m_ircv3_extjwt 4.939 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7be000f4208c5058140c43533c3f92595d3b70ab/4/m_ircv3_extjwt.cpp
+module m_ircv3_extjwt 4.966 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cbb2abdea5e30a94979f857b7fb70e4ee8a3bbca/4/m_ircv3_extjwt.cpp
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
+module m_ircv3_extjwt_rapidjson 4.965 https://raw.githubusercontent.com/inspircd/inspircd-contrib/b894be2698838c512d0015a3c2633fcd6e07a403/4/m_ircv3_extjwt_rapidjson.cpp
+ depends core 4
+ description Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
 module m_lockserv 4.927 https://raw.githubusercontent.com/inspircd/inspircd-contrib/132aac6dbb892cd82e33295247619ef28eda1e11/4/m_lockserv.cpp
  depends core 4
  description Adds the /LOCKSERV and /UNLOCKSERV commands which allows server operators to control whether users can connect to the local server.
