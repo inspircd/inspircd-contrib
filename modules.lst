@@ -408,7 +408,7 @@ module m_ssl_mbedtls 4.927 https://raw.githubusercontent.com/inspircd/inspircd-c
 module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e5b22f69a1e5112f17a2e665d9e39691033d98ec/4/m_stats_unlinked.cpp
  depends core 4
  description Adds stats character 'X' which shows unlinked servers.
-module m_swhois_ext 4.976 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c78d20dd218b42379676f4cf2b050097ad8bc1c4/4/m_swhois_ext.cpp
+module m_swhois_ext 4.978 https://raw.githubusercontent.com/inspircd/inspircd-contrib/281dc4a5c2da68cfa37fd63e610321acfc2fa0d8/4/m_swhois_ext.cpp
  depends core 4
  description Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.
 module m_teams 4.838 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f80fc0433652502ebf0b0bc2574e8ea1f6321609/4/m_teams.cpp
