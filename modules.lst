@@ -435,6 +435,9 @@ module m_xlinetools 4.963 https://raw.githubusercontent.com/inspircd/inspircd-co
 module cloak_md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/cloak_md5.cpp
  depends core 5
  description Adds the half and full cloaking methods for use with the cloak module.
+module customtitle 5.980 https://raw.githubusercontent.com/inspircd/inspircd-contrib/84f13f81ccca97ab61dd47d7ab987e87c2f4432a/5/customtitle.cpp
+ depends core 5
+ description Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.
 module md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.
