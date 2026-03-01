@@ -441,9 +441,12 @@ module customtitle 5.980 https://raw.githubusercontent.com/inspircd/inspircd-con
 module md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.943 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c94933635ae0a8129d7f38c5218ee2023ddb2407/5/starttls.cpp
+module starttls 5.987 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4566bc2f98aef571132c37432efd864b8194f8db/5/starttls.cpp
  depends core 5
  description Provides the IRCv3 tls client capability.
+module teststdrpl 5.986 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9d3c82b6b02e610b1bdc6f6ff25f59e6c261bf3/5/teststdrpl.cpp
+ depends core 5
+ description Adds the STDRPL command for testing client standard reply implementations.
 module vhost 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/vhost.cpp
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom virtual host.
