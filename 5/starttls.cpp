@@ -62,7 +62,8 @@ public:
 			return CmdResult::FAILURE;
 		}
 
-		if (user->eh.GetIOHook())
+		auto *socket = user->io->GetSocket();
+		if (!socket || socket->GetIOHook())
 		{
 			user->WriteNumeric(ERR_STARTTLS, "STARTTLS failure");
 			return CmdResult::FAILURE;
@@ -77,9 +78,9 @@ public:
 		 * user hasn't built up much sendq. Handling a blocked write here would
 		 * be very annoying.
 		 */
-		user->eh.DoWrite();
+		socket->DoWrite();
 
-		ssl->OnAccept(&user->eh, user->client_sa, user->server_sa);
+		ssl->OnAccept(socket, user->client_sa, user->server_sa);
 
 		return CmdResult::SUCCESS;
 	}
