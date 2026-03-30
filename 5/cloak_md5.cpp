@@ -81,7 +81,7 @@ struct CloakInfo final
 		, domainparts(tag->getNum<unsigned int>("domainparts", 3, 1, 10))
 		, ignorecase(tag->getBool("ignorecase"))
 		, key(Key)
-		, md5(engine->creator, "md5")
+		, md5(engine->service_creator, "md5")
 		, prefix(tag->getString("prefix"))
 		, suffix(tag->getString("suffix", ".IP"))
 	{
@@ -262,7 +262,7 @@ private:
 	CloakMode mode;
 
 public:
-	MD5Engine(Module* Creator, const std::string& Name, CloakMode cm)
+	MD5Engine(const WeakModulePtr& Creator, const std::string& Name, CloakMode cm)
 		: Cloak::Engine(Creator, Name)
 		, md5(Creator, "md5")
 		, mode(cm)
@@ -273,16 +273,16 @@ public:
 	{
 		// Check any dependent modules are loaded.
 		if (!md5)
-			throw ModuleException(creator, "Unable to create a " + name.substr(6) + " cloak without the md5 module, at" + tag->source.str());
+			throw ModuleException(this->service_creator, "Unable to create a " + this->service_name + " cloak without the md5 module, at" + tag->source.str());
 
 		// Ensure that we have the <cloak:key> parameter.
 		const std::string key = tag->getString("key");
 		if (key.empty())
-			throw ModuleException(creator, "You have not defined a cloaking key. Define <cloak:key> as a " + ConvToStr(minkeylen) + "+ character network-wide secret, at " + tag->source.str());
+			throw ModuleException(this->service_creator, "You have not defined a cloaking key. Define <cloak:key> as a " + ConvToStr(minkeylen) + "+ character network-wide secret, at " + tag->source.str());
 
 		// If we are the first cloak method then mandate a strong key.
 		if (primary && key.length() < minkeylen)
-			throw ModuleException(creator, "Your cloaking key is not secure. It should be at least " + ConvToStr(minkeylen) + " characters long, at " + tag->source.str());
+			throw ModuleException(this->service_creator, "Your cloaking key is not secure. It should be at least " + ConvToStr(minkeylen) + " characters long, at " + tag->source.str());
 
 		return std::make_shared<CloakInfo>(this, tag, mode, key);
 	}
@@ -298,8 +298,8 @@ private:
 public:
 	ModuleCloakMD5()
 		: Module(VF_VENDOR, "Adds the half and full cloaking methods for use with the cloak module.")
-		, halfcloak(this, "half", MODE_HALF_CLOAK)
-		, fullcloak(this, "full", MODE_OPAQUE)
+		, halfcloak(weak_from_this(), "half", MODE_HALF_CLOAK)
+		, fullcloak(weak_from_this(), "full", MODE_OPAQUE)
 	{
 	}
 };

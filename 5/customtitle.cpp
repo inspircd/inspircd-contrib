@@ -71,7 +71,7 @@ public:
 	StringExtItem ctitle;
 	CustomVhostMap configs;
 
-	CommandTitle(Module* Creator)
+	CommandTitle(const WeakModulePtr& Creator)
 		: Command(Creator, "TITLE", 2)
 		, ctitle(Creator, "ctitle", ExtensionType::USER, true)
 	{
@@ -111,8 +111,8 @@ private:
 public:
 	ModuleCustomTitle()
 		: Module(VF_VENDOR | VF_OPTCOMMON, "Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.")
-		, Whois::LineEventListener(this)
-		, cmd(this)
+		, Whois::LineEventListener(weak_from_this())
+		, cmd(weak_from_this())
 	{
 	}
 
@@ -123,11 +123,11 @@ public:
 		{
 			std::string name = tag->getString("name", "", 1);
 			if (name.empty())
-				throw ModuleException(this, "<title:name> is empty at " + tag->source.str());
+				throw ModuleException(weak_from_this(), "<title:name> is empty at " + tag->source.str());
 
 			std::string pass = tag->getString("password");
 			if (pass.empty())
-				throw ModuleException(this, "<title:password> is empty at " + tag->source.str());
+				throw ModuleException(weak_from_this(), "<title:password> is empty at " + tag->source.str());
 
 			const std::string hash = tag->getString("hash", "plaintext", 1);
 			if (insp::equalsci(hash, "plaintext"))

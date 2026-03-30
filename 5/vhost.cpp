@@ -62,7 +62,7 @@ class CommandVhost final
 public:
 	CustomVhostMap vhosts;
 
-	CommandVhost(Module* Creator)
+	CommandVhost(const WeakModulePtr& Creator)
 		: Command(Creator, "VHOST", 2)
 	{
 		syntax = { "<username> <password>" };
@@ -94,7 +94,7 @@ private:
 public:
 	ModuleVHost()
 		: Module(VF_VENDOR, "Allows the server administrator to define accounts which can grant a custom virtual host.")
-		, cmd(this)
+		, cmd(weak_from_this())
 	{
 	}
 
@@ -105,15 +105,15 @@ public:
 		{
 			std::string mask = tag->getString("host");
 			if (mask.empty())
-				throw ModuleException(this, "<vhost:host> is empty! at " + tag->source.str());
+				throw ModuleException(weak_from_this(), "<vhost:host> is empty! at " + tag->source.str());
 
 			std::string username = tag->getString("user");
 			if (username.empty())
-				throw ModuleException(this, "<vhost:user> is empty! at " + tag->source.str());
+				throw ModuleException(weak_from_this(), "<vhost:user> is empty! at " + tag->source.str());
 
 			std::string pass = tag->getString("pass");
 			if (pass.empty())
-				throw ModuleException(this, "<vhost:pass> is empty! at " + tag->source.str());
+				throw ModuleException(weak_from_this(), "<vhost:pass> is empty! at " + tag->source.str());
 
 			const std::string hash = tag->getString("hash", "plaintext", 1);
 			if (insp::equalsci(hash, "plaintext"))

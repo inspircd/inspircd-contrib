@@ -41,7 +41,7 @@ class CommandStartTLS final
 	dynamic_reference_nocheck<IOHookProvider>& ssl;
 
 public:
-	CommandStartTLS(Module* mod, dynamic_reference_nocheck<IOHookProvider>& s)
+	CommandStartTLS(const WeakModulePtr& mod, dynamic_reference_nocheck<IOHookProvider>& s)
 		: SplitCommand(mod, "STARTTLS")
 		, ssl(s)
 	{
@@ -103,7 +103,7 @@ private:
 	}
 
 public:
-	TLSCap(Module* mod, dynamic_reference_nocheck<IOHookProvider>& ssl)
+	TLSCap(const WeakModulePtr& mod, dynamic_reference_nocheck<IOHookProvider>& ssl)
 		: Cap::Capability(mod, "tls")
 		, sslref(ssl)
 	{
@@ -121,21 +121,16 @@ private:
 public:
 	ModuleStartTLS()
 		: Module(VF_VENDOR, "Provides the deprecated IRCv3 tls client capability.")
-		, starttls(this, ssl)
-		, tls(this, ssl)
-		, ssl(this, "ssl")
+		, starttls(weak_from_this(), ssl)
+		, tls(weak_from_this(), ssl)
+		, ssl(weak_from_this(), "ssl")
 	{
 	}
 
 	void ReadConfig(ConfigStatus& status) override
 	{
 		const auto& conf = ServerInstance->Config->ConfValue("starttls");
-
-		std::string newprovider = conf->getString("provider");
-		if (newprovider.empty())
-			ssl.SetProvider("ssl");
-		else
-			ssl.SetProvider("ssl/" + newprovider);
+		ssl.SetProviderName("ssl/" + conf->getString("provider"));
 	}
 };
 

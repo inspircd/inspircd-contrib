@@ -397,7 +397,7 @@ class MD5Provider final
 	: public Hash::Provider
 {
 public:
-	MD5Provider(Module* parent)
+	MD5Provider(const WeakModulePtr& parent)
 		: Hash::Provider(parent, "md5", 16, 64)
 	{
 	}
@@ -417,7 +417,7 @@ private:
 public:
 	ModuleMD5()
 		: Module(VF_VENDOR, "Allows other modules to generate MD5 hashes.")
-		, md5(this)
+		, md5(weak_from_this())
 	{
 	}
 };

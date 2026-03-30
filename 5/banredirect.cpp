@@ -64,7 +64,7 @@ public:
 	ExtBan::ManagerRef extbanmgr;
 	SimpleExtItem<BanRedirectList> redirectlist;
 
-	BanRedirect(Module* parent)
+	BanRedirect(const WeakModulePtr& parent)
 		: ModeWatcher(parent, "ban", MODETYPE_CHANNEL)
 		, banmode(parent, "ban")
 		, extbanmgr(parent)
@@ -166,7 +166,7 @@ public:
 
 			if(mask[CHAN].length())
 			{
-				if (change.adding && IS_LOCAL(source))
+				if (change.adding && source->IsLocal())
 				{
 					if (!ServerInstance->Channels.IsChannel(mask[CHAN]))
 					{
@@ -186,7 +186,7 @@ public:
 						return false;
 					}
 
-					if (irc::equals(channel->name, mask[CHAN]))
+					if (insp::casemapped_equals(channel->name, mask[CHAN]))
 					{
 						source->WriteNumeric(690, channel->name, "You cannot set a ban redirection to the channel the ban is on");
 						return false;
@@ -207,7 +207,8 @@ public:
 						for (const auto& redirect : *redirects)
 						{
 							// Mimic the functionality used when removing the mode
-							if (irc::equals(redirect.targetchan, mask[CHAN]) && irc::equals(redirect.banmask, change.param))
+							if (insp::casemapped_equals(redirect.targetchan, mask[CHAN])
+								&& insp::casemapped_equals(redirect.banmask, change.param))
 							{
 								// Make sure the +b handler will still set the right ban
 								change.param.append(mask[CHAN]);
@@ -234,7 +235,7 @@ public:
 
 						for(BanRedirectList::iterator redir = redirects->begin(); redir != redirects->end(); redir++)
 						{
-							if ((irc::equals(redir->targetchan, mask[CHAN])) && (irc::equals(redir->banmask, change.param)))
+							if ((insp::casemapped_equals(redir->targetchan, mask[CHAN])) && (insp::casemapped_equals(redir->banmask, change.param)))
 							{
 								redirects->erase(redir);
 
@@ -264,15 +265,17 @@ class ModuleBanRedirect final
 private:
 	BanRedirect banwatcher;
 	bool nofollow = false;
+	ChanModeReference banmode;
 	ChanModeReference limitmode;
 	ChanModeReference redirectmode;
 
 public:
 	ModuleBanRedirect()
 		: Module(VF_VENDOR | VF_COMMON, "Allows specifying a channel to redirect a banned user to in the ban mask.")
-		, banwatcher(this)
-		, limitmode(this, "limit")
-		, redirectmode(this, "redirect")
+		, banwatcher(weak_from_this())
+		, banmode(weak_from_this(), "ban")
+		, limitmode(weak_from_this(), "limit")
+		, redirectmode(weak_from_this(), "redirect")
 	{
 	}
 
@@ -296,7 +299,7 @@ public:
 		ServerInstance->Modes.Process(ServerInstance->FakeClient, chan, nullptr, changelist, ModeParser::MODE_LOCALONLY);
 	}
 
-	ModResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname, std::string& privs, const std::string& keygiven, bool override) override
+	ModResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname, PrefixMode::Set& privs, const std::string& keygiven, bool override) override
 	{
 		if (!override && chan)
 		{
@@ -305,8 +308,9 @@ public:
 			if (redirects)
 			{
 				/* We actually had some ban redirects to check */
+				auto* lm = banmode->IsListModeBase();
 				ModResult result;
-				FIRST_MOD_RESULT(OnCheckChannelBan, result, (user, chan, ServerInstance->Config->BanRealMask));
+				FIRST_MOD_RESULT(OnCheckList, result, (lm, user, chan, ServerInstance->Config->BanRealMask));
 				if (result == MOD_RES_ALLOW)
 				{
 					// they have a ban exception

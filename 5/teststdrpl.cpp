@@ -32,7 +32,7 @@ private:
 	IRCv3::ReplyCapReference stdrplcap;
 
 public:
-	CommandStdRpl(Module* Creator)
+	CommandStdRpl(const WeakModulePtr& Creator)
 		: SplitCommand(Creator, "STDRPL")
 		, stdrplcap(Creator)
 	{
@@ -85,7 +85,7 @@ private:
 public:
 	ModuleStdRpl()
 		: Module(VF_NONE, "Adds the STDRPL command for testing client standard reply implementations.")
-		, cmd(this)
+		, cmd(weak_from_this())
 	{
 	}
 };
