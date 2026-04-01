@@ -21,7 +21,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModConfig: <starttls provider="sslprofile-name">
 /// $ModDepends: core 5
-/// $ModDesc: Provides the IRCv3 tls client capability.
+/// $ModDesc: Provides the deprecated IRCv3 tls client capability.
 
 
 #include "inspircd.h"
