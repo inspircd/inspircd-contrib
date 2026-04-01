@@ -273,7 +273,7 @@ public:
 	{
 		// Check any dependent modules are loaded.
 		if (!md5)
-			throw ModuleException(this->service_creator, "Unable to create a " + this->service_name + " cloak without the md5 module, at" + tag->source.str());
+			throw ModuleException(this->service_creator, "Unable to create a " + this->service_name + " cloak without the hash_md5 module, at" + tag->source.str());
 
 		// Ensure that we have the <cloak:key> parameter.
 		const std::string key = tag->getString("key");
