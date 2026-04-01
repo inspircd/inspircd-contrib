@@ -432,24 +432,24 @@ module m_whoisport 4.932 https://raw.githubusercontent.com/inspircd/inspircd-con
 module m_xlinetools 4.963 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5e43ae5bfd491c03fe39440b39c0af55b59c1149/4/m_xlinetools.cpp
  depends core 4
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module banredirect 5.989 https://raw.githubusercontent.com/inspircd/inspircd-contrib/26187b79dbfa8477c2a626986bb0b0b5a01630d2/5/banredirect.cpp
+module banredirect 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/banredirect.cpp
  depends core 5
  description Allows specifying a channel to redirect a banned user to in the ban mask.
-module cloak_md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/cloak_md5.cpp
+module cloak_md5 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/cloak_md5.cpp
  depends core 5
  description Adds the half and full cloaking methods for use with the cloak module.
-module customtitle 5.980 https://raw.githubusercontent.com/inspircd/inspircd-contrib/84f13f81ccca97ab61dd47d7ab987e87c2f4432a/5/customtitle.cpp
+module customtitle 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/customtitle.cpp
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.
-module md5 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/md5.cpp
+module hash_md5 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/hash_md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.987 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4566bc2f98aef571132c37432efd864b8194f8db/5/starttls.cpp
+module starttls 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/starttls.cpp
  depends core 5
  description Provides the IRCv3 tls client capability.
-module teststdrpl 5.986 https://raw.githubusercontent.com/inspircd/inspircd-contrib/c9d3c82b6b02e610b1bdc6f6ff25f59e6c261bf3/5/teststdrpl.cpp
+module teststdrpl 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/teststdrpl.cpp
  depends core 5
  description Adds the STDRPL command for testing client standard reply implementations.
-module vhost 5.936 https://raw.githubusercontent.com/inspircd/inspircd-contrib/35551fe54ae85768a04e30e817e47c08ef5306c2/5/vhost.cpp
+module vhost 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/vhost.cpp
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom virtual host.
