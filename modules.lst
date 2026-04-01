@@ -435,7 +435,7 @@ module m_xlinetools 4.963 https://raw.githubusercontent.com/inspircd/inspircd-co
 module banredirect 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/banredirect.cpp
  depends core 5
  description Allows specifying a channel to redirect a banned user to in the ban mask.
-module cloak_md5 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/cloak_md5.cpp
+module cloak_md5 5.993 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9a05616dc4e29e4612286f75d6445ff13d89de0d/5/cloak_md5.cpp
  depends core 5
  description Adds the half and full cloaking methods for use with the cloak module.
 module customtitle 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/customtitle.cpp
