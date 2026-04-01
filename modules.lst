@@ -444,9 +444,9 @@ module customtitle 5.991 https://raw.githubusercontent.com/inspircd/inspircd-con
 module hash_md5 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/hash_md5.cpp
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/starttls.cpp
+module starttls 5.995 https://raw.githubusercontent.com/inspircd/inspircd-contrib/5ba84b095d873580786aeadb9e85887f68ab6832/5/starttls.cpp
  depends core 5
- description Provides the IRCv3 tls client capability.
+ description Provides the deprecated IRCv3 tls client capability.
 module teststdrpl 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/teststdrpl.cpp
  depends core 5
  description Adds the STDRPL command for testing client standard reply implementations.
