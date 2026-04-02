@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: InspIRCd Developers
 /// $ModDesc: Adds extended ban p: (partmsg) which blocks the part message of matching users.
 /// $ModDepends: core 4
 

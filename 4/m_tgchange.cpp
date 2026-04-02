@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Adam
-/// $ModAuthorMail: Adam@anope.org
+/// $ModAuthor: Adam <Adam@anope.org>
 /// $ModDesc: Implements "target change" detection to help prevent spam bots
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 
 /*
  * tgchange. Detects users messaging many different targets rapidly.

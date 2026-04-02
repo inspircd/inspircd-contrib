@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthor: Sadie Powell <sadie@witchery.services>
 /// $ModDepends: core 4
 /// $ModDesc: Allows blocking IP addresses from making any socket connections to the server.
 
