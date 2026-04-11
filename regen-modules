@@ -22,6 +22,7 @@ use v5.10.0;
 use strict;
 use warnings FATAL => qw(all);
 
+use Digest::SHA;
 use File::Basename qw(basename dirname);
 
 use constant RM_BASE_URL => $ENV{RM_BASE_URL} // 'https://raw.githubusercontent.com/inspircd/inspircd-contrib';
@@ -49,6 +50,9 @@ for my $file (<*/*.cpp>) {
 	chomp(my $version = `git rev-list $revision | wc -l`);
 	$version =~ s/\s//g;
 	say $list "module $name $branch.$version ${\RM_BASE_URL}/$revision/$file";
+	my $sha = Digest::SHA->new("sha256");
+	$sha->addfile($file);
+	say $list " checksum " . $sha->hexdigest;
 	open(my $module, $file);
 	while (<$module>) {
 		if ($_ =~ /^\/\/\/ \$(\S+): (.+)/) {
