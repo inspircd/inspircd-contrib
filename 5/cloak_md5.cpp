@@ -29,6 +29,7 @@
 /// $ModAuthor: InspIRCd Developers
 /// $ModConfig: <cloak method="full|half" key="changeme" class="" prefix="MyNet-" suffix=".IP" domainparts="3" ignorecase="yes">
 /// $ModDepends: core 5
+/// $ModDepends: hash_md5 5
 /// $ModDesc: Adds the half and full cloaking methods for use with the cloak module.
 
 
