@@ -229,9 +229,10 @@ module banredirect 5.991 https://raw.githubusercontent.com/inspircd/inspircd-con
  checksum f670d4faa8eaca5376e234a83214ba31f93754fccf4e4c7b7a79460ed38d2faf
  depends core 5
  description Allows specifying a channel to redirect a banned user to in the ban mask.
-module cloak_md5 5.993 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9a05616dc4e29e4612286f75d6445ff13d89de0d/5/cloak_md5.cpp
- checksum b0b93cb758e783cf7663fa2254d8d98b6bbe38d4c267c4cdfe59f148cae2a292
+module cloak_md5 5.1002 https://raw.githubusercontent.com/inspircd/inspircd-contrib/7160f0effcc29efbf65af553591adccbc9b8f89c/5/cloak_md5.cpp
+ checksum dfdba011a041fb9c1d8c80b45de751a7dc3c4f4cc54aac512fff615123069deb
  depends core 5
+ depends hash_md5 5
  description Adds the half and full cloaking methods for use with the cloak module.
 module customtitle 5.991 https://raw.githubusercontent.com/inspircd/inspircd-contrib/886d07c16b14d1f6ffcb67f1c35c6d1e94032e22/5/customtitle.cpp
  checksum 6dd2d04581d3dcf030c507e6b6b1befe08239daf2aa71adb9a3448e722a1318b
