@@ -56,7 +56,9 @@ for my $file (<*/*.cpp>) {
 	open(my $module, $file);
 	while (<$module>) {
 		if ($_ =~ /^\/\/\/ \$(\S+): (.+)/) {
-			if ($1 eq 'ModDepends') {
+			if ($1 eq 'ModAuthor') {
+				say $list " author $2";
+			} elsif ($1 eq 'ModDepends') {
 				say $list " depends $2";
 			} elsif ($1 eq 'ModConflicts') {
 				say $list " conflicts $2";
