@@ -31,7 +31,6 @@
 
 #include "inspircd.h"
 #include "modules/hash.h"
-#include "utility/string.h"
 
 struct CustomVhost final
 {
@@ -116,7 +115,7 @@ public:
 				throw ModuleException(weak_from_this(), "<vhost:pass> is empty! at " + tag->source.str());
 
 			const std::string hash = tag->getString("hash", "plaintext", 1);
-			if (insp::equalsci(hash, "plaintext"))
+			if (insp::ascii_equals(hash, "plaintext"))
 			{
 				ServerInstance->Logs.Warning(MODNAME, "<vhost> tag for {} at {} contains an plain text password, this is insecure!",
 					username, tag->source.str());

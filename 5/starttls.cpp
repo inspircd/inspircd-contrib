@@ -25,7 +25,7 @@
 
 
 #include "inspircd.h"
-#include "modules/ssl.h"
+#include "modules/tls.h"
 #include "modules/cap.h"
 
 // From IRCv3 tls-3.1
