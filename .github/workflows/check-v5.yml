@@ -15,8 +15,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CXX: ${{ matrix.compiler }}
-      INSPIRCD_DEBUG: 3
+      CC: ${{ matrix.compiler.cc }}
+      CXX: ${{ matrix.compiler.cxx }}
     steps:
       - name: Install dependencies
         run: |
@@ -27,7 +27,7 @@ jobs:
             g++ \
             git \
             jq \
-            make \
+            ninja-build \
             pkg-config
 
       - name: Retrieve latest release
@@ -75,9 +75,10 @@ jobs:
             export PACKAGES="${PACKAGES} $(./tools/directive ${FILE} PackageInfo)"
             export TARGETS="${TARGETS} m_$(basename $FILE .cpp)"
           done
+          echo "Building ${TARGETS}"
           echo "INSPIRCD_MODULES=${MODULES%% }" >> $GITHUB_ENV
           echo "INSPIRCD_PACKAGES=${PACKAGES%% }" >> $GITHUB_ENV
-          echo "INSPIRCD_TARGET=${TARGETS%%   }" >> $GITHUB_ENV
+          echo "INSPIRCD_TARGETS=${TARGETS%% }" >> $GITHUB_ENV
 
       - name: Install module dependencies
         if: env.INSPIRCD_PACKAGES != ''
@@ -88,14 +89,24 @@ jobs:
       - name: Build the changed modules
         working-directory: inspircd
         if: env.INSPIRCD_MODULES != ''
+        env:
+          VERBOSE: ${{ runner.debug }}
         run: |
-          cp -v ${INSPIRCD_MODULES} modules
-          ./configure --development --disable-auto-extras
-          make --jobs $(($(getconf _NPROCESSORS_ONLN) + 1))
+          cp -v ${INSPIRCD_MODULES} modules/contrib
+          cmake -B "build" \
+                -D "CMAKE_BUILD_TYPE=Debug" \
+                -D "AUTO_ENABLE_EXTRAS=OFF" \
+                -D "SOCKET_ENGINE=${{ matrix.socketengine }}" \
+                -G "Ninja" \
+                -Wdeprecated \
+                -Wdev
+          ninja -C "build" ${{ runner.debug == '1' && '-v' || '' }} ${INSPIRCD_TARGETS}
 
     strategy:
       fail-fast: false
       matrix:
         compiler:
-          - clang++
-          - g++
+          - cc: clang
+            cxx: clang++
+          - cc: gcc
+            cxx: g++
