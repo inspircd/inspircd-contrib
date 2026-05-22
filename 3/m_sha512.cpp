@@ -3,7 +3,7 @@
  *
  *   Copyright (C) 2021 Benjamin Graillot <graillot@crans.org>
  *   Copyright (C) 2019 linuxdaemon <linuxdaemon.irc@gmail.com>
- *   Copyright (C) 2013, 2017-2018 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2013, 2017-2018 Sadie Powell <sadie@sadiepowell.dev>
  *   Copyright (C) 2012 Robby <robby@chatbelgie.be>
  *   Copyright (C) 2009 Uli Schlachter <psychon@inspircd.org>
  *   Copyright (C) 2009 Daniel De Graaf <danieldg@inspircd.org>

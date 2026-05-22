@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2024 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2024 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: Sadie Powell <sadie@sadiepowell.dev>
 /// $ModConfig: <cloak method="unreal-md5|unreal-md5-ip|unreal-sha256|unreal-sha256-ip" key1="foo" key2="bar" key3="baz" prefix="Clk">
 /// $ModDepends: core 4
 /// $ModDesc: Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.

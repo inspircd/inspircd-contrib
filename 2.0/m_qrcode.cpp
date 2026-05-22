@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2015 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2015 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -20,7 +20,7 @@
 /* $LinkerFlags: pkgconflibs("libqrencode","/libqrencode.so","-lqrencode") */
 
 /* $ModAuthor: Sadie Powell */
-/* $ModAuthorMail: sadie@witchery.services */
+/* $ModAuthorMail: sadie@sadiepowell.dev */
 /* $ModDesc: Provides support for QR code generation via the /QRCODE command. */
 /* $ModConfig: <qrcode blockchar=" " darkcolour="black" lightcolour="white"> */
 /* $ModDepends: core 2.0 */

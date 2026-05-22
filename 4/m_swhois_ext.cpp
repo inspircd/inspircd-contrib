@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2026 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2026 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: Sadie Powell <sadie@sadiepowell.dev>
 /// $ModDepends: core 4
 /// $ModDesc: Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.
 

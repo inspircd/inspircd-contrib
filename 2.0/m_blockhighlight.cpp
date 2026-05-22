@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2017 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2017 Sadie Powell <sadie@sadiepowell.dev>
  *   Copyright (C) 2015 Attila Molnar <attilamolnar@hush.com>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
@@ -18,7 +18,7 @@
  */
 
 /* $ModAuthor: Sadie Powell */
-/* $ModAuthorMail: sadie@witchery.services */
+/* $ModAuthorMail: sadie@sadiepowell.dev */
 /* $ModConfig: <blockhighlight ignoreextmsg="yes" minlen="50" minusernum="10" reason="Mass highlight spam is not allowed" stripcolor="yes"> */
 /* $ModDesc: Adds a channel mode which kills clients that mass highlight spam. */
 /* $ModDepends: core 2.0 */

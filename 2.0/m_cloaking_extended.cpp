@@ -23,7 +23,7 @@
  */
 
 /* $ModAuthor: Sadie Powell */
-/* $ModAuthorMail: sadie@witchery.services */
+/* $ModAuthorMail: sadie@sadiepowell.dev */
 /* $ModDesc: Provides masking of user hostnames (backport from v3). */
 /* $ModDepends: core 2.0 */
 

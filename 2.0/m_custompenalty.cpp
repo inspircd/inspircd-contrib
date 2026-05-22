@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2013 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2013 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -19,7 +19,7 @@
 #include "inspircd.h"
 
 /* $ModAuthor: Sadie Powell */
-/* $ModAuthorMail: sadie@witchery.services */
+/* $ModAuthorMail: sadie@sadiepowell.dev */
 /* $ModDesc: Allows the customisation of penalty levels. */
 /* $ModDepends: core 2.0 */
 /* $ModConfig: <penalty name="INVITE" value="60"> */

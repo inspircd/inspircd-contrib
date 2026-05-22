@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2019 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2019 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,7 +17,7 @@
  */
 
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: Sadie Powell <sadie@sadiepowell.dev>
 /// $ModDesc: Sets channel mode +s (secret) when users try to set channel mode +p (private).
 /// $ModDepends: core 4
 

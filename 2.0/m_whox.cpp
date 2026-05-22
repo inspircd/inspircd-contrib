@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2018 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2018 Sadie Powell <sadie@sadiepowell.dev>
  *   Copyright (C) 2014 Adam <Adam@anope.org>
  *   Copyright (C) 2009-2010 Daniel De Graaf <danieldg@inspircd.org>
  *   Copyright (C) 2007-2008 Robin Burchell <robin+git@viroteck.net>
@@ -20,7 +20,7 @@
  */
 
 /* $ModAuthor: Sadie Powell */
-/* $ModAuthorMail: sadie@witchery.services */
+/* $ModAuthorMail: sadie@sadiepowell.dev */
 /* $ModDesc: Provides the WHOX extension. */
 /* $ModDepends: core 2.0 */
 

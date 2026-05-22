@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2023 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2023 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: Sadie Powell <sadie@sadiepowell.dev>
 /// $ModConfig: <bind path="message.sock" type="message">
 /// $ModDesc: Allows sending messages to all local users from a socket.
 /// $ModDepends: core 4

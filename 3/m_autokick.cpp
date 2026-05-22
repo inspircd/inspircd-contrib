@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2014-2016 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2014-2016 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthorMail: sadie@sadiepowell.dev
 /// $ModConfig: <autokick message="Banned">
 /// $ModDepends: core 3
 /// $ModDesc: Automatically kicks people who match a banned mask.

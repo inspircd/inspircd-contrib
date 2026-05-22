@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2019-2026 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2019-2026 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -19,7 +19,7 @@
 /// $CompilerFlags: find_compiler_flags("yyjson")
 /// $LinkerFlags: find_linker_flags("yyjson")
 
-/// $ModAuthor: Sadie Powell <sadie@witchery.services>
+/// $ModAuthor: Sadie Powell <sadie@sadiepowell.dev>
 /// $ModDepends: core 4
 /// $ModDesc: Provides the DRAFT extjwt IRCv3 extension.
 

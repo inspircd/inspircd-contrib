@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2015-2016 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2015-2016 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -17,7 +17,7 @@
  */
 
 /// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthorMail: sadie@sadiepowell.dev
 /// $ModConfig: <solvemsg chanmsg="no" usermsg="yes">
 /// $ModDepends: core 3
 /// $ModDesc: Requires users to solve a basic maths problem before messaging others.

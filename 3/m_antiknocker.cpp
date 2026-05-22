@@ -1,7 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
- *   Copyright (C) 2023 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2023 Sadie Powell <sadie@sadiepowell.dev>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
  * redistribute it and/or modify it under the terms of the GNU General Public
@@ -19,7 +19,7 @@
 /// $CompilerFlags: -std=c++11
 
 /// $ModAuthor: Sadie Powell
-/// $ModAuthorMail: sadie@witchery.services
+/// $ModAuthorMail: sadie@sadiepowell.dev
 /// $ModConfig: <antiknock nickregex="(st|sn|cr|pl|pr|fr|fl|qu|br|gr|sh|sk|tr|kl|wr|bl|[bcdfgklmnprstvwz])([aeiou][aeiou][bcdfgklmnprstvwz])(ed|est|er|le|ly|y|ies|iest|ian|ion|est|ing|led|inger|[abcdfgklmnprstvwz])" docmd="yes" donick="yes" donotice="yes" shunduration="15" shunreason="User was caught in an antiknock trap">
 /// $ModDesc: Attempts to block a common IRC spambot.
 /// $ModDepends: core 3

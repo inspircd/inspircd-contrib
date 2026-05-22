@@ -3,7 +3,7 @@
  *
  *   Copyright (C) 2021 Dominic Hamon
  *   Copyright (C) 2020 Matt Schatz <genius3000@g3k.solutions>
- *   Copyright (C) 2016-2017, 2019-2024 Sadie Powell <sadie@witchery.services>
+ *   Copyright (C) 2016-2017, 2019-2024 Sadie Powell <sadie@sadiepowell.dev>
  *   Copyright (C) 2016-2017 Attila Molnar <attilamolnar@hush.com>
  *
  * This file is part of InspIRCd.  InspIRCd is free software: you can
