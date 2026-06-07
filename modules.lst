@@ -241,8 +241,8 @@ module m_stats_unlinked 4.810 https://raw.githubusercontent.com/inspircd/inspirc
  author Sadie Powell <sadie@witchery.services>
  depends core 4
  description Adds stats character 'X' which shows unlinked servers.
-module m_swhois_ext 4.984 https://raw.githubusercontent.com/inspircd/inspircd-contrib/9f72fd48669c2604ba85ee6c80c4ae11fb773aed/4/m_swhois_ext.cpp
- checksum 764319b9d4756a3da4b76cffad009204d4fe1dcffd0b9d7e3a70140c892994c6
+module m_swhois_ext 4.1009 https://raw.githubusercontent.com/inspircd/inspircd-contrib/a7bdaf94f92ec79557f5240c361479177eb8d490/4/m_swhois_ext.cpp
+ checksum 1b82135367c7a79d6e4293875bd8463acf9661ecb386b805a9235ff0a0321f61
  author Sadie Powell <sadie@witchery.services>
  depends core 4
  description Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.
