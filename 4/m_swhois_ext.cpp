@@ -86,11 +86,11 @@ struct SWhois final
 	void ParseFlags(const std::string& flagstr)
 	{
 		this->flags = FLAG_NONE;
-		if (flagstr.find('o') == std::string::npos)
+		if (flagstr.find('o') != std::string::npos)
 			this->flags |= FLAG_OPER_CONFIG;
-		if (flagstr.find('O') == std::string::npos)
+		if (flagstr.find('O') != std::string::npos)
 			this->flags |= FLAG_OPER_ONLY;
-		if (flagstr.find('s') == std::string::npos)
+		if (flagstr.find('s') != std::string::npos)
 			this->flags |= FLAG_SERVER_SET;
 	}
 
@@ -115,7 +115,7 @@ using SWhoisExtItem = SimpleExtItem<SWhoisList>;
 
 namespace
 {
-	static SWhois& AddSWhois(SWhoisExtItem& swhoisext, User* user, const std::string& msg)
+	static SWhois& AddSWhois(SWhoisExtItem& swhoisext, User* user, time_t priority, const std::string& msg)
 	{
 		auto* swhoislist = swhoisext.Get(user);
 		if (!swhoislist)
@@ -127,6 +127,8 @@ namespace
 		// If the message is empty we use a space to avoid client formatting issues.
 		SWhois swhois;
 		swhois.message = msg.empty() ? " " : msg;
+		if (priority)
+			swhois.priority = priority;
 
 		// Insert sorted so we get the right order on iteration.
 		auto pos = std::upper_bound(swhoislist->begin(), swhoislist->end(), swhois);
@@ -184,9 +186,11 @@ private:
 			return CmdResult::FAILURE;
 		}
 
-		auto& swhois = AddSWhois(swhoisext, target, parameters.back());
+		time_t priority = 0;
 		if (parameters.size() > 3 && parameters[2].find_first_not_of("0123456789+-") == std::string::npos)
-			swhois.priority = ConvToNum<time_t>(parameters[2]);
+			priority = ConvToNum<time_t>(parameters[2]);
+
+		auto& swhois = AddSWhois(swhoisext, target, priority, parameters.back());
 		ServerInstance->PI->SendMetadata(target, "specialwhois", swhois.SerializeAdd());
 
 		noterpl.SendIfCap(source, stdrplcap, this, "ENTRY_ADDED", target->nick, INSP_FORMAT("Added special whois for {}: {}",
@@ -344,9 +348,8 @@ private:
 			});
 		}
 
-		auto& swhois = AddSWhois(cmdswhois.swhoisext, user, message);
+		auto& swhois = AddSWhois(cmdswhois.swhoisext, user, ConvToNum<time_t>(priority), message);
 		swhois.tag = tag;
-		swhois.priority = ConvToNum<time_t>(priority);
 		swhois.ParseFlags(flags);
 	}
 
@@ -377,7 +380,7 @@ private:
 		// Delete the previous compatibility swhois message and optionally replace it.
 		DelSWhois(cmdswhois.swhoisext, user, [](const SWhois& swhois) { return swhois.flags & SWhois::FLAG_COMPAT; });
 		if (!message.empty())
-			AddSWhois(cmdswhois.swhoisext, user, message);
+			AddSWhois(cmdswhois.swhoisext, user, 0, message);
 	}
 
 public:
@@ -426,7 +429,7 @@ public:
 		irc::sepstream msgstream(swhoisstr, '\n', true);
 		for (std::string msg; msgstream.GetToken(msg); )
 		{
-			auto& swhois = AddSWhois(cmdswhois.swhoisext, user, msg);
+			auto& swhois = AddSWhois(cmdswhois.swhoisext, user, 0, msg);
 			swhois.flags = SWhois::FLAG_OPER_CONFIG;
 			ServerInstance->PI->SendMetadata(user, "specialwhois", swhois.SerializeAdd());
 		}
