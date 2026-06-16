@@ -18,7 +18,7 @@
 
 /// $ModAuthor: Sadie Powell
 /// $ModAuthorMail: sadie@sadiepowell.dev
-/// $ModDepends: core 3
+/// $ModDepends: core 4
 /// $ModDesc: Adds capabilities for testing client capability negotiation implementations.
 
 
