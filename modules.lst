@@ -151,6 +151,11 @@ module m_ircv3_extjwt_rapidjson 4.1011 https://raw.githubusercontent.com/inspirc
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
+module m_ircv3_network_icon 4.1020 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cf914287df7f6538d5b9573c444b7b02a5f639b7/4/m_ircv3_network_icon.cpp
+ checksum a132caa074be9988d5444df02da9b37fe7c44631a911f3768877b75a88713b61
+ author reverse <mike.chevronnet@gmail.com>
+ depends core 4
+ description Provides the DRAFT IRCv3 draft/network-icon ISUPPORT token (draft/ICON).
 module m_kill_idle 4.997 https://raw.githubusercontent.com/inspircd/inspircd-contrib/89e323ffeabf6ec4be8f36226c38c68c85554c67/4/m_kill_idle.cpp
  checksum 5f3d04ebac067b60772b7efb468525a6058f5b7f8fe9022a66162cd628241dd9
  author linuxdaemon <linuxdaemonirc@gmail.com>
