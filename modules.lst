@@ -251,10 +251,10 @@ module m_teams 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contri
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Allows users to be managed using services-assigned teams.
-module m_testcap 4.1016 https://raw.githubusercontent.com/inspircd/inspircd-contrib/08b6e97b901d2ffceea07a9ab4bf769962693e09/4/m_testcap.cpp
- checksum c31aaad45246ea77bc22d6ee369deac5dbd31376412d202ec1a0167ccc4d536a
+module m_testcap 4.1018 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e67430755702b428dce64f2bc1cb3463c3bc91f0/4/m_testcap.cpp
+ checksum cbb594c81f856627fd873d2ec4cf68d5ea83f67bb4f77a83dfc320cb04832f2c
  author Sadie Powell
- depends core 3
+ depends core 4
  description Adds capabilities for testing client capability negotiation implementations.
 module m_teststdrpl 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_teststdrpl.cpp
  checksum 3380cbcf4ab3079186c3c8ab22183dbbaeaedf4abd4b262c58608a6292ee7b26
