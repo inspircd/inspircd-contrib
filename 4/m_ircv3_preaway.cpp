@@ -17,9 +17,9 @@
  */
 
 /// $ModAuthor: reverse <mike.chevronnet@gmail.com>
+/// $ModConfig: <preaway substitute="Away">
 /// $ModDepends: core 4
-/// $ModDesc: Provides the DRAFT pre-away IRCv3 extension.
-
+/// $ModDesc: Provides the DRAFT draft/pre-away IRCv3 client capability.
 
 #include "inspircd.h"
 #include "modules/cap.h"
@@ -29,14 +29,60 @@ class ModuleIRCv3PreAway final
 {
 private:
 	Cap::Capability cap;
+	ClientProtocol::EventProvider awayprov;
+	std::string substitute;
 
 public:
 	ModuleIRCv3PreAway()
-		: Module(VF_VENDOR, "Provides the IRCv3 draft/pre-away client capability.")
+		: Module(VF_VENDOR, "Provides the DRAFT draft/pre-away IRCv3 client capability.")
 		, cap(this, "draft/pre-away")
+		, awayprov(this, "AWAY")
 	{
-		// CommandAway already sets works_before_reg, so a pre-away client can send
-		// AWAY mid-registration as-is; this just advertises that support.
+	}
+
+	void ReadConfig(ConfigStatus&) override
+	{
+		const std::string sub = ServerInstance->Config->ConfValue("preaway")->getString("substitute", "Away");
+		substitute = (sub == "*") ? "" : sub;
+	}
+
+	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg) override
+	{
+		if (substitute.empty() || cap.IsEnabled(user))
+			return MOD_RES_PASSTHRU;
+
+		const char* cmd = msg.GetCommand();
+		if (cmd[0] != 'A' && cmd[0] != '3')
+			return MOD_RES_PASSTHRU;
+
+		const auto& params = msg.GetParams();
+		if (params.empty())
+			return MOD_RES_PASSTHRU;
+
+		const std::string& awaymsg = params.back();
+		if (awaymsg != "*")
+			return MOD_RES_PASSTHRU;
+
+		const std::string command = cmd;
+		if (command == "301")
+		{
+			msg.ReplaceParam(params.size() - 1, substitute);
+			return MOD_RES_PASSTHRU;
+		}
+
+		if (command == "AWAY")
+		{
+			User* source = msg.GetSourceUser();
+			if (!source)
+				return MOD_RES_PASSTHRU;
+
+			ClientProtocol::Message rewritten("AWAY", source);
+			rewritten.PushParam(substitute);
+			user->Send(awayprov, rewritten);
+			return MOD_RES_DENY;
+		}
+
+		return MOD_RES_PASSTHRU;
 	}
 };
 
