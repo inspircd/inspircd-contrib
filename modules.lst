@@ -141,6 +141,11 @@ module m_ipinfo_io 4.945 https://raw.githubusercontent.com/inspircd/inspircd-con
  author Jean Chevronnet (reverse) <mike.chevronnet@gmail.com>
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
+module m_ircv3_extended_isupport 4.1022 https://raw.githubusercontent.com/inspircd/inspircd-contrib/729cfaf95b76eff461818b4e98ab4f8fef19252f/4/m_ircv3_extended_isupport.cpp
+ checksum 3f951fcbea21e6d6bad1432c9935a818e10a60e0570dec532bbf3c5433fd5e09
+ author reverse <mike.chevronnet@gmail.com>
+ depends core 4
+ description Provides the DRAFT extended-isupport IRCv3 extension.
 module m_ircv3_extjwt 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_ircv3_extjwt.cpp
  checksum 3f36a1d8d40e0581b8605d91eb9c69bd2bc41c9acc8a719a2c679576ca79a5db
  author Sadie Powell <sadie@sadiepowell.dev>
