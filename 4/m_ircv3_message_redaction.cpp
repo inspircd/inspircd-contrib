@@ -91,7 +91,7 @@ public:
 	size_t maxtracked = 200000;        // hard cap on the tracking map
 
 	ModuleRedaction()
-		: Module(VF_VENDOR, "Provides the DRAFT IRCv3 draft/message-redaction extension (REDACT command).")
+		: Module(VF_VENDOR | VF_COMMON, "Provides the DRAFT IRCv3 draft/message-redaction extension (REDACT command).")
 		, CTCTags::EventListener(this)
 		, cap(this, "draft/message-redaction")
 		, msgtagcap(this, "message-tags")
