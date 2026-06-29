@@ -295,7 +295,7 @@ private:
 
 public:
 	ModuleSecurityGroups()
-		: Module(VF_VENDOR, "Implements security-groups for InspIRCd 4")
+		: Module(VF_NONE, "Implements security-groups for InspIRCd 4")
 		, Account::EventListener(this)
 		, WebIRC::EventListener(this)
 		, Whois::EventListener(this)

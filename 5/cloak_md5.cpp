@@ -298,7 +298,7 @@ private:
 
 public:
 	ModuleCloakMD5()
-		: Module(VF_VENDOR, "Adds the half and full cloaking methods for use with the cloak module.")
+		: Module(VF_NONE, "Adds the half and full cloaking methods for use with the cloak module.")
 		, halfcloak(weak_from_this(), "half", MODE_HALF_CLOAK)
 		, fullcloak(weak_from_this(), "full", MODE_OPAQUE)
 	{

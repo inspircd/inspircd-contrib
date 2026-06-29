@@ -110,7 +110,7 @@ private:
 
 public:
 	ModuleCustomTitle()
-		: Module(VF_VENDOR | VF_OPTCOMMON, "Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.")
+		: Module(VF_OPTCOMMON, "Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.")
 		, Whois::LineEventListener(weak_from_this())
 		, cmd(weak_from_this())
 	{

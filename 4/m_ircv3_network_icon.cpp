@@ -33,7 +33,7 @@ private:
 
 public:
 	ModuleIRCv3NetworkIcon()
-		: Module(VF_VENDOR, "Provides the DRAFT IRCv3 draft/network-icon ISUPPORT token.")
+		: Module(VF_NONE, "Provides the DRAFT IRCv3 draft/network-icon ISUPPORT token.")
 		, ISupport::EventListener(this)
 	{
 	}

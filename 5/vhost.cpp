@@ -92,7 +92,7 @@ private:
 
 public:
 	ModuleVHost()
-		: Module(VF_VENDOR, "Allows the server administrator to define accounts which can grant a custom virtual host.")
+		: Module(VF_NONE, "Allows the server administrator to define accounts which can grant a custom virtual host.")
 		, cmd(weak_from_this())
 	{
 	}

@@ -83,7 +83,7 @@ private:
 
 public:
     ModuleRandomIDxLines()
-        : Module(VF_VENDOR, "Enhances /zline, /gline, /kline, /kill and similar commands by adding a random ID to the end for better log identification.")
+        : Module(VF_NONE, "Enhances /zline, /gline, /kline, /kill and similar commands by adding a random ID to the end for better log identification.")
     {
     }
 

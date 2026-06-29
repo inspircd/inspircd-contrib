@@ -385,7 +385,7 @@ private:
 
 public:
 	ModuleSWhois()
-		: Module(VF_VENDOR | VF_OPTCOMMON, "Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.")
+		: Module(VF_OPTCOMMON, "Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.")
 		, ServerProtocol::SyncEventListener(this)
 		, Whois::LineEventListener(this)
 		, cmdswhois(this)

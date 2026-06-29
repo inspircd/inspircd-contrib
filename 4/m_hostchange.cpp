@@ -158,7 +158,7 @@ private:
 
 public:
 	ModuleHostChange()
-		: Module(VF_VENDOR, "Allows the server administrator to define custom rules for applying hostnames to users.")
+		: Module(VF_NONE, "Allows the server administrator to define custom rules for applying hostnames to users.")
 		, accountapi(this)
 	{
 	}

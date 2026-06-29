@@ -248,7 +248,7 @@ private:
 
 public:
 	ModuleCloakUnreal()
-		: Module(VF_VENDOR, "Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.")
+		: Module(VF_NONE, "Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.")
 		, md5(this, "hash/md5")
 		, md5hostcloak(this, "unreal-md5", md5, true)
 		, md5ipcloak(this, "unreal-md5-ip", md5, false)

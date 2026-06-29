@@ -995,7 +995,7 @@ private:
 
 public:
 	ModuleSSLmbedTLS()
-		: Module(VF_VENDOR, "Allows TLS encrypted connections using the mbedTLS library.")
+		: Module(VF_NONE, "Allows TLS encrypted connections using the mbedTLS library.")
 	{
 		thismod = this;
 	}

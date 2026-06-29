@@ -148,7 +148,7 @@ private:
 
 public:
     ModuleIPInfo()
-        : Module(VF_VENDOR, "Adds IPinfo.io information to WHOIS responses for opers, using a configured API key.")
+        : Module(VF_NONE, "Adds IPinfo.io information to WHOIS responses for opers, using a configured API key.")
         , Whois::EventListener(this)
         , cachedinfo(this, "ipinfo", ExtensionType::USER, true) // Enable synchronization across the network
     {

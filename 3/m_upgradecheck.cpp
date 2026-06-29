@@ -167,7 +167,7 @@ class ModuleUpgradeCheck CXX11_FINAL
 
 	Version GetVersion() CXX11_OVERRIDE
 	{
-		return Version("Checks the server config for deprecated config entries that might cause trouble when upgrading to v4.", VF_VENDOR);
+		return Version("Checks the server config for deprecated config entries that might cause trouble when upgrading to v4.");
 	}
 };
 

@@ -166,7 +166,7 @@ private:
 
 public:
 	ModuleIRCv3ExtendedISupport()
-		: Module(VF_VENDOR, "Provides the IRCv3 draft/extended-isupport client capability.")
+		: Module(VF_NONE, "Provides the IRCv3 draft/extended-isupport client capability.")
 		, cap(this)
 		, batchmanager(this)
 		, batchcap(this)
