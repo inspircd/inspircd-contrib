@@ -51,8 +51,8 @@ module m_clientcheck 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-
  author Sadie Powell <sadie@sadiepowell.dev>
  description Allows detection of clients by version string.
  depends core 4
-module m_cloak_unreal 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_cloak_unreal.cpp
- checksum 01eb4344941fd0a538b410d349aad183119d73e145bd37d7ea6cd247b36c75c8
+module m_cloak_unreal 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_cloak_unreal.cpp
+ checksum c7241c85ae7b6eda1a81fdf2bdd0265386d3822f4dd00499b32e7601c8559509
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Adds the unreal-md5, unreal-md5-ip, unreal-sha256, and unreal-sha256-ip cloaking methods for use with the cloak module.
@@ -131,18 +131,18 @@ module m_hideidle 4.902 https://raw.githubusercontent.com/inspircd/inspircd-cont
  author Attila Molnar <attilamolnar@hush.com>
  depends core 4
  description Provides the +a usermode that hides idle and signon time in WHOIS from non-opers
-module m_hostchange 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_hostchange.cpp
- checksum 842040e27bdf39edcebe46548255ecdfac1311fa8234fe8c8c18a5319007cfdb
+module m_hostchange 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_hostchange.cpp
+ checksum 2a4cf5b9420bfb9ae199843a2167bfbab841e9c31e97bdc86d727f0c8747fe98
  author InspIRCd Developers
  depends core 4
  description Allows the server administrator to define custom rules for applying hostnames to users.
-module m_ipinfo_io 4.945 https://raw.githubusercontent.com/inspircd/inspircd-contrib/34a74034f7b69081b1944c8d548b403b509b3f8e/4/m_ipinfo_io.cpp
- checksum 1ffcd0c5b3d318ea447ef1590c4bf4e9bc345d755d41d1f5336f16d126c92339
+module m_ipinfo_io 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_ipinfo_io.cpp
+ checksum cb340aadc7bdde9800f26efd69acb9f312642c479f5ade2b5b950510cb5914d9
  author Jean Chevronnet (reverse) <mike.chevronnet@gmail.com>
  description Ip information from Ipinfo.io in /WHOIS (only irc operators), found more information at https://ipinfo.io/developers.
  depends core 4
-module m_ircv3_extended_isupport 4.1022 https://raw.githubusercontent.com/inspircd/inspircd-contrib/729cfaf95b76eff461818b4e98ab4f8fef19252f/4/m_ircv3_extended_isupport.cpp
- checksum 3f951fcbea21e6d6bad1432c9935a818e10a60e0570dec532bbf3c5433fd5e09
+module m_ircv3_extended_isupport 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_ircv3_extended_isupport.cpp
+ checksum 3d69b7dd4abc7657d2af1682197a4a80f3e1e0286fa6ff43ffc58f363947973c
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Provides the DRAFT extended-isupport IRCv3 extension.
@@ -156,8 +156,8 @@ module m_ircv3_extjwt_rapidjson 4.1011 https://raw.githubusercontent.com/inspirc
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
-module m_ircv3_network_icon 4.1020 https://raw.githubusercontent.com/inspircd/inspircd-contrib/cf914287df7f6538d5b9573c444b7b02a5f639b7/4/m_ircv3_network_icon.cpp
- checksum a132caa074be9988d5444df02da9b37fe7c44631a911f3768877b75a88713b61
+module m_ircv3_network_icon 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_ircv3_network_icon.cpp
+ checksum 46ed12f578c32c531c81680633f7017d106dcf73df97b4ce16381937dc7886e3
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Provides the DRAFT IRCv3 draft/network-icon ISUPPORT token (draft/ICON).
@@ -191,8 +191,8 @@ module m_noidletyping 4.1011 https://raw.githubusercontent.com/inspircd/inspircd
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Prevents typing notifications from being sent to idle users.
-module m_nopartmsg 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_nopartmsg.cpp
- checksum 2dd5877ce2726168659e173d310bc311fe8d7725f9a7397c2317c56232f6d2f6
+module m_nopartmsg 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_nopartmsg.cpp
+ checksum e2e6afd512edf9d640773838d0a83df6eccd100585970a2d87b099f8d39aa36a
  author InspIRCd Developers
  description Adds extended ban p: (partmsg) which blocks the part message of matching users.
  depends core 4
@@ -216,8 +216,8 @@ module m_qrcode 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contr
  author Sadie Powell <sadie@sadiepowell.dev>
  description Provides support for QR code generation via the /QRCODE command.
  depends core 4
-module m_randomidxlines 4.869 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e454c12513ba770f73449ab28b75d5e05e62c5c1/4/m_randomidxlines.cpp
- checksum 5e1966d478d8dfc014084c7b544d942cf8b4cc9ee80c093d580b5d15af892fdc
+module m_randomidxlines 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_randomidxlines.cpp
+ checksum cda2763c8672368b5ffdc52c36ce1abb37717def88fc36e718444daec1c29c18
  author Jean reverse Chevronnet <mike.chevronnet@gmail.com>
  description Enhances /zline, /gline, /kline, /kill and similar commands by adding a random ID to the end for better log identification.
  depends core 4
@@ -231,8 +231,8 @@ module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-
  author WindowsUser
  description Gives /ALINE and /GALINE, short for auth-lines. Users affected by these will have to use SASL to connect, while any users already connected but not identified to services will be disconnected in a similar manner to G-lines.
  depends core 4
-module m_securitygroups 4.961 https://raw.githubusercontent.com/inspircd/inspircd-contrib/2afaa0a235ebb1f2cf19709d4931ae13916d8aae/4/m_securitygroups.cpp
- checksum cb4544d884f568e338b472838f51f830618cb4f492bd98efcd5ab1f8d72825a3
+module m_securitygroups 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_securitygroups.cpp
+ checksum 4ae62fc8e28df70d8570d763869b1e9479cf8ea9e3072e831855056de269ea88
  author reverse - mike.chevronnet@gmail.com
  depends core 4
  description Implements UnrealIRCd-style security-groups for InspIRCd 4.
@@ -241,8 +241,8 @@ module m_solvemsg 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-con
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Requires users to solve a basic maths problem before messaging others.
-module m_ssl_mbedtls 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_ssl_mbedtls.cpp
- checksum a21469acfbccdf963a4b34d6153c5377f8a03b8dc76b413000968c55530ae435
+module m_ssl_mbedtls 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_ssl_mbedtls.cpp
+ checksum 954f351ded8fbed54aeda0342888fccfad866b1299ad4a040a70fc9dd6decf09
  author InspIRCd Developers
  depends core 4
  description Allows TLS encrypted connections using the mbedTLS library.
@@ -251,8 +251,8 @@ module m_stats_unlinked 4.1011 https://raw.githubusercontent.com/inspircd/inspir
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Adds stats character 'X' which shows unlinked servers.
-module m_swhois_ext 4.1014 https://raw.githubusercontent.com/inspircd/inspircd-contrib/4686ef1f56ed77e0e72e87b93083d104637d1ee2/4/m_swhois_ext.cpp
- checksum fc9ca94bf0bfab1abfa92d8baabcd7d1df243b7371555ee249cb50864eff8aaa
+module m_swhois_ext 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_swhois_ext.cpp
+ checksum 38ecf5f7b24aab69fb311d7978f38671340eb83dd1ef1a69bb310f4e638bf40d
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Adds the /SWHOIS command which adds custom messages to a user's WHOIS response.
@@ -296,29 +296,29 @@ module m_xlinetools 4.963 https://raw.githubusercontent.com/inspircd/inspircd-co
  author MathiasJRL <pellirc@gmail.com>
  depends core 4
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module banredirect 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/banredirect.cpp
- checksum 47befffef4d6cfdd0bcb37568131d3cb11c9363202fdeb2135f5047783fd6d76
+module banredirect 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/banredirect.cpp
+ checksum 1b80b99527c240a71e2172b54a42b9f045e97da537e2147c81e9f9f8503b397e
  author InspIRCd Developers
  depends core 5
  description Allows specifying a channel to redirect a banned user to in the ban mask.
-module cloak_md5 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/cloak_md5.cpp
- checksum c0504db5f8f08903a0de6d35098a73078cf04a68dbb181643a1212ccdcfc4c8b
+module cloak_md5 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/cloak_md5.cpp
+ checksum ad6302b79c2614e9eab34b584906f7f69544c9028fa4a324d1907fb43766dd7e
  author InspIRCd Developers
  depends core 5
  depends hash_md5 5
  description Adds the half and full cloaking methods for use with the cloak module.
-module customtitle 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/customtitle.cpp
- checksum 97f356c9b826152f08895331e739ff1e398874271f6c29d4013c83881470dcbe
+module customtitle 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/customtitle.cpp
+ checksum 0d0a114499a4fd6c2b1cbeed6ad2e20f49a7275ffbeafa2bbde65470c77a3f20
  author InspIRCd Developers
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.
-module hash_md5 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/hash_md5.cpp
- checksum 0063ca2e41474280299c66e3577d8cf740b434c32fb9fa43d22446f6ed64aada
+module hash_md5 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/hash_md5.cpp
+ checksum 29587dd9d26272de88c597ade4ac9dc8b4266294447d398bc430229d53930087
  author InspIRCd Developers
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/starttls.cpp
- checksum 3e28be0394779d379ef72740cb9f4a3e51c6b907163c792765a5fe0c988480c4
+module starttls 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/starttls.cpp
+ checksum 10d32ff0551170dcf6fbbf6ba5e04baccf6fcf0a9999139c6478c6761642492e
  author InspIRCd Developers
  depends core 5
  description Provides the deprecated IRCv3 tls client capability.
@@ -327,8 +327,8 @@ module teststdrpl 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-con
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 5
  description Adds the STDRPL command for testing client standard reply implementations.
-module vhost 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/vhost.cpp
- checksum f6c8e63b49e67bfb7ab037a74fe40e13b35fac32a9d0ddef3c076a893b6f3b3b
+module vhost 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/vhost.cpp
+ checksum 7433b78ae378cc2cd91b839b86aee0477275e9eb1ec36ee99d719549506c2c4b
  author InspIRCd Developers
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom virtual host.
