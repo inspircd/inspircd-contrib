@@ -34,7 +34,7 @@ private:
 
 public:
 	ModuleIRCv3PreAway()
-		: Module(VF_VENDOR, "Provides the DRAFT draft/pre-away IRCv3 client capability.")
+		: Module(VF_NONE, "Provides the DRAFT draft/pre-away IRCv3 client capability.")
 		, cap(this, "draft/pre-away")
 		, awayprov(this, "AWAY")
 	{
