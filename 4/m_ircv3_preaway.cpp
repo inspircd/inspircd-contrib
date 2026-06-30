@@ -42,8 +42,9 @@ public:
 
 	void ReadConfig(ConfigStatus&) override
 	{
-		const std::string sub = ServerInstance->Config->ConfValue("preaway")->getString("substitute", "Away");
-		substitute = (sub == "*") ? "" : sub;
+		substitute = ServerInstance->Config->ConfValue("preaway")->getString("substitute", "Away", [](const auto& str) {
+			return !str.empty() && str.length() <= ServerInstance->Config->Limits.MaxAway && !irc::equals(str, "*");
+		});
 	}
 
 	ModResult OnUserWrite(LocalUser* user, ClientProtocol::Message& msg) override
