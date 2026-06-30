@@ -156,6 +156,11 @@ module m_ircv3_extjwt_rapidjson 4.1011 https://raw.githubusercontent.com/inspirc
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension (old RapidJSON version).
+module m_ircv3_message_redaction 4.1026 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8ababd141cb4280e0dac2512cb86cba5dae96950/4/m_ircv3_message_redaction.cpp
+ checksum 898bd6116265c904dca03e83d4cc8cb4acc69fa680438618d6cf325ee051d0da
+ author reverse <mike.chevronnet@gmail.com>
+ depends core 4
+ description Provides the DRAFT IRCv3 draft/message-redaction extension (REDACT command).
 module m_ircv3_network_icon 4.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/4/m_ircv3_network_icon.cpp
  checksum 46ed12f578c32c531c81680633f7017d106dcf73df97b4ce16381937dc7886e3
  author reverse <mike.chevronnet@gmail.com>
