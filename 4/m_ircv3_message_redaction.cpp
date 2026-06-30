@@ -50,7 +50,7 @@ namespace
 	struct TrackedMsg final
 	{
 		std::string owneruuid;     // global uuid of the sender
-		std::string owneraccount;  // services account at send time (may be empty)
+		std::string owneraccount;  // services account id at send time (may be empty)
 		std::string target;        // channel name or PM peer nick (for scoping)
 		time_t when = 0;
 	};
@@ -86,7 +86,7 @@ public:
 	// config
 	time_t window = 0;                 // self-redaction time limit (0 = unlimited)
 	time_t retention = 3600;           // how long a msgid stays redactable
-	unsigned long minrank = HALFOP_VALUE; // min channel rank for moderator redaction
+	ModeHandler::Rank minrank = HALFOP_VALUE; // min channel rank for moderator redaction
 	bool operoverride = true;          // opers with channels/redact can redact anything
 	size_t maxtracked = 200000;        // hard cap on the tracking map
 
@@ -107,27 +107,21 @@ public:
 		const auto& tag = ServerInstance->Config->ConfValue("redaction");
 		window = tag->getDuration("window", 0, 0);
 		retention = tag->getDuration("retention", 3600, 60);
-		minrank = tag->getNum<unsigned long>("minrank", HALFOP_VALUE, 0);
+		minrank = tag->getNum<ModeHandler::Rank>("minrank", HALFOP_VALUE, 0);
 		operoverride = tag->getBool("operoverride", true);
 		maxtracked = tag->getNum<size_t>("maxtracked", 200000, 1000);
 	}
 
 	std::string AccountOf(User* user) const
 	{
-		const std::string* acct = accountapi ? accountapi->GetAccountName(user) : nullptr;
+		const std::string* acct = accountapi ? accountapi->GetAccountId(user) : nullptr;
 		return acct ? *acct : "";
 	}
 
 	// Remember a freshly sent message keyed by its msgid (set by m_ircv3_msgid).
 	void Track(User* user, const MessageTarget& target, const ClientProtocol::TagMap& tags)
 	{
-		std::string tname;
-		if (target.type == MessageTarget::TYPE_CHANNEL)
-			tname = target.Get<Channel>()->name;
-		else if (target.type == MessageTarget::TYPE_USER)
-			tname = target.Get<User>()->nick;
-		else
-			return; // not a redactable target
+		const std::string& tname = target.GetName();
 
 		auto it = tags.find("msgid");
 		if (it == tags.end() || it->second.value.empty())
@@ -267,7 +261,7 @@ RouteDescriptor CommandRedact::GetRouting(User*, const Params& parameters)
 	if (!t.empty() && ServerInstance->Channels.IsPrefix(t[0]))
 		return ROUTE_BROADCAST; // every server delivers to its local channel members
 	if (User* tu = ServerInstance->Users.FindNick(t, true))
-		return ROUTE_OPT_UCAST(tu->server); // only the target's server needs it
+		return ROUTE_UNICAST(tu->server); // only the target's server needs it
 	return ROUTE_LOCALONLY;
 }
 
