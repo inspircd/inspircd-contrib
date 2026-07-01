@@ -22,6 +22,176 @@
 
 #include "inspircd.h"
 
+#if INSPIRCD_VERSION_SINCE(4, 12)
+
+// InspIRCd 4.12+ has the core ISupport API; use it directly.
+#include "clientprotocolmsg.h"
+
+#include "modules/cap.h"
+#include "modules/ircv3_batch.h"
+#include "modules/isupport.h"
+
+enum
+{
+	// From RFC 2812.
+	RPL_MYINFO = 4,
+
+	// From RFC 1459.
+	RPL_LUSERCLIENT = 251,
+};
+
+class ExtendedISupportCap final
+	: public Cap::Capability
+{
+public:
+	IRCv3::Batch::CapReference batchcap;
+	ISupport::API isupportapi;
+
+	ExtendedISupportCap(Module* mod)
+		: Cap::Capability(mod, "draft/extended-isupport")
+		, batchcap(mod)
+		, isupportapi(mod)
+	{
+	}
+
+	bool OnList(LocalUser* user) override
+	{
+		// The spec requires batch so don't offer the cap without it.
+		return batchcap && isupportapi;
+	}
+
+	bool OnRequest(LocalUser* user, bool adding) override
+	{
+		return OnList(user);
+	}
+};
+
+class CommandISupport final
+	: public SplitCommand
+{
+public:
+	BoolExtItem earlyisupport;
+	ExtendedISupportCap cap;
+
+	CommandISupport(Module* mod)
+		: SplitCommand(mod, "ISUPPORT")
+		, earlyisupport(mod, "early-isupport", ExtensionType::USER)
+		, cap(mod)
+	{
+		works_before_reg = true;
+	}
+
+	CmdResult HandleLocal(LocalUser* user, const Params& parameters) override
+	{
+		if (!cap.IsEnabled(user))
+		{
+			user->WriteNumeric(ERR_UNKNOWNCOMMAND, name, INSP_FORMAT("You need the {} capability to use this command", cap.GetName()));
+			return CmdResult::FAILURE;
+		}
+
+		if (!cap.isupportapi)
+			return CmdResult::FAILURE;
+
+		cap.isupportapi->SendTo(user);
+
+		if (!user->IsFullyConnected())
+			earlyisupport.Set(user);
+
+		return CmdResult::SUCCESS;
+	}
+};
+
+class ModuleIRCv3ExtendedISupport final
+	: public Module
+	, public ClientProtocol::EventHook
+	, public ISupport::EventListener
+{
+private:
+	IRCv3::Batch::Batch batch;
+	IRCv3::Batch::API batchmanager;
+	CommandISupport cmd;
+	bool skipisupport = true;
+
+public:
+	ModuleIRCv3ExtendedISupport()
+		: Module(VF_NONE, "Provides the IRCv3 draft/extended-isupport client capability.")
+		, ClientProtocol::EventHook(this, "NUMERIC")
+		, ISupport::EventListener(this)
+		, batch("draft/extended-isupport")
+		, batchmanager(this)
+		, cmd(this)
+	{
+	}
+
+	ModResult OnNumeric(User* user, const Numeric::Numeric& numeric) override
+	{
+		if (!IS_LOCAL(user) || user->IsFullyConnected())
+			return MOD_RES_PASSTHRU;
+
+		// Connect order is 004 -> 005 -> 251. Hold back the plain 005 burst so
+		// extended-isupport clients receive it batched instead.
+		switch (numeric.GetNumeric())
+		{
+			case RPL_MYINFO:
+				skipisupport = true;
+				break;
+
+			case RPL_ISUPPORT:
+				if (skipisupport)
+					return MOD_RES_DENY;
+				break;
+
+			case RPL_LUSERCLIENT:
+				skipisupport = false;
+				break;
+		}
+		return MOD_RES_PASSTHRU;
+	}
+
+	void OnPostConnect(User* user) override
+	{
+		if (IS_LOCAL(user))
+			cmd.earlyisupport.Unset(user);
+	}
+
+	ModResult OnPreEventSend(LocalUser* user, const ClientProtocol::Event& ev, ClientProtocol::MessageList& messagelist) override
+	{
+		if (!batchmanager || !cmd.cap.batchcap.IsEnabled(user) || !cmd.cap.IsEnabled(user))
+			return MOD_RES_PASSTHRU;
+
+		for (auto* message : messagelist)
+		{
+			auto* numeric = static_cast<ClientProtocol::Messages::Numeric*>(message);
+			if (numeric->GetNumeric() != RPL_ISUPPORT)
+				continue;
+
+			if (!batch.IsRunning())
+				batchmanager->Start(batch);
+			batch.AddToBatch(*numeric);
+		}
+		return MOD_RES_PASSTHRU;
+	}
+
+	void OnPostEventSend(LocalUser* user, const ClientProtocol::Event& ev, const ClientProtocol::MessageList& messagelist) override
+	{
+		if (batch.IsRunning())
+			batchmanager->End(batch);
+	}
+
+	ModResult OnSendISupportDiff(LocalUser* user, const ISupport::TokenMap& tokens) override
+	{
+		if (user->IsFullyConnected())
+			return MOD_RES_PASSTHRU; // The core already handles these.
+
+		return cmd.earlyisupport.Get(user) ? MOD_RES_ALLOW : MOD_RES_PASSTHRU;
+	}
+};
+
+MODULE_INIT(ModuleIRCv3ExtendedISupport)
+
+#else
+
+// Older cores lack ISupport::API; build the ISUPPORT list by hand.
 #include "modules/cap.h"
 #include "modules/isupport.h"
 #include "modules/ircv3_batch.h"
@@ -215,3 +385,5 @@ public:
 };
 
 MODULE_INIT(ModuleIRCv3ExtendedISupport)
+
+#endif
