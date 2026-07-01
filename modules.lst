@@ -291,6 +291,11 @@ module m_usernamemeta 4.1011 https://raw.githubusercontent.com/inspircd/inspircd
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Stores the username given in USER as metadata.
+module m_vlink 4.1028 https://raw.githubusercontent.com/inspircd/inspircd-contrib/f66bc1bf81364890ee0f4f7b58aed563c7f5cd80/4/m_vlink.cpp
+ checksum 07f49c0fcfa835a7eaf8a3c136065109fc7a837bfa35b3264e96a88b011ba063
+ author reverse <mike.chevronnet@gmail.com>
+ depends core 4
+ description Shows cosmetic virtual servers (vlinks) in /LINKS.
 module m_whoisport 4.932 https://raw.githubusercontent.com/inspircd/inspircd-contrib/535ca4919f0995661529531f5ce88bdb0a268d22/4/m_whoisport.cpp
  checksum cbde1530722d5d857804f1ae2a68451f2d70e69ee692e1ad4976e7220e7173c4
  author reverse <mike.chevronnet@gmail.com>
