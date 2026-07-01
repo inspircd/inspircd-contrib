@@ -166,6 +166,11 @@ module m_ircv3_network_icon 4.1024 https://raw.githubusercontent.com/inspircd/in
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Provides the DRAFT IRCv3 draft/network-icon ISUPPORT token (draft/ICON).
+module m_ircv3_preaway 4.1031 https://raw.githubusercontent.com/inspircd/inspircd-contrib/290312f321438617f06e3afcf89dd9c6e563aa61/4/m_ircv3_preaway.cpp
+ checksum c6e4711ab74b22b30148a8a1705f6379684e3bea7228a3da9d782fa70ef8a990
+ author reverse <mike.chevronnet@gmail.com>
+ depends core 4
+ description Provides the DRAFT draft/pre-away IRCv3 client capability.
 module m_kill_idle 4.997 https://raw.githubusercontent.com/inspircd/inspircd-contrib/89e323ffeabf6ec4be8f36226c38c68c85554c67/4/m_kill_idle.cpp
  checksum 5f3d04ebac067b60772b7efb468525a6058f5b7f8fe9022a66162cd628241dd9
  author linuxdaemon <linuxdaemonirc@gmail.com>
