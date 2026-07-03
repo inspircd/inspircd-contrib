@@ -56,6 +56,7 @@ jobs:
       - name: Work out what modules to build
         working-directory: inspircd
         run: |
+          set -e
           if [ '${{ steps.changed-modules.outputs.any_changed }}' = true ]
           then
             export FILES=$(cd ${{ github.workspace }}/contrib && readlink -f ${{ steps.changed-modules.outputs.all_changed_files }})
@@ -65,17 +66,17 @@ jobs:
 
           for FILE in ${FILES}
           do
-            SKIP_BUILD=$(./tools/directive ${FILE} SkipBuild)
+            SKIP_BUILD=$(${{ github.workspace }}/contrib/directive.py ${FILE} SkipBuild)
             if [ -n "${SKIP_BUILD}" ]
             then
               echo "Not building ${FILE} because ${SKIP_BUILD}"
               continue
             fi
             export MODULES="${MODULES} ${FILE}"
-            export PACKAGES="${PACKAGES} $(./tools/directive ${FILE} PackageInfo)"
+            export PACKAGES="${PACKAGES} $(${{ github.workspace }}/contrib/directive.py ${FILE} BuildPackages)"
             export TARGETS="${TARGETS} m_$(basename $FILE .cpp)"
           done
-          echo "Building ${TARGETS}"
+          echo "Building${TARGETS}"
           echo "INSPIRCD_MODULES=${MODULES%% }" >> $GITHUB_ENV
           echo "INSPIRCD_PACKAGES=${PACKAGES%% }" >> $GITHUB_ENV
           echo "INSPIRCD_TARGETS=${TARGETS%% }" >> $GITHUB_ENV
