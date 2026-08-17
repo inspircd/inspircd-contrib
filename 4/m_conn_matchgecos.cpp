@@ -1,5 +1,5 @@
 /*
-* InspIRCd -- Internet Relay Chat Daemon
+ * InspIRCd -- Internet Relay Chat Daemon
  *
  *   Copyright (C) 2026 TheUnstoppable <theunstoppable1000@gmail.com>
  *
@@ -54,7 +54,7 @@ public:
                 return MOD_RES_PASSTHRU;
             }
         }
-        
+
         return MOD_RES_DENY;
     }
 };
