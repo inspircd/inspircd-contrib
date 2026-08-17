@@ -1,6 +1,7 @@
 /*
  * InspIRCd -- Internet Relay Chat Daemon
  *
+ *   Copyright (C) 2026 TheUnstoppable <theunstoppable1000@gmail.com>
  *   Copyright (C) 2018-2020 Matt Schatz <genius3000@g3k.solutions>
  *
  * This file is a module for InspIRCd.  InspIRCd is free software: you can
