@@ -133,13 +133,14 @@ class ModuleFakeList : public Module
 				switch (onJoin) {
 					case NONE: // Do nothing.
 						break;
-					case KILL: // They did the unspeakable, kill them!
-						ServerInstance->Users.QuitUser(user, reason);
-						break;
 					case GLINE:
 					case KLINE:
 					case ZLINE: // They did the unspeakable, nuke them!
 						AddXLine(user);
+						ServerInstance->Users.QuitUser(user, reason); // Oh and kill too, just in case.
+						break;
+					case KILL: // They did the unspeakable, kill them!
+						ServerInstance->Users.QuitUser(user, reason);
 						break;
 				}
 			}
@@ -190,14 +191,19 @@ class ModuleFakeList : public Module
 				break;
 		}
 
-		std::string durationStr;
+		std::string durationStr, expireStr;
+
 		if (duration == 0)
 		{
 			durationStr = "permanent";
+			expireStr = "";
 		}
 		else
 		{
-			durationStr = Duration::ToString(duration);
+			durationStr = "timed";
+			expireStr = INSP_FORMAT(", expires in {} (on {})",
+				Duration::ToString(duration),
+				Time::ToString(ServerInstance->Time() + duration));
 		}
 
 		time_t addTime = ServerInstance->Time();
@@ -207,8 +213,8 @@ class ModuleFakeList : public Module
 
 		if (ServerInstance->XLines->AddLine(line, nullptr))
 		{
-			ServerInstance->SNO.WriteToSnoMask('x', "%s added a %s-line (%s) for %s due to: %s",
-				src.c_str(), lineType.c_str(), durationStr.c_str(), mask.c_str(), reason.c_str());
+			ServerInstance->SNO.WriteToSnoMask('x', "{} added a {} {}-line for {}{} due to: {}",
+				src, durationStr, lineType, durationStr, mask, expireStr, reason);
 		}
 		else
 		{
