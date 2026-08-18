@@ -609,19 +609,19 @@ class ModuleAntiRandom : public Module
 		{
 			score += digits;
 			if (this->DebugMode)
-				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: %s:MATCH digits", original_str.c_str());
+				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: {}:MATCH digits", original_str);
 		}
 		if (vowels >= 4)
 		{
 			score += vowels;
 			if (this->DebugMode)
-				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: %s:MATCH vowels", original_str.c_str());
+				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: {}:MATCH vowels", original_str);
 		}
 		if (consonants >= 4)
 		{
 			score += consonants;
 			if (this->DebugMode)
-				ServerInstance->SNO.WriteGlobalSno('a',  "m_antirandom: %s:MATCH consonants", original_str.c_str());
+				ServerInstance->SNO.WriteGlobalSno('a',  "m_antirandom: {}:MATCH consonants", original_str);
 		}
 
 
@@ -638,8 +638,8 @@ class ModuleAntiRandom : public Module
 				{
 					score++;
 					if (this->DebugMode)
-						ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: %s:MATCH triple (%s:%c/%c/%c)",
-															original_str.c_str(), trip->second.c_str(), original_str[i], original_str[i + 1], original_str[i + 2]);
+						ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: {}:MATCH triple ({}:{}/{}/{})",
+															original_str, trip->second, original_str[i], original_str[i + 1], original_str[i + 2]);
 				}
 			}
 		}
@@ -660,11 +660,11 @@ class ModuleAntiRandom : public Module
 
 		gettimeofday(&tv_beta, NULL);
 		if (this->DebugMode)
-			ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom Timing: %ld microseconds",
+			ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom Timing: {} microseconds",
 				((tv_beta.tv_sec - tv_alpha.tv_sec) * 1000000) + (tv_beta.tv_usec - tv_alpha.tv_usec));
 
 		if (this->DebugMode)
-			ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom Got score: %d/%d/%d = %d", nscore, uscore, gscore, score);
+			ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom Got score: {}/{}/{} = {}", nscore, uscore, gscore, score);
 		return score;
 	}
 
@@ -679,7 +679,7 @@ class ModuleAntiRandom : public Module
 					if (InspIRCd::Match(user->nick, iter->pattern, ascii_case_insensitive_map))
 					{
 						if (this->DebugMode)
-							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: NICK (%s)", iter->pattern.c_str());
+							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: NICK ({})", iter->pattern);
 						return true;
 					}
 					break;
@@ -689,7 +689,7 @@ class ModuleAntiRandom : public Module
 					if (InspIRCd::Match(user->GetRealUser(), iter->pattern, ascii_case_insensitive_map))
 					{
 						if (this->DebugMode)
-							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: REALUSER (%s)", iter->pattern.c_str());
+							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: REALUSER ({})", iter->pattern);
 						return true;
 					}
 					break;
@@ -699,7 +699,7 @@ class ModuleAntiRandom : public Module
 					if (InspIRCd::Match(user->GetRealHost(), iter->pattern, ascii_case_insensitive_map) || InspIRCd::MatchCIDR(user->GetAddress().c_str(), iter->pattern, ascii_case_insensitive_map))
 					{
 						if (this->DebugMode)
-							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: HOST (%s)", iter->pattern.c_str());
+							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: HOST ({})", iter->pattern);
 						return true;
 					}
 					break;
@@ -709,7 +709,7 @@ class ModuleAntiRandom : public Module
 					if (InspIRCd::Match(user->GetRealName(), iter->pattern, ascii_case_insensitive_map))
 					{
 						if (this->DebugMode)
-							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: FULLNAME (%s)", iter->pattern.c_str());
+							ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom exempt: FULLNAME ({})", iter->pattern);
 						return true;
 					}
 					break;
@@ -764,9 +764,9 @@ class ModuleAntiRandom : public Module
 			if (this->ShowFailedConnects)
 			{
 				std::string realhost = user->GetRealMask();
-				ServerInstance->SNO.WriteGlobalSno('a', "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetAddress().c_str(), method.c_str(), score, this->Threshold);
+				ServerInstance->SNO.WriteGlobalSno('a', "Connection from {} ({}) was {} by m_antirandom with a score of {} - which exceeds threshold of {}", realhost, user->GetAddress(), method, score, this->Threshold);
 
-				ServerInstance->Logs.Normal(MODNAME, "Connection from %s (%s) was %s by m_antirandom with a score of %d - which exceeds threshold of %d", realhost.c_str(), user->GetAddress().c_str(), method.c_str(), score, this->Threshold);
+				ServerInstance->Logs.Normal(MODNAME, "Connection from {} ({}) was {} by m_antirandom with a score of {} - which exceeds threshold of {}", realhost, user->GetAddress(), method, score, this->Threshold);
 			}
 			return MOD_RES_DENY;
 		}
@@ -819,19 +819,19 @@ class ModuleAntiRandom : public Module
 					exemptType = FULLNAME;
 				else
 				{
-					ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Invalid <antirandomexempt:type> value in config: %s", type.c_str());
-					ServerInstance->Logs.Normal(MODNAME, "m_antirandom: Invalid <antirandomexempt:type> value in config: %s", type.c_str());
+					ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Invalid <antirandomexempt:type> value in config: {}", type);
+					ServerInstance->Logs.Normal(MODNAME, "m_antirandom: Invalid <antirandomexempt:type> value in config: {}", type);
 					continue;
 				}
 
 				Exempts.push_back(AntirandomExempt(exemptType, pattern));
 				if (this->DebugMode)
-					ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Added exempt: %s (%s)", type.c_str(), pattern.c_str());
+					ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Added exempt: {} ({})", type, pattern);
 			}
 			else
 			{
-				ServerInstance->Logs.Normal(MODNAME, "m_antirandom: Invalid block <antirandomexempt type=\"%s\" pattern=\"%s\">", type.c_str(), pattern.c_str());
-				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Invalid block <antirandomexempt type=\"%s\" pattern=\"%s\">", type.c_str(), pattern.c_str());
+				ServerInstance->Logs.Normal(MODNAME, "m_antirandom: Invalid block <antirandomexempt type=\"{}\" pattern=\"{}\">", type, pattern);
+				ServerInstance->SNO.WriteGlobalSno('a', "m_antirandom: Invalid block <antirandomexempt type=\"{}\" pattern=\"{}\">", type, pattern);
 				continue;
 			}
 		}

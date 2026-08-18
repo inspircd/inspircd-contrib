@@ -158,8 +158,8 @@ class ModuleConnRequire : public Module
 		const std::string& source = ServerInstance->Config->ServerName;
 		const std::string timetype = (duration == 0 ? "permanent" : "timed");
 		const std::string expires = (duration == 0 ? "" : INSP_FORMAT(", expires in {} (on {})",
-			Duration::ToString(duration).c_str(),
-			Time::ToString(ServerInstance->Time() + duration).c_str()));
+			Duration::ToString(duration),
+			Time::ToString(ServerInstance->Time() + duration)));
 
 		std::string dueto;
 		if (from == "dual")
@@ -172,8 +172,8 @@ class ModuleConnRequire : public Module
 		XLine* x = xlf->Generate(ServerInstance->Time(), duration, source, reason, mask);
 		if (ServerInstance->XLines->AddLine(x, NULL))
 		{
-			ServerInstance->SNO.WriteToSnoMask('x', "%s added %s Z-line for %s%s due to %s: %s", source.c_str(),
-				timetype.c_str(), mask.c_str(), expires.c_str(), dueto.c_str(), reason.c_str());
+			ServerInstance->SNO.WriteToSnoMask('x', "{} added {} Z-line for {}{} due to {}: {}", source,
+				timetype, mask, expires, dueto, reason);
 		}
 		else
 			delete x;
@@ -340,8 +340,8 @@ class ModuleConnRequire : public Module
 				if (bv.ban)
 					SetZLine(user, bv.duration, bv.reason, "badversion");
 
-				ServerInstance->SNO.WriteToSnoMask('u', "Blocked user %s (%s) [%s] on port %d, version reply \"%s\" matched badversion mask \"%s\"",
-					user->GetRealMask().c_str(), user->GetAddress().c_str(), user->GetRealName().c_str(), user->server_sa.port(), rplversion.c_str(), bv.mask.c_str());
+				ServerInstance->SNO.WriteToSnoMask('u', "Blocked user {} ({}) [{}] on port {}, version reply \"{}\" matched badversion mask \"{}\"",
+					user->GetRealMask(), user->GetAddress(), user->GetRealName(), user->server_sa.port(), rplversion, bv.mask);
 				ud->zapped = true;
 				ServerInstance->Users.QuitUser(user, bv.reason);
 
@@ -369,11 +369,11 @@ class ModuleConnRequire : public Module
 				if (dualban)
 					SetZLine(user, dualduration, dualreason, "dual");
 
-				ServerInstance->SNO.WriteToSnoMask('u', "Blocked user %s (%s) [%s] from connecting on port %d for mismatched version replies",
-					user->GetRealMask().c_str(), user->GetAddress().c_str(), user->GetRealName().c_str(), user->server_sa.port());
+				ServerInstance->SNO.WriteToSnoMask('u', "Blocked user {} ({}) [{}] from connecting on port {} for mismatched version replies",
+					user->GetRealMask(), user->GetAddress(), user->GetRealName(), user->server_sa.port());
 
 				if (dualshow)
-					ServerInstance->SNO.WriteToSnoMask('u', "Version replies \"%s\" and \"%s\"", firstversionreply.c_str(), secondversionreply.c_str());
+					ServerInstance->SNO.WriteToSnoMask('u', "Version replies \"{}\" and \"{}\"", firstversionreply, secondversionreply);
 
 				ud->zapped = true;
 				ServerInstance->Users.QuitUser(user, dualreason);
@@ -479,8 +479,8 @@ class ModuleConnRequire : public Module
 		// We didn't block any connect classes for this user.
 		if (!ud->ccblocked)
 		{
-			ServerInstance->Logs.Debug(MODNAME, "Unregistered user exiting for unknown reasons: %s (%s) [%s]",
-				user->GetRealMask().c_str(), user->GetAddress().c_str(), user->GetRealName().c_str());
+			ServerInstance->Logs.Debug(MODNAME, "Unregistered user exiting for unknown reasons: {} ({}) [{}]",
+				user->GetRealMask(), user->GetAddress(), user->GetRealName());
 			return;
 		}
 

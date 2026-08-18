@@ -92,7 +92,7 @@ public:
     }
 
     std::string GetFakeHostmask(const std::string& nick) {
-        return INSP_FORMAT("%s!%s@%s", nick.c_str(), fake_ident.c_str(), fake_host.c_str());
+        return INSP_FORMAT("{}!{}@{}", nick, fake_ident, fake_host);
     }
 
     CmdResult Handle(User* user, const CommandBase::Params& parameters)
@@ -141,7 +141,7 @@ public:
         {
             if (nick.find_first_of(cap.nick_separators) == std::string::npos)
             {
-                user->WriteNumeric(ERR_BADRELAYNICK, nick, INSP_FORMAT("Spoofed nickname must include one of the following separators: %s", cap.nick_separators.c_str()));
+                user->WriteNumeric(ERR_BADRELAYNICK, nick, INSP_FORMAT("Spoofed nickname must include one of the following separators: {}", cap.nick_separators));
                 return CmdResult::FAILURE;
             }
         }
