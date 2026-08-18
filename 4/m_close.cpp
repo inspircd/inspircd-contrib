@@ -18,8 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: InspIRCd Developers
-/// $ModAuthorMail: noreply@inspircd.org
+/// $ModAuthor: TheUnstoppable <theunstoppable1000@gmail.com>
 /// $ModDepends: core 4
 /// $ModDesc: Provides the ability to close unregistered connections.
 
