@@ -536,7 +536,7 @@ class ModuleAntiRandom : public Module
 	bool DebugMode;
 	unsigned int Threshold;
 	unsigned int BanAction;
-	unsigned int BanDuration;
+	unsigned long BanDuration;
 	std::string BanReason;
 	AntirandomExemptList Exempts;
  public:
