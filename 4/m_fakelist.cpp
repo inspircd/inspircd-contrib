@@ -22,15 +22,25 @@
 
 
 #include "inspircd.h"
+#include "timeutils.h"
+#include "xline.h"
 #include "modules/account.h"
 
 /// $ModAuthor: James Lu
 /// $ModAuthorMail: james@overdrivenetworks.com
 /// $ModDepends: core 4
 /// $ModDesc: Turns /list into a honeypot for newly connected users
-/// $ModConfig: <fakelist waittime="30s" reason="User hit a spam trap" target="#spamtrap" minusers="20" maxusers="50" topic="SPAM TRAP: DO NOT JOIN, YOU WILL BE DISCONNECTED! (try again later for a real reply)" killonjoin="true">
+/// $ModConfig: <fakelist waittime="30s" reason="User hit a spam trap" target="#spamtrap" minusers="20" maxusers="50" topic="SPAM TRAP: DO NOT JOIN, YOU WILL BE DISCONNECTED! (try again later for a real reply)" onjoin="none/kill/gline/kline/zline" duration="1d">
 
 typedef std::vector<std::string> AllowList;
+
+enum OnJoinActionType {
+	NONE,
+	KILL,
+	GLINE,
+	KLINE,
+	ZLINE,
+};
 
 class ModuleFakeList : public Module
 {
@@ -44,7 +54,8 @@ class ModuleFakeList : public Module
 	std::string reason;
 	unsigned int minUsers;
 	unsigned int maxUsers;
-	bool killOnJoin;
+	OnJoinActionType onJoin;
+	time_t duration;
 
  public:
 	ModuleFakeList() :
@@ -76,7 +87,8 @@ class ModuleFakeList : public Module
 		topic = tag->getString("topic", "SPAM TRAP: DO NOT JOIN, YOU WILL BE DISCONNECTED! (try again later for a real reply)");
 		minUsers = tag->getNum("minusers", 20U, 1U);
 		maxUsers = tag->getNum("maxusers", 50U, minUsers);
-		killOnJoin = tag->getBool("killonjoin", true);
+		onJoin = tag->getEnum("onjoin", NONE, {{"none", NONE},{"kill",KILL},{"gline",GLINE},{"kline",KLINE},{"zline",ZLINE}});
+		duration = tag->getDuration("duration", 86400); // 1 day by default
 	}
 
 
@@ -114,12 +126,22 @@ class ModuleFakeList : public Module
 
 	ModResult OnUserPreJoin(LocalUser* user, Channel* chan, const std::string& cname, std::string& privs, const std::string& keygiven, bool override) override
 	{
-		if (killOnJoin && irc::equals(cname, targetChannel))
+		if (irc::equals(cname, targetChannel))
 		{
 			if (!user->IsOper())
 			{
-				// They did the unspeakable, kill them!
-				ServerInstance->Users.QuitUser(user, reason);
+				switch (onJoin) {
+					case NONE: // Do nothing.
+						break;
+					case KILL: // They did the unspeakable, kill them!
+						ServerInstance->Users.QuitUser(user, reason);
+						break;
+					case GLINE:
+					case KLINE:
+					case ZLINE: // They did the unspeakable, nuke them!
+						AddXLine(user);
+						break;
+				}
 			}
 			else
 			{
@@ -129,6 +151,69 @@ class ModuleFakeList : public Module
 			return MOD_RES_DENY;
 		}
 		return MOD_RES_PASSTHRU;
+	}
+
+	std::string GetLineType()
+	{
+		switch (onJoin) {
+			case GLINE:
+				return "G";
+			case KLINE:
+				return "K";
+			case ZLINE:
+				return "Z";
+			default:
+				return "-";
+		}
+	}
+
+	void AddXLine(User* user) {
+		auto lineType = GetLineType();
+
+		XLineFactory* factory = ServerInstance->XLines->GetFactory(lineType);
+		if (!factory)
+		{
+			return;
+		}
+
+		std::string mask;
+		switch (onJoin)
+		{
+			case GLINE:
+			case KLINE:
+				mask = user->GetRealUserHost();
+				break;
+			case ZLINE:
+				mask = user->GetAddress();
+				break;
+			default: // should be unreachable
+				break;
+		}
+
+		std::string durationStr;
+		if (duration == 0)
+		{
+			durationStr = "permanent";
+		}
+		else
+		{
+			durationStr = Duration::ToString(duration);
+		}
+
+		time_t addTime = ServerInstance->Time();
+		std::string src = ServerInstance->Config->ServerName;
+
+		XLine* line = factory->Generate(addTime, duration, src, reason, mask);
+
+		if (ServerInstance->XLines->AddLine(line, nullptr))
+		{
+			ServerInstance->SNO.WriteToSnoMask('x', "%s added a %s-line (%s) for %s due to: %s",
+				src.c_str(), lineType.c_str(), durationStr.c_str(), mask.c_str(), reason.c_str());
+		}
+		else
+		{
+			delete line;
+		}
 	}
 };
 
