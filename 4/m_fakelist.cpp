@@ -169,52 +169,43 @@ class ModuleFakeList : public Module
 	}
 
 	void AddXLine(User* user) {
-		auto lineType = GetLineType();
+		std::string src = "m_fakelist@" + ServerInstance->Config->ServerName;
+		XLine* line = nullptr;
 
-		XLineFactory* factory = ServerInstance->XLines->GetFactory(lineType);
-		if (!factory)
-		{
-			return;
-		}
-
-		std::string mask;
 		switch (onJoin)
 		{
 			case GLINE:
+				line = new GLine(ServerInstance->Time(), duration, src, reason, user->GetRealUser(), user->GetRealHost());
+				break;
 			case KLINE:
-				mask = user->GetRealUserHost();
+				line = new KLine(ServerInstance->Time(), duration, src, reason, user->GetRealUser(), user->GetRealHost());
 				break;
 			case ZLINE:
-				mask = user->GetAddress();
+				line = new ZLine(ServerInstance->Time(), duration, src, reason, user->GetAddress());
 				break;
 			default: // should be unreachable
-				break;
+				return;
 		}
-
-		std::string durationStr, expireStr;
-
-		if (duration == 0)
-		{
-			durationStr = "permanent";
-			expireStr = "";
-		}
-		else
-		{
-			durationStr = "timed";
-			expireStr = INSP_FORMAT(", expires in {} (on {})",
-				Duration::ToString(duration),
-				Time::ToString(ServerInstance->Time() + duration));
-		}
-
-		time_t addTime = ServerInstance->Time();
-		std::string src = ServerInstance->Config->ServerName;
-
-		XLine* line = factory->Generate(addTime, duration, src, reason, mask);
 
 		if (ServerInstance->XLines->AddLine(line, nullptr))
 		{
+			std::string durationStr, expireStr;
+
+			if (duration == 0)
+			{
+				durationStr = "permanent";
+				expireStr = "";
+			}
+			else
+			{
+				durationStr = "timed";
+				expireStr = INSP_FORMAT(", expires in {} (on {})",
+					Duration::ToString(duration),
+					Time::ToString(ServerInstance->Time() + duration));
+			}
+
 			ServerInstance->SNO.WriteToSnoMask('x', "{} added a {} {}-line for {}{} due to: {}",
-				src, durationStr, lineType, mask, expireStr, reason);
+				src, durationStr, line->type, line->Displayable(), expireStr, reason);
 		}
 		else
 		{
