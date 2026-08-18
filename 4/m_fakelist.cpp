@@ -76,7 +76,7 @@ class ModuleFakeList : public Module
 			newallows.push_back(host);
 		}
 
-		ConfigTag* tag = ServerInstance->Config->ConfValue("fakelist").get();
+		const auto& tag = ServerInstance->Config->ConfValue("fakelist");
 
 		exemptregistered = tag->getBool("exemptregistered");
 		WaitTime = tag->getDuration("waittime", 60, 1);

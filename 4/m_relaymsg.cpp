@@ -189,7 +189,7 @@ public:
 
     void ReadConfig(ConfigStatus& status) override
     {
-        ConfigTag* tag = ServerInstance->Config->ConfValue("relaymsg").get();
+        const auto& tag = ServerInstance->Config->ConfValue("relaymsg");
         std::string fake_ident = tag->getString("ident", "relay");
         std::string fake_host = tag->getString("host", ServerInstance->Config->ServerName);
 

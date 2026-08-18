@@ -774,7 +774,7 @@ class ModuleAntiRandom : public Module
 
 	void ReadConfig(ConfigStatus& status)
 	{
-		ConfigTag* conftag = ServerInstance->Config->ConfValue("antirandom").get();
+		const auto& conftag = ServerInstance->Config->ConfValue("antirandom");
 
 		this->ShowFailedConnects = conftag->getBool("showfailedconnects", true);
 		this->DebugMode = conftag->getBool("debugmode");

@@ -217,19 +217,19 @@ class ModuleConnRequire : public Module
 
 	void ReadConfig(ConfigStatus&) override
 	{
-		ConfigTag* tag = ServerInstance->Config->ConfValue("connrequire").get();
-		timeout = tag->getNum("timeout", 5, 1, 30);
-		disableversion = tag->getBool("disableversion");
-		ctcpstring = tag->getString("ctcpstring");
-		blockmessage = tag->getString("blockmessage");
+		const auto& reqtag = ServerInstance->Config->ConfValue("connrequire");
+		timeout = reqtag->getNum("timeout", 5, 1, 30);
+		disableversion = reqtag->getBool("disableversion");
+		ctcpstring = reqtag->getString("ctcpstring");
+		blockmessage = reqtag->getString("blockmessage");
 		std::transform(ctcpstring.begin(), ctcpstring.end(), ctcpstring.begin(), ::toupper);
 
-		tag = ServerInstance->Config->ConfValue("dualversion").get();
-		dualversion = tag->getBool("active");
-		dualshow = tag->getBool("showdual");
-		dualban = tag->getBool("ban");
-		dualduration = tag->getDuration("duration", 60*60*24*7);
-		dualreason = tag->getString("reason", "Fix your client!");
+		const auto& dualtag = ServerInstance->Config->ConfValue("dualversion");
+		dualversion = dualtag->getBool("active");
+		dualshow = dualtag->getBool("showdual");
+		dualban = dualtag->getBool("ban");
+		dualduration = dualtag->getDuration("duration", 60*60*24*7);
+		dualreason = dualtag->getString("reason", "Fix your client!");
 
 		// No need to send VERSION here, it's already taken care of
 		if (!strcmp(ctcpstring.c_str(), "VERSION"))
@@ -406,7 +406,7 @@ class ModuleConnRequire : public Module
 
 	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
 	{
-		auto cc = klass.get();
+		const auto& cc = klass;
 
 		// Don't mess with the initial class setting
 		// This way we only act after the client has had time to send CAP or CTCP replies

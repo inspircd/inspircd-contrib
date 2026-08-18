@@ -30,7 +30,7 @@ public:
 
     ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
     {
-        auto connClass = klass.get();
+        const auto& connClass = klass;
 
         std::string matches;
         if (!connClass->config->readString("matchgecos", matches, true))

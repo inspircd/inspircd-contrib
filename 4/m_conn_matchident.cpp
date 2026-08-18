@@ -42,7 +42,7 @@ class ModuleConnMatchIdent : public Module
 
 	ModResult OnPreChangeConnectClass(LocalUser* user, const std::shared_ptr<ConnectClass>& klass, std::optional<Numeric::Numeric>& errnum) override
 	{
-		auto connclass = klass.get();
+		const auto& connclass = klass;
 
 		const std::string matchident = connclass->config->getString("matchident");
 		if (matchident.empty())
