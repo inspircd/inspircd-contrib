@@ -47,7 +47,7 @@ class ModuleFakeList : public Module
 	Account::API accountapi;
 	AllowList allowlist;
 	bool exemptregistered;
-	unsigned int WaitTime;
+	unsigned long WaitTime;
 
 	std::string targetChannel;
 	std::string topic;
