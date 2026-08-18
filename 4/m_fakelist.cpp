@@ -214,7 +214,7 @@ class ModuleFakeList : public Module
 		if (ServerInstance->XLines->AddLine(line, nullptr))
 		{
 			ServerInstance->SNO.WriteToSnoMask('x', "{} added a {} {}-line for {}{} due to: {}",
-				src, durationStr, lineType, durationStr, mask, expireStr, reason);
+				src, durationStr, lineType, mask, expireStr, reason);
 		}
 		else
 		{
