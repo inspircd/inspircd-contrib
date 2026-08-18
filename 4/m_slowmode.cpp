@@ -25,8 +25,7 @@
 #include "numerichelper.h"
 #include "modules/exemption.h"
 
-/// $ModAuthor: Adam
-/// $ModAuthorMail: adam@anope.org
+/// $ModAuthor: Adam <adam@anope.org>
 /// $ModConfig: <slowmode modechar="W">
 /// $ModDesc: Provides channel mode +W (slow mode)
 /// $ModDepends: core 4

@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: genius3000
-/// $ModAuthorMail: genius3000@g3k.solutions
+/// $ModAuthor: genius3000 <genius3000@g3k.solutions>
 /// $ModConfig: <connect matchident="myIdent thatIdent ~thisIdent">
 /// $ModDepends: core 4
 /// $ModDesc: Allows a connect class to match by ident(s).

@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: TheUnstoppable
-/// $ModAuthorMail: theunstoppable1000@gmail.com
+/// $ModAuthor: TheUnstoppable <theunstoppable1000@gmail.com>
 /// $ModConfig: <connect matchgecos="John Doe\nJane Doe"> # Separate values with new line
 /// $ModDepends: core 4
 /// $ModDesc: Allows a connect class to match by real name(s)/gecos.

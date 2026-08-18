@@ -26,8 +26,7 @@
 #include "xline.h"
 #include "modules/account.h"
 
-/// $ModAuthor: James Lu
-/// $ModAuthorMail: james@overdrivenetworks.com
+/// $ModAuthor: James Lu <james@overdrivenetworks.com>
 /// $ModDepends: core 4
 /// $ModDesc: Turns /list into a honeypot for newly connected users
 /// $ModConfig: <fakelist waittime="30s" reason="User hit a spam trap" target="#spamtrap" minusers="20" maxusers="50" topic="SPAM TRAP: DO NOT JOIN, YOU WILL BE DISCONNECTED! (try again later for a real reply)" onjoin="none/kill/gline/kline/zline" duration="1d">

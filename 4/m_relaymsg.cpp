@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: jlu5
-/// $ModAuthorMail: james@overdrivenetworks.com
+/// $ModAuthor: jlu5 <james@overdrivenetworks.com>
 /// $ModDepends: core 4
 /// $ModDesc: Provides the RELAYMSG command & draft/relaymsg capability for stateless bridging
 /// $ModConfig: <relaymsg separators="/" ident="relay" host="relay.example.com">

@@ -17,8 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/// $ModAuthor: genius3000
-/// $ModAuthorMail: genius3000@g3k.solutions
+/// $ModAuthor: genius3000 <genius3000@g3k.solutions>
 /// $ModConfig: <connrequire timeout="5" ctcpstring="TIME" blockmessage="Your client isn't up to spec!">
 /// $ModDepends: core 4
 /// $ModDesc: Allow or block connections based on multiple criteria
