@@ -6,6 +6,11 @@ module m_antiknocker 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-
  author Sadie Powell <sadie@sadiepowell.dev>
  description Attempts to block a common IRC spambot.
  depends core 4
+module m_antirandom 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_antirandom.cpp
+ checksum 33cb3d4b84cb23abcbc1ae9ed7c87ef52dc536c7065f651bb37fd74692f33e13
+ description A module to prevent against bots using random patterns.
+ author lnx85 <lnx85@lnxlabs.it>
+ depends core 4
 module m_antisnoop 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_antisnoop.cpp
  checksum 6fad99152ea8f717040f6f141b9a1b9c605db52d53ed97d9f09ec4c4e0d4f0af
  author Sadie Powell <sadie@sadiepowell.dev>
@@ -61,6 +66,11 @@ module m_clones 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contr
  author InspIRCd Developers
  depends core 4
  description Adds the /CLONES command which allows server operators to view IP addresses from which there are more than a specified number of connections.
+module m_close 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_close.cpp
+ checksum 71453c00b58b7ca88eb36468efc3fc2ced408c832d3cee2de6ab04a1aac5e8a8
+ author TheUnstoppable <theunstoppable1000@gmail.com>
+ depends core 4
+ description Provides the ability to close unregistered connections.
 module m_complete 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_complete.cpp
  checksum d3590898567f403cfbb7c8846af5e3b2f0dd49ecea94047cb67b0c9b7e111db4
  author Sadie Powell <sadie@sadiepowell.dev>
@@ -71,6 +81,21 @@ module m_conn_banner 4.902 https://raw.githubusercontent.com/inspircd/inspircd-c
  author Attila Molnar <attilamolnar@hush.com>
  depends core 4
  description Displays a static text to every connecting user before registration
+module m_conn_matchgecos 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_conn_matchgecos.cpp
+ checksum a46042f20a0834ad51eaccbceadbd008ad07fea2dc73a54e07e004b8e7e4c372
+ author TheUnstoppable <theunstoppable1000@gmail.com>
+ depends core 4
+ description Allows a connect class to match by real name(s)/gecos.
+module m_conn_matchident 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_conn_matchident.cpp
+ checksum 2d883c7d0fb16becf160c79b03b20c70baba4cca34fcaab91051432bb62ee2de
+ author genius3000 <genius3000@g3k.solutions>
+ depends core 4
+ description Allows a connect class to match by ident(s).
+module m_conn_require 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_conn_require.cpp
+ checksum 2092a095ab8d6c576d7ddc0fa2a86f28c29e4567ba55a2f2f453dc55183670fe
+ author genius3000 <genius3000@g3k.solutions>
+ depends core 4
+ description Allow or block connections based on multiple criteria
 module m_custompenalty 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_custompenalty.cpp
  checksum f20d545b20b7f5d22ae2d308f694d141bc426f959db388af23afcf6480175500
  author Sadie Powell <sadie@sadiepowell.dev>
@@ -111,6 +136,11 @@ module m_exmode 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contr
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Adds the /EXMODE command which explains a mode change.
+module m_fakelist 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_fakelist.cpp
+ checksum fb4f695ce5b4f677c3c6bedb7e69f56b92f26bd8a31cd6be2d92cde6f2c91599
+ author James Lu <james@overdrivenetworks.com>
+ depends core 4
+ description Turns /list into a honeypot for newly connected users
 module m_forceusername 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_forceusername.cpp
  checksum 5cb0e77afbe2e338ab30df5358776b9c10a6bbbc69467454f6bd6a4dadc5e992
  author Sadie Powell <sadie@sadiepowell.dev>
@@ -171,6 +201,11 @@ module m_ircv3_preaway 4.1031 https://raw.githubusercontent.com/inspircd/inspirc
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Provides the DRAFT draft/pre-away IRCv3 client capability.
+module m_jumpserver 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_jumpserver.cpp
+ checksum a43ca2502cd61ed400d2b17efdad73fabf8e6adb4a76a9f20668e3389c53b503
+ author TheUnstoppable <theunstoppable1000@gmail.com>
+ depends core 4
+ description Provides support for the RPL_REDIR numeric and the /JUMPSERVER command.
 module m_kill_idle 4.997 https://raw.githubusercontent.com/inspircd/inspircd-contrib/89e323ffeabf6ec4be8f36226c38c68c85554c67/4/m_kill_idle.cpp
  checksum 5f3d04ebac067b60772b7efb468525a6058f5b7f8fe9022a66162cd628241dd9
  author linuxdaemon <linuxdaemonirc@gmail.com>
@@ -236,6 +271,11 @@ module m_regex_pcre 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-c
  author InspIRCd Developers
  depends core 4
  description Provides the pcre regular expression engine which uses the PCRE library.
+module m_relaymsg 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_relaymsg.cpp
+ checksum 7b04144f13f07fd6f49e89132bdbbba607d3551c7d85d8d95ce1949df03dbfa2
+ author jlu5 <james@overdrivenetworks.com>
+ depends core 4
+ description Provides the RELAYMSG command & draft/relaymsg capability for stateless bridging
 module m_require_auth 4.901 https://raw.githubusercontent.com/inspircd/inspircd-contrib/8c7730ee7338fca1f36172ea59d8b67c695d6e4e/4/m_require_auth.cpp
  checksum 30ead8a563444934a132d120af0cdb8afd688cc7ac9e1e9e0f66c20a2efafaf1
  author WindowsUser
@@ -246,6 +286,11 @@ module m_securitygroups 4.1024 https://raw.githubusercontent.com/inspircd/inspir
  author reverse - mike.chevronnet@gmail.com
  depends core 4
  description Implements UnrealIRCd-style security-groups for InspIRCd 4.
+module m_slowmode 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_slowmode.cpp
+ checksum e38f6c40528ef057464fc0057db6d3cc3099cfa054bb73d1524102daef9331bc
+ author Adam <adam@anope.org>
+ description Provides channel mode +W (slow mode)
+ depends core 4
 module m_solvemsg 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_solvemsg.cpp
  checksum d59a54e96613d816a7b2b348d00719456f2fbc1ba7d654cbf43e0187114259e5
  author Sadie Powell <sadie@sadiepowell.dev>
