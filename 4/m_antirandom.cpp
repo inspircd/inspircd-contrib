@@ -51,8 +51,7 @@
 #include "xline.h"
 
 /// $ModDesc: A module to prevent against bots using random patterns.
-/// $ModAuthor: lnx85
-/// $ModAuthorMail: lnx85@lnxlabs.it
+/// $ModAuthor: lnx85 <lnx85@lnxlabs.it>
 /// $ModDepends: core 4
 
 #define ANTIRANDOM_ACT_KILL     0
