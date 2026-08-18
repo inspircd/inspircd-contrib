@@ -102,7 +102,7 @@ class ModuleFakeList : public Module
 		if (!validated)
 			return MOD_RES_PASSTHRU;
 
-		if ((command == "LIST") && (ServerInstance->Time() < (user->signon+WaitTime)) && (!user->IsOper()))
+		if ((command == "LIST") && (static_cast<unsigned long>(ServerInstance->Time()) < (user->signon+WaitTime)) && (!user->IsOper()))
 		{
 			/* Normally wouldnt be allowed here, are they exempt? */
 			for (std::vector<std::string>::iterator x = allowlist.begin(); x != allowlist.end(); x++)
