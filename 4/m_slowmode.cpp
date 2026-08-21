@@ -26,7 +26,6 @@
 #include "modules/exemption.h"
 
 /// $ModAuthor: Adam <adam@anope.org>
-/// $ModConfig: <slowmode modechar="W">
 /// $ModDesc: Provides channel mode +W (slow mode)
 /// $ModDepends: core 4
 
@@ -91,11 +90,9 @@ class MsgFlood : public ParamMode<MsgFlood, SimpleExtItem<slowmodesettings>>
 {
  public:
 	MsgFlood(Module* Creator)
-		: ParamMode<MsgFlood, SimpleExtItem<slowmodesettings>>(Creator, "slowmode", ServerInstance->Config->ConfValue("slowmode")->getString("modechar", "W", 1, 1)[0])
+		: ParamMode<MsgFlood, SimpleExtItem<slowmodesettings>>(Creator, "slowmode", 'W')
 	{
-#if defined INSPIRCD_VERSION_SINCE && INSPIRCD_VERSION_SINCE(3, 2)
 		syntax = "[cu]<lines>:<seconds>";
-#endif
 	}
 
 	bool OnSet(User* source, Channel* channel, std::string& parameter) override
