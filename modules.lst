@@ -286,8 +286,8 @@ module m_securitygroups 4.1024 https://raw.githubusercontent.com/inspircd/inspir
  author reverse - mike.chevronnet@gmail.com
  depends core 4
  description Implements UnrealIRCd-style security-groups for InspIRCd 4.
-module m_slowmode 4.1035 https://raw.githubusercontent.com/inspircd/inspircd-contrib/066d0fe8caba177c78777455b9b8250742912292/4/m_slowmode.cpp
- checksum e38f6c40528ef057464fc0057db6d3cc3099cfa054bb73d1524102daef9331bc
+module m_slowmode 4.1037 https://raw.githubusercontent.com/inspircd/inspircd-contrib/3511fc5ccf26fce353ec57e2b0db0745ecca4741/4/m_slowmode.cpp
+ checksum 6badf59d3d1492692c62fe044ff65bb01c85e9b85e1b93ce485c6c00b4ca71c6
  author Adam <adam@anope.org>
  description Provides channel mode +W (slow mode)
  depends core 4
