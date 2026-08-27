@@ -84,7 +84,7 @@ private:
 
 public:
 	ModuleStdRpl()
-		: Module(VF_NONE, "Adds the STDRPL command for testing client standard reply implementations.")
+		: Module(NONE, "Adds the STDRPL command for testing client standard reply implementations.")
 		, cmd(weak_from_this())
 	{
 	}

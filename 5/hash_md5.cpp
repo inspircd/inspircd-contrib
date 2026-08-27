@@ -416,7 +416,7 @@ private:
 
 public:
 	ModuleMD5()
-		: Module(VF_NONE, "Allows other modules to generate MD5 hashes.")
+		: Module(NONE, "Allows other modules to generate MD5 hashes.")
 		, md5(weak_from_this())
 	{
 	}

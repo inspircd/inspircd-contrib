@@ -271,7 +271,7 @@ private:
 
 public:
 	ModuleBanRedirect()
-		: Module(VF_COMMON, "Allows specifying a channel to redirect a banned user to in the ban mask.")
+		: Module(COMMON, "Allows specifying a channel to redirect a banned user to in the ban mask.")
 		, banwatcher(weak_from_this())
 		, banmode(weak_from_this(), "ban")
 		, limitmode(weak_from_this(), "limit")
@@ -279,7 +279,7 @@ public:
 	{
 	}
 
-	void OnCleanup(ExtensionType type, Extensible* item) override
+	void Cleanup(ExtensionType type, Extensible* item) override
 	{
 		if (type != ExtensionType::CHANNEL)
 			return;
