@@ -356,39 +356,44 @@ module m_xlinetools 4.963 https://raw.githubusercontent.com/inspircd/inspircd-co
  author MathiasJRL <pellirc@gmail.com>
  depends core 4
  description X-line management with XCOPY, XCOUNT, XREMOVE, and XSEARCH
-module banredirect 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/banredirect.cpp
- checksum 1b80b99527c240a71e2172b54a42b9f045e97da537e2147c81e9f9f8503b397e
+module banredirect 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/banredirect.cpp
+ checksum 2ae1ea6ceaafd80431fcebe05291003a01da068b6aa299120347b1447258199b
  author InspIRCd Developers
  depends core 5
  description Allows specifying a channel to redirect a banned user to in the ban mask.
-module cloak_md5 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/cloak_md5.cpp
- checksum ad6302b79c2614e9eab34b584906f7f69544c9028fa4a324d1907fb43766dd7e
+module cloak_md5 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/cloak_md5.cpp
+ checksum 76e07d5e1765b4b3542f1503122e2c37d739395e1fb671b4d7343e016d428104
  author InspIRCd Developers
  depends core 5
  depends hash_md5 5
  description Adds the half and full cloaking methods for use with the cloak module.
-module customtitle 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/customtitle.cpp
- checksum 0d0a114499a4fd6c2b1cbeed6ad2e20f49a7275ffbeafa2bbde65470c77a3f20
+module customtitle 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/customtitle.cpp
+ checksum 91235e33afa13b0f77e18a8c0e4df93323b0fd9446ed9ee9ba5ba15f2d29ba85
  author InspIRCd Developers
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom title in /WHOIS and an optional virtual host.
-module hash_md5 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/hash_md5.cpp
- checksum 29587dd9d26272de88c597ade4ac9dc8b4266294447d398bc430229d53930087
+module hash_md5 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/hash_md5.cpp
+ checksum 50e2a368d1867ffdd865ae7e396f77ad80e9a238af43573ef0adb257211f5b3c
  author InspIRCd Developers
  depends core 5
  description Allows other modules to generate MD5 hashes.
-module starttls 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/starttls.cpp
- checksum 10d32ff0551170dcf6fbbf6ba5e04baccf6fcf0a9999139c6478c6761642492e
+module randquote 5.1040 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e834672d814a92adf3b89875b0ef95f41840fe4b/5/randquote.cpp
+ checksum 93c81b285e79d24d5f8894144f1c02e65fc4175a80f30c200b86171462a49407
+ author InspIRCd Developers
+ depends core 5
+ description Allows random quotes to be sent to users when they connect to the server.
+module starttls 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/starttls.cpp
+ checksum 1c1ce10702737ac2f8ce81e6af650be3f3020a5d7aba8c0a6212cedb9cbcdffa
  author InspIRCd Developers
  depends core 5
  description Provides the deprecated IRCv3 tls client capability.
-module teststdrpl 5.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/5/teststdrpl.cpp
- checksum 593ebae4da40da71a5cb59bf96f49d71c7849f6e877ff33db58970c2d0ea30a4
+module teststdrpl 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/teststdrpl.cpp
+ checksum de30ed2ebb933869765b1cb6fcdf9baa3262e6a0c39a3f67d32e7c3d2372a548
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 5
  description Adds the STDRPL command for testing client standard reply implementations.
-module vhost 5.1024 https://raw.githubusercontent.com/inspircd/inspircd-contrib/fded6d13f9a8e0559b801ed9bc9ca682b5670585/5/vhost.cpp
- checksum 7433b78ae378cc2cd91b839b86aee0477275e9eb1ec36ee99d719549506c2c4b
+module vhost 5.1039 https://raw.githubusercontent.com/inspircd/inspircd-contrib/dfc64c7b26bbd6e0e45a15f2464fd06d0167163d/5/vhost.cpp
+ checksum 6ffef028dd2a968df713026b0aa90b9f2baefe24f0af6fd6a5ed65202fb89e53
  author InspIRCd Developers
  depends core 5
  description Allows the server administrator to define accounts which can grant a custom virtual host.
