@@ -131,8 +131,8 @@ module m_eventexec 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-co
  author Sadie Powell <sadie@sadiepowell.dev>
  description Executes commands when a specified event occurs.
  depends core 4
-module m_exmode 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_exmode.cpp
- checksum 74522d50f09c6a41d051297bb0cdf01a4b42a1016a8673c65bd282a793c5dc97
+module m_exmode 4.1042 https://raw.githubusercontent.com/inspircd/inspircd-contrib/44aaf1b918f89122eea3ab7799fa158be5724505/4/m_exmode.cpp
+ checksum 648506d16146e4629df7eb13ee33db24f165b08c81e897fd4713821f5538e528
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Adds the /EXMODE command which explains a mode change.
