@@ -79,15 +79,15 @@ public:
 				else if (mh->IsParameterMode())
 					ptype = "a parameter mode";
 
-				Reply(user, "%c%c (%s) is %s (parameter: %s).", adding ? '+' : '-', modechar,
+				Reply(user, "{}{} ({}) is {} (parameter: {}).", adding ? '+' : '-', modechar,
 					mh->name.c_str(), ptype, param);
 				continue;
 			}
 
-			Reply(user, "%c%c (%s) is a flag mode.", adding ? '+' : '-', modechar, mh->name.c_str());
+			Reply(user, "{}{} ({}) is a flag mode.", adding ? '+' : '-', modechar, mh->name.c_str());
 		}
 
-		Reply(user, "%s mode list complete (%lu total).", mtype == MODETYPE_USER ? "user" : "channel", modecount);
+		Reply(user, "{} mode list complete ({} total).", mtype == MODETYPE_USER ? "user" : "channel", modecount);
 		return CmdResult::SUCCESS;
 	}
 };
