@@ -59,7 +59,7 @@ namespace
 
 	bool yyjson_mut_obj_add_stdstr(yyjson_mut_doc* doc, yyjson_mut_val* obj, const char* key, const std::string& val)
 	{
-		return yyjson_mut_obj_add_strn(doc, obj, key, val.c_str(), val.length());
+		return yyjson_mut_obj_add_strncpy(doc, obj, key, val.c_str(), val.length());
 	}
 }
 
@@ -286,7 +286,7 @@ public:
 
 		auto* umodes = yyjson_mut_arr(doc);
 		for (auto mode : user->GetModeLetters().substr(1))
-			yyjson_mut_arr_add_strn(doc, umodes, &mode, 1);
+			yyjson_mut_arr_add_strncpy(doc, umodes, &mode, 1);
 		yyjson_mut_obj_add_val(doc, root, "umodes", umodes);
 
 		if (!siter->second.verifyurl.empty())
@@ -303,7 +303,7 @@ public:
 				for (const auto* mh : memb->modes)
 				{
 					const auto chr = mh->GetModeChar();
-					yyjson_mut_arr_add_strn(doc, cmodes, &chr, 1);
+					yyjson_mut_arr_add_strncpy(doc, cmodes, &chr, 1);
 				}
 			}
 			yyjson_mut_obj_add_val(doc, root, "cmodes", cmodes);
