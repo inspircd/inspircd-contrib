@@ -176,8 +176,8 @@ module m_ircv3_extended_isupport 4.1024 https://raw.githubusercontent.com/inspir
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Provides the DRAFT extended-isupport IRCv3 extension.
-module m_ircv3_extjwt 4.1011 https://raw.githubusercontent.com/inspircd/inspircd-contrib/e4cd29db4f5e1ccc4f8d019d9a241a904dcb9206/4/m_ircv3_extjwt.cpp
- checksum 3f36a1d8d40e0581b8605d91eb9c69bd2bc41c9acc8a719a2c679576ca79a5db
+module m_ircv3_extjwt 4.1046 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ce3356710109c93fb5469acdbc31ffa8390d7465/4/m_ircv3_extjwt.cpp
+ checksum 4d8e5dd41d85885d87a1101b1b69bbb9d9edd48b1002cb045894337d1904228f
  author Sadie Powell <sadie@sadiepowell.dev>
  depends core 4
  description Provides the DRAFT extjwt IRCv3 extension.
