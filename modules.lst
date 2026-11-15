@@ -346,6 +346,11 @@ module m_vlink 4.1028 https://raw.githubusercontent.com/inspircd/inspircd-contri
  author reverse <mike.chevronnet@gmail.com>
  depends core 4
  description Shows cosmetic virtual servers (vlinks) in /LINKS.
+module m_whoiscipher 4.1051 https://raw.githubusercontent.com/inspircd/inspircd-contrib/ec09930cbaed9678864469911521fc14b2a58c28/4/m_whoiscipher.cpp
+ checksum c291726957c5f06c56bc27634307a6d79c349ec1f0f9956c23766bcb2d97e899
+ author Chris Novakovic <chris@chrisn.me.uk>
+ description Adds the TLS ciphersuite negotiated by the user to /WHOIS responses. Visible only to server operators with the users/auspex privilege and users performing a /WHOIS on themselves.
+ depends core 4
 module m_whoisport 4.932 https://raw.githubusercontent.com/inspircd/inspircd-contrib/535ca4919f0995661529531f5ce88bdb0a268d22/4/m_whoisport.cpp
  checksum cbde1530722d5d857804f1ae2a68451f2d70e69ee692e1ad4976e7220e7173c4
  author reverse <mike.chevronnet@gmail.com>
