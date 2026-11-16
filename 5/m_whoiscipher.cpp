@@ -22,7 +22,7 @@
 /// $ModConfig: <whoiscipher showoper="yes" showuser="yes">
 
 #include "inspircd.h"
-#include "modules/ssl.h"
+#include "modules/tls.h"
 #include "modules/whois.h"
 
 class ModuleWhoisCipher final
@@ -56,17 +56,16 @@ public:
 			(showuser && whois.IsSelfWhois()))
 		{
 			// The TLS ciphersuite is only known for users connected locally.
-			LocalUser* ltarget = IS_LOCAL(target);
+			auto* ltarget = target->AsLocal();
 			if (!ltarget)
 				return;
 
-			const auto* ssliohook = SSLIOHook::IsSSL(&ltarget->io->GetSocket());
-			if (!ssliohook)
+			auto* tlshook = TLS::GetHook(ltarget->io->GetSocket());
+			if (!tlshook)
 				return;
 
 			std::string cipher;
-			ssliohook->GetCiphersuite(cipher);
-			if (!cipher.empty())
+			if (tlshook->GetCiphersuite(cipher))
 				whois.SendLine(RPL_WHOISSPECIAL, "is using TLS ciphersuite " + cipher);
 		}
 	}
